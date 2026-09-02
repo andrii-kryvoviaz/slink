@@ -13,56 +13,54 @@
     base: 'inline-flex items-center justify-center select-none cursor-pointer focus:outline-hidden focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50',
     variants: {
       variant: {
-        default: 'border border-bc-button-default dark:border-gray-700',
-        primary: 'bg-button-accent/80 hover:bg-button-accent/100',
+        default: 'border border-border',
+        primary: 'bg-primary-solid/80 hover:bg-primary-solid/100',
         secondary:
-          'border border-bc-button-default hover:bg-button-accent hover:border-button-accent',
-        dark: 'bg-button-dark/80 hover:bg-button-dark/100',
-        accent:
-          'bg-button-dark/80 hover:bg-button-dark/100 dark:bg-button-accent/80 dark:hover:bg-button-accent/100',
-        invisible: 'bg-none hover:bg-button-invisible-hover/25',
-        outline:
-          'border border-bc-button-default hover:bg-button-default-hover',
+          'border border-muted hover:bg-primary-solid hover:border-primary-solid',
+        dark: 'bg-surface-inverse/80 hover:bg-surface-inverse/100',
+        cta: 'bg-surface-inverse/80 hover:bg-surface-inverse/100 dark:bg-primary-solid/80 dark:hover:bg-primary-solid/100',
+        invisible: 'bg-none hover:bg-foreground-muted/25',
+        outline: 'border border-muted hover:bg-surface-raised',
         link: 'bg-transparent dark:bg-transparent hover:bg-transparent',
         danger:
-          'bg-danger/80 hover:bg-danger focus:ring-3 focus:ring-rc-danger/40',
+          'bg-danger-solid/80 hover:bg-danger-solid focus:ring-3 focus:ring-danger/40',
         modern:
-          'bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-full shadow-sm hover:shadow-md transition-all duration-200',
+          'bg-card border border-border rounded-full shadow-sm hover:shadow-md transition-all duration-200',
         glass:
-          'bg-white/80 dark:bg-gray-900/80 border border-gray-200/60 dark:border-gray-700/60 hover:bg-white dark:hover:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600 hover:shadow-lg hover:shadow-gray-200/40 dark:hover:shadow-gray-900/40 focus-visible:ring-blue-500/20 transition-all duration-200',
+          'bg-card/80 border border-border/60 hover:bg-card dark:hover:bg-muted hover:border-border-strong hover:shadow-lg hover:shadow-border/40 dark:hover:shadow-card/40 focus-visible:ring-ring/20 transition-all duration-200',
         'glass-dark':
-          'bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-200',
+          'bg-on-surface-inverse/10 backdrop-blur-sm border border-on-surface-inverse/20 hover:bg-on-surface-inverse/20 transition-all duration-200',
         'primary-dark':
-          'bg-blue-500 border-transparent hover:bg-blue-600 transition-all duration-200',
+          'bg-primary-solid border-transparent hover:bg-primary-surface dark:hover:bg-primary-surface-strong transition-all duration-200',
         'soft-violet':
-          'text-violet-600 dark:text-violet-300 bg-violet-500/10 dark:bg-violet-500/15 hover:bg-violet-500/20 dark:hover:bg-violet-500/25 border border-violet-500/20 dark:border-violet-400/20 hover:border-violet-500/30 dark:hover:border-violet-400/30 transition-all duration-200',
-        'soft-indigo':
-          'text-indigo-600 dark:text-indigo-300 bg-indigo-500/10 dark:bg-indigo-500/15 hover:bg-indigo-500/20 dark:hover:bg-indigo-500/25 border border-indigo-500/20 dark:border-indigo-400/20 hover:border-indigo-500/30 dark:hover:border-indigo-400/30 transition-all duration-200',
+          'text-decor-violet-text bg-decor-violet/10 dark:bg-decor-violet/15 hover:bg-decor-violet/20 dark:hover:bg-decor-violet/25 border border-decor-violet/20 hover:border-decor-violet/30 transition-all duration-200',
+        'soft-accent':
+          'text-accent-text bg-accent-solid/10 dark:bg-accent-solid/15 hover:bg-accent-solid/20 dark:hover:bg-accent-solid/25 border border-accent/20 hover:border-accent/30 transition-all duration-200',
         'soft-blue':
-          'text-blue-600 dark:text-blue-300 bg-blue-500/10 dark:bg-blue-500/15 hover:bg-blue-500/20 dark:hover:bg-blue-500/25 border border-blue-500/20 dark:border-blue-400/20 hover:border-blue-500/30 dark:hover:border-blue-400/30 transition-all duration-200',
+          'text-info-text bg-primary-solid/10 dark:bg-primary-solid/15 hover:bg-primary-solid/20 dark:hover:bg-primary-solid/25 border border-info/20 hover:border-info/30 transition-all duration-200',
         'soft-green':
-          'text-green-600 dark:text-green-300 bg-green-500/10 dark:bg-green-500/15 hover:bg-green-500/20 dark:hover:bg-green-500/25 border border-green-500/20 dark:border-green-400/20 hover:border-green-500/30 dark:hover:border-green-400/30 transition-all duration-200',
+          'text-success-text bg-success/10 dark:bg-success/15 hover:bg-success/20 dark:hover:bg-success/25 border border-success/20 hover:border-success/30 transition-all duration-200',
         'soft-red':
-          'text-red-600 dark:text-red-300 bg-red-500/10 dark:bg-red-500/15 hover:bg-red-500/20 dark:hover:bg-red-500/25 border border-red-500/20 dark:border-red-400/20 hover:border-red-500/30 dark:hover:border-red-400/30 transition-all duration-200',
+          'text-danger-text bg-danger/10 dark:bg-danger/15 hover:bg-danger/20 dark:hover:bg-danger/25 border border-danger/20 hover:border-danger/30 transition-all duration-200',
         'soft-amber':
-          'text-amber-600 dark:text-amber-300 bg-amber-500/10 dark:bg-amber-500/15 hover:bg-amber-500/20 dark:hover:bg-amber-500/25 border border-amber-500/20 dark:border-amber-400/20 hover:border-amber-500/30 dark:hover:border-amber-400/30 transition-all duration-200',
+          'text-warning-text bg-warning/10 dark:bg-warning/15 hover:bg-warning/20 dark:hover:bg-warning/25 border border-warning/20 hover:border-warning/30 transition-all duration-200',
         'outline-blue':
-          'bg-transparent border border-blue-500 dark:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950 transition-all duration-200',
+          'bg-transparent border border-info hover:bg-info-wash dark:hover:bg-info-wash/20 transition-all duration-200',
         'outline-green':
-          'bg-transparent border border-green-500 dark:border-green-400 hover:bg-green-50 dark:hover:bg-green-950 transition-all duration-200',
-        'outline-purple':
-          'bg-transparent border border-indigo-500 dark:border-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950 transition-all duration-200',
+          'bg-transparent border border-success hover:bg-success-wash dark:hover:bg-success-wash/20 transition-all duration-200',
+        'outline-accent':
+          'bg-transparent border border-accent hover:bg-accent-wash dark:hover:bg-accent-wash/20 transition-all duration-200',
         'outline-amber':
-          'bg-transparent border border-amber-500 dark:border-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950 transition-all duration-200',
+          'bg-transparent border border-warning hover:bg-warning-wash dark:hover:bg-warning-wash/20 transition-all duration-200',
         'outline-danger':
-          'bg-transparent border border-red-500 dark:border-red-400 hover:bg-red-50 dark:hover:bg-red-950 transition-all duration-200',
+          'bg-transparent border border-danger hover:bg-danger-wash dark:hover:bg-danger-wash/20 transition-all duration-200',
         destructive:
-          'bg-destructive shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60',
-        ghost: 'hover:bg-gray-100 dark:hover:bg-gray-800',
+          'bg-danger shadow-xs hover:bg-danger/90 focus-visible:ring-danger/20 dark:focus-visible:ring-danger/40 dark:bg-danger/60',
+        ghost: 'hover:bg-hover',
         transparent:
-          'bg-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 focus:text-slate-900 dark:focus:text-slate-100 focus:bg-slate-100/50 dark:focus:bg-slate-800/50 transition-all duration-200',
+          'bg-transparent text-foreground-muted hover:text-foreground-soft hover:bg-hover/50 dark:hover:bg-hover/30 focus:text-foreground focus:bg-hover/50 transition-all duration-200',
         toggle:
-          'bg-gradient-to-br from-slate-50 to-slate-100/50 dark:from-slate-800/50 dark:to-slate-700/30 border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 transition-all duration-200',
+          'bg-gradient-to-br from-muted-soft to-muted/50 dark:from-muted-soft/50 dark:to-muted/30 border border-border hover:border-border-strong transition-all duration-200',
       },
       rounded: {
         none: 'rounded-none',
@@ -130,41 +128,36 @@
       },
       variant: {
         default:
-          'bg-transparent text-button-default dark:text-gray-200 hover:text-button-hover-default dark:hover:text-white',
-        primary: 'bg-transparent text-button-accent',
-        secondary:
-          'bg-transparent text-button-default hover:text-button-accent',
-        dark: 'bg-transparent text-button-accent',
-        accent: 'bg-transparent text-button-accent',
-        invisible:
-          'bg-transparent text-button-invisible hover:text-button-primary',
-        outline:
-          'bg-transparent text-button-default hover:text-button-hover-default',
-        link: 'bg-transparent text-button-default underline-offset-4 hover:underline',
-        danger: 'bg-transparent text-button-accent',
+          'bg-transparent dark:text-foreground-soft dark:hover:text-foreground',
+        primary: 'bg-transparent text-on-primary-solid',
+        secondary: 'bg-transparent hover:text-on-primary-solid',
+        dark: 'bg-transparent text-on-surface-inverse',
+        cta: 'bg-transparent text-on-surface-inverse',
+        invisible: 'bg-transparent',
+        outline: 'bg-transparent',
+        link: 'bg-transparent underline-offset-4 hover:underline',
+        danger: 'bg-transparent text-on-danger-solid',
         modern:
-          'bg-transparent font-medium text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white',
-        glass:
-          'bg-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100',
-        'glass-dark': 'bg-transparent text-white',
-        'primary-dark': 'bg-transparent text-white',
+          'bg-transparent font-medium text-foreground-soft hover:text-foreground',
+        glass: 'bg-transparent text-foreground-muted hover:text-foreground',
+        'glass-dark': 'bg-transparent text-on-surface-inverse',
+        'primary-dark': 'bg-transparent text-on-primary-solid',
         'soft-violet': 'bg-transparent',
-        'soft-indigo': 'bg-transparent',
+        'soft-accent': 'bg-transparent',
         'soft-blue': 'bg-transparent',
         'soft-green': 'bg-transparent',
         'soft-red': 'bg-transparent',
         'soft-amber': 'bg-transparent',
-        'outline-blue': 'bg-transparent text-blue-600 dark:text-blue-400',
-        'outline-green': 'bg-transparent text-green-600 dark:text-green-400',
-        'outline-purple': 'bg-transparent text-indigo-600 dark:text-indigo-400',
-        'outline-amber': 'bg-transparent text-amber-600 dark:text-amber-400',
-        'outline-danger': 'bg-transparent text-red-600 dark:text-red-400',
-        destructive: 'bg-transparent text-white',
-        ghost:
-          'bg-transparent text-gray-900 hover:text-gray-900 dark:text-gray-100 dark:hover:text-gray-100',
+        'outline-blue': 'bg-transparent text-info-text dark:text-info',
+        'outline-green': 'bg-transparent text-success-text dark:text-success',
+        'outline-accent': 'bg-transparent text-accent-text dark:text-accent',
+        'outline-amber': 'bg-transparent text-warning-text dark:text-warning',
+        'outline-danger': 'bg-transparent text-danger-text dark:text-danger',
+        destructive: 'bg-transparent text-on-danger-solid',
+        ghost: 'bg-transparent text-foreground hover:text-foreground',
         transparent: 'bg-transparent',
         toggle:
-          'bg-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300',
+          'bg-transparent text-foreground-muted hover:text-foreground-soft',
       },
       size: {
         xs: 'text-xs px-2.5 py-1 has-[>svg]:px-1.5',
@@ -191,7 +184,7 @@
       {
         variant: 'primary-dark',
         status: 'disabled',
-        class: 'text-white/30',
+        class: 'text-on-primary-solid/30',
       },
       {
         variant: 'toggle',

@@ -198,8 +198,7 @@
             href="https://aws.amazon.com/s3/pricing/"
             target="_blank"
             rel="noopener noreferrer"
-            class="underline hover:text-amber-700 dark:hover:text-amber-300"
-            >Review pricing</a
+            class="underline hover:text-warning-text">Review pricing</a
           >
         </Notice>
       {/if}
@@ -288,7 +287,7 @@
               href="https://docs.aws.amazon.com/general/latest/gr/s3.html"
               target="_blank"
               rel="noopener noreferrer"
-              class="text-blue-600 dark:text-blue-400 hover:underline"
+              class="text-info hover:underline"
             >
               View available regions
             </a>
@@ -319,7 +318,7 @@
             href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingBucket.html#general-purpose-buckets-overview"
             target="_blank"
             rel="noopener noreferrer"
-            class="text-blue-600 dark:text-blue-400 hover:underline"
+            class="text-info hover:underline"
           >
             Learn about bucket naming
           </a>
@@ -373,7 +372,7 @@
               href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access-key-self-managed.html#Using_CreateAccessKey"
               target="_blank"
               rel="noopener noreferrer"
-              class="text-blue-600 dark:text-blue-400 hover:underline"
+              class="text-info hover:underline"
             >
               How to create access keys
             </a>

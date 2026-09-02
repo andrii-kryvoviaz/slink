@@ -1,7 +1,7 @@
 import { cva } from 'class-variance-authority';
 
 export const metadataContainerTheme = cva(
-  'flex items-center overflow-hidden whitespace-nowrap tabular-nums text-xs text-gray-400 dark:text-gray-500',
+  'flex items-center overflow-hidden whitespace-nowrap tabular-nums text-xs text-foreground-subtle',
   {
     variants: {
       gap: {

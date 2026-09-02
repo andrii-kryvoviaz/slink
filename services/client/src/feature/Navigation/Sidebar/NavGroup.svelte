@@ -151,7 +151,7 @@
               >
                 <Sidebar.MenuButton
                   isActive={isActive || isChildActive(item)}
-                  class="flex-1 rounded-r-none hover:pl-4 data-[active=true]:pl-4 group-hover/item:bg-indigo-50/80 dark:group-hover/item:bg-indigo-950/30 group-hover/item:text-indigo-700 dark:group-hover/item:text-indigo-300 transition-all duration-200 ease-out"
+                  class="flex-1 rounded-r-none hover:pl-4 data-[active=true]:pl-4 group-hover/item:bg-accent-wash/80 dark:group-hover/item:bg-accent-wash/16 group-hover/item:text-accent-text transition-all duration-200 ease-out"
                 >
                   {#snippet child({ props }: { props: Props })}
                     <a
@@ -178,7 +178,7 @@
                       aria-label={expandedItems[item.id]
                         ? 'Collapse submenu'
                         : 'Expand submenu'}
-                      class="flex h-8 w-8 shrink-0 items-center justify-center rounded-r-md text-muted-foreground group-hover/item:bg-indigo-50/80 dark:group-hover/item:bg-indigo-950/30 group-hover/item:text-indigo-600 dark:group-hover/item:text-indigo-400 group-data-[active=true]/item:bg-indigo-50/80 dark:group-data-[active=true]/item:bg-indigo-950/30 group-data-[active=true]/item:text-indigo-700 dark:group-data-[active=true]/item:text-indigo-300 hover:text-indigo-800 dark:hover:text-indigo-200 transition-all duration-200 ease-out cursor-pointer"
+                      class="flex h-8 w-8 shrink-0 items-center justify-center rounded-r-md text-foreground-muted group-hover/item:bg-accent-wash/80 dark:group-hover/item:bg-accent-wash/16 group-hover/item:text-accent group-data-[active=true]/item:bg-accent-wash/80 dark:group-data-[active=true]/item:bg-accent-wash/16 group-data-[active=true]/item:text-accent-text hover:text-accent-text-strong transition-all duration-200 ease-out cursor-pointer"
                     >
                       <Icon
                         icon="ph:caret-right"

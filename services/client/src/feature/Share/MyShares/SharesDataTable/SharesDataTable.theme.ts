@@ -4,10 +4,10 @@ export const shareableCell = tv({
   slots: {
     root: 'flex items-center gap-3 min-w-0 group/shareable',
     thumb:
-      'shrink-0 overflow-hidden rounded-md bg-gray-100 dark:bg-gray-800/50 flex items-center justify-center',
-    thumbIcon: 'text-gray-400 dark:text-gray-600',
-    name: 'font-medium text-gray-900 dark:text-white truncate text-sm group-hover/shareable:text-blue-600 dark:group-hover/shareable:text-blue-400 transition-colors',
-    meta: 'text-xs text-gray-500 dark:text-gray-400',
+      'shrink-0 overflow-hidden rounded-md bg-muted flex items-center justify-center',
+    thumbIcon: 'text-foreground-subtle',
+    name: 'font-medium text-foreground truncate text-sm group-hover/shareable:text-info transition-colors',
+    meta: 'text-xs text-foreground-muted',
   },
   variants: {
     size: {

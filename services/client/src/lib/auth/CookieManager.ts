@@ -1,6 +1,8 @@
 import type { Cookies } from '@sveltejs/kit';
 
-type CookieOptions = {
+import { type CookiePolicy, ScopedCookies } from '@slink/lib/auth/CookiePolicy';
+
+export type CookieOptions = {
   secure?: boolean;
   sameSite?: 'strict' | 'lax' | 'none';
   path?: string;
@@ -9,10 +11,16 @@ type CookieOptions = {
 };
 
 export class CookieManager {
-  constructor(private requireSsl: boolean) {}
+  constructor(
+    private requireSsl: boolean,
+    private _cookies: Cookies,
+  ) {}
+
+  public get(name: string): string | undefined {
+    return this._cookies.get(name);
+  }
 
   public setCookie(
-    cookies: Cookies,
     name: string,
     value: string,
     options: CookieOptions = {},
@@ -25,11 +33,10 @@ export class CookieManager {
       maxAge: options.maxAge,
     };
 
-    cookies.set(name, value, cookieOptions);
+    this._cookies.set(name, value, cookieOptions);
   }
 
   public deleteCookie(
-    cookies: Cookies,
     name: string,
     options: Pick<CookieOptions, 'path' | 'sameSite'> = {},
   ): void {
@@ -39,6 +46,10 @@ export class CookieManager {
       secure: this.requireSsl,
     };
 
-    cookies.delete(name, cookieOptions);
+    this._cookies.delete(name, cookieOptions);
+  }
+
+  public use<K extends string>(policy: CookiePolicy<K>): ScopedCookies<K> {
+    return new ScopedCookies(this, policy);
   }
 }

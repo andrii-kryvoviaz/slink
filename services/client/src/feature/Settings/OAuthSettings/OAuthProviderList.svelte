@@ -30,54 +30,50 @@
 
 {#if listState.providers.length === 0}
   <div
-    class="flex flex-col items-center justify-center py-12 text-center rounded-xl border border-dashed border-gray-200 dark:border-gray-700"
+    class="flex flex-col items-center justify-center py-12 text-center rounded-xl border border-dashed border-border"
   >
     <div
-      class="w-12 h-12 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center mb-4"
+      class="w-12 h-12 rounded-xl bg-muted flex items-center justify-center mb-4"
     >
-      <Icon icon="ph:key" class="w-6 h-6 text-gray-400 dark:text-gray-500" />
+      <Icon icon="ph:key" class="w-6 h-6 text-foreground-subtle" />
     </div>
-    <p class="text-sm text-gray-500 dark:text-gray-400">
-      No SSO providers configured yet
-    </p>
+    <p class="text-sm text-foreground-muted">No SSO providers configured yet</p>
   </div>
 {:else}
   <SortableList
     items={listState.providers}
     key={(provider) => provider.id}
     onReorder={(id, index) => listState.reorder(id, index)}
-    class="divide-y divide-gray-100 dark:divide-gray-800 rounded-xl bg-gray-50/50 dark:bg-gray-900/30 border border-gray-100 dark:border-gray-800 overflow-hidden"
+    class="divide-y divide-muted rounded-xl bg-muted-soft/50 dark:bg-muted-soft/30 border border-muted overflow-hidden"
   >
     {#snippet row({ item: provider, handle })}
       {@const preset = OAuthProviderConfig.resolve(provider.slug)}
       <div
-        class="flex items-center justify-between gap-4 px-4 py-3.5 hover:bg-gray-100/50 dark:hover:bg-gray-800/30 transition-colors duration-150"
+        class="flex items-center justify-between gap-4 px-4 py-3.5 hover:bg-muted/50 dark:hover:bg-muted/30 transition-colors duration-150"
       >
         <div class="flex items-center gap-3 min-w-0">
           {#if listState.providers.length > 1}
             <button
               type="button"
               aria-label="Drag to reorder"
-              class="shrink-0 cursor-grab active:cursor-grabbing text-gray-300 dark:text-gray-600 hover:text-gray-400 dark:hover:text-gray-500 transition-colors duration-150"
+              class="shrink-0 cursor-grab active:cursor-grabbing text-border-strong hover:text-foreground-subtle transition-colors duration-150"
               {...handle}
             >
               <Icon icon="ph:dots-six-vertical" class="w-4 h-4" />
             </button>
           {/if}
           <div
-            class="w-9 h-9 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center shrink-0"
+            class="w-9 h-9 rounded-lg bg-muted flex items-center justify-center shrink-0"
           >
             <ProviderIcon provider={preset} class="w-5 h-5" />
           </div>
 
           <div class="min-w-0">
             <div class="flex items-center gap-2">
-              <span
-                class="text-sm font-medium text-gray-900 dark:text-white truncate"
-              >
+              <span class="text-sm font-medium text-foreground truncate">
                 {provider.name}
               </span>
-              <span class="text-xs text-gray-400 dark:text-gray-500 font-mono">
+              <span class="text-xs text-foreground-subtle font-mono">
                 {provider.slug}
               </span>
               {#if provider.registrationPolicy === 'allowed'}
@@ -90,9 +86,7 @@
                 </Badge>
               {/if}
             </div>
-            <p
-              class="text-xs text-gray-400 dark:text-gray-500 truncate max-w-xs"
-            >
+            <p class="text-xs text-foreground-subtle truncate max-w-xs">
               {provider.discoveryUrl}
             </p>
           </div>

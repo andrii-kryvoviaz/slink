@@ -6,12 +6,12 @@ export const activeFilterToggleButtonVariants = cva(
   {
     variants: {
       matchMode: {
-        all: 'text-violet-600 dark:text-violet-400',
-        any: 'text-blue-600 dark:text-blue-400',
+        all: 'text-decor-violet',
+        any: 'text-info',
       },
       disabled: {
         true: 'opacity-50 cursor-not-allowed',
-        false: 'cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-900/30',
+        false: 'cursor-pointer hover:bg-primary-solid/12',
       },
     },
     defaultVariants: {
@@ -26,8 +26,8 @@ export const activeFilterTooltipIconWrapperVariants = cva(
   {
     variants: {
       matchMode: {
-        all: 'bg-violet-100 dark:bg-violet-900/40',
-        any: 'bg-blue-100 dark:bg-blue-900/40',
+        all: 'bg-decor-violet/12',
+        any: 'bg-primary-solid/12',
       },
     },
     defaultVariants: {
@@ -39,8 +39,8 @@ export const activeFilterTooltipIconWrapperVariants = cva(
 export const activeFilterTooltipIconVariants = cva('w-4 h-4', {
   variants: {
     matchMode: {
-      all: 'text-violet-600 dark:text-violet-400',
-      any: 'text-blue-600 dark:text-blue-400',
+      all: 'text-decor-violet',
+      any: 'text-info',
     },
   },
   defaultVariants: {

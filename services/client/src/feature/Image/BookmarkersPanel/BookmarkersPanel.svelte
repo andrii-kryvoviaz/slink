@@ -83,7 +83,7 @@
       {#if items.length > 0}
         <AvatarStack
           users={items}
-          ringClass="ring-indigo-50 dark:ring-indigo-950"
+          ringClass="ring-accent-border/45 dark:ring-accent-border/14"
         />
       {/if}
     {/snippet}

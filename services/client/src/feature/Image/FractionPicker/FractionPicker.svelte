@@ -46,9 +46,7 @@
 </script>
 
 <div class="space-y-1">
-  <span class="block text-xs font-medium text-gray-700 dark:text-gray-300">
-    Scale
-  </span>
+  <span class="block text-xs font-medium text-foreground-soft"> Scale </span>
   <div
     class={fractionPickerContainerTheme({ size })}
     role="radiogroup"

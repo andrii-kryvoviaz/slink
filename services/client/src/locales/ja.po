@@ -1344,14 +1344,6 @@ msgstr "メディアをアップロードしてコレクションに整理し、
 msgid "Shortcut"
 msgstr "ショートカット"
 
-#: src/feature/Navigation/Navbar/Navbar.svelte
-msgid "Toggle Theme"
-msgstr "テーマ切り替え"
-
-#: src/feature/Navigation/Navbar/Navbar.svelte
-msgid "Switch between light and dark mode."
-msgstr "ライトモードとダークモードを切り替えます。"
-
 #: src/feature/Navigation/Sidebar/NavProjects.svelte
 msgid "Projects"
 msgstr "プロジェクト"
@@ -1411,11 +1403,11 @@ msgstr "非公開にする"
 msgid "Make Public"
 msgstr "公開にする"
 
-#: src/feature/Layout/ThemeSwitch/ThemeSwitch.svelte
+#: src/feature/Layout/ModeSwitch/ModeSwitch.svelte
 msgid "Switch to light mode"
 msgstr "ライトモードに切り替え"
 
-#: src/feature/Layout/ThemeSwitch/ThemeSwitch.svelte
+#: src/feature/Layout/ModeSwitch/ModeSwitch.svelte
 msgid "Switch to dark mode"
 msgstr "ダークモードに切り替え"
 
@@ -2705,6 +2697,7 @@ msgid "Visibility Options"
 msgstr "公開設定オプション"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
+#: src/lib/settings/themes.language.ts
 #: src/routes/help/faq/+page.svelte
 msgid "Default"
 msgstr "デフォルト"
@@ -5121,3 +5114,55 @@ msgstr "無効化してコンテンツを削除"
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
 msgid "Deletes their images, collections, and bookmarks by others. Comments stay, shown as deleted."
 msgstr "このユーザーの画像とコレクション、および他のユーザーがそれらの画像に付けたブックマークを削除します。コメントは残り、削除済みとして表示されます。"
+
+#: src/routes/preferences/+page.svelte
+msgid "Appearance"
+msgstr "外観"
+
+#: src/routes/preferences/+page.svelte
+msgid "Theme"
+msgstr "テーマ"
+
+#: src/routes/preferences/+page.svelte
+msgid "Choose your preferred color theme for the interface"
+msgstr "インターフェースのカラーテーマを選択してください"
+
+#: src/lib/settings/themes.language.ts
+msgid "Nord"
+msgstr "Nord"
+
+#: src/lib/settings/themes.language.ts
+msgid "Catppuccin"
+msgstr "Catppuccin"
+
+#: src/lib/settings/themes.language.ts
+msgid "Gruvbox"
+msgstr "Gruvbox"
+
+#: src/lib/settings/themes.language.ts
+msgid "Rosé Pine"
+msgstr "Rosé Pine"
+
+#: src/lib/settings/themes.language.ts
+msgid "Tokyo Night"
+msgstr "Tokyo Night"
+
+#: src/lib/settings/themes.language.ts
+msgid "Everforest"
+msgstr "Everforest"
+
+#: src/lib/settings/themes.language.ts
+msgid "Monochrome"
+msgstr "モノクロ"
+
+#: src/feature/Layout/ModeSwitch/ModeSwitchHoverCard.svelte
+msgid "Toggle light and dark mode."
+msgstr "ライトモードとダークモードを切り替えます。"
+
+#: src/feature/Layout/ModeSwitch/ModeSwitchHoverCard.svelte
+msgid "Theme: {0}"
+msgstr "テーマ: {0}"
+
+#: src/feature/Layout/ModeSwitch/ModeSwitchHoverCard.svelte
+msgid "Customize"
+msgstr "カスタマイズ"

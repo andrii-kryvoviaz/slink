@@ -97,7 +97,5 @@
     {/snippet}
   </OverflowBadgeList>
 {:else if !$isLoadingTags}
-  <p class="text-sm text-gray-500 dark:text-gray-400">
-    No tags assigned to this image.
-  </p>
+  <p class="text-sm text-foreground-muted">No tags assigned to this image.</p>
 {/if}

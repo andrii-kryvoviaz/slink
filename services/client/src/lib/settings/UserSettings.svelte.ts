@@ -1,7 +1,18 @@
 import { browser } from '$app/environment';
+import { MediaQuery } from 'svelte/reactivity';
 
 import { SortOrder } from '@slink/lib/enum/SortOrder';
-import { Locale, Theme } from '@slink/lib/settings/Settings.enums';
+import {
+  Locale,
+  Mode,
+  type SettingsKey,
+  Theme,
+  resolveLocale,
+  resolveMode,
+  resolveTheme,
+  settingsKeys,
+} from '@slink/lib/settings/Settings.enums';
+import { settingsPolicy } from '@slink/lib/settings/SettingsPolicy';
 
 import { cookie } from '@slink/utils/http/cookie';
 import { deepMerge } from '@slink/utils/object/deepMerge';
@@ -37,41 +48,11 @@ export type CommentState = { sortOrder: SortOrder };
 export type UploadOptionsState = { expanded: boolean };
 export type BannersState = { hideExifKeptNotice: boolean };
 
-export type SettingsKey =
-  | 'theme'
-  | 'locale'
-  | 'sidebar'
-  | 'navigation'
-  | 'userAdmin'
-  | 'table'
-  | 'history'
-  | 'tags'
-  | 'share'
-  | 'comment'
-  | 'uploadOptions'
-  | 'banners'
-  | 'collections';
-
 export type CookieSettings = { [K in SettingsKey]?: unknown };
 
-export const settingsKeys: SettingsKey[] = [
-  'theme',
-  'locale',
-  'sidebar',
-  'navigation',
-  'userAdmin',
-  'table',
-  'history',
-  'tags',
-  'share',
-  'comment',
-  'uploadOptions',
-  'banners',
-  'collections',
-];
-
 export const defaultSettings: Record<SettingsKey, unknown> = {
-  theme: Theme.DARK,
+  mode: Mode.SYSTEM,
+  theme: Theme.DEFAULT,
   locale: Locale.EN,
   sidebar: { expanded: true },
   navigation: { expandedGroups: {} },
@@ -136,59 +117,61 @@ export const defaultSettings: Record<SettingsKey, unknown> = {
 
 export const USER_SETTINGS_BRAND = Symbol.for('slink:user-settings');
 
-function persist(key: string, value: unknown): void {
+function persist(key: SettingsKey, value: unknown): void {
   if (!browser) return;
-  const cookieValue = typeof value === 'string' ? value : JSON.stringify(value);
-  cookie.set(`settings.${key}`, cookieValue, 31536000);
+  cookie.set(
+    settingsPolicy.name(key),
+    settingsPolicy.encode(value),
+    settingsPolicy.options.maxAge,
+  );
 }
 
-class ThemeState {
-  _value = $state<Theme>(Theme.DARK);
+class EnumSetting<T extends string> {
+  _value = $state() as T;
 
-  get current(): Theme {
+  constructor(
+    private readonly _key: SettingsKey,
+    private readonly _resolve: (value: unknown) => T,
+  ) {
+    this._value = _resolve(undefined);
+  }
+
+  get current(): T {
     return this._value;
   }
 
-  set current(v: Theme) {
+  set current(v: T) {
     this._value = v;
-    persist('theme', v);
+    persist(this._key, v);
   }
 
+  hydrate(v: unknown): void {
+    this._value = this._resolve(v);
+  }
+}
+
+class ModeSetting extends EnumSetting<Mode> {
+  private readonly _systemDark = new MediaQuery('prefers-color-scheme: dark');
+
   get isDark(): boolean {
-    return this._value === Theme.DARK;
+    if (this.current === Mode.SYSTEM) {
+      return this._systemDark.current;
+    }
+
+    return this.current === Mode.DARK;
   }
 
   get isLight(): boolean {
-    return this._value === Theme.LIGHT;
-  }
-
-  hydrate(v: Theme) {
-    this._value = v;
-  }
-}
-
-class LocaleState {
-  _value = $state<Locale>(Locale.EN);
-
-  get current(): Locale {
-    return this._value;
-  }
-
-  set current(v: Locale) {
-    this._value = v;
-    persist('locale', v);
-  }
-
-  hydrate(v: Locale) {
-    this._value = v;
+    return !this.isDark;
   }
 }
 
 export class UserSettings {
   [USER_SETTINGS_BRAND] = true;
 
-  readonly theme = new ThemeState();
-  readonly locale = new LocaleState();
+  readonly mode = new ModeSetting('mode', resolveMode);
+  readonly theme = new EnumSetting('theme', resolveTheme);
+  readonly locale = new EnumSetting('locale', resolveLocale);
 
   _sidebar = $state<SidebarState>(defaultSettings.sidebar as SidebarState);
   _navigation = $state<NavigationState>(
@@ -221,7 +204,7 @@ export class UserSettings {
   private _readCookies(): Record<string, unknown> {
     return settingsKeys.reduce(
       (acc, key) => {
-        const value = cookie.get(`settings.${key}`);
+        const value = cookie.get(settingsPolicy.name(key));
         const parsed = value ? tryJson(value) : undefined;
         const fallback = defaultSettings[key];
 

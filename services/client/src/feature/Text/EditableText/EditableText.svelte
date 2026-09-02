@@ -113,7 +113,7 @@
   });
 
   const inputClasses =
-    'w-full resize-none rounded-lg bg-gray-50 dark:bg-gray-800/50 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 border border-gray-200 dark:border-gray-700 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-1 focus:ring-blue-500/20 dark:focus:ring-blue-400/20 focus:outline-none transition-all py-2.5 px-3';
+    'w-full resize-none rounded-lg bg-muted-soft text-sm text-foreground placeholder-foreground-muted border border-border focus:border-info focus:ring-1 focus:ring-info/20 focus:outline-none transition-all py-2.5 px-3';
 </script>
 
 <div class={className}>
@@ -147,17 +147,17 @@
         <div data-editable-actions class="flex items-center gap-3 mt-2 text-xs">
           <button
             onclick={save}
-            class="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 font-medium transition-colors"
+            class="text-info hover:text-info-strong font-medium transition-colors"
           >
             Save
           </button>
           <button
             onclick={cancel}
-            class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+            class="text-foreground-muted hover:text-foreground-soft transition-colors"
           >
             Cancel
           </button>
-          <span class="text-gray-400 dark:text-gray-500 ml-auto">
+          <span class="text-foreground-muted ml-auto">
             {type === 'input' ? 'Enter' : '⌘ + Enter'}
           </span>
         </div>
@@ -166,11 +166,11 @@
   {:else}
     <button
       onclick={startEditing}
-      class="w-full text-left rounded-lg py-2.5 px-3 -mx-3 transition-all duration-150 hover:bg-gray-50 dark:hover:bg-gray-800/50 group cursor-text flex items-center gap-2"
+      class="w-full text-left rounded-lg py-2.5 px-3 -mx-3 transition-all duration-150 hover:bg-muted-soft group cursor-text flex items-center gap-2"
     >
       {#if value}
         <span
-          class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed group-hover:text-gray-900 dark:group-hover:text-gray-100 transition-colors flex-1"
+          class="text-sm text-foreground-soft leading-relaxed group-hover:text-foreground transition-colors flex-1"
         >
           {#if type === 'textarea'}
             <HashtagText text={value} />
@@ -180,7 +180,7 @@
         </span>
       {:else}
         <span
-          class="text-sm text-gray-400 dark:text-gray-500 group-hover:text-gray-500 dark:group-hover:text-gray-400 transition-colors"
+          class="text-sm text-foreground-muted group-hover:text-foreground-subtle transition-colors"
         >
           {emptyText}
         </span>
@@ -188,7 +188,7 @@
       {#if isLoading && !header}
         <Icon
           icon="lucide:loader-2"
-          class="h-3.5 w-3.5 text-gray-400 animate-spin shrink-0"
+          class="h-3.5 w-3.5 text-foreground-muted animate-spin shrink-0"
         />
       {/if}
     </button>

@@ -29,7 +29,7 @@ export const load: PageServerLoad = async (event) => {
     });
 
     if ('approval_required' in response) {
-      locals.cookieManager.setCookie(cookies, 'createdUserId', response.userId);
+      locals.cookies.setCookie('createdUserId', response.userId);
       redirect(302, '/profile/awaiting-approval');
     }
 
@@ -37,7 +37,7 @@ export const load: PageServerLoad = async (event) => {
 
     await Auth.loginWithTokens(
       { accessToken: access_token, refreshToken: refresh_token },
-      { cookies, cookieManager: locals.cookieManager, fetch },
+      { cookies, cookieManager: locals.cookies, fetch },
     );
   } catch (e) {
     SsoError.handle(event, e);

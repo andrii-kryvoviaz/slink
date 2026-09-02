@@ -10,10 +10,8 @@
   <div class="text-center">
     <Icon
       icon="ph:upload-simple"
-      class="h-12 w-12 text-slate-600/80 dark:text-slate-300/80 mb-3 mx-auto"
+      class="h-12 w-12 text-foreground-soft/80 mb-3 mx-auto"
     />
-    <p class="text-lg font-light text-slate-700/90 dark:text-slate-200/90">
-      Drop to upload
-    </p>
+    <p class="text-lg font-light text-foreground-soft/90">Drop to upload</p>
   </div>
 </Dropzone.Overlay>

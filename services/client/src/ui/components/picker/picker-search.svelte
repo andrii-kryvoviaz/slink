@@ -16,15 +16,15 @@
     <Icon
       icon="ph:magnifying-glass"
       class="absolute left-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 transition-colors {inputFocused
-        ? 'text-gray-500 dark:text-gray-400'
-        : 'text-gray-400 dark:text-gray-500'}"
+        ? 'text-foreground-muted'
+        : 'text-foreground-subtle'}"
     />
     <input
       bind:value
       onfocus={() => (inputFocused = true)}
       onblur={() => (inputFocused = false)}
       {placeholder}
-      class="w-full pl-8 pr-3 py-1.5 text-[13px] bg-gray-50/80 dark:bg-white/5 focus:bg-gray-100/80 dark:focus:bg-white/[0.08] rounded-md border-0 outline-none focus:ring-1 focus:ring-gray-200/80 dark:focus:ring-white/10 placeholder:text-gray-400 dark:placeholder:text-gray-500 text-gray-900 dark:text-gray-100 transition-colors"
+      class="bg-muted/80 focus:bg-hover focus:ring-border/80 placeholder:text-foreground-subtle text-foreground w-full rounded-md border-0 py-1.5 pr-3 pl-8 text-[13px] transition-colors outline-none focus:ring-1"
     />
   </div>
 </div>

@@ -13,7 +13,6 @@ export { default as TagDepthDots } from './TagDepthDots/TagDepthDots.svelte';
 export { default as TagDepthIndicator } from './TagDepthIndicator/TagDepthIndicator.svelte';
 export * from './TagDropdown/TagDropdownContent.theme';
 export { default as TagFilter } from './TagFilter/TagFilter.svelte';
-export * from './TagFilter/TagFilter.theme';
 export { default as TagMatchModeToggle } from './TagMatchModeToggle/TagMatchModeToggle.svelte';
 export * from './TagMatchModeToggle/TagMatchModeToggle.theme';
 export { default as TagMoveDialog } from './TagMoveDialog/TagMoveDialog.svelte';

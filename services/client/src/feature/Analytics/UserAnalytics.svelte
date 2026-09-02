@@ -32,7 +32,7 @@
       type: 'radialBar',
       height: '95%',
     },
-    colors: ['#4B8EDD', '#7029FF', '#4B5563'],
+    seriesClasses: ['text-info', 'text-chart-2', 'text-foreground-muted'],
     series: [0],
     labels: ['No Data'],
   });
@@ -62,7 +62,7 @@
 
 <Card class="h-full" variant="enhanced" rounded="xl" shadow="lg">
   <div class="flex items-center justify-between">
-    <p class="text-lg font-semibold text-gray-900 dark:text-white">Users</p>
+    <p class="text-lg font-semibold text-foreground">Users</p>
     <RefreshButton size="sm" loading={$isLoading} onclick={run} />
   </div>
 

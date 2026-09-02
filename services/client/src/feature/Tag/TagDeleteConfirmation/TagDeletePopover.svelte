@@ -33,28 +33,24 @@
 <div class="w-xs max-w-screen p-2 space-y-4">
   <div class="flex items-center gap-3">
     <div
-      class="flex h-10 w-10 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30 border border-red-200/40 dark:border-red-800/30 shadow-sm shrink-0"
+      class="flex h-10 w-10 items-center justify-center rounded-full bg-danger/12 border border-danger-border/40 dark:border-danger-border/12 shadow-sm shrink-0"
     >
-      <Icon icon="ph:tag" class="h-5 w-5 text-red-600 dark:text-red-400" />
+      <Icon icon="ph:tag" class="h-5 w-5 text-danger" />
     </div>
     <div>
-      <h3 class="text-sm font-semibold text-gray-900 dark:text-white">
-        Delete Tag
-      </h3>
-      <p class="text-xs text-gray-500 dark:text-gray-400">
+      <h3 class="text-sm font-semibold text-foreground">Delete Tag</h3>
+      <p class="text-xs text-foreground-muted">
         Tag will be permanently removed
       </p>
     </div>
   </div>
 
   {#if hasCascade}
-    <div
-      class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800/50 rounded-lg p-3"
-    >
-      <h4 class="text-xs font-medium text-amber-800 dark:text-amber-200 mb-1">
+    <div class="bg-warning/6 border border-warning/30 rounded-lg p-3">
+      <h4 class="text-xs font-medium text-warning-text-strong mb-1">
         This will cascade:
       </h4>
-      <ul class="text-xs text-amber-700 dark:text-amber-300 space-y-0.5">
+      <ul class="text-xs text-warning-text space-y-0.5">
         {#if hasChildren}
           <li>&bull; {childrenText}</li>
         {/if}

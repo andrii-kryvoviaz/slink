@@ -143,10 +143,10 @@
           {#if selectedItem?.icon}
             <Icon
               icon={selectedItem.icon}
-              class="w-4 h-4 shrink-0 text-muted-foreground"
+              class="w-4 h-4 shrink-0 text-foreground-muted"
             />
           {/if}
-          <span class={cn('truncate', !value ? 'text-muted-foreground' : '')}>
+          <span class={cn('truncate', !value ? 'text-foreground-muted' : '')}>
             {displayValue}
           </span>
         </div>
@@ -193,12 +193,12 @@
             {#if selectedItem?.icon}
               <Icon
                 icon={selectedItem.icon}
-                class="w-4 h-4 shrink-0 text-muted-foreground"
+                class="w-4 h-4 shrink-0 text-foreground-muted"
               />
             {/if}
             <span class="text-sm truncate">{displayValue}</span>
           {:else}
-            <span class="text-muted-foreground text-sm truncate">
+            <span class="text-foreground-muted text-sm truncate">
               {placeholder}
             </span>
           {/if}

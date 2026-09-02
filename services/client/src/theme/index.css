@@ -1,0 +1,20 @@
+@layer core, presets;
+
+@import './core/radius.css' layer(core);
+@import './core/surface.css' layer(core);
+@import './core/accent.css' layer(core);
+@import './core/primary.css' layer(core);
+@import './core/decor.css' layer(core);
+@import './core/series.css' layer(core);
+@import './core/status.css' layer(core);
+
+@import './presets/default.css';
+@import './presets/nord.css';
+@import './presets/catppuccin.css';
+@import './presets/gruvbox.css';
+@import './presets/rose-pine.css';
+@import './presets/tokyo-night.css';
+@import './presets/everforest.css';
+@import './presets/monochrome.css';
+
+@import './recipes.css';

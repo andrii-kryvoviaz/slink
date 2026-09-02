@@ -91,17 +91,17 @@
           {#if !bookmark.image.available}
             <div
               in:fly={{ y: 20, duration: 400, delay: Math.random() * 200 }}
-              class="break-inside-avoid bg-gray-100 dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden p-8 text-center"
+              class="break-inside-avoid bg-muted rounded-2xl border border-border overflow-hidden p-8 text-center"
             >
               <Icon
                 icon="ph:image-broken"
-                class="w-12 h-12 mx-auto text-gray-400 dark:text-gray-500 mb-3"
+                class="w-12 h-12 mx-auto text-ring mb-3"
               />
-              <p class="text-gray-500 dark:text-gray-400 text-sm">
+              <p class="text-foreground-muted text-sm">
                 Image no longer available
               </p>
               <button
-                class="mt-4 text-sm text-red-500 hover:text-red-600 transition-colors"
+                class="mt-4 text-sm text-danger hover:text-danger-strong transition-colors"
                 onclick={() => handleRemoveBookmark(bookmark)}
               >
                 Remove bookmark
@@ -111,7 +111,7 @@
             {@const image = bookmark.image}
             <div
               in:fly={{ y: 20, duration: 400, delay: Math.random() * 200 }}
-              class="group/card break-inside-avoid rounded-xl overflow-hidden bg-white dark:bg-gray-900/80 backdrop-blur-sm border border-gray-200/60 dark:border-white/[0.06] hover:border-gray-300 dark:hover:border-white/[0.1] shadow-sm hover:shadow-lg dark:shadow-black/20 dark:hover:shadow-black/40 transition-all duration-300"
+              class="group/card break-inside-avoid rounded-xl overflow-hidden bg-card/80 backdrop-blur-sm border border-border/30 hover:border-border/50 shadow-sm hover:shadow-lg dark:shadow-scrim/20 dark:hover:shadow-scrim/40 transition-all duration-300"
             >
               <a
                 href="/explore?post={image.id}"
@@ -132,20 +132,20 @@
                 />
 
                 <div
-                  class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300"
+                  class="absolute inset-0 bg-gradient-to-t from-scrim/60 via-transparent to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300"
                 ></div>
 
                 <div
                   class="absolute top-3 left-3 flex items-center gap-2 opacity-0 group-hover/card:opacity-100 transition-all duration-300 translate-y-1 group-hover/card:translate-y-0"
                 >
                   <div
-                    class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-black/40 backdrop-blur-md text-white text-xs"
+                    class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-scrim/40 backdrop-blur-md text-on-surface-inverse text-xs"
                   >
                     <Icon icon="ph:eye" class="w-3.5 h-3.5" />
                     <span>{image.attributes?.views}</span>
                   </div>
                   <div
-                    class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-black/40 backdrop-blur-md text-white text-xs"
+                    class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-scrim/40 backdrop-blur-md text-on-surface-inverse text-xs"
                   >
                     <Icon icon="ph:frame-corners" class="w-3.5 h-3.5" />
                     <span>{image.metadata?.width}×{image.metadata?.height}</span
@@ -157,7 +157,7 @@
                   class="absolute bottom-3 left-3 opacity-0 group-hover/card:opacity-100 transition-all duration-300 translate-y-1 group-hover/card:translate-y-0"
                 >
                   <div
-                    class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-black/40 backdrop-blur-md text-white text-xs"
+                    class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-scrim/40 backdrop-blur-md text-on-surface-inverse text-xs"
                   >
                     <Icon icon="ph:bookmark-simple-fill" class="w-3.5 h-3.5" />
                     <span
@@ -172,11 +172,11 @@
                   class="absolute inset-0 flex items-center justify-center opacity-0 group-hover/card:opacity-100 transition-all duration-300 pointer-events-none"
                 >
                   <div
-                    class="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center transform scale-75 group-hover/card:scale-100 transition-transform duration-300"
+                    class="w-12 h-12 rounded-full bg-on-surface-inverse/20 backdrop-blur-sm flex items-center justify-center transform scale-75 group-hover/card:scale-100 transition-transform duration-300"
                   >
                     <Icon
                       icon="ph:arrows-out"
-                      class="w-6 h-6 text-white drop-shadow-lg"
+                      class="w-6 h-6 text-on-surface-inverse drop-shadow-lg"
                     />
                   </div>
                 </div>
@@ -203,13 +203,11 @@
                   {/if}
                   <div class="flex-1 min-w-0">
                     <p
-                      class="font-medium text-gray-900 dark:text-gray-100 text-sm leading-tight truncate"
+                      class="font-medium text-foreground text-sm leading-tight truncate"
                     >
                       {image.owner?.displayName}
                     </p>
-                    <div
-                      class="text-xs text-gray-500 dark:text-gray-400 mt-0.5"
-                    >
+                    <div class="text-xs text-foreground-muted mt-0.5">
                       {#if image.attributes?.createdAt?.timestamp}
                         <FormattedDate
                           date={image.attributes.createdAt.timestamp}
@@ -221,7 +219,7 @@
 
                 {#if image.attributes?.description?.trim()}
                   <p
-                    class="mt-3 text-sm text-gray-600 dark:text-gray-400 leading-relaxed line-clamp-2"
+                    class="mt-3 text-sm text-foreground-muted leading-relaxed line-clamp-2"
                   >
                     {image.attributes.description}
                   </p>

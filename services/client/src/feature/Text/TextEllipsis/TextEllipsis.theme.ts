@@ -26,9 +26,9 @@ export const textEllipsisFadeTheme = cva(
     variants: {
       background: {
         default: 'from-bg-start',
-        card: 'from-white dark:from-gray-900',
-        muted: 'from-gray-100 dark:from-gray-800',
-        adaptive: 'from-white/80 dark:from-gray-900/80',
+        card: 'from-card',
+        muted: 'from-muted',
+        adaptive: 'from-card/80',
       },
     },
     defaultVariants: {

@@ -5,24 +5,21 @@ export const ghostRowsVariants = cva(
 );
 
 export const ghostRowVariants = cva(
-  'flex items-center gap-3 rounded-xl border border-slate-200/80 bg-slate-100/60 px-3.5 py-2.5 dark:border-slate-700/50 dark:bg-slate-800/30',
+  'flex items-center gap-3 rounded-xl border border-border/80 dark:border-border-strong/50 bg-muted/60 dark:bg-muted/30 px-3.5 py-2.5',
 );
 
 export const ghostRowThumbVariants = cva(
-  'h-8 w-8 shrink-0 rounded-lg bg-slate-200/80 dark:bg-slate-700/50',
+  'h-8 w-8 shrink-0 rounded-lg bg-border/70',
 );
 
-export const ghostRowBarVariants = cva(
-  'h-2 rounded-full bg-slate-200/80 dark:bg-slate-700/50',
-  {
-    variants: {
-      width: {
-        long: 'flex-1',
-        short: 'w-1/4 shrink-0',
-      },
-    },
-    defaultVariants: {
-      width: 'long',
+export const ghostRowBarVariants = cva('h-2 rounded-full bg-border/70', {
+  variants: {
+    width: {
+      long: 'flex-1',
+      short: 'w-1/4 shrink-0',
     },
   },
-);
+  defaultVariants: {
+    width: 'long',
+  },
+});

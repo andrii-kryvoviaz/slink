@@ -86,24 +86,22 @@
 >
   <div class="flex items-center justify-start gap-4 mb-8">
     <div
-      class="w-12 h-12 rounded-xl bg-linear-to-br from-primary/10 to-primary/5 border border-primary/10 flex items-center justify-center shadow-sm"
+      class="w-12 h-12 rounded-xl bg-linear-to-br from-foreground-solid/10 to-foreground-solid/5 border border-foreground-solid/10 flex items-center justify-center shadow-sm"
     >
       <BrandLogo class="h-6 w-6" />
     </div>
     <div class="text-left">
-      <h1
-        class="text-2xl font-semibold text-gray-900 dark:text-white tracking-tight"
-      >
+      <h1 class="text-2xl font-semibold text-foreground tracking-tight">
         Welcome back
       </h1>
-      <p class="text-gray-500 dark:text-gray-400 text-sm mt-0.5">
+      <p class="text-foreground-muted text-sm mt-0.5">
         Sign in to continue to {customization.siteName}
       </p>
     </div>
   </div>
 
   <div
-    class="bg-white/60 dark:bg-gray-900/40 backdrop-blur-sm rounded-2xl border border-gray-200/60 dark:border-gray-700/40 p-6 shadow-sm"
+    class="bg-card/60 dark:bg-card/40 backdrop-blur-sm rounded-2xl border border-border/60 p-6 shadow-sm"
   >
     {#if data.sso?.error}
       <Notice variant="error" class="mb-5">
@@ -133,7 +131,7 @@
         rounded="lg"
       >
         {#snippet leftIcon()}
-          <Icon icon="ph:user" class="text-gray-400 dark:text-gray-500" />
+          <Icon icon="ph:user" class="text-ring" />
         {/snippet}
       </Input>
 
@@ -153,10 +151,7 @@
           rounded="lg"
         >
           {#snippet leftIcon()}
-            <Icon
-              icon="ph:lock-simple"
-              class="text-gray-400 dark:text-gray-500"
-            />
+            <Icon icon="ph:lock-simple" class="text-ring" />
           {/snippet}
           <PasswordToggle
             visible={showPassword}
@@ -166,7 +161,7 @@
       </div>
 
       <Button
-        variant="accent"
+        variant="cta"
         size="lg"
         class="w-full mt-2 group"
         type="submit"
@@ -185,16 +180,11 @@
     {#if providers.length > 0}
       <div class="mt-5">
         <div class="relative flex items-center">
-          <div
-            class="flex-grow border-t border-gray-200/60 dark:border-gray-700/40"
-          ></div>
-          <span
-            class="mx-4 shrink-0 text-xs text-gray-400 dark:text-gray-500 uppercase tracking-wide"
+          <div class="flex-grow border-t border-border/60"></div>
+          <span class="mx-4 shrink-0 text-xs text-ring uppercase tracking-wide"
             >or continue with</span
           >
-          <div
-            class="flex-grow border-t border-gray-200/60 dark:border-gray-700/40"
-          ></div>
+          <div class="flex-grow border-t border-border/60"></div>
         </div>
 
         <div class="mt-4 space-y-3">

@@ -149,7 +149,7 @@
         </div>
         {#if logoUpload.previewError && !logoUpload.showLoader}
           <div
-            class="flex h-9 shrink-0 items-center gap-1.5 rounded-lg border border-border bg-background px-3 text-xs text-muted-foreground"
+            class="flex h-9 shrink-0 items-center gap-1.5 rounded-lg border border-border bg-background px-3 text-xs text-foreground-muted"
           >
             <Icon icon="ph:image-broken" class="h-4 w-4" />
             <span>Couldn't load this image</span>
@@ -169,7 +169,7 @@
               >
                 <Icon
                   icon="lucide:loader-2"
-                  class="h-4 w-4 animate-spin text-muted-foreground"
+                  class="h-4 w-4 animate-spin text-foreground-muted"
                 />
               </div>
             {/if}

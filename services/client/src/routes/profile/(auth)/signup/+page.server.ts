@@ -22,7 +22,7 @@ export const load: PageServerLoad = async ({ parent, locals }) => {
   return { settings, globalSettings, user, userPreferences };
 };
 
-const defaultAction: Action = async ({ request, cookies, locals }) => {
+const defaultAction: Action = async ({ request, locals }) => {
   const { username, email, password, confirm } = await formData(request);
 
   let redirectUrl: string | null;
@@ -37,7 +37,7 @@ const defaultAction: Action = async ({ request, cookies, locals }) => {
 
     const { id, headers } = response;
 
-    locals.cookieManager.setCookie(cookies, 'createdUserId', id);
+    locals.cookies.setCookie('createdUserId', id);
 
     redirectUrl = headers.get('location');
   } catch (e) {

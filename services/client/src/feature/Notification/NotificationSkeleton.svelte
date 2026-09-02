@@ -14,7 +14,7 @@
 <div class="flex flex-col gap-3 {customClass}">
   {#each skeletonItems as _, index}
     <div
-      class="flex items-start gap-4 p-4 pl-5 rounded-2xl bg-gray-50 dark:bg-white/2"
+      class="flex items-start gap-4 p-4 pl-5 rounded-2xl bg-muted-soft"
       style="animation-delay: {index * 75}ms"
     >
       <Skeleton width="40px" height="40px" rounded="xl" />

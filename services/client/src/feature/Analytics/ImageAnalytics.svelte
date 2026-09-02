@@ -77,7 +77,7 @@
 
 <Card class="h-full" variant="enhanced" rounded="xl" shadow="lg">
   <div class="flex items-center justify-between">
-    <p class="text-lg font-semibold text-gray-900 dark:text-white">Uploads</p>
+    <p class="text-lg font-semibold text-foreground">Uploads</p>
     <div class="flex items-center gap-2">
       <RefreshButton size="sm" loading={$isLoading} onclick={handleFetch} />
       {#if availableIntervals}
@@ -101,17 +101,15 @@
       in:fade={{ duration: 200 }}
     >
       <div
-        class="w-14 h-14 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mb-4"
+        class="w-14 h-14 bg-muted rounded-full flex items-center justify-center mb-4"
       >
         <Icon
           icon="heroicons:chart-bar"
-          class="w-7 h-7 text-gray-400 dark:text-gray-500"
+          class="w-7 h-7 text-foreground-subtle"
         />
       </div>
-      <h3 class="text-base font-medium text-gray-900 dark:text-white mb-1">
-        No uploads yet
-      </h3>
-      <p class="text-sm text-gray-500 dark:text-gray-400 max-w-xs">
+      <h3 class="text-base font-medium text-foreground mb-1">No uploads yet</h3>
+      <p class="text-sm text-foreground-muted max-w-xs">
         Upload data will appear here once images are added
       </p>
     </div>

@@ -3,36 +3,32 @@ import { cva } from 'class-variance-authority';
 export const CardTheme = cva(`flex flex-col border w-full`, {
   variants: {
     variant: {
-      gray: 'bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-gray-300 border-gray-300 dark:border-gray-800 divide-gray-300 dark:divide-gray-800',
-      red: 'bg-red-50 dark:bg-gray-800 text-red-800 dark:text-red-400 border-red-300 dark:border-red-800 divide-red-300 dark:divide-red-800',
+      gray: 'bg-muted text-foreground-soft border-border-strong divide-border-strong',
+      red: 'bg-danger-wash dark:bg-danger-wash/20 text-danger-text border-danger-border dark:border-danger-border/30 divide-danger-border dark:divide-danger-border/30',
       yellow:
-        'bg-yellow-50 dark:bg-gray-800 text-yellow-800 dark:text-yellow-300 border-yellow-300 dark:border-yellow-800 divide-yellow-300 dark:divide-yellow-800',
+        'bg-decor-yellow-wash dark:bg-decor-yellow-wash/20 text-decor-yellow-text border-decor-yellow-border divide-decor-yellow-border',
       green:
-        'bg-green-50 dark:bg-gray-800 text-green-800 dark:text-green-400 border-green-300 dark:border-green-800 divide-green-300 dark:divide-green-800',
-      indigo:
-        'bg-indigo-50 dark:bg-gray-800 text-indigo-800 dark:text-indigo-400 border-indigo-300 dark:border-indigo-800 divide-indigo-300 dark:divide-indigo-800',
-      purple:
-        'bg-purple-50 dark:bg-gray-800 text-purple-800 dark:text-purple-400 border-purple-300 dark:border-purple-800 divide-purple-300 dark:divide-purple-800',
-      pink: 'bg-pink-50 dark:bg-gray-800 text-pink-800 dark:text-pink-400 border-pink-300 dark:border-pink-800 divide-pink-300 dark:divide-pink-800',
-      blue: 'bg-blue-50 dark:bg-gray-800 text-blue-800 dark:text-blue-400 border-blue-300 dark:border-blue-800 divide-blue-300 dark:divide-blue-800',
+        'bg-success-wash dark:bg-success-wash/20 text-success-text border-success-border dark:border-success-border/30 divide-success-border dark:divide-success-border/30',
+      indigo: 'bg-accent/10 text-accent border-accent/40 divide-accent/40',
+      purple: 'bg-accent/10 text-accent border-accent/40 divide-accent/40',
+      pink: 'bg-decor-pink-wash dark:bg-decor-pink-wash/20 text-decor-pink-text border-decor-pink-border divide-decor-pink-border',
+      blue: 'bg-info-wash dark:bg-info-wash/20 text-info-text border-info-border dark:border-info-border/30 divide-info-border dark:divide-info-border/30',
       light:
-        'bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-500 divide-gray-500',
-      dark: 'bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-500 divide-gray-500',
+        'bg-surface-raised text-foreground-soft border-border-bold divide-border-bold',
+      dark: 'bg-muted text-foreground-soft border-border-bold divide-border-bold',
       default:
-        'bg-white dark:bg-gray-900/60 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-800 divide-gray-200 dark:divide-gray-800',
+        'bg-card dark:bg-card/60 text-foreground-muted border-border divide-border',
       enhanced:
-        'bg-white dark:bg-gray-900/60 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-800 divide-gray-200 dark:divide-gray-800',
+        'bg-card dark:bg-card/60 text-foreground-muted border-border divide-border',
       dropdown:
-        'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-100 dark:border-gray-600 divide-gray-100 dark:divide-gray-600',
-      navbar:
-        'bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200 border-gray-100 dark:border-gray-700 divide-gray-100 dark:divide-gray-700',
-      navbarUl:
-        'bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-400 border-gray-100 dark:border-gray-700 divide-gray-100 dark:divide-gray-700',
-      form: 'bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-700 divide-gray-300 dark:divide-gray-700',
+        'bg-surface-raised text-foreground-soft border-border divide-border',
+      navbar: 'bg-card text-foreground-soft border-border divide-border',
+      navbarUl: 'bg-muted text-foreground-soft border-border divide-border',
+      form: 'bg-surface-raised text-foreground border-border-strong divide-border-strong',
       primary:
-        'bg-primary-50 dark:bg-gray-800 text-primary-800 dark:text-primary-400 border-primary-500 dark:border-primary-200 divide-primary-500 dark:divide-primary-200',
+        'bg-foreground-solid/5 text-foreground-solid border-foreground-solid/30 divide-foreground-solid/30',
       orange:
-        'bg-orange-50 dark:bg-orange-800 text-orange-800 dark:text-orange-400 border-orange-300 dark:border-orange-800 divide-orange-300 dark:divide-orange-800',
+        'bg-decor-orange-wash dark:bg-decor-orange-wash/20 text-decor-orange-text border-decor-orange-border divide-decor-orange-border',
       none: '',
     },
     size: {

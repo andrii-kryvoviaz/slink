@@ -6,9 +6,9 @@ export const dropdownMenuItemTheme = cva(
     variants: {
       variant: {
         default:
-          'text-gray-700 dark:text-gray-200 data-highlighted:bg-blue-100 dark:data-highlighted:bg-blue-800/40 data-highlighted:text-blue-600 dark:data-highlighted:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-800/40 hover:text-blue-600 dark:hover:text-blue-300',
+          'text-foreground-soft data-highlighted:bg-info-wash dark:data-highlighted:bg-info-wash/20 data-highlighted:text-info-text hover:bg-info-wash dark:hover:bg-info-wash/20 hover:text-info-text',
         destructive:
-          'text-gray-700 dark:text-gray-200 data-highlighted:bg-red-100 dark:data-highlighted:bg-red-900/60 data-highlighted:text-red-600 dark:data-highlighted:text-red-300 hover:bg-red-100 dark:hover:bg-red-900/60 hover:text-red-600 dark:hover:text-red-300 data-[variant=destructive]:*:[svg]:!text-red-600 dark:data-[variant=destructive]:*:[svg]:!text-red-300',
+          'text-foreground-soft data-highlighted:bg-danger-wash dark:data-highlighted:bg-danger-wash/20 data-highlighted:text-danger-text hover:bg-danger-wash dark:hover:bg-danger-wash/20 hover:text-danger-text data-[variant=destructive]:*:[svg]:!text-danger-text',
       },
       inset: {
         true: 'data-[inset]:pl-8',
@@ -25,9 +25,9 @@ export const dropdownMenuItemTheme = cva(
 export const dropdownMenuItemIconTheme = cva('transition-colors duration-150', {
   variants: {
     variant: {
-      default: 'text-gray-500 dark:text-gray-400',
+      default: 'text-foreground-muted',
       destructive:
-        'text-gray-500 dark:text-gray-400 group-hover:text-red-600 dark:group-hover:text-red-300 group-data-[highlighted]:text-red-600 dark:group-data-[highlighted]:text-red-300',
+        'text-foreground-muted group-hover:text-danger-text group-data-[highlighted]:text-danger-text',
     },
   },
   defaultVariants: {

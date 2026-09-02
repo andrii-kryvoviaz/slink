@@ -1,0 +1,36 @@
+@layer presets {
+  [data-theme='tokyo-night'] {
+    --color-background: light-dark(
+      oklch(0.9135 0.0068 277.16),
+      oklch(0.2263 0.0214 280.49)
+    );
+    --color-foreground: light-dark(
+      oklch(0.3598 0.0529 273.42),
+      oklch(0.8456 0.0611 274.76)
+    );
+    --color-accent: light-dark(
+      oklch(0.5999 0.1804 257.53),
+      oklch(0.719 0.1322 264.2)
+    );
+    --color-primary: light-dark(
+      oklch(0.5999 0.1804 257.53),
+      oklch(0.719 0.1322 264.2)
+    );
+    --color-success: light-dark(
+      oklch(0.5249 0.0929 130.28),
+      oklch(0.7953 0.1395 130.14)
+    );
+    --color-warning: light-dark(
+      oklch(0.5231 0.1044 71.02),
+      oklch(0.7839 0.1057 75.43)
+    );
+    --color-danger: light-dark(
+      oklch(0.6337 0.2326 11.57),
+      oklch(0.7227 0.1589 10.28)
+    );
+    --color-info: light-dark(
+      oklch(0.5141 0.1031 230.51),
+      oklch(0.82 0.1051 235.72)
+    );
+  }
+}

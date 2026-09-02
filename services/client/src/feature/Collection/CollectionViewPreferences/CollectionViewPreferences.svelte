@@ -60,7 +60,7 @@
   <div class="w-64 p-3 space-y-4">
     <div class="space-y-2">
       <p
-        class="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400"
+        class="text-xs font-medium uppercase tracking-wide text-foreground-muted"
       >
         Items per page
       </p>
@@ -93,7 +93,7 @@
 
     <div class="space-y-2">
       <p
-        class="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400"
+        class="text-xs font-medium uppercase tracking-wide text-foreground-muted"
       >
         Load strategy
       </p>

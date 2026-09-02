@@ -245,9 +245,7 @@
         >
           {#snippet extras()}
             {#if historyFeedState.tagFilter.selectedTags.length > 1}
-              <div
-                class="w-px h-3.5 bg-slate-300 dark:bg-slate-600 hidden sm:block"
-              ></div>
+              <div class="w-px h-3.5 bg-border-strong hidden sm:block"></div>
               <TagMatchModeToggle
                 requireAllTags={historyFeedState.tagFilter.requireAllTags}
                 onChange={handleMatchModeChange}
@@ -431,7 +429,7 @@
         loading={batchActions.isLoading}
         onAction={batchActions.download}
       />
-      <div class="h-6 w-px bg-gray-200 dark:bg-gray-700"></div>
+      <div class="h-6 w-px bg-border"></div>
       <DeleteAction
         selectedCount={selectionState.selectedCount}
         loading={batchActions.isLoading}

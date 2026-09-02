@@ -15,13 +15,20 @@
 <div class="w-full min-w-56 p-2 space-y-4">
   <div class="flex items-center gap-3">
     <div
-      class="flex h-10 w-10 items-center justify-center rounded-full bg-red-500/15 border border-red-500/20 shrink-0"
+      class="flex h-10 w-10 items-center justify-center rounded-full bg-danger/15 border border-danger/20 shrink-0"
     >
-      <Icon icon="ph:chat-circle-text" class="h-5 w-5 text-red-400" />
+      <Icon
+        icon="ph:chat-circle-text"
+        class="h-5 w-5 text-surface-inverse-danger"
+      />
     </div>
     <div>
-      <h3 class="text-sm font-semibold text-white">Delete Comment</h3>
-      <p class="text-xs text-white/50">Comment will be permanently removed</p>
+      <h3 class="text-sm font-semibold text-on-surface-inverse">
+        Delete Comment
+      </h3>
+      <p class="text-xs text-on-surface-inverse/50">
+        Comment will be permanently removed
+      </p>
     </div>
   </div>
 

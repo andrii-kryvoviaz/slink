@@ -52,7 +52,7 @@
 </script>
 
 <div
-  class="space-y-6 p-6 bg-gradient-to-br from-slate-50 to-slate-100/50 dark:from-slate-800/50 dark:to-slate-700/30 border border-slate-200/50 dark:border-slate-700/30 rounded-2xl shadow-lg backdrop-blur-sm"
+  class="space-y-6 p-6 bg-gradient-to-br from-muted-soft to-muted/50 dark:to-muted/30 border border-border/50 dark:border-border/30 rounded-2xl shadow-lg backdrop-blur-sm"
 >
   <div class="flex items-start gap-6">
     <div
@@ -67,16 +67,12 @@
     </div>
 
     <div class="flex-1 min-w-0">
-      <h3
-        class="text-xl font-semibold text-slate-900 dark:text-white tracking-tight"
-      >
+      <h3 class="text-xl font-semibold text-foreground tracking-tight">
         {title}
       </h3>
 
       {#if message}
-        <p
-          class="mt-2 text-base text-slate-600 dark:text-slate-400 leading-relaxed"
-        >
+        <p class="mt-2 text-base text-foreground-muted leading-relaxed">
           {message}
         </p>
       {/if}

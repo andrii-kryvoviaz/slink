@@ -1344,14 +1344,6 @@ msgstr "Condividi i tuoi file multimediali con gli altri caricandoli e organizza
 msgid "Shortcut"
 msgstr "Scorciatoia"
 
-#: src/feature/Navigation/Navbar/Navbar.svelte
-msgid "Toggle Theme"
-msgstr "Cambia tema"
-
-#: src/feature/Navigation/Navbar/Navbar.svelte
-msgid "Switch between light and dark mode."
-msgstr "Passa dalla modalità chiara a quella scura."
-
 #: src/feature/Navigation/Sidebar/NavProjects.svelte
 msgid "Projects"
 msgstr "Progetti"
@@ -1411,11 +1403,11 @@ msgstr "Rendi privata"
 msgid "Make Public"
 msgstr "Rendi pubblica"
 
-#: src/feature/Layout/ThemeSwitch/ThemeSwitch.svelte
+#: src/feature/Layout/ModeSwitch/ModeSwitch.svelte
 msgid "Switch to light mode"
 msgstr "Passa alla modalità chiara"
 
-#: src/feature/Layout/ThemeSwitch/ThemeSwitch.svelte
+#: src/feature/Layout/ModeSwitch/ModeSwitch.svelte
 msgid "Switch to dark mode"
 msgstr "Passa alla modalità scura"
 
@@ -2705,6 +2697,7 @@ msgid "Visibility Options"
 msgstr "Opzioni di visibilità"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
+#: src/lib/settings/themes.language.ts
 #: src/routes/help/faq/+page.svelte
 msgid "Default"
 msgstr "Predefinito"
@@ -5139,3 +5132,55 @@ msgstr "Disabilita ed elimina i contenuti"
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
 msgid "Deletes their images, collections, and bookmarks by others. Comments stay, shown as deleted."
 msgstr "Elimina le sue immagini, le sue raccolte e i preferiti che altri hanno aggiunto alle sue immagini. I commenti restano, mostrati come eliminati."
+
+#: src/routes/preferences/+page.svelte
+msgid "Appearance"
+msgstr "Aspetto"
+
+#: src/routes/preferences/+page.svelte
+msgid "Theme"
+msgstr "Tema"
+
+#: src/routes/preferences/+page.svelte
+msgid "Choose your preferred color theme for the interface"
+msgstr "Scegli il tema colore preferito per l'interfaccia"
+
+#: src/lib/settings/themes.language.ts
+msgid "Nord"
+msgstr "Nord"
+
+#: src/lib/settings/themes.language.ts
+msgid "Catppuccin"
+msgstr "Catppuccin"
+
+#: src/lib/settings/themes.language.ts
+msgid "Gruvbox"
+msgstr "Gruvbox"
+
+#: src/lib/settings/themes.language.ts
+msgid "Rosé Pine"
+msgstr "Rosé Pine"
+
+#: src/lib/settings/themes.language.ts
+msgid "Tokyo Night"
+msgstr "Tokyo Night"
+
+#: src/lib/settings/themes.language.ts
+msgid "Everforest"
+msgstr "Everforest"
+
+#: src/lib/settings/themes.language.ts
+msgid "Monochrome"
+msgstr "Monocromatico"
+
+#: src/feature/Layout/ModeSwitch/ModeSwitchHoverCard.svelte
+msgid "Toggle light and dark mode."
+msgstr "Passa dalla modalità chiara a quella scura."
+
+#: src/feature/Layout/ModeSwitch/ModeSwitchHoverCard.svelte
+msgid "Theme: {0}"
+msgstr "Tema: {0}"
+
+#: src/feature/Layout/ModeSwitch/ModeSwitchHoverCard.svelte
+msgid "Customize"
+msgstr "Personalizza"

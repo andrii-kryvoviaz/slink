@@ -96,6 +96,7 @@ export class UserResource extends AbstractResource {
     exifMetadataPreference,
     externalUploadAutoPublish,
     displayLanguage,
+    displayTheme,
   }: {
     defaultLicense?: string | null;
     syncLicenseToImages?: boolean;
@@ -104,6 +105,7 @@ export class UserResource extends AbstractResource {
     exifMetadataPreference?: string | null;
     externalUploadAutoPublish?: boolean | null;
     displayLanguage?: string | null;
+    displayTheme?: string | null;
   }): Promise<EmptyResponse> {
     return this.patch('/user/preferences', {
       json: {
@@ -114,6 +116,7 @@ export class UserResource extends AbstractResource {
         'image.stripExifMetadataOverride': exifMetadataPreference,
         'image.externalUploadAutoPublish': externalUploadAutoPublish,
         'display.language': displayLanguage,
+        'display.theme': displayTheme,
       },
     });
   }

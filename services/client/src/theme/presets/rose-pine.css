@@ -1,0 +1,33 @@
+@layer presets {
+  [data-theme='rose-pine'] {
+    --color-background: light-dark(
+      oklch(0.9699 0.0113 71.9),
+      oklch(0.2134 0.0255 291.13)
+    );
+    --color-foreground: light-dark(
+      oklch(0.4597 0.0629 289.56),
+      oklch(0.9088 0.0299 289.97)
+    );
+    --color-accent: light-dark(
+      oklch(0.6171 0.0738 305.7),
+      oklch(0.776 0.0945 304.99)
+    );
+    --color-primary: light-dark(
+      oklch(0.4909 0.077 228),
+      oklch(0.8219 0.0543 209.56)
+    );
+    --color-success: light-dark(
+      oklch(0.6289 0.0661 210.12),
+      oklch(0.8219 0.0543 209.56)
+    );
+    --color-warning: light-dark(
+      oklch(0.7555 0.1459 69.74),
+      oklch(0.8429 0.11 74.6)
+    );
+    --color-danger: light-dark(
+      oklch(0.5989 0.1071 2.66),
+      oklch(0.6977 0.1565 4.22)
+    );
+    --color-info: light-dark(oklch(0.4909 0.077 228), oklch(0.6138 0.0926 228));
+  }
+}

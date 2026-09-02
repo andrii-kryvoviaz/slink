@@ -5,20 +5,18 @@ export const passwordStrengthBarVariants = cva(
   {
     variants: {
       strength: {
-        weak: 'bg-red-500',
-        fair: 'bg-orange-500',
-        good: 'bg-yellow-500',
-        strong: 'bg-green-500',
-        veryStrong: 'bg-emerald-500',
+        weak: 'bg-danger-solid',
+        fair: 'bg-warning-strong',
+        good: 'bg-warning',
+        strong: 'bg-success',
+        veryStrong: 'bg-success-strong',
       },
       active: {
         true: '',
-        false: 'bg-gray-200 dark:bg-gray-700',
+        false: 'bg-surface-raised',
       },
     },
-    compoundVariants: [
-      { active: false, class: 'bg-gray-200 dark:bg-gray-700' },
-    ],
+    compoundVariants: [{ active: false, class: 'bg-surface-raised' }],
     defaultVariants: {
       strength: 'weak',
       active: false,
@@ -29,11 +27,11 @@ export const passwordStrengthBarVariants = cva(
 export const passwordStrengthLabelVariants = cva('text-xs font-medium', {
   variants: {
     strength: {
-      weak: 'text-red-500',
-      fair: 'text-orange-500',
-      good: 'text-yellow-600 dark:text-yellow-500',
-      strong: 'text-green-500',
-      veryStrong: 'text-emerald-500',
+      weak: 'text-danger',
+      fair: 'text-warning-strong',
+      good: 'text-warning',
+      strong: 'text-success',
+      veryStrong: 'text-success-strong',
     },
   },
   defaultVariants: {

@@ -105,10 +105,10 @@
           {#snippet icon()}
             <Icon
               icon={image.attributes.isPublic ? 'ph:eye-slash' : 'ph:eye'}
-              class="h-4 w-4 {isGuestImage ? 'text-gray-400' : ''}"
+              class="h-4 w-4 {isGuestImage ? 'text-foreground-muted' : ''}"
             />
           {/snippet}
-          <span class={isGuestImage ? 'text-gray-400' : ''}
+          <span class={isGuestImage ? 'text-foreground-muted' : ''}
             >{image.attributes.isPublic ? 'Make Private' : 'Make Public'}</span
           >
         </DropdownSimpleItem>

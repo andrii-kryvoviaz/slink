@@ -24,11 +24,11 @@
   <ul class="flex flex-col gap-3 {customClass}">
     {#each Array(count) as _, index}
       <li
-        class="flex flex-col sm:flex-row w-full overflow-hidden rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/60"
+        class="flex flex-col sm:flex-row w-full overflow-hidden rounded-lg border border-border bg-card dark:bg-card/60"
         style="animation-delay: {index * 100}ms"
       >
         <div
-          class="relative w-full sm:w-40 md:w-48 lg:w-56 shrink-0 bg-gray-100 dark:bg-gray-800/80"
+          class="relative w-full sm:w-40 md:w-48 lg:w-56 shrink-0 bg-muted dark:bg-muted/80"
         >
           <div class="aspect-4/3 sm:aspect-square">
             <Skeleton width="100%" height="100%" rounded="none" />
@@ -82,7 +82,7 @@
   >
     {#each Array(count) as _, index}
       <div
-        class="break-inside-avoid mb-4 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/60"
+        class="break-inside-avoid mb-4 overflow-hidden rounded-lg border border-border bg-card dark:bg-card/60"
         style="animation-delay: {index * 80}ms"
       >
         <div class="relative">

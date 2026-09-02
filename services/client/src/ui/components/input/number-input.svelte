@@ -217,7 +217,7 @@
 
 {#if error}
   <div
-    class="mt-1.5 text-xs text-input-error"
+    class="mt-1.5 text-xs text-accent-strong"
     transition:slide={{ duration: 150 }}
   >
     {error}

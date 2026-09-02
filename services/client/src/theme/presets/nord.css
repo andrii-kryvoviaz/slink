@@ -1,0 +1,28 @@
+@layer presets {
+  [data-theme='nord'] {
+    --color-danger: oklch(0.6061 0.1206 15.34);
+    --color-warning: oklch(0.8549 0.0892 84.09);
+    --color-success: oklch(0.7683 0.0749 131.06);
+
+    --color-background: light-dark(
+      oklch(0.933 0.0104 261.79),
+      oklch(0.2554 0.0163 264.18)
+    );
+    --color-foreground: light-dark(
+      oklch(0.3244 0.0229 264.18),
+      oklch(0.9513 0.0074 260.73)
+    );
+    --color-accent: light-dark(
+      oklch(0.5944 0.0772 254.03),
+      oklch(0.6965 0.0591 248.69)
+    );
+    --color-info: light-dark(
+      oklch(0.5944 0.0772 254.03),
+      oklch(0.7746 0.0622 217.47)
+    );
+    --color-primary: light-dark(
+      oklch(0.5944 0.0772 254.03),
+      oklch(0.7746 0.0622 217.47)
+    );
+  }
+}

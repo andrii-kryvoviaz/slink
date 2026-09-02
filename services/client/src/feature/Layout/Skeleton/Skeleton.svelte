@@ -29,11 +29,11 @@
 
   const animationClasses = {
     pulse: 'animate-pulse',
-    wave: 'animate-shimmer bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 dark:from-gray-700 dark:via-gray-600 dark:to-gray-700 bg-[length:200%_100%]',
+    wave: 'animate-shimmer bg-gradient-to-r from-muted via-foreground-muted/30 to-muted bg-[length:200%_100%]',
     none: '',
   };
 
-  const baseClasses = 'bg-gray-200 dark:bg-gray-700';
+  const baseClasses = 'bg-border dark:bg-border-strong';
 
   const skeletonClasses = $derived(
     className(

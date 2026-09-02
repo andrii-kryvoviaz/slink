@@ -10,12 +10,11 @@
     base: 'inline-flex items-center',
     variants: {
       variant: {
-        default:
-          'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700',
+        default: 'bg-card border border-border',
         glass:
-          'bg-white/90 dark:bg-gray-800/90 backdrop-blur shadow-[inset_0_0_0_1px_rgba(0,0,0,0.1)] dark:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.1)]',
+          'bg-card/90 dark:bg-muted/90 backdrop-blur shadow-[inset_0_0_0_1px_var(--color-border)]',
         ghost: 'bg-transparent',
-        solid: 'bg-gray-100 dark:bg-gray-800',
+        solid: 'bg-muted',
       },
       rounded: {
         none: 'rounded-none',
@@ -54,21 +53,20 @@
   });
 
   export const buttonGroupItemVariants = tv({
-    base: 'relative flex items-center justify-center rounded-md transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-blue-500/50 focus-visible:z-10 disabled:pointer-events-none disabled:opacity-50',
+    base: 'relative flex items-center justify-center rounded-md transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-ring/50 focus-visible:z-10 disabled:pointer-events-none disabled:opacity-50',
     variants: {
       variant: {
         default:
-          'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700',
+          'text-foreground-muted hover:text-foreground hover:bg-hover-strong',
         primary:
-          'bg-blue-600 dark:bg-blue-500 text-white hover:bg-blue-700 dark:hover:bg-blue-600 active:bg-blue-800 dark:active:bg-blue-700',
+          'bg-primary-solid/80 text-on-primary-solid hover:bg-primary-solid/90 active:bg-primary-solid',
         'primary-outline':
-          'border border-blue-600 text-blue-600 dark:border-blue-500 dark:text-blue-500 hover:bg-blue-600 hover:text-white dark:hover:bg-blue-600 dark:hover:text-white active:bg-blue-700',
-        secondary:
-          'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700',
+          'border border-info text-info-text hover:bg-primary-solid/90 hover:text-on-primary-solid active:bg-primary-solid',
+        secondary: 'text-foreground-soft hover:bg-hover-strong',
         ghost:
-          'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100/80 dark:hover:bg-gray-700/80',
+          'text-foreground-muted hover:text-foreground hover:bg-hover-strong/80',
         destructive:
-          'text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30',
+          'text-foreground-muted hover:text-danger-text hover:bg-danger-wash dark:hover:bg-danger-wash/20',
       },
       size: {
         sm: 'h-7 min-w-7 px-2 text-xs',
@@ -77,7 +75,7 @@
         xl: 'h-10 min-w-10 px-3.5 text-base',
       },
       active: {
-        true: 'bg-gray-100 dark:bg-gray-700',
+        true: 'bg-muted',
         false: '',
       },
     },

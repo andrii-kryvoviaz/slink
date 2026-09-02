@@ -3,14 +3,14 @@
 
   import { cn } from '@slink/utils/ui';
 
-  const skeletonClass = 'bg-white/10';
+  const skeletonClass = 'bg-on-surface-inverse/10';
 </script>
 
 <div
-  class="flex flex-col w-full h-full bg-white/5 backdrop-blur-sm rounded-2xl p-4"
+  class="flex flex-col w-full h-full bg-on-surface-inverse/5 backdrop-blur-sm rounded-2xl p-4"
 >
   <div class="flex items-center justify-between mb-4">
-    <h3 class="text-sm font-medium text-white/80">Comments</h3>
+    <h3 class="text-sm font-medium text-on-surface-inverse/80">Comments</h3>
   </div>
 
   <div class="flex-1 space-y-4 overflow-hidden">
@@ -26,7 +26,7 @@
     {/each}
   </div>
 
-  <div class="mt-4 pt-4 border-t border-white/10">
+  <div class="mt-4 pt-4 border-t border-on-surface-inverse/10">
     <div class="flex items-center gap-3">
       <Skeleton class={cn('w-8 h-8 rounded-full shrink-0', skeletonClass)} />
       <Skeleton class={cn('flex-1 h-10 rounded-full', skeletonClass)} />

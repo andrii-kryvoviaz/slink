@@ -18,14 +18,12 @@
 
 {#if viewMode === 'table'}
   <div
-    class="rounded-xl border border-gray-200/60 dark:border-gray-700/40 bg-white dark:bg-gray-900/60 overflow-hidden {customClass}"
+    class="rounded-xl border border-border/60 dark:border-border/40 bg-card dark:bg-card/60 overflow-hidden {customClass}"
   >
     <div class="overflow-x-auto">
       <table class="w-full">
         <thead>
-          <tr
-            class="bg-gray-50 dark:bg-gray-800/50 border-b border-gray-200 dark:border-gray-700"
-          >
+          <tr class="bg-muted dark:bg-muted/50 border-b border-border">
             <th class="h-10 px-4 text-left">
               <Skeleton width="60px" height="10px" />
             </th>
@@ -46,7 +44,7 @@
         <tbody>
           {#each Array(count) as _, index}
             <tr
-              class="border-b border-gray-100 dark:border-gray-700/50 last:border-b-0"
+              class="border-b border-border dark:border-border/50 last:border-b-0"
               style="animation-delay: {index * 75}ms"
             >
               <td class="h-14 px-4">
@@ -89,10 +87,10 @@
   >
     {#each Array(count) as _, index}
       <div
-        class="break-inside-avoid mb-4 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/60"
+        class="break-inside-avoid mb-4 overflow-hidden rounded-lg border border-border bg-card dark:bg-card/60"
         style="animation-delay: {index * 100}ms"
       >
-        <div class="aspect-4/3 relative bg-gray-100 dark:bg-gray-800/50">
+        <div class="aspect-4/3 relative bg-muted dark:bg-muted/50">
           <Skeleton width="100%" height="100%" rounded="none" />
           <div class="absolute bottom-2 left-2">
             <Skeleton

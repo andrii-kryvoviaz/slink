@@ -59,7 +59,6 @@
         vertical: 10,
       },
     },
-    colors: ['#1A56DB', '#7029FF', '#5AC8FF', '#62CC11', '#FFC107', '#FF5722'],
     xaxis: {
       labels: {
         trim: true,
@@ -97,20 +96,63 @@
     return new ChartNormalizer();
   };
 
-  function initChart(node: HTMLElement, options: ApexOptions) {
+  const SERIES_UTILITIES = [
+    'text-chart-1',
+    'text-chart-2',
+    'text-chart-3',
+    'text-chart-4',
+    'text-chart-5',
+  ];
+
+  const toHex = (context: CanvasRenderingContext2D, color: string): string => {
+    context.fillStyle = color;
+    context.fillRect(0, 0, 1, 1);
+
+    const [red, green, blue] = context.getImageData(0, 0, 1, 1).data;
+    return `#${[red, green, blue].map((channel) => channel.toString(16).padStart(2, '0')).join('')}`;
+  };
+
+  const resolveSeriesColors = (
+    node: HTMLElement,
+    utilities: string[],
+  ): string[] => {
+    const probe = document.createElement('span');
+    probe.style.display = 'none';
+    node.appendChild(probe);
+
+    const context = document.createElement('canvas').getContext('2d');
+    const colors = utilities.map((utility) => {
+      probe.className = utility;
+      const color = getComputedStyle(probe).color;
+      return context ? toHex(context, color) : color;
+    });
+
+    probe.remove();
+    return colors;
+  };
+
+  function initChart(node: HTMLElement, options: ChartOptions) {
     let chart: ApexCharts;
+
+    const withSeriesColors = (options: ChartOptions): ApexOptions => ({
+      ...options,
+      colors: resolveSeriesColors(
+        node,
+        options.seriesClasses ?? SERIES_UTILITIES,
+      ),
+    });
 
     async function asyncInitChart() {
       const ApexCharts = (await import('apexcharts')).default;
-      chart = new ApexCharts(node, options);
+      chart = new ApexCharts(node, withSeriesColors(options));
       await chart.render();
     }
 
     asyncInitChart();
 
     return {
-      update(options: ApexOptions) {
-        chart && chart.updateOptions(options);
+      update(options: ChartOptions) {
+        chart && chart.updateOptions(withSeriesColors(options));
       },
       destroy() {
         chart && chart.destroy();
@@ -122,7 +164,7 @@
 
   const handleOptionsChange = (
     options: ChartOptions,
-    theme: 'dark' | 'light',
+    mode: 'dark' | 'light',
   ) => {
     let chartOptions = deepMerge(
       defaultOptions as any,
@@ -138,13 +180,13 @@
       }
     }
 
-    chartOptions.theme = { mode: theme };
+    chartOptions.theme = { mode };
 
     return chartOptions;
   };
 
   let chartOptions = $derived(
-    handleOptionsChange(options, settings.theme.isDark ? 'dark' : 'light'),
+    handleOptionsChange(options, settings.mode.isDark ? 'dark' : 'light'),
   );
 </script>
 

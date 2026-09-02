@@ -20,50 +20,44 @@ export const visibilityBadgeContainerTheme = cva(
       {
         status: 'public',
         variant: 'default',
-        class:
-          'bg-emerald-100 text-emerald-800 dark:bg-emerald-500/20 dark:text-emerald-300',
+        class: 'bg-success-strong/20 text-success-text',
       },
       {
         status: 'public',
         variant: 'compact',
-        class:
-          'bg-emerald-100/90 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-400',
+        class: 'bg-success-strong/15 text-success-text',
       },
       {
         status: 'public',
         variant: 'pill',
-        class:
-          'bg-emerald-100 text-emerald-800 dark:bg-emerald-500/20 dark:text-emerald-300',
+        class: 'bg-success-strong/20 text-success-text',
       },
       {
         status: 'public',
         variant: 'overlay',
         class:
-          'bg-white/95 text-emerald-600 border-emerald-300/50 dark:bg-black/60 dark:text-emerald-400 dark:border-emerald-500/30',
+          'bg-card/95 dark:bg-scrim/60 text-success-strong border-success-strong/30',
       },
       {
         status: 'private',
         variant: 'default',
-        class:
-          'bg-orange-100 text-orange-800 dark:bg-orange-500/20 dark:text-orange-300',
+        class: 'bg-warning-strong/20 text-warning-text',
       },
       {
         status: 'private',
         variant: 'compact',
-        class:
-          'bg-orange-100/90 text-orange-700 dark:bg-orange-500/15 dark:text-orange-400',
+        class: 'bg-warning-strong/15 text-warning-text',
       },
       {
         status: 'private',
         variant: 'pill',
-        class:
-          'bg-orange-100 text-orange-800 dark:bg-orange-500/20 dark:text-orange-300',
+        class: 'bg-warning-strong/20 text-warning-text',
       },
       {
         status: 'private',
         variant: 'overlay',
         class:
-          'bg-white/95 text-orange-600 border-orange-300/50 dark:bg-black/60 dark:text-orange-400 dark:border-orange-500/30',
+          'bg-card/95 dark:bg-scrim/60 text-warning-strong border-warning-strong/30',
       },
     ],
     defaultVariants: {

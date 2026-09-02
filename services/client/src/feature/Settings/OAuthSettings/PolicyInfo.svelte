@@ -31,7 +31,7 @@
         {...props}
         type="button"
         aria-label={optionsLabel}
-        class="inline-flex items-center justify-center w-3.5 h-3.5 rounded text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors duration-150"
+        class="inline-flex items-center justify-center w-3.5 h-3.5 rounded text-foreground-subtle hover:text-foreground-soft transition-colors duration-150"
       >
         <Icon icon="lucide:info" class="w-3.5 h-3.5" />
       </button>
@@ -40,7 +40,7 @@
 
   <HoverCard.Content variant="glass" width="md" rounded="xl" size="sm">
     <div class="space-y-3">
-      <h4 class="text-sm font-semibold text-slate-900 dark:text-slate-100">
+      <h4 class="text-sm font-semibold text-foreground">
         {title}
       </h4>
 
@@ -49,8 +49,8 @@
       </div>
 
       {#if note}
-        <div class="pt-2 border-t border-gray-200/60 dark:border-gray-700/50">
-          <p class="text-[11px] text-gray-500 dark:text-gray-400">
+        <div class="pt-2 border-t border-border/60">
+          <p class="text-[11px] text-foreground-muted">
             {@render note()}
           </p>
         </div>

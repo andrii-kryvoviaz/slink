@@ -11,10 +11,10 @@
 </script>
 
 <div>
-  <h3 class="text-sm font-semibold text-slate-900 dark:text-white">
+  <h3 class="text-sm font-semibold text-foreground">
     {title}
   </h3>
-  <p class="text-xs text-slate-600 dark:text-slate-400">
+  <p class="text-xs text-foreground-muted">
     {#if children}{@render children()}{:else}{description}{/if}
   </p>
 </div>

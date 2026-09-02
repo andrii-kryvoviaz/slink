@@ -9,34 +9,19 @@
     {
       variants: {
         variant: {
-          amber: [
-            'bg-amber-25/50 text-amber-700 border-amber-200/20 shadow-amber-500/4',
-            'dark:bg-amber-950/50 dark:text-amber-200 dark:border-amber-800/20 dark:shadow-amber-900/10',
-          ],
-          purple: [
-            'bg-purple-25/50 text-purple-700 border-purple-200/20 shadow-purple-500/4',
-            'dark:bg-purple-950/50 dark:text-purple-200 dark:border-purple-800/20 dark:shadow-purple-900/10',
-          ],
-          red: [
-            'bg-red-25/50 text-red-700 border-red-200/20 shadow-red-500/4',
-            'dark:bg-red-950/50 dark:text-red-200 dark:border-red-800/20 dark:shadow-red-900/10',
-          ],
-          green: [
-            'bg-green-25/50 text-green-700 border-green-200/20 shadow-green-500/4',
-            'dark:bg-green-950/50 dark:text-green-200 dark:border-green-800/20 dark:shadow-green-900/10',
-          ],
-          blue: [
-            'bg-blue-25/50 text-blue-700 border-blue-200/20 shadow-blue-500/4',
-            'dark:bg-blue-950/50 dark:text-blue-200 dark:border-blue-800/20 dark:shadow-blue-900/10',
-          ],
-          yellow: [
-            'bg-yellow-25/50 text-yellow-700 border-yellow-200/20 shadow-yellow-500/4',
-            'dark:bg-yellow-950/50 dark:text-yellow-200 dark:border-yellow-800/20 dark:shadow-yellow-900/10',
-          ],
+          accent:
+            'text-accent-text border-accent-border/20 dark:border-accent-border/6 shadow-accent/4 bg-accent-wash dark:bg-accent-wash/20',
+          success:
+            'text-success-text border-success-border/20 dark:border-success-border/6 shadow-success/4 bg-success-wash dark:bg-success-wash/20',
+          warning:
+            'text-warning-text border-warning-border/20 dark:border-warning-border/6 shadow-warning/4 bg-warning-wash dark:bg-warning-wash/20',
+          danger:
+            'text-danger-text border-danger-border/20 dark:border-danger-border/6 shadow-danger/4 bg-danger-wash dark:bg-danger-wash/20',
+          info: 'text-info-text border-info-border/20 dark:border-info-border/6 shadow-info/4 bg-info-wash dark:bg-info-wash/20',
         },
       },
       defaultVariants: {
-        variant: 'purple',
+        variant: 'accent',
       },
     },
   );
@@ -46,16 +31,15 @@
     {
       variants: {
         variant: {
-          amber: 'bg-amber-100/60 dark:bg-amber-950/60',
-          purple: 'bg-purple-100/60 dark:bg-purple-950/60',
-          red: 'bg-red-100/60 dark:bg-red-950/60',
-          green: 'bg-green-100/60 dark:bg-green-950/60',
-          blue: 'bg-blue-100/60 dark:bg-blue-950/60',
-          yellow: 'bg-yellow-100/60 dark:bg-yellow-950/60',
+          accent: 'bg-accent/15',
+          success: 'bg-success/15',
+          warning: 'bg-warning/15',
+          danger: 'bg-danger/15',
+          info: 'bg-info/15',
         },
       },
       defaultVariants: {
-        variant: 'purple',
+        variant: 'accent',
       },
     },
   );
@@ -63,16 +47,15 @@
   const iconVariants = cva('h-4 w-4', {
     variants: {
       variant: {
-        amber: 'text-amber-600 dark:text-amber-400',
-        purple: 'text-purple-600 dark:text-purple-400',
-        red: 'text-red-600 dark:text-red-400',
-        green: 'text-green-600 dark:text-green-400',
-        blue: 'text-blue-600 dark:text-blue-400',
-        yellow: 'text-yellow-600 dark:text-yellow-400',
+        accent: 'text-accent',
+        success: 'text-success',
+        warning: 'text-warning',
+        danger: 'text-danger',
+        info: 'text-info',
       },
     },
     defaultVariants: {
-      variant: 'purple',
+      variant: 'accent',
     },
   });
 
@@ -81,34 +64,15 @@
     {
       variants: {
         variant: {
-          amber: [
-            'text-amber-600 dark:text-amber-400 hover:bg-amber-100/60 dark:hover:bg-amber-950/60',
-            'focus:ring-amber-500/20',
-          ],
-          purple: [
-            'text-purple-600 dark:text-purple-400 hover:bg-purple-100/60 dark:hover:bg-purple-950/60',
-            'focus:ring-purple-500/20',
-          ],
-          red: [
-            'text-red-600 dark:text-red-400 hover:bg-red-100/60 dark:hover:bg-red-950/60',
-            'focus:ring-red-500/20',
-          ],
-          green: [
-            'text-green-600 dark:text-green-400 hover:bg-green-100/60 dark:hover:bg-green-950/60',
-            'focus:ring-green-500/20',
-          ],
-          blue: [
-            'text-blue-600 dark:text-blue-400 hover:bg-blue-100/60 dark:hover:bg-blue-950/60',
-            'focus:ring-blue-500/20',
-          ],
-          yellow: [
-            'text-yellow-600 dark:text-yellow-400 hover:bg-yellow-100/60 dark:hover:bg-yellow-950/60',
-            'focus:ring-yellow-500/20',
-          ],
+          accent: 'text-accent hover:bg-accent/15 focus:ring-accent/20',
+          success: 'text-success hover:bg-success/15 focus:ring-success/20',
+          warning: 'text-warning hover:bg-warning/15 focus:ring-warning/20',
+          danger: 'text-danger hover:bg-danger/15 focus:ring-danger/20',
+          info: 'text-info hover:bg-info/15 focus:ring-info/20',
         },
       },
       defaultVariants: {
-        variant: 'purple',
+        variant: 'accent',
       },
     },
   );
@@ -120,7 +84,7 @@
   }
 
   let {
-    variant = 'purple',
+    variant = 'accent',
     icon = 'clarity:block-line',
     oncloseToast,
     children,

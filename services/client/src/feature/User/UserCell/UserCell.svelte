@@ -14,10 +14,10 @@
 <div class="flex items-center space-x-3">
   <UserAvatar {user} size="md" />
   <div class="min-w-0">
-    <div class="font-medium text-gray-900 dark:text-white truncate">
+    <div class="font-medium text-foreground truncate">
       {user.displayName}
     </div>
-    <div class="text-sm text-gray-500 dark:text-gray-400 truncate">
+    <div class="text-sm text-foreground-muted truncate">
       <CopyableText text={user.email} />
     </div>
   </div>

@@ -1,0 +1,180 @@
+@property --color-background {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: white;
+}
+
+@property --color-foreground {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: black;
+}
+
+@property --color-accent {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: blue;
+}
+
+@property --color-success {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: green;
+}
+
+@property --color-warning {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: orange;
+}
+
+@property --color-danger {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: red;
+}
+
+@property --color-info {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: blue;
+}
+
+@property --color-primary {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: blue;
+}
+
+@property --color-scrim {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: black;
+}
+
+@theme static {
+  --radius: 0.625rem;
+
+  --color-background: light-dark(var(--color-white), var(--color-zinc-950));
+  --color-foreground: light-dark(var(--color-gray-900), var(--color-zinc-50));
+  --color-accent: light-dark(var(--color-indigo-500), var(--color-indigo-400));
+
+  --color-success: light-dark(var(--color-green-500), var(--color-green-400));
+  --color-warning: light-dark(var(--color-amber-500), var(--color-amber-400));
+  --color-danger: light-dark(var(--color-red-600), var(--color-red-400));
+  --color-info: light-dark(var(--color-blue-500), var(--color-blue-400));
+  --color-primary: light-dark(var(--color-blue-500), var(--color-blue-400));
+
+  --color-scrim: var(--color-black);
+
+  --shadow-raised:
+    0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-overlay:
+    0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --blur-glass: 20px;
+
+  --animate-shimmer: shimmer 2s infinite linear;
+  --animate-spin-slow: spin 2s linear infinite;
+
+  --breakpoint-xs: 480px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+  --breakpoint-3xl: 1920px;
+}
+
+@layer presets {
+  .dark {
+    --shadow-raised:
+      0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.2);
+    --shadow-overlay:
+      0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+  }
+
+  [data-theme='default'] {
+    --color-background: light-dark(var(--color-white), var(--color-zinc-950));
+    --color-foreground: light-dark(var(--color-gray-900), var(--color-zinc-50));
+    --color-accent: light-dark(
+      var(--color-indigo-500),
+      var(--color-indigo-400)
+    );
+    --color-info: light-dark(var(--color-blue-500), var(--color-blue-400));
+    --color-primary: light-dark(var(--color-blue-500), var(--color-blue-400));
+
+    --color-foreground-body: light-dark(
+      var(--color-gray-800),
+      var(--color-gray-200)
+    );
+    --color-foreground-soft: light-dark(
+      var(--color-gray-700),
+      var(--color-gray-300)
+    );
+    --color-card: light-dark(
+      oklch(
+        from var(--color-background) calc(l + 0.0183) calc(c * 0.7115)
+          calc(h - 1.06)
+      ),
+      var(--color-gray-900)
+    );
+    --color-foreground-solid: light-dark(
+      var(--color-zinc-900),
+      var(--color-zinc-200)
+    );
+    --color-on-foreground-solid: light-dark(
+      var(--color-zinc-50),
+      var(--color-zinc-900)
+    );
+    --color-muted: light-dark(var(--color-gray-100), var(--color-gray-800));
+    --color-muted-soft: light-dark(var(--color-gray-50), var(--color-card));
+    --color-foreground-muted: light-dark(
+      var(--color-gray-500),
+      var(--color-gray-400)
+    );
+    --color-border: light-dark(var(--color-gray-200), oklch(1 0 0 / 0.1));
+    --color-border-strong: light-dark(
+      var(--color-gray-300),
+      var(--color-gray-700)
+    );
+    --color-border-bold: light-dark(
+      var(--color-gray-500),
+      var(--color-gray-600)
+    );
+    --color-ring: light-dark(var(--color-zinc-400), var(--color-zinc-500));
+    --color-surface-inverse: var(--color-neutral-900);
+    --color-bg-start: light-dark(var(--color-card), var(--color-slate-900));
+    --color-bg-end: light-dark(var(--color-muted), var(--color-black));
+    --color-switch-unchecked: light-dark(
+      oklch(
+        from var(--color-zinc-300) calc(l - 0.021) calc(c * 1.3333)
+          calc(h + 0.034)
+      ),
+      oklch(1 0 0 / 20%)
+    );
+    --color-sidebar: light-dark(
+      oklch(from var(--color-zinc-50) l c h / 0.7),
+      oklch(from var(--color-zinc-900) l c h / 0.95)
+    );
+    --color-on-sidebar: light-dark(
+      var(--color-zinc-950),
+      var(--color-foreground)
+    );
+    --color-sidebar-primary: light-dark(
+      var(--color-foreground-solid),
+      var(--color-blue-700)
+    );
+    --color-sidebar-hover: light-dark(
+      oklch(from var(--color-zinc-100) l c h / 0.8),
+      oklch(from var(--color-zinc-800) l c h / 0.8)
+    );
+    --color-on-sidebar-hover: light-dark(
+      var(--color-zinc-900),
+      var(--color-foreground)
+    );
+    --color-sidebar-border: light-dark(
+      oklch(from var(--color-zinc-200) l c h / 0.2),
+      oklch(1 0 0 / 0.1)
+    );
+  }
+}

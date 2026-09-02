@@ -65,30 +65,6 @@ class StorageUsageStore extends AbstractHttpState<StorageUsageResponse> {
     return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
   }
 
-  public getUsagePercentage(): number {
-    if (!this._usage?.totalBytes || this._usage.totalBytes === 0) {
-      return 0;
-    }
-
-    return (this._usage.usedBytes / this._usage.totalBytes) * 100;
-  }
-
-  public getUsageColor(): string {
-    const percentage = this.getUsagePercentage();
-
-    if (percentage < 70) return 'text-green-600 dark:text-green-400';
-    if (percentage < 85) return 'text-yellow-600 dark:text-yellow-400';
-    return 'text-red-600 dark:text-red-400';
-  }
-
-  public getProgressColor(): string {
-    const percentage = this.getUsagePercentage();
-
-    if (percentage < 70) return 'bg-green-500';
-    if (percentage < 85) return 'bg-yellow-500';
-    return 'bg-red-500';
-  }
-
   public destroy(): void {}
 }
 

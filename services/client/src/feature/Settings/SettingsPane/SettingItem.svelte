@@ -102,7 +102,7 @@
 ></button>
 
 <div
-  class="relative flex flex-col hover:bg-gray-100/50 dark:hover:bg-gray-800/30 transition-colors duration-150 overflow-hidden"
+  class="relative flex flex-col hover:bg-muted/50 dark:hover:bg-muted/30 transition-colors duration-150 overflow-hidden"
 >
   {#if header}
     {@render header?.()}
@@ -112,7 +112,7 @@
     <div class={labelArea()}>
       {#if label}
         <div class="flex items-center gap-2">
-          <h3 class="text-sm font-medium text-gray-900 dark:text-white">
+          <h3 class="text-sm font-medium text-foreground">
             {@render label?.()}
           </h3>
 
@@ -126,7 +126,7 @@
                 <button
                   type="button"
                   onclick={() => (showConfirm = true)}
-                  class="inline-flex items-center justify-center w-5 h-5 rounded text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-200/50 dark:hover:bg-gray-700/50 transition-colors duration-150"
+                  class="inline-flex items-center justify-center w-5 h-5 rounded text-foreground-subtle hover:text-foreground-soft hover:bg-hover transition-colors duration-150"
                   aria-label="Reset to default value"
                 >
                   <Icon icon="lucide:rotate-ccw" class="w-3 h-3" />
@@ -138,7 +138,7 @@
         </div>
 
         {#if hint}
-          <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+          <p class="text-xs text-foreground-muted mt-0.5">
             {@render hint?.()}
           </p>
         {/if}
@@ -158,14 +158,12 @@
 
   {#if showConfirm}
     <div
-      class="absolute inset-0 flex items-center justify-between gap-3 px-4 bg-white dark:bg-gray-900 animate-in fade-in duration-100 z-10"
+      class="absolute inset-0 flex items-center justify-between gap-3 px-4 bg-card animate-in fade-in duration-100 z-10"
     >
-      <div
-        class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400"
-      >
-        <Icon icon="lucide:rotate-ccw" class="w-4 h-4 text-gray-400" />
+      <div class="flex items-center gap-2 text-sm text-foreground-muted">
+        <Icon icon="lucide:rotate-ccw" class="w-4 h-4 text-foreground-subtle" />
         <span>
-          Reset to <span class="font-medium text-gray-900 dark:text-white"
+          Reset to <span class="font-medium text-foreground"
             >{displayValue}</span
           >
         </span>

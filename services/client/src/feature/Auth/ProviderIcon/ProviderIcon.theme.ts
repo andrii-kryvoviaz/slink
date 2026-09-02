@@ -4,10 +4,10 @@ export const providerIconVariants = cva('', {
   variants: {
     provider: {
       google: '',
-      authentik: 'text-orange-600',
-      keycloak: 'text-gray-600 dark:text-gray-300',
-      authelia: 'text-blue-600',
-      pocketid: 'text-rose-500',
+      authentik: 'text-[#fd4b2d]',
+      keycloak: 'text-foreground-muted',
+      authelia: 'text-[#0065BF]',
+      pocketid: 'text-[#e11d48]',
     },
   },
 });

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { getLicenseLabels } from '@slink/feature/Image';
-  import { Loader } from '@slink/feature/Layout';
+  import { Loader, ThemePicker, ThemePreview } from '@slink/feature/Layout';
   import { SettingItem } from '@slink/feature/Settings';
   import { Notice, Subtitle, Title } from '@slink/feature/Text';
   import { Select } from '@slink/ui/components';
@@ -18,8 +18,9 @@
   import type { User } from '@slink/lib/auth/Type/User';
   import { LandingPage } from '@slink/lib/enum/LandingPage';
   import type { License } from '@slink/lib/enum/License';
-  import { Locale } from '@slink/lib/settings/Settings.enums';
+  import { Locale, resolveTheme } from '@slink/lib/settings/Settings.enums';
   import type { UploadPolicy } from '@slink/lib/settings/UploadPolicy';
+  import { themes } from '@slink/lib/settings/themes.svelte';
   import { applyLocale } from '@slink/lib/utils/i18n';
   import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
 
@@ -125,6 +126,7 @@
       },
       onSuccess: async () => {
         await state.commit();
+        settings.theme.current = resolveTheme(state.theme);
         toast.success(messages.preferences.updated);
       },
       onError: (data) => {
@@ -142,14 +144,14 @@
       <section class="space-y-1">
         <div class="flex items-center justify-between gap-4 pb-3">
           <h2
-            class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+            class="text-sm font-medium text-foreground-muted uppercase tracking-wider"
           >
             Language
           </h2>
         </div>
 
         <div
-          class="divide-y divide-gray-100 dark:divide-gray-800 rounded-xl bg-gray-50/50 dark:bg-gray-900/30 border border-gray-100 dark:border-gray-800 overflow-hidden"
+          class="divide-y divide-muted rounded-xl bg-muted-soft/50 dark:bg-muted-soft/30 border border-muted overflow-hidden"
         >
           <SettingItem>
             {#snippet label()}
@@ -168,17 +170,47 @@
         </div>
       </section>
 
+      <section id="appearance" class="space-y-1 scroll-mt-20">
+        <div class="flex items-center justify-between gap-4 pb-3">
+          <h2
+            class="text-sm font-medium text-foreground-muted uppercase tracking-wider"
+          >
+            Appearance
+          </h2>
+        </div>
+
+        <div
+          class="divide-y divide-muted rounded-xl bg-muted-soft/50 dark:bg-muted-soft/30 border border-muted overflow-hidden"
+        >
+          <SettingItem>
+            {#snippet label()}
+              Theme
+            {/snippet}
+            {#snippet hint()}
+              Choose your preferred color theme for the interface
+            {/snippet}
+            {#snippet footer()}
+              <div class="px-4 pb-4">
+                <ThemePreview theme={state.theme} />
+              </div>
+            {/snippet}
+            <ThemePicker {themes} bind:value={state.theme} />
+            <input type="hidden" name="displayTheme" value={state.theme} />
+          </SettingItem>
+        </div>
+      </section>
+
       <section class="space-y-1">
         <div class="flex items-center justify-between gap-4 pb-3">
           <h2
-            class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+            class="text-sm font-medium text-foreground-muted uppercase tracking-wider"
           >
             Navigation
           </h2>
         </div>
 
         <div
-          class="divide-y divide-gray-100 dark:divide-gray-800 rounded-xl bg-gray-50/50 dark:bg-gray-900/30 border border-gray-100 dark:border-gray-800 overflow-hidden"
+          class="divide-y divide-muted rounded-xl bg-muted-soft/50 dark:bg-muted-soft/30 border border-muted overflow-hidden"
         >
           <SettingItem>
             {#snippet label()}
@@ -205,13 +237,13 @@
         <section class="space-y-1">
           <div class="flex items-center justify-between gap-4 pb-3">
             <h2
-              class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+              class="text-sm font-medium text-foreground-muted uppercase tracking-wider"
             >
               Image Uploads
             </h2>
           </div>
           <div
-            class="divide-y divide-gray-100 dark:divide-gray-800 rounded-xl bg-gray-50/50 dark:bg-gray-900/30 border border-gray-100 dark:border-gray-800 overflow-hidden"
+            class="divide-y divide-muted rounded-xl bg-muted-soft/50 dark:bg-muted-soft/30 border border-muted overflow-hidden"
           >
             <SettingItem>
               {#snippet label()}
@@ -272,13 +304,13 @@
         <section class="space-y-1">
           <div class="flex items-center justify-between gap-4 pb-3">
             <h2
-              class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+              class="text-sm font-medium text-foreground-muted uppercase tracking-wider"
             >
               Image Licensing
             </h2>
           </div>
           <div
-            class="divide-y divide-gray-100 dark:divide-gray-800 rounded-xl bg-gray-50/50 dark:bg-gray-900/30 border border-gray-100 dark:border-gray-800 overflow-hidden"
+            class="divide-y divide-muted rounded-xl bg-muted-soft/50 dark:bg-muted-soft/30 border border-muted overflow-hidden"
           >
             <SettingItem>
               {#snippet label()}
@@ -353,9 +385,7 @@
 
     <div class="flex items-center justify-end gap-3 pt-4">
       {#if $isPreferencesFormLoading}
-        <div
-          class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400"
-        >
+        <div class="flex items-center gap-2 text-sm text-foreground-muted">
           <Loader variant="minimal" size="xs" />
           <span>Saving...</span>
         </div>

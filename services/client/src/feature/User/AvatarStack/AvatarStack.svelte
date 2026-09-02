@@ -17,7 +17,7 @@
     users,
     max = 3,
     size = 'sm',
-    ringClass = 'ring-white dark:ring-gray-900',
+    ringClass = 'ring-card',
     class: className,
   }: Props = $props();
 </script>

@@ -1,12 +1,17 @@
 import type { UserPreferencesResponse } from '@slink/api/Response';
 
 import { LandingPage } from '@slink/lib/enum/LandingPage';
-import { Locale } from '@slink/lib/settings/Settings.enums';
+import {
+  Locale,
+  Theme,
+  resolveTheme,
+} from '@slink/lib/settings/Settings.enums';
 
 type ChangeHandler = (value: unknown) => void | Promise<void>;
 
 export class PreferencesPageState {
   locale = $state(Locale.EN);
+  theme = $state(Theme.DEFAULT);
   landingPage = $state(LandingPage.Explore);
   visibility = $state('private');
   exifPreference = $state('default');
@@ -20,6 +25,7 @@ export class PreferencesPageState {
 
   constructor(preferences: UserPreferencesResponse) {
     this.locale = (preferences?.['display.language'] as Locale) ?? Locale.EN;
+    this.theme = resolveTheme(preferences?.['display.theme']);
     this.landingPage =
       preferences?.['navigation.landingPage'] ?? LandingPage.Explore;
     this.visibility = preferences?.['image.defaultVisibility'] ?? 'private';
@@ -51,6 +57,7 @@ export class PreferencesPageState {
   private _takeSnapshot() {
     this._snapshot = {
       locale: this.locale,
+      theme: this.theme,
       landingPage: this.landingPage,
       visibility: this.visibility,
       exifPreference: this.exifPreference,

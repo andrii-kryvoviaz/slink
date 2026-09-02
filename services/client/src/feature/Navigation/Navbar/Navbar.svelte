@@ -20,7 +20,7 @@
     showLoginButton?: boolean;
     showUploadButton?: boolean;
     sidebarWidth?: number;
-    themeSwitch?: Snippet;
+    modeSwitch?: Snippet;
     children?: Snippet;
   }
 
@@ -28,7 +28,7 @@
     showLogo = true,
     showLoginButton = false,
     showUploadButton = true,
-    themeSwitch,
+    modeSwitch,
     children,
   }: Props = $props();
 
@@ -64,7 +64,7 @@
         class="flex items-center gap-3 hover:opacity-80 transition-opacity duration-200 group"
       >
         <div
-          class="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/10 group-hover:border-primary/20 group-hover:scale-105 transition-all duration-200"
+          class="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-br from-foreground-solid/10 to-foreground-solid/5 border border-foreground-solid/10 group-hover:border-foreground-solid/20 group-hover:scale-105 transition-all duration-200"
         >
           <BrandLogo class="h-5 w-5" />
         </div>
@@ -120,21 +120,18 @@
         >
           <div class="flex flex-col gap-2">
             <div class="flex items-center gap-2">
-              <Icon
-                icon="ph:cloud-arrow-up"
-                class="h-4 w-4 text-blue-500 dark:text-blue-400"
-              />
+              <Icon icon="ph:cloud-arrow-up" class="h-4 w-4 text-info" />
               <span class="text-sm font-semibold">Upload Image</span>
             </div>
-            <p class="text-xs text-muted-foreground leading-relaxed">
+            <p class="text-xs text-foreground-muted leading-relaxed">
               Share your media with others by uploading them and organizing them
               into collections.
             </p>
             <div
-              class="flex items-center justify-between pt-1.5 border-t border-slate-200/30 dark:border-slate-700/30"
+              class="flex items-center justify-between pt-1.5 border-t border-border/30"
             >
               <span
-                class="text-[10px] uppercase tracking-wider text-muted-foreground/60 font-medium"
+                class="text-[10px] uppercase tracking-wider text-foreground-muted/60 font-medium"
               >
                 Shortcut
               </span>
@@ -165,37 +162,8 @@
       </Button>
     {/if}
 
-    {#if themeSwitch}
-      <HoverCard.Root openDelay={1000} closeDelay={200}>
-        <HoverCard.Trigger>
-          <div class="flex items-center">
-            {@render themeSwitch?.()}
-          </div>
-        </HoverCard.Trigger>
-        <HoverCard.Content
-          variant="glass"
-          size="sm"
-          rounded="xl"
-          width="auto"
-          side="bottom"
-          sideOffset={8}
-          align="end"
-          class="min-w-52"
-        >
-          <div class="flex flex-col gap-2">
-            <div class="flex items-center gap-2">
-              <Icon
-                icon="ph:palette"
-                class="h-4 w-4 text-blue-500 dark:text-blue-400"
-              />
-              <span class="text-sm font-semibold">Toggle Theme</span>
-            </div>
-            <p class="text-xs text-muted-foreground leading-relaxed">
-              Switch between light and dark mode.
-            </p>
-          </div>
-        </HoverCard.Content>
-      </HoverCard.Root>
+    {#if modeSwitch}
+      {@render modeSwitch()}
     {/if}
   </div>
 </nav>

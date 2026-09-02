@@ -27,7 +27,6 @@
 
   const share = getShareControls();
   const list = controls.list();
-  const dangerList = controls.list({ tone: 'danger' });
   const copiedState = useAutoReset(1500);
 
   const handleCopy = async (): Promise<void> => {
@@ -59,7 +58,7 @@
             in:scale|local={{ duration: 150, easing: cubicOut }}
             class="inline-flex"
           >
-            <Icon icon="ph:check" class="h-5 w-5 text-emerald-500" />
+            <Icon icon="ph:check" class="h-5 w-5 text-success-strong" />
           </span>
         {:else}
           <span
@@ -115,13 +114,19 @@
 
   {#if onOpenUnpublish}
     <div class={list.separator()}></div>
-    <button type="button" class={dangerList.item()} onclick={onOpenUnpublish}>
-      <Icon icon="ph:eye-slash" class={dangerList.icon()} />
+    <button
+      type="button"
+      class={list.item({ tone: 'danger' })}
+      onclick={onOpenUnpublish}
+    >
+      <Icon icon="ph:eye-slash" class={list.icon({ tone: 'danger' })} />
       <div class={list.labels()}>
-        <span class={dangerList.label()}>Unpublish</span>
-        <span class={dangerList.sublabel()}>Stop sharing this link</span>
+        <span class={list.label({ tone: 'danger' })}>Unpublish</span>
+        <span class={list.sublabel({ tone: 'danger' })}>
+          Stop sharing this link
+        </span>
       </div>
-      <Icon icon="ph:caret-right" class={dangerList.chevron()} />
+      <Icon icon="ph:caret-right" class={list.chevron({ tone: 'danger' })} />
     </button>
   {/if}
 </div>

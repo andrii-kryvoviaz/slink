@@ -61,7 +61,7 @@
 
   {#if showAnimationWarning}
     <div
-      class="flex items-center gap-2 rounded-md bg-amber-500/10 px-3 py-2 text-xs text-amber-600 dark:text-amber-400"
+      class="flex items-center gap-2 rounded-md bg-warning/10 px-3 py-2 text-xs text-warning-strong"
     >
       <Icon icon="ph:warning" class="h-4 w-4 shrink-0" />
       <span>Converting to {value.toUpperCase()} will remove animation</span>

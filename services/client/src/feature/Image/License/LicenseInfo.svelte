@@ -45,7 +45,7 @@
         href={license.url}
         target="_blank"
         rel="noopener noreferrer"
-        class="inline-flex items-center gap-1.5 text-xs text-blue-400 hover:text-blue-300 transition-colors"
+        class="inline-flex items-center gap-1.5 text-xs text-info-strong hover:text-info transition-colors"
       >
         <span>Learn more</span>
         <Icon icon="heroicons:arrow-top-right-on-square" class="w-3 h-3" />
@@ -56,10 +56,14 @@
 
 {#snippet trigger()}
   {#if variant === 'text'}
-    <span class="{licenseInfoLabelTheme({ size })} text-white/60">
+    <span
+      class="{licenseInfoLabelTheme({
+        size,
+      })} text-on-surface-inverse/60"
+    >
       Licensed under
       <span
-        class="underline underline-offset-2 decoration-white/40 hover:decoration-white/80 hover:text-white/80 transition-colors cursor-pointer"
+        class="underline underline-offset-2 decoration-on-surface-inverse/40 hover:decoration-on-surface-inverse/80 hover:text-on-surface-inverse/80 transition-colors cursor-pointer"
       >
         {labels.title}
       </span>

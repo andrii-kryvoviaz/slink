@@ -52,24 +52,22 @@
 >
   <div class="flex items-center justify-start gap-4 mb-8">
     <div
-      class="w-12 h-12 rounded-xl bg-linear-to-br from-primary/10 to-primary/5 border border-primary/10 flex items-center justify-center shadow-sm"
+      class="w-12 h-12 rounded-xl bg-linear-to-br from-foreground-solid/10 to-foreground-solid/5 border border-foreground-solid/10 flex items-center justify-center shadow-sm"
     >
       <BrandLogo class="h-6 w-6" />
     </div>
     <div class="text-left">
-      <h1
-        class="text-2xl font-semibold text-gray-900 dark:text-white tracking-tight"
-      >
+      <h1 class="text-2xl font-semibold text-foreground tracking-tight">
         Create Account
       </h1>
-      <p class="text-gray-500 dark:text-gray-400 text-sm mt-0.5">
+      <p class="text-foreground-muted text-sm mt-0.5">
         Join {customization.siteName} to start sharing your images
       </p>
     </div>
   </div>
 
   <div
-    class="bg-white/60 dark:bg-gray-900/40 backdrop-blur-sm rounded-2xl border border-gray-200/60 dark:border-gray-700/40 p-6 shadow-sm"
+    class="bg-card/60 dark:bg-card/40 backdrop-blur-sm rounded-2xl border border-border/60 p-6 shadow-sm"
   >
     <form
       class="space-y-5"
@@ -91,7 +89,7 @@
           rounded="lg"
         >
           {#snippet leftIcon()}
-            <Icon icon="ph:at" class="text-gray-400 dark:text-gray-500" />
+            <Icon icon="ph:at" class="text-ring" />
           {/snippet}
         </Input>
 
@@ -108,10 +106,7 @@
           rounded="lg"
         >
           {#snippet leftIcon()}
-            <Icon
-              icon="ph:envelope-simple"
-              class="text-gray-400 dark:text-gray-500"
-            />
+            <Icon icon="ph:envelope-simple" class="text-ring" />
           {/snippet}
         </Input>
       </div>
@@ -130,10 +125,7 @@
           rounded="lg"
         >
           {#snippet leftIcon()}
-            <Icon
-              icon="ph:lock-simple"
-              class="text-gray-400 dark:text-gray-500"
-            />
+            <Icon icon="ph:lock-simple" class="text-ring" />
           {/snippet}
           <PasswordToggle
             visible={showPassword}
@@ -156,10 +148,7 @@
         rounded="lg"
       >
         {#snippet leftIcon()}
-          <Icon
-            icon="ph:lock-simple"
-            class="text-gray-400 dark:text-gray-500"
-          />
+          <Icon icon="ph:lock-simple" class="text-ring" />
         {/snippet}
         <PasswordToggle
           visible={showConfirmPassword}
@@ -168,7 +157,7 @@
       </Input>
 
       <Button
-        variant="accent"
+        variant="cta"
         size="lg"
         class="w-full mt-2 group"
         type="submit"

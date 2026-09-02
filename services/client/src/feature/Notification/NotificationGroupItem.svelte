@@ -81,16 +81,14 @@
 
     <div class="flex-1 min-w-0 space-y-1">
       <div class="flex items-baseline gap-2 flex-wrap">
-        <span
-          class="font-semibold text-gray-900 dark:text-white text-[15px] leading-tight"
-        >
+        <span class="font-semibold text-foreground text-[15px] leading-tight">
           {#if group.actor}
             {group.actor.displayName}
           {:else}
             Someone
           {/if}
         </span>
-        <span class="text-gray-500 dark:text-gray-400 text-sm">
+        <span class="text-foreground-muted text-sm">
           {#if group.type === 'comment'}
             commented
           {:else if group.type === 'comment_reply'}
@@ -106,9 +104,7 @@
       </div>
 
       {#if !isExpanded && group.latestComment?.content}
-        <p
-          class="text-sm text-gray-600 dark:text-gray-300 line-clamp-2 leading-relaxed"
-        >
+        <p class="text-sm text-foreground-soft line-clamp-2 leading-relaxed">
           <CommentText
             content={group.latestComment.content}
             isDeleted={group.latestComment.isDeleted}
@@ -118,7 +114,7 @@
       {/if}
 
       {#if !isExpanded}
-        <p class="text-xs text-gray-400 dark:text-gray-500 pt-0.5">
+        <p class="text-xs text-foreground-subtle pt-0.5">
           {formatDate(new Date(group.latestTimestamp * 1000).toISOString())}
         </p>
       {/if}
@@ -127,14 +123,14 @@
     <div class="shrink-0 self-center flex items-center gap-2">
       {#if isGrouped && !hasPerItemContent}
         <span
-          class="text-xs font-medium text-gray-500 dark:text-gray-400 px-2 py-0.5 rounded-full bg-gray-100 dark:bg-white/5"
+          class="text-xs font-medium text-foreground-muted px-2 py-0.5 rounded-full bg-muted"
         >
           {group.items.length}
         </span>
       {/if}
       {#if !group.isRead}
         <div
-          class="w-2.5 h-2.5 rounded-full bg-indigo-500 ring-4 ring-indigo-500/20"
+          class="w-2.5 h-2.5 rounded-full bg-accent ring-4 ring-accent/20"
         ></div>
       {/if}
       {#if isExpandable}
@@ -147,25 +143,22 @@
   </button>
 
   {#if isExpanded && isExpandable}
-    <div
-      class="border-t border-gray-100 dark:border-white/5"
-      transition:slide={{ duration: 200 }}
-    >
+    <div class="border-t border-border/25" transition:slide={{ duration: 200 }}>
       {#each group.items as item (item.id)}
         <button
           onclick={() => onItemClick(item)}
-          class="w-full text-left flex items-start gap-3 px-4 py-3 hover:bg-gray-100 dark:hover:bg-white/4 transition-colors border-b border-gray-50 dark:border-white/2 last:border-b-0"
+          class="w-full text-left flex items-start gap-3 px-4 py-3 hover:bg-hover transition-colors border-b border-border/10 last:border-b-0"
         >
           <div class="shrink-0 w-10 h-10 flex items-center justify-center">
             <Icon
               icon="ph:arrow-bend-down-right"
-              class="w-4 h-4 text-gray-300 dark:text-gray-600"
+              class="w-4 h-4 text-border-strong"
             />
           </div>
           <div class="flex-1 min-w-0 space-y-1">
             {#if item.relatedComment?.content}
               <p
-                class="text-sm text-gray-600 dark:text-gray-300 line-clamp-2 leading-relaxed"
+                class="text-sm text-foreground-soft line-clamp-2 leading-relaxed"
               >
                 <CommentText
                   content={item.relatedComment.content}
@@ -174,13 +167,13 @@
                 />
               </p>
             {/if}
-            <p class="text-xs text-gray-400 dark:text-gray-500">
+            <p class="text-xs text-foreground-subtle">
               {formatItemTime(item)}
             </p>
           </div>
           {#if !item.isRead}
             <div class="shrink-0 self-center">
-              <div class="w-2 h-2 rounded-full bg-indigo-500"></div>
+              <div class="w-2 h-2 rounded-full bg-accent"></div>
             </div>
           {/if}
         </button>

@@ -6,20 +6,20 @@ export const BannerTheme = cva(
     variants: {
       variant: {
         default:
-          'bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900 border-slate-200/50 dark:border-slate-700/50',
+          'bg-gradient-to-r from-muted-soft to-muted dark:from-muted dark:to-muted-soft border-border/50',
         neutral:
-          'bg-gradient-to-r from-white to-gray-50 dark:from-gray-800 dark:to-gray-700 border-gray-200/50 dark:border-gray-600/50 shadow-gray-500/5',
+          'bg-gradient-to-r from-card to-muted-soft dark:to-muted border-border/50 shadow-foreground-muted/5',
         warning:
-          'bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-amber-200/50 dark:border-amber-700/30 shadow-amber-500/10',
-        info: 'bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-blue-200/50 dark:border-blue-700/30 shadow-blue-500/10',
+          'bg-gradient-to-r from-warning-wash dark:from-warning-wash/20 to-warning-wash-strong dark:to-warning-wash-strong/20 border-warning-border/50 dark:border-warning-border/9 shadow-warning/10',
+        info: 'bg-gradient-to-r from-info-wash dark:from-info-wash/20 to-info-wash-strong dark:to-info-wash-strong/20 border-info-border/50 dark:border-info-border/9 shadow-info/10',
         success:
-          'bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-green-200/50 dark:border-green-700/30 shadow-green-500/10',
+          'bg-gradient-to-r from-success-wash dark:from-success-wash/20 to-success-wash-strong dark:to-success-wash-strong/20 border-success-border/50 dark:border-success-border/9 shadow-success/10',
         error:
-          'bg-gradient-to-r from-red-50 to-rose-50 dark:from-red-900/20 dark:to-rose-900/20 border-red-200/50 dark:border-red-700/30 shadow-red-500/10',
+          'bg-gradient-to-r from-danger-wash dark:from-danger-wash/20 to-danger-wash-strong dark:to-danger-wash-strong/20 border-danger-border/50 dark:border-danger-border/9 shadow-danger/10',
         purple:
-          'bg-gradient-to-r from-purple-50 to-violet-50 dark:from-purple-900/20 dark:to-violet-900/20 border-purple-200/50 dark:border-purple-700/30 shadow-purple-500/10',
+          'bg-gradient-to-r from-decor-violet/10 to-decor-violet/10 border-decor-violet/30 dark:border-decor-violet/20 shadow-decor-violet/10',
         violet:
-          'bg-gradient-to-r from-violet-50 to-purple-50 dark:from-violet-900/20 dark:to-purple-900/20 border-violet-200/50 dark:border-violet-700/30 shadow-violet-500/10',
+          'bg-gradient-to-r from-decor-violet/10 to-decor-violet/10 border-decor-violet/30 dark:border-decor-violet/20 shadow-decor-violet/10',
       },
     },
   },
@@ -30,18 +30,19 @@ export const BannerIconTheme = cva(
   {
     variants: {
       variant: {
-        default: 'bg-slate-900 dark:bg-white',
-        neutral: 'bg-gray-600 dark:bg-gray-400',
+        default: 'bg-foreground',
+        neutral: 'bg-foreground-muted',
         warning:
-          'bg-gradient-to-br from-amber-500 to-orange-500 shadow-amber-500/30',
-        info: 'bg-gradient-to-br from-blue-500 to-indigo-500 shadow-blue-500/30',
+          'bg-gradient-to-br from-warning to-warning-strong shadow-warning/30',
+        info: 'bg-gradient-to-br from-info-solid to-info-strong shadow-info/30',
         success:
-          'bg-gradient-to-br from-green-500 to-emerald-500 shadow-green-500/30',
-        error: 'bg-gradient-to-br from-red-500 to-rose-500 shadow-red-500/30',
+          'bg-gradient-to-br from-success to-success-strong shadow-success/30',
+        error:
+          'bg-gradient-to-br from-danger to-danger-strong shadow-danger/30',
         purple:
-          'bg-gradient-to-br from-purple-500 to-violet-500 shadow-purple-500/30',
+          'bg-gradient-to-br from-decor-violet to-decor-violet shadow-decor-violet/30',
         violet:
-          'bg-gradient-to-br from-violet-500 to-purple-500 shadow-violet-500/30',
+          'bg-gradient-to-br from-decor-violet to-decor-violet shadow-decor-violet/30',
       },
     },
   },
@@ -50,14 +51,14 @@ export const BannerIconTheme = cva(
 export const BannerIconColorTheme = cva('h-5 w-5', {
   variants: {
     variant: {
-      default: 'text-white dark:text-slate-900',
-      neutral: 'text-white dark:text-gray-900',
+      default: 'text-background',
+      neutral: 'text-background',
       warning: 'text-white',
       info: 'text-white',
       success: 'text-white',
       error: 'text-white',
-      purple: 'text-white',
-      violet: 'text-white',
+      purple: 'text-on-decor-violet',
+      violet: 'text-on-decor-violet',
     },
   },
 });
@@ -66,20 +67,20 @@ export const BannerActionTheme = cva('border transition-colors duration-200', {
   variants: {
     variant: {
       default:
-        'bg-slate-100/80 hover:bg-slate-200/80 dark:bg-slate-700/80 dark:hover:bg-slate-600/80 border-slate-200 hover:border-slate-300 dark:border-slate-600 dark:hover:border-slate-500 text-slate-700 hover:text-slate-800 dark:text-slate-300 dark:hover:text-slate-200',
+        'bg-accent-wash/80 dark:bg-accent-wash/16 hover:bg-accent-wash dark:hover:bg-accent-wash/20 border-accent-border dark:border-accent-border/30 hover:border-accent text-accent-text',
       neutral:
-        'bg-gray-100/80 hover:bg-gray-200/80 dark:bg-gray-700/80 dark:hover:bg-gray-600/80 border-gray-200 hover:border-gray-300 dark:border-gray-600 dark:hover:border-gray-500 text-gray-700 hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-200',
+        'bg-muted/80 hover:bg-hover-strong border-border hover:border-border-strong dark:hover:border-border-bold text-foreground-soft',
       warning:
-        'bg-amber-100/90 hover:bg-amber-200/90 border-amber-400 hover:border-amber-500 text-amber-800 hover:text-amber-900 dark:bg-amber-800/40 dark:hover:bg-amber-700/60 dark:border-amber-600 dark:hover:border-amber-500 dark:text-amber-200 dark:hover:text-amber-100',
-      info: 'bg-blue-100/80 hover:bg-blue-200/80 dark:bg-blue-800/40 dark:hover:bg-blue-700/60 border-blue-200 hover:border-blue-300 dark:border-blue-600 dark:hover:border-blue-500 text-blue-700 hover:text-blue-800 dark:text-blue-200 dark:hover:text-blue-100',
+        'bg-warning-wash/90 hover:bg-warning-wash dark:bg-warning-strong/25 dark:hover:bg-warning-strong/40 border-warning-border dark:border-warning-border/30 hover:border-warning text-warning-text',
+      info: 'bg-info-wash/80 hover:bg-info-wash dark:bg-info-solid/30 dark:hover:bg-info-solid/45 border-info-border dark:border-info-border/30 hover:border-info text-info-text',
       success:
-        'bg-green-100/80 hover:bg-green-200/80 dark:bg-green-800/40 dark:hover:bg-green-700/60 border-green-200 hover:border-green-300 dark:border-green-600 dark:hover:border-green-500 text-green-700 hover:text-green-800 dark:text-green-200 dark:hover:text-green-100',
+        'bg-success-wash/80 hover:bg-success-wash dark:bg-success-solid/30 dark:hover:bg-success-solid/45 border-success-border dark:border-success-border/30 hover:border-success text-success-text',
       error:
-        'bg-red-100/80 hover:bg-red-200/80 dark:bg-red-800/40 dark:hover:bg-red-700/60 border-red-200 hover:border-red-300 dark:border-red-600 dark:hover:border-red-500 text-red-700 hover:text-red-800 dark:text-red-200 dark:hover:text-red-100',
+        'bg-danger-wash/80 hover:bg-danger-wash dark:bg-danger-solid/30 dark:hover:bg-danger-solid/45 border-danger-border dark:border-danger-border/30 hover:border-danger text-danger-text',
       purple:
-        'bg-purple-100/80 hover:bg-purple-200/80 dark:bg-purple-800/40 dark:hover:bg-purple-700/60 border-purple-200 hover:border-purple-300 dark:border-purple-600 dark:hover:border-purple-500 text-purple-700 hover:text-purple-800 dark:text-purple-200 dark:hover:text-purple-100',
+        'bg-decor-violet/10 hover:bg-decor-violet/20 dark:bg-decor-violet/30 dark:hover:bg-decor-violet/45 border-decor-violet/40 hover:border-decor-violet text-decor-violet',
       violet:
-        'bg-violet-100/80 hover:bg-violet-200/80 dark:bg-violet-800/40 dark:hover:bg-violet-700/60 border-violet-200 hover:border-violet-300 dark:border-violet-600 dark:hover:border-violet-500 text-violet-700 hover:text-violet-800 dark:text-violet-200 dark:hover:text-violet-100',
+        'bg-decor-violet/10 hover:bg-decor-violet/20 dark:bg-decor-violet/30 dark:hover:bg-decor-violet/45 border-decor-violet/40 hover:border-decor-violet text-decor-violet',
     },
   },
 });
@@ -87,14 +88,14 @@ export const BannerActionTheme = cva('border transition-colors duration-200', {
 export const BannerFooterTheme = cva('pt-3 border-t', {
   variants: {
     variant: {
-      default: 'border-slate-200/20 dark:border-slate-700/20',
-      neutral: 'border-gray-200/20 dark:border-gray-600/20',
-      warning: 'border-amber-200/20 dark:border-amber-700/20',
-      info: 'border-blue-200/20 dark:border-blue-700/20',
-      success: 'border-green-200/20 dark:border-green-700/20',
-      error: 'border-red-200/20 dark:border-red-700/20',
-      purple: 'border-purple-200/20 dark:border-purple-700/20',
-      violet: 'border-violet-200/20 dark:border-violet-700/20',
+      default: 'border-border/20',
+      neutral: 'border-border/20',
+      warning: 'border-warning-border/20 dark:border-warning-border/6',
+      info: 'border-info-border/20 dark:border-info-border/6',
+      success: 'border-success-border/20 dark:border-success-border/6',
+      error: 'border-danger-border/20 dark:border-danger-border/6',
+      purple: 'border-decor-violet/20',
+      violet: 'border-decor-violet/20',
     },
   },
 });
@@ -104,14 +105,14 @@ export const BannerFooterTextTheme = cva(
   {
     variants: {
       variant: {
-        default: 'text-slate-600/80 dark:text-slate-400/80',
-        neutral: 'text-gray-600/80 dark:text-gray-400/80',
-        warning: 'text-amber-600/80 dark:text-amber-400/80',
-        info: 'text-blue-600/80 dark:text-blue-400/80',
-        success: 'text-green-600/80 dark:text-green-400/80',
-        error: 'text-red-600/80 dark:text-red-400/80',
-        purple: 'text-purple-600/80 dark:text-purple-400/80',
-        violet: 'text-violet-600/80 dark:text-violet-400/80',
+        default: 'text-foreground-muted/80',
+        neutral: 'text-foreground-muted/80',
+        warning: 'text-warning-text/80',
+        info: 'text-info-text/80',
+        success: 'text-success-text/80',
+        error: 'text-danger-text/80',
+        purple: 'text-decor-violet/80',
+        violet: 'text-decor-violet/80',
       },
     },
   },

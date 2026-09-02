@@ -57,7 +57,7 @@
     <ImageCollectionAction />
     <ImageTagAction />
     <ImageVisibilityAction />
-    <div class="w-px h-[18px] bg-gray-200 dark:bg-gray-700 mx-0.5"></div>
+    <div class="w-px h-[18px] bg-border mx-0.5"></div>
     <ImageDeleteAction />
   </ButtonGroup>
 {/snippet}

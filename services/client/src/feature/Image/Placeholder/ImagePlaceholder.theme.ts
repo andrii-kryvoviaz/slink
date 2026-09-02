@@ -31,7 +31,7 @@ export const imagePlaceholderVariants = cva('border-none', {
 });
 
 export const imagePlaceholderWrapperVariants = cva(
-  'group relative flex items-center justify-center overflow-hidden border-slate-500/10 bg-white/0 @container',
+  'group relative flex items-center justify-center overflow-hidden border-ring/12 bg-transparent @container',
   {
     variants: {
       keepAspectRatio: {

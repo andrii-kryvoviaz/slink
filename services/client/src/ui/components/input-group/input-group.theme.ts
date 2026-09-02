@@ -1,14 +1,14 @@
 import { cva } from 'class-variance-authority';
 
 export const InputGroupShell = cva(
-  'group relative flex w-full items-center overflow-hidden rounded-lg border transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-500/20',
+  'group relative flex w-full items-center overflow-hidden rounded-lg border transition-all duration-200 focus-within:ring-2 focus-within:ring-ring/20',
   {
     variants: {
       variant: {
         default:
-          'border-gray-200/50 dark:border-gray-700/30 bg-gray-50/80 dark:bg-gray-800/50 hover:bg-gray-100/50 dark:hover:bg-gray-800/70 focus-within:border-gray-200/50 dark:focus-within:border-gray-700/30',
+          'border-border/50 bg-muted/50 hover:bg-muted/70 focus-within:border-border/50',
         success:
-          'border-green-200/50 dark:border-green-700/30 bg-green-50/80 dark:bg-green-900/30 hover:bg-green-100/50 dark:hover:bg-green-900/50 focus-within:border-green-200/50 dark:focus-within:border-green-700/30 focus-within:ring-green-500/20',
+          'border-success-border/50 dark:border-success-border/15 bg-success-wash/80 dark:bg-success-wash/16 hover:bg-success-wash/50 dark:hover:bg-success-wash/10 focus-within:border-success-border/50 dark:focus-within:border-success-border/15 focus-within:ring-success/20',
       },
       size: {
         sm: 'max-w-xs text-xs',
@@ -29,12 +29,12 @@ export const InputGroupShell = cva(
 );
 
 export const InputGroupField = cva(
-  'w-full bg-transparent border-0 focus:outline-none focus:ring-0 placeholder-gray-400',
+  'w-full bg-transparent border-0 focus:outline-none focus:ring-0 placeholder-foreground-subtle dark:placeholder-foreground-muted',
   {
     variants: {
       variant: {
-        default: 'text-gray-700 dark:text-gray-300',
-        success: 'text-green-700 dark:text-green-300',
+        default: 'text-foreground-soft',
+        success: 'text-success-text',
       },
       size: {
         sm: 'px-3 py-2 text-xs',

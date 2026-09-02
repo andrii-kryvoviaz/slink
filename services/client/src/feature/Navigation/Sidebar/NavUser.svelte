@@ -35,7 +35,7 @@
         {#snippet child({ props })}
           <Sidebar.MenuButton
             size="lg"
-            class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground hover:bg-sidebar-accent/50 transition-colors duration-200"
+            class="data-[state=open]:bg-sidebar-hover data-[state=open]:text-on-sidebar-hover hover:bg-sidebar-hover/50 transition-colors duration-200"
             tooltipContent={user.displayName}
             {...props}
           >
@@ -44,12 +44,12 @@
               class="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden"
             >
               <span class="truncate font-semibold">{user.displayName}</span>
-              <span class="truncate text-xs text-muted-foreground"
+              <span class="truncate text-xs text-foreground-muted"
                 >{user.email}</span
               >
             </div>
             <ChevronsUpDownIcon
-              class="ml-auto size-4 text-muted-foreground group-hover:text-sidebar-accent-foreground transition-colors duration-200 group-data-[collapsible=icon]:hidden"
+              class="ml-auto size-4 text-foreground-muted group-hover:text-on-sidebar-hover transition-colors duration-200 group-data-[collapsible=icon]:hidden"
             />
           </Sidebar.MenuButton>
         {/snippet}
@@ -67,7 +67,7 @@
               <span class="truncate font-semibold text-sm"
                 >{user.displayName}</span
               >
-              <span class="truncate text-xs text-muted-foreground"
+              <span class="truncate text-xs text-foreground-muted"
                 >{user.email}</span
               >
             </div>
@@ -80,11 +80,11 @@
               <a
                 href="/profile"
                 {...props}
-                class="flex items-center gap-3 w-full px-2 py-1.5 text-sm font-medium rounded-md hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-900 dark:hover:text-blue-200 focus:bg-blue-50 dark:focus:bg-blue-900/20 focus:text-blue-900 dark:focus:text-blue-200 transition-all duration-200 group"
+                class="flex items-center gap-3 w-full px-2 py-1.5 text-sm font-medium rounded-md hover:bg-primary-solid/8 hover:text-info-text-strong focus:bg-primary-solid/8 focus:text-info-text-strong transition-all duration-200 group"
                 onclick={handleNavigateAndClose}
               >
                 <UserIcon
-                  class="size-4 text-gray-500 dark:text-gray-400 group-hover:text-blue-900 dark:group-hover:text-blue-200 transition-colors duration-200"
+                  class="size-4 text-foreground-muted group-hover:text-info-text-strong transition-colors duration-200"
                 />
                 <span>Account Settings</span>
               </a>
@@ -95,11 +95,11 @@
               <a
                 href="/integrations"
                 {...props}
-                class="flex items-center gap-3 w-full px-2 py-1.5 text-sm font-medium rounded-md hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-900 dark:hover:text-blue-200 focus:bg-blue-50 dark:focus:bg-blue-900/20 focus:text-blue-900 dark:focus:text-blue-200 transition-all duration-200 group"
+                class="flex items-center gap-3 w-full px-2 py-1.5 text-sm font-medium rounded-md hover:bg-primary-solid/8 hover:text-info-text-strong focus:bg-primary-solid/8 focus:text-info-text-strong transition-all duration-200 group"
                 onclick={handleNavigateAndClose}
               >
                 <LinkIcon
-                  class="size-4 text-gray-500 dark:text-gray-400 group-hover:text-blue-900 dark:group-hover:text-blue-200 transition-colors duration-200"
+                  class="size-4 text-foreground-muted group-hover:text-info-text-strong transition-colors duration-200"
                 />
                 <span>External Integrations</span>
               </a>
@@ -110,11 +110,11 @@
               <a
                 href="/preferences"
                 {...props}
-                class="flex items-center gap-3 w-full px-2 py-1.5 text-sm font-medium rounded-md hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-900 dark:hover:text-blue-200 focus:bg-blue-50 dark:focus:bg-blue-900/20 focus:text-blue-900 dark:focus:text-blue-200 transition-all duration-200 group"
+                class="flex items-center gap-3 w-full px-2 py-1.5 text-sm font-medium rounded-md hover:bg-primary-solid/8 hover:text-info-text-strong focus:bg-primary-solid/8 focus:text-info-text-strong transition-all duration-200 group"
                 onclick={handleNavigateAndClose}
               >
                 <SettingsIcon
-                  class="size-4 text-gray-500 dark:text-gray-400 group-hover:text-blue-900 dark:group-hover:text-blue-200 transition-colors duration-200"
+                  class="size-4 text-foreground-muted group-hover:text-info-text-strong transition-colors duration-200"
                 />
                 <span>Preferences</span>
               </a>
@@ -133,7 +133,7 @@
               <button
                 type="submit"
                 {...props}
-                class="flex cursor-pointer items-center gap-3 w-full px-2 py-1.5 text-sm font-medium text-left rounded-md hover:bg-destructive/10 hover:text-destructive focus:bg-destructive/10 focus:text-destructive transition-all duration-200"
+                class="flex cursor-pointer items-center gap-3 w-full px-2 py-1.5 text-sm font-medium text-left rounded-md hover:bg-danger/10 hover:text-danger focus:bg-danger/10 focus:text-danger transition-all duration-200"
                 onclick={handleNavigateAndClose}
               >
                 <LogOutIcon class="size-4" />

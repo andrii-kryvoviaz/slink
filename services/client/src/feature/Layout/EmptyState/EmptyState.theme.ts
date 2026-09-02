@@ -5,7 +5,7 @@ export const containerVariants = cva('w-full', {
     kind: {
       'first-use': 'relative',
       'no-results':
-        'flex items-center gap-4 rounded-xl border border-slate-200 bg-white px-4 py-3.5 dark:border-slate-700/60 dark:bg-slate-900/60',
+        'flex items-center gap-4 rounded-xl border border-border/80 bg-card px-4 py-3.5',
     },
   },
 });
@@ -29,22 +29,20 @@ export const contentVariants = cva(
   },
 );
 
-export const titleVariants = cva(
-  'font-semibold text-slate-900 dark:text-slate-100',
-  {
-    variants: {
-      kind: {
-        'first-use': 'text-lg',
-        'no-results': 'text-sm',
-      },
-    },
-  },
-);
-
-export const descriptionVariants = cva('text-slate-600 dark:text-slate-400', {
+export const titleVariants = cva('font-semibold text-foreground', {
   variants: {
     kind: {
-      'first-use': 'mt-2 max-w-md text-sm leading-relaxed',
+      'first-use': 'text-lg',
+      'no-results': 'text-sm',
+    },
+  },
+});
+
+export const descriptionVariants = cva('text-foreground-muted', {
+  variants: {
+    kind: {
+      'first-use':
+        'mt-2 max-w-md text-sm leading-relaxed text-foreground-muted',
       'no-results': 'mt-0.5 text-xs',
     },
   },
@@ -60,11 +58,11 @@ export const actionVariants = cva('', {
 });
 
 export const hintVariants = cva(
-  'mt-[18px] inline-flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400',
+  'mt-[18px] inline-flex items-center gap-2 text-xs text-foreground-muted',
 );
 
 export const hintIconVariants = cva(
-  'flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400',
+  'flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-info-solid/8 text-info',
 );
 
 export const iconVariants = cva(
@@ -72,9 +70,8 @@ export const iconVariants = cva(
   {
     variants: {
       tone: {
-        default:
-          'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400',
-        danger: 'bg-red-50 text-red-500 dark:bg-red-950/50 dark:text-red-400',
+        default: 'bg-muted text-foreground-muted',
+        danger: 'bg-danger-wash dark:bg-danger-wash/20 text-danger',
       },
     },
     defaultVariants: {

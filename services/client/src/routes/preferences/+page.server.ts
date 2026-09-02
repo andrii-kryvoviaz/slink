@@ -24,6 +24,7 @@ export const load: PageServerLoad = async ({ locals, parent }) => {
     'image.stripExifMetadataOverride': null,
     'image.externalUploadAutoPublish': null,
     'display.language': null,
+    'display.theme': null,
   };
 
   let licenses: {
@@ -62,6 +63,7 @@ export const actions: Actions = {
       exifMetadataPreference,
       externalUploadAutoPublish,
       displayLanguage,
+      displayTheme,
     } = await formData(request);
 
     try {
@@ -73,6 +75,7 @@ export const actions: Actions = {
         exifMetadataPreference: exifMetadataPreference || null,
         externalUploadAutoPublish: externalUploadAutoPublish === 'true',
         displayLanguage: displayLanguage || null,
+        displayTheme: displayTheme || null,
       });
     } catch (e) {
       if (e instanceof HttpException) {

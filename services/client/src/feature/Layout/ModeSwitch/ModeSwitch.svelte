@@ -1,27 +1,27 @@
 <script lang="ts">
   import {
-    ThemeSwitchContainer,
-    ThemeSwitchIcon,
-    ThemeSwitchTheme,
-    ThemeSwitchTooltip,
-  } from '@slink/feature/Layout/ThemeSwitch/ThemeSwitch.theme';
+    ModeSwitchContainer,
+    ModeSwitchIcon,
+    ModeSwitchTheme,
+    ModeSwitchTooltip,
+  } from '@slink/feature/Layout/ModeSwitch/ModeSwitch.theme';
   import type {
-    ThemeSwitchAnimation,
-    ThemeSwitchProps,
-  } from '@slink/feature/Layout/ThemeSwitch/ThemeSwitch.types';
+    ModeSwitchAnimation,
+    ModeSwitchProps,
+  } from '@slink/feature/Layout/ModeSwitch/ModeSwitch.types';
   import { twMerge } from 'tailwind-merge';
 
-  import { Theme } from '$lib/settings';
+  import { Mode } from '$lib/settings';
   import Icon from '@iconify/svelte';
   import type { HTMLButtonAttributes } from 'svelte/elements';
 
-  interface Props extends Omit<HTMLButtonAttributes, 'size'>, ThemeSwitchProps {
+  interface Props extends Omit<HTMLButtonAttributes, 'size'>, ModeSwitchProps {
     disabled?: boolean;
     checked?: boolean;
     showTooltip?: boolean;
     tooltipText?: string;
     class?: string;
-    on: { change: (theme: Theme) => void };
+    on: { change: (mode: Mode) => void };
   }
 
   let {
@@ -38,11 +38,11 @@
   }: Props = $props();
 
   const buttonClasses = $derived(
-    twMerge(ThemeSwitchTheme({ variant, size, animation }), customClass),
+    twMerge(ModeSwitchTheme({ variant, size, animation }), customClass),
   );
 
   const animationMap: Record<
-    NonNullable<ThemeSwitchAnimation>,
+    NonNullable<ModeSwitchAnimation>,
     'scale' | 'bounce' | 'none'
   > = {
     subtle: 'scale',
@@ -52,7 +52,7 @@
   };
 
   const iconClasses = $derived(
-    ThemeSwitchIcon({
+    ModeSwitchIcon({
       variant,
       size,
       animation: animation ? animationMap[animation] : 'none',
@@ -60,16 +60,16 @@
   );
 
   const containerClasses = $derived(
-    ThemeSwitchContainer({ tooltip: showTooltip }),
+    ModeSwitchContainer({ tooltip: showTooltip }),
   );
 
   const defaultTooltip = $derived(
     tooltipText || (checked ? 'Switch to light mode' : 'Switch to dark mode'),
   );
 
-  const handleThemeChange = () => {
+  const handleModeChange = () => {
     if (disabled) return;
-    on.change(checked ? Theme.LIGHT : Theme.DARK);
+    on.change(checked ? Mode.LIGHT : Mode.DARK);
   };
 </script>
 
@@ -77,7 +77,7 @@
   <button
     type="button"
     class={buttonClasses}
-    onclick={handleThemeChange}
+    onclick={handleModeChange}
     {disabled}
     aria-label={defaultTooltip}
     {...buttonProps}
@@ -90,7 +90,7 @@
   </button>
 
   {#if showTooltip}
-    <div class={ThemeSwitchTooltip()}>
+    <div class={ModeSwitchTooltip()}>
       {defaultTooltip}
     </div>
   {/if}

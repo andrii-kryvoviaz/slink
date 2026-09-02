@@ -118,9 +118,7 @@
               <ImageCollectionAction />
               <ImageTagAction />
               <ImageVisibilityAction />
-              <div
-                class="w-px h-[18px] bg-gray-200 dark:bg-gray-700 mx-0.5"
-              ></div>
+              <div class="w-px h-[18px] bg-border mx-0.5"></div>
               <ImageDeleteAction />
             </div>
           </div>
@@ -172,11 +170,9 @@
       {#if state.image.supportsResize}
         <div>
           <div class="flex items-center gap-2 mb-4">
-            <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
-              Resize
-            </h2>
+            <h2 class="text-lg font-semibold text-foreground">Resize</h2>
           </div>
-          <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">
+          <p class="text-xs text-foreground-muted mb-4">
             Adjust dimensions for the shared link
           </p>
           <ImageSizePicker

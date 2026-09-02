@@ -11,9 +11,9 @@
     {
       variants: {
         state: {
-          none: 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600',
-          indeterminate: 'bg-blue-500 border-blue-500',
-          all: 'bg-blue-500 border-blue-500',
+          none: 'bg-input border-border-strong',
+          indeterminate: 'bg-primary-solid border-primary-solid',
+          all: 'bg-primary-solid border-primary-solid',
         },
       },
       defaultVariants: {
@@ -68,30 +68,34 @@
   class="fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-50 w-[calc(100vw-2rem)] sm:w-auto"
 >
   <div
-    class="flex items-center gap-1.5 sm:gap-4 px-2.5 sm:px-4 py-2.5 sm:py-3 max-w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 rounded-2xl shadow-lg shadow-gray-200/50 dark:shadow-gray-900/50"
+    class="flex items-center gap-1.5 sm:gap-4 px-2.5 sm:px-4 py-2.5 sm:py-3 max-w-full bg-card/80 backdrop-blur-xl border border-border/50 rounded-2xl shadow-lg shadow-border/50 dark:shadow-surface-inverse/50"
   >
     <button
       type="button"
       onclick={handleCheckboxChange}
-      class="flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg px-1 sm:px-2 py-1 transition-colors"
+      class="flex items-center gap-2 hover:bg-hover rounded-lg px-1 sm:px-2 py-1 transition-colors"
       aria-label={isAllSelected ? 'Deselect all' : 'Select all'}
     >
       <div class={selectAllCheckboxVariants({ state: checkboxState })}>
         {#if isAllSelected}
-          <Icon icon="heroicons:check" class="w-3.5 h-3.5 text-white" />
+          <Icon
+            icon="heroicons:check"
+            class="w-3.5 h-3.5 text-on-primary-solid"
+          />
         {:else if isIndeterminate}
-          <Icon icon="heroicons:minus" class="w-3.5 h-3.5 text-white" />
+          <Icon
+            icon="heroicons:minus"
+            class="w-3.5 h-3.5 text-on-primary-solid"
+          />
         {/if}
       </div>
     </button>
 
-    <span
-      class="text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap"
-    >
+    <span class="text-sm font-medium text-foreground-soft whitespace-nowrap">
       {selectedCount} selected
     </span>
 
-    <div class="h-6 w-px bg-gray-200 dark:bg-gray-700"></div>
+    <div class="h-6 w-px bg-border"></div>
 
     {#if actions}
       {@render actions()}
@@ -102,7 +106,7 @@
       size="sm"
       rounded="full"
       onclick={onCancel}
-      class="text-gray-600 dark:text-gray-400"
+      class="text-foreground-muted"
     >
       <Icon icon="lucide:x" class="w-4 h-4 sm:hidden" />
       <span class="hidden sm:inline">Cancel</span>

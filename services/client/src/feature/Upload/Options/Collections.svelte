@@ -42,7 +42,7 @@
     {#snippet child({ props })}
       <Button
         {...props}
-        variant="soft-indigo"
+        variant="soft-accent"
         rounded="full"
         size="sm"
         {disabled}

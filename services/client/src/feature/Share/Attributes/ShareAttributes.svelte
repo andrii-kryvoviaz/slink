@@ -67,7 +67,7 @@
       <div class="flex items-start gap-2">
         <Icon
           icon="ph:lock-simple"
-          class="h-3.5 w-3.5 mt-0.5 shrink-0 text-indigo-400"
+          class="h-3.5 w-3.5 mt-0.5 shrink-0 text-accent"
         />
         <span>Password required to open this link</span>
       </div>
@@ -101,6 +101,6 @@
   {/if}
 
   {#if !hasAny && emptyFallback}
-    <span class="text-xs text-gray-400 dark:text-gray-500">—</span>
+    <span class="text-xs text-foreground-subtle">—</span>
   {/if}
 </div>

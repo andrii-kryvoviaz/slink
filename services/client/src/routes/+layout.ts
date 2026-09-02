@@ -11,7 +11,7 @@ import type { LayoutLoad } from './$types';
 export const load: LayoutLoad = async ({ fetch, data }) => {
   await Application.initialize(fetch);
 
-  const locale = data.locale ?? 'en';
+  const locale = data.settings.locale.current;
   runtimeTranslator.locale = locale;
 
   if (browser) {

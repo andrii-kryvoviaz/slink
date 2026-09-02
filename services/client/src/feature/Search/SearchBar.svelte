@@ -178,7 +178,7 @@
     onEscape={handleEscape}
   >
     {#snippet trailing()}
-      <div class="w-px h-4 bg-gray-200 dark:bg-gray-700 shrink-0"></div>
+      <div class="w-px h-4 bg-border-strong shrink-0"></div>
 
       <DropdownSimple
         bind:open={dropdownOpen}
@@ -190,8 +190,8 @@
             {...triggerProps}
             class={cn(
               'flex items-center gap-1 px-1.5 sm:px-2 py-0.5 text-xs font-medium',
-              'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100',
-              'hover:bg-gray-50 dark:hover:bg-gray-800 rounded-r-full transition-colors duration-150',
+              'text-foreground-muted hover:text-foreground',
+              'hover:bg-muted-soft dark:hover:bg-muted rounded-r-full transition-colors duration-150',
               'whitespace-nowrap shrink-0',
             )}
             type="button"

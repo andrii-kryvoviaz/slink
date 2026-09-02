@@ -11,8 +11,8 @@
         'Configure image uploads, processing options, and URL sharing preferences',
       href: '/admin/settings/image',
       icon: 'solar:gallery-linear',
-      iconBg: 'bg-blue-100 dark:bg-blue-900/30',
-      iconColor: 'text-blue-600 dark:text-blue-400',
+      iconBg: 'bg-info-solid/15',
+      iconColor: 'text-info',
     },
     {
       title: 'Storage Configuration',
@@ -20,8 +20,8 @@
         'Configure storage providers, cache settings, and data management',
       href: '/admin/settings/storage',
       icon: 'solar:database-linear',
-      iconBg: 'bg-purple-100 dark:bg-purple-900/30',
-      iconColor: 'text-purple-600 dark:text-purple-400',
+      iconBg: 'bg-accent-strong/15',
+      iconColor: 'text-accent-strong',
     },
     {
       title: 'Security Settings',
@@ -29,8 +29,8 @@
         'Manage user registration, access control, and authentication policies',
       href: '/admin/settings/security',
       icon: 'solar:shield-check-linear',
-      iconBg: 'bg-emerald-100 dark:bg-emerald-900/30',
-      iconColor: 'text-emerald-600 dark:text-emerald-400',
+      iconBg: 'bg-success-strong/15',
+      iconColor: 'text-success-strong',
     },
     {
       title: 'Single Sign-On',
@@ -38,16 +38,16 @@
         'Manage SSO/OIDC identity providers for external authentication',
       href: '/admin/settings/sso',
       icon: 'solar:key-linear',
-      iconBg: 'bg-indigo-100 dark:bg-indigo-900/30',
-      iconColor: 'text-indigo-600 dark:text-indigo-400',
+      iconBg: 'bg-accent/15',
+      iconColor: 'text-accent',
     },
     {
       title: 'Customization',
       description: 'Customize the site name, description, logo, and branding',
       href: '/admin/settings/customization',
       icon: 'solar:palette-linear',
-      iconBg: 'bg-rose-100 dark:bg-rose-900/30',
-      iconColor: 'text-rose-600 dark:text-rose-400',
+      iconBg: 'bg-danger-strong/15',
+      iconColor: 'text-danger-strong',
     },
   ];
 </script>
@@ -68,7 +68,7 @@
     {#each categories as category}
       <a
         href={category.href}
-        class="group relative flex flex-col p-6 bg-white dark:bg-gray-900/50 border border-gray-200/60 dark:border-gray-700/40 rounded-2xl transition-all duration-300 hover:shadow-lg hover:shadow-gray-200/50 dark:hover:shadow-gray-900/50 hover:border-gray-300 dark:hover:border-gray-700/60 hover:-translate-y-0.5"
+        class="group relative flex flex-col p-6 bg-card/50 border border-border/60 rounded-2xl transition-all duration-300 hover:shadow-lg hover:shadow-border/50 dark:hover:shadow-card/50 hover:border-border-strong hover:-translate-y-0.5"
       >
         <div class="flex items-start justify-between mb-4">
           <div
@@ -78,15 +78,15 @@
           </div>
           <Icon
             icon="ph:arrow-right"
-            class="w-5 h-5 text-gray-400 dark:text-gray-500 transition-all duration-300 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0"
+            class="w-5 h-5 text-ring transition-all duration-300 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0"
           />
         </div>
 
-        <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">
+        <h3 class="text-lg font-medium text-foreground mb-2">
           {category.title}
         </h3>
 
-        <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
+        <p class="text-sm text-foreground-muted leading-relaxed">
           {category.description}
         </p>
       </a>

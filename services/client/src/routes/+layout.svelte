@@ -1,5 +1,9 @@
 <script lang="ts">
-  import { DemoNotice, ThemeSwitch } from '@slink/feature/Layout';
+  import {
+    DemoNotice,
+    ModeSwitch,
+    ModeSwitchHoverCard,
+  } from '@slink/feature/Layout';
   import { AppFooter } from '@slink/feature/Layout/Footer';
   import { Navbar } from '@slink/feature/Navigation';
   import AppSidebar from '@slink/feature/Navigation/Sidebar/AppSidebar.svelte';
@@ -13,6 +17,7 @@
   import { afterNavigate } from '$app/navigation';
   import { page } from '$app/state';
 
+  import { mode } from '@slink/lib/actions/mode';
   import { theme } from '@slink/lib/actions/theme';
   import { isAdmin } from '@slink/lib/auth/utils';
   import { customization } from '@slink/lib/settings';
@@ -56,7 +61,11 @@
   <link rel="apple-touch-icon" href={customization.appleTouchIconUrl} />
 </svelte:head>
 
-<div class="relative flex h-screen" use:theme={settings.theme.current}>
+<div
+  class="relative flex h-screen"
+  use:mode={settings.mode.current}
+  use:theme={settings.theme.current}
+>
   <Sidebar.Provider bind:open={sidebarOpen}>
     {#if showSidebar}
       <AppSidebar
@@ -72,7 +81,7 @@
     {/if}
     <Sidebar.Inset class="bg-transparent">
       <header
-        class="group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 flex h-16 shrink-0 items-center justify-between gap-2 transition-[width,height] ease-linear border-b border-bc-header relative"
+        class="group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 flex h-16 shrink-0 items-center justify-between gap-2 transition-[width,height] ease-linear border-b border-muted relative"
       >
         {#if showSidebar}
           <div class="flex items-center px-4 pr-0 sm:px-4">
@@ -90,13 +99,15 @@
           showUploadButton={!!user ||
             !!data.globalSettings?.access?.allowGuestUploads}
         >
-          {#snippet themeSwitch()}
-            <ThemeSwitch
-              checked={settings.theme.isDark}
-              variant="default"
-              animation="none"
-              on={{ change: (theme) => (settings.theme.current = theme) }}
-            />
+          {#snippet modeSwitch()}
+            <ModeSwitchHoverCard showPreferencesLink={!!user}>
+              <ModeSwitch
+                checked={settings.mode.isDark}
+                variant="default"
+                animation="none"
+                on={{ change: (mode) => (settings.mode.current = mode) }}
+              />
+            </ModeSwitchHoverCard>
           {/snippet}
         </Navbar>
       </header>

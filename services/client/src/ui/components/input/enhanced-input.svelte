@@ -95,7 +95,7 @@
   <div class="relative">
     {#if leftIcon}
       <div
-        class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-muted-foreground"
+        class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-foreground-muted"
       >
         {@render leftIcon()}
       </div>
@@ -113,7 +113,7 @@
 
     {#if rightIcon}
       <div
-        class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4 text-muted-foreground"
+        class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4 text-foreground-muted"
       >
         {@render rightIcon()}
       </div>
@@ -124,7 +124,7 @@
 
   {#if error}
     <div
-      class="mt-1.5 text-xs text-input-error"
+      class="mt-1.5 text-xs text-accent-strong"
       transition:slide={{ duration: 150 }}
     >
       {#if typeof error === 'string'}

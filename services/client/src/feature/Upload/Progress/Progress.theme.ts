@@ -8,8 +8,8 @@ export const UploadProgressNumberTheme = cva('font-light tracking-tight', {
       lg: 'text-5xl sm:text-6xl',
     },
     shimmer: {
-      true: 'bg-gradient-to-r from-slate-700 via-slate-400 to-slate-700 dark:from-slate-200 dark:via-slate-500 dark:to-slate-200 bg-[length:200%_100%] animate-shimmer bg-clip-text text-transparent',
-      false: 'text-slate-900 dark:text-white',
+      true: 'bg-gradient-to-r from-foreground-soft via-ring to-foreground-soft bg-[length:200%_100%] animate-shimmer bg-clip-text text-transparent',
+      false: 'text-foreground',
     },
     animated: {
       true: 'tabular-nums',
@@ -26,10 +26,10 @@ export const UploadProgressNumberTheme = cva('font-light tracking-tight', {
 export const UploadProgressStatusIconTheme = cva('w-5 h-5', {
   variants: {
     status: {
-      completed: 'text-slate-600 dark:text-slate-300',
-      error: 'text-red-500 dark:text-red-400',
-      cancelled: 'text-slate-400 dark:text-slate-500',
-      pending: 'text-slate-300 dark:text-slate-600',
+      completed: 'text-foreground-soft',
+      error: 'text-danger',
+      cancelled: 'text-foreground-subtle',
+      pending: 'text-border-strong',
     },
   },
 });

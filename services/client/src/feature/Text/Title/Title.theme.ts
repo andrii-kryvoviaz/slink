@@ -1,7 +1,7 @@
 import { cva } from 'class-variance-authority';
 
 export const TitleTheme = cva(
-  'bg-gradient-to-r from-slate-700 to-slate-900 dark:from-slate-200 dark:to-slate-400 bg-clip-text text-transparent',
+  'bg-gradient-to-r from-foreground-soft to-foreground dark:to-foreground-muted bg-clip-text text-transparent',
   {
     variants: {
       size: {

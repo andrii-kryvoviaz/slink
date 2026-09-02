@@ -35,7 +35,7 @@
         {/if}
       </div>
       {#if !provider.isCustom}
-        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+        <span class="text-sm font-medium text-foreground-soft">
           {provider.name}
         </span>
       {/if}

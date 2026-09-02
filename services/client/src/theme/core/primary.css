@@ -1,0 +1,88 @@
+@theme static {
+  --color-on-primary: oklch(
+    from var(--color-primary) clamp(0, (var(--on-color-flip) - l) * 1000, 1) 0 h
+  );
+  --color-primary-strong: light-dark(
+    oklch(
+      from var(--color-primary) calc(l - 0.038) calc(c * 1.0888)
+        calc(h + 17.302)
+    ),
+    oklch(
+      from var(--color-primary) calc(l - 0.034) calc(c * 1.103) calc(h + 22.311)
+    )
+  );
+  --color-primary-solid: light-dark(
+    oklch(from var(--color-primary) l c h),
+    oklch(
+      from var(--color-primary) calc(l - 0.084) calc(c * 1.297) calc(h + 5.191)
+    )
+  );
+  --color-on-primary-solid: oklch(
+    from var(--color-primary-solid)
+      clamp(0, (var(--on-color-flip) - l) * 1000, 1) 0 h
+  );
+  --color-primary-surface: light-dark(
+    oklch(
+      from var(--color-primary) calc(l - 0.077) calc(c * 1.1449) calc(h + 3.066)
+    ),
+    oklch(
+      from var(--color-primary) calc(l - 0.084) calc(c * 1.297) calc(h + 5.191)
+    )
+  );
+  --color-primary-surface-strong: light-dark(
+    oklch(
+      from var(--color-primary) calc(l - 0.135) calc(c * 1.1355) calc(h + 4.561)
+    ),
+    oklch(
+      from var(--color-primary) calc(l - 0.161) calc(c * 1.4848) calc(h + 8.257)
+    )
+  );
+  --color-on-primary-surface: oklch(
+    from var(--color-primary-surface)
+      clamp(0, (var(--on-color-flip) - l) * 1000, 1) 0 h
+  );
+  --color-primary-wash: light-dark(
+    oklch(
+      from var(--color-primary) calc(l + 0.347) calc(c * 0.0654) calc(h - 5.211)
+    ),
+    oklch(
+      from var(--color-primary) calc(l - 0.328) calc(c * 0.8848)
+        calc(h + 10.898)
+    )
+  );
+  --color-primary-wash-strong: light-dark(
+    oklch(
+      from var(--color-primary) calc(l + 0.339) calc(c * 0.0841)
+        calc(h + 12.499)
+    ),
+    oklch(
+      from var(--color-primary) calc(l - 0.348) calc(c * 0.8727)
+        calc(h + 24.073)
+    )
+  );
+  --color-primary-text: light-dark(
+    oklch(
+      from var(--color-primary) calc(l - 0.135) calc(c * 1.1355) calc(h + 4.561)
+    ),
+    oklch(
+      from var(--color-primary) calc(l + 0.102) calc(c * 0.6364) calc(h - 2.811)
+    )
+  );
+  --color-primary-text-strong: light-dark(
+    oklch(
+      from var(--color-primary) calc(l - 0.244) calc(c * 0.6822) calc(h + 5.707)
+    ),
+    oklch(
+      from var(--color-primary) calc(l + 0.225) calc(c * 0.1939) calc(h + 0.961)
+    )
+  );
+  --color-primary-border: light-dark(
+    oklch(
+      from var(--color-primary) calc(l + 0.259) calc(c * 0.2757) calc(h - 5.687)
+    ),
+    oklch(
+      from var(--color-primary) calc(l - 0.283) calc(c * 1.2061)
+        calc(h + 11.014)
+    )
+  );
+}

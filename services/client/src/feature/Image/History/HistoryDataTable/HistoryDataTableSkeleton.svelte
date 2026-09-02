@@ -8,13 +8,11 @@
   let { count = 10 }: Props = $props();
 </script>
 
-<div
-  class="rounded-xl border border-slate-200/60 dark:border-slate-700/40 bg-white dark:bg-slate-800/30 overflow-hidden"
->
+<div class="rounded-xl border border-border/50 bg-card overflow-hidden">
   <div class="@container overflow-x-auto">
     <table class="w-full">
       <thead>
-        <tr class="bg-slate-50 dark:bg-slate-800/50">
+        <tr class="bg-muted/50">
           <th class="h-10 px-4 w-[40px]"
             ><Skeleton width="16px" height="12px" /></th
           >
@@ -51,7 +49,7 @@
       <tbody>
         {#each Array(count) as _, index}
           <tr
-            class="border-t border-slate-200/60 dark:border-slate-700/40"
+            class="border-t border-border/50"
             style="animation-delay: {index * 50}ms"
           >
             <td class="h-14 pl-4"

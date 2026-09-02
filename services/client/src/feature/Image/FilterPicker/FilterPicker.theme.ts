@@ -5,8 +5,8 @@ export const filterTileTheme = cva(
   {
     variants: {
       selected: {
-        true: 'ring-2 ring-violet-500 dark:ring-violet-400 bg-violet-50 dark:bg-violet-500/10',
-        false: 'hover:bg-gray-100 dark:hover:bg-white/5 hover:scale-105',
+        true: 'ring-2 ring-accent bg-accent-wash dark:bg-accent-wash/30',
+        false: 'hover:bg-hover hover:scale-105',
       },
     },
     defaultVariants: {
@@ -18,8 +18,8 @@ export const filterTileTheme = cva(
 export const filterLabelTheme = cva('w-16 truncate text-center text-xs', {
   variants: {
     selected: {
-      true: 'text-violet-700 dark:text-violet-300 font-medium',
-      false: 'text-gray-600 dark:text-gray-400',
+      true: 'text-accent-text font-medium',
+      false: 'text-foreground-muted',
     },
   },
   defaultVariants: {

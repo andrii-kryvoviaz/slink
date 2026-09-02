@@ -22,29 +22,25 @@
 <div class="w-xs max-w-screen space-y-4">
   <div class="flex items-center gap-3">
     <div
-      class="flex h-10 w-10 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30 border border-red-200/40 dark:border-red-800/30 shadow-sm shrink-0"
+      class="flex h-10 w-10 items-center justify-center rounded-full bg-danger/12 border border-danger-border/40 dark:border-danger-border/12 shadow-sm shrink-0"
     >
-      <Icon icon="ph:key" class="h-5 w-5 text-red-600 dark:text-red-400" />
+      <Icon icon="ph:key" class="h-5 w-5 text-danger" />
     </div>
     <div>
-      <h3 class="text-sm font-semibold text-gray-900 dark:text-white">
-        Revoke API Key
-      </h3>
-      <p class="text-xs text-gray-500 dark:text-gray-400">
+      <h3 class="text-sm font-semibold text-foreground">Revoke API Key</h3>
+      <p class="text-xs text-foreground-muted">
         Key will be permanently revoked
       </p>
     </div>
   </div>
 
-  <div
-    class="bg-gray-50/80 dark:bg-gray-800/50 rounded-xl p-4 border border-gray-200/50 dark:border-gray-700/30"
-  >
+  <div class="bg-muted/50 rounded-xl p-4 border border-border/50">
     <div class="flex items-center gap-3">
       <div>
-        <span class="text-sm font-medium text-gray-900 dark:text-white">
+        <span class="text-sm font-medium text-foreground">
           {apiKey.name}
         </span>
-        <p class="text-xs text-gray-500 dark:text-gray-400">
+        <p class="text-xs text-foreground-muted">
           This API key will be permanently revoked and cannot be recovered
         </p>
       </div>

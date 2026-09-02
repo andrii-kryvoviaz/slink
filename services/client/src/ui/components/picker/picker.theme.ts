@@ -17,15 +17,15 @@ export const pickerContainerTheme = cva('', {
 });
 
 export const pickerHeaderTheme = cva(
-  'flex shrink-0 items-center justify-between gap-2 border-b border-gray-200/80 px-3 py-2 dark:border-gray-700/80',
+  'border-border/80 flex shrink-0 items-center justify-between gap-2 border-b px-3 py-2',
 );
 
 export const pickerHeaderTitleTheme = cva(
-  'truncate text-[13px] font-medium text-gray-900 dark:text-gray-100',
+  'text-foreground truncate text-[13px] font-medium',
 );
 
 export const pickerHeaderCloseTheme = cva(
-  'inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/30 dark:text-gray-400 dark:hover:bg-gray-800/60 dark:hover:text-white cursor-pointer',
+  'text-foreground-muted hover:bg-hover hover:text-foreground focus-visible:ring-primary-solid/30 inline-flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-md transition-colors focus:outline-none focus-visible:ring-2',
 );
 
 export const pickerListTheme = cva('', {
@@ -56,10 +56,10 @@ export const pickerItemTheme = cva(
       },
       selected: {
         true: '',
-        false: 'hover:bg-gray-50 dark:hover:bg-white/5',
+        false: 'hover:bg-hover',
       },
       highlighted: {
-        true: 'bg-gray-50 dark:bg-white/5',
+        true: 'bg-hover',
         false: '',
       },
     },
@@ -67,32 +67,29 @@ export const pickerItemTheme = cva(
       {
         color: 'blue',
         selected: true,
-        class: 'bg-blue-50/80 dark:bg-blue-500/10',
+        class: 'bg-primary-solid/10',
       },
       {
         color: 'indigo',
         selected: true,
-        class: 'bg-indigo-50/80 dark:bg-indigo-500/10',
+        class: 'bg-accent-wash dark:bg-accent-wash/20',
       },
       {
         variant: 'glass',
         color: 'blue',
         selected: true,
-        class:
-          'bg-blue-100 dark:bg-blue-500/20 border border-blue-200 dark:border-blue-500/30',
+        class: 'bg-primary-solid/20 border border-primary-solid/30',
       },
       {
         variant: 'glass',
         color: 'indigo',
         selected: true,
-        class:
-          'bg-indigo-100 dark:bg-indigo-500/20 border border-indigo-200 dark:border-indigo-500/30',
+        class: 'bg-accent/20 border border-accent/30',
       },
       {
         variant: 'glass',
         selected: false,
-        class:
-          'hover:bg-slate-100 dark:hover:bg-slate-800 border border-transparent hover:border-slate-200 dark:hover:border-slate-700',
+        class: 'hover:bg-hover hover:border-border border border-transparent',
       },
     ],
     defaultVariants: {
@@ -119,20 +116,20 @@ export const pickerCheckboxTheme = cva(
       },
       selected: {
         true: '',
-        false:
-          'border-gray-300 dark:border-gray-600 group-hover:border-gray-400 dark:group-hover:border-gray-500',
+        false: 'border-border-strong group-hover:border-ring',
       },
     },
     compoundVariants: [
       {
         color: 'blue',
         selected: true,
-        class: 'bg-blue-600 border-blue-600 text-white',
+        class:
+          'bg-primary-surface border-primary-surface text-on-primary-surface',
       },
       {
         color: 'indigo',
         selected: true,
-        class: 'bg-indigo-600 border-indigo-600 text-white',
+        class: 'bg-accent border-accent text-on-accent',
       },
     ],
     defaultVariants: {
@@ -143,7 +140,7 @@ export const pickerCheckboxTheme = cva(
   },
 );
 
-export const pickerCheckIconTheme = cva('text-white', {
+export const pickerCheckIconTheme = cva('text-on-primary-surface', {
   variants: {
     variant: {
       popover: 'w-2.5 h-2.5',
@@ -169,19 +166,19 @@ export const pickerNameTheme = cva('truncate transition-colors duration-150', {
     },
     selected: {
       true: '',
-      false: 'text-gray-700 dark:text-gray-200',
+      false: 'text-foreground-soft',
     },
   },
   compoundVariants: [
     {
       color: 'blue',
       selected: true,
-      class: 'text-blue-700 dark:text-blue-300',
+      class: 'text-info-text',
     },
     {
       color: 'indigo',
       selected: true,
-      class: 'text-indigo-700 dark:text-indigo-300',
+      class: 'text-accent-text',
     },
   ],
   defaultVariants: {
@@ -206,19 +203,19 @@ export const pickerSubtextTheme = cva(
       },
       selected: {
         true: '',
-        false: 'text-gray-400 dark:text-gray-500',
+        false: 'text-foreground-subtle',
       },
     },
     compoundVariants: [
       {
         color: 'blue',
         selected: true,
-        class: 'text-blue-500 dark:text-blue-400',
+        class: 'text-info',
       },
       {
         color: 'indigo',
         selected: true,
-        class: 'text-indigo-500 dark:text-indigo-400',
+        class: 'text-accent',
       },
     ],
     defaultVariants: {
@@ -240,21 +237,20 @@ export const pickerCreateFooterTheme = cva(
       highlighted: {
         true: '',
         false:
-          'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5',
+          'text-foreground-muted hover:text-foreground-soft hover:bg-hover',
       },
     },
     compoundVariants: [
       {
         color: 'blue',
         highlighted: true,
-        class:
-          'bg-blue-50/80 text-blue-600 hover:bg-blue-100/80 dark:bg-blue-500/10 dark:text-blue-400 dark:hover:bg-blue-500/15',
+        class: 'bg-primary-solid/10 text-info hover:bg-primary-solid/15',
       },
       {
         color: 'indigo',
         highlighted: true,
         class:
-          'bg-indigo-50/80 text-indigo-600 hover:bg-indigo-100/80 dark:bg-indigo-500/10 dark:text-indigo-400 dark:hover:bg-indigo-500/15',
+          'bg-accent-wash dark:bg-accent-wash/20 text-accent hover:bg-accent/15',
       },
     ],
     defaultVariants: {
@@ -274,9 +270,8 @@ export const pickerCreateRowTheme = cva(
         glass: 'gap-2.5 px-2.5 py-2 rounded-lg',
       },
       color: {
-        blue: 'text-blue-600 dark:text-blue-400 hover:bg-blue-50/80 dark:hover:bg-blue-500/10',
-        indigo:
-          'text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50/80 dark:hover:bg-indigo-500/10',
+        blue: 'text-info hover:bg-primary-solid/10',
+        indigo: 'text-accent hover:bg-accent-wash dark:hover:bg-accent-wash/20',
       },
     },
     defaultVariants: {

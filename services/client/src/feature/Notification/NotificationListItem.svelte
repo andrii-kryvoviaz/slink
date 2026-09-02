@@ -77,19 +77,19 @@
 
   <div class="flex-1 min-w-0">
     <div class="flex items-center gap-2 mb-1">
-      <span class="font-medium text-gray-900 dark:text-white truncate">
+      <span class="font-medium text-foreground truncate">
         {actorName}
       </span>
-      <span class="text-xs text-gray-400 dark:text-gray-500 shrink-0">
+      <span class="text-xs text-foreground-subtle shrink-0">
         {timeAgo}
       </span>
     </div>
-    <p class="text-sm text-gray-600 dark:text-gray-400">
+    <p class="text-sm text-foreground-muted">
       {notification.message}
     </p>
     {#if hasCommentPreview}
       <p
-        class="mt-2 text-sm text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800/50 rounded-lg px-3 py-2 line-clamp-2 italic"
+        class="mt-2 text-sm text-foreground-muted bg-muted rounded-lg px-3 py-2 line-clamp-2 italic"
       >
         {notification.relatedComment?.content}
       </p>
@@ -99,7 +99,7 @@
   {#if !notification.isRead}
     <button
       onclick={handleMarkAsRead}
-      class="shrink-0 w-2 h-2 rounded-full bg-indigo-500 hover:bg-indigo-600 transition-colors"
+      class="shrink-0 w-2 h-2 rounded-full bg-accent hover:bg-accent/90 transition-colors"
       aria-label="Mark as read"
     ></button>
   {/if}

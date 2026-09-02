@@ -13,7 +13,7 @@
 <div class="space-y-3">
   {#each skeletonItems as _, index}
     <div
-      class="rounded-lg border border-gray-200 dark:border-gray-800 p-4 bg-white dark:bg-gray-900/60"
+      class="rounded-lg border border-border p-4 bg-card"
       style="animation-delay: {index * 75}ms"
     >
       <div class="flex items-center gap-4">

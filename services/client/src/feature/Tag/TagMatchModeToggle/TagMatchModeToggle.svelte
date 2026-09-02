@@ -68,19 +68,17 @@
       {/if}
     </div>
     <div class="flex flex-col gap-1">
-      <span class="text-xs font-semibold text-slate-900 dark:text-slate-100">
+      <span class="text-xs font-semibold text-foreground">
         {#if requireAllTags}Match All{:else}Match Any{/if}
       </span>
-      <span
-        class="text-[11px] leading-relaxed text-slate-600 dark:text-slate-400"
-      >
+      <span class="text-[11px] leading-relaxed text-foreground-muted">
         {#if requireAllTags}
           Images must have every selected tag to appear in results.
         {:else}
           Images with at least one selected tag will appear in results.
         {/if}
       </span>
-      <span class="text-[10px] text-slate-400 dark:text-slate-500 italic">
+      <span class="text-[10px] text-foreground-subtle italic">
         {#if requireAllTags}
           Click to switch to match any
         {:else}

@@ -17,7 +17,7 @@
   class="flex items-center gap-3 min-w-0 group/name"
 >
   <div
-    class="w-10 h-10 rounded-md overflow-hidden bg-gray-100 dark:bg-gray-800/50 shrink-0 flex items-center justify-center"
+    class="w-10 h-10 rounded-md overflow-hidden bg-muted shrink-0 flex items-center justify-center"
   >
     <LazyImage
       src={collection.coverImage}
@@ -28,13 +28,13 @@
       {#snippet placeholder()}
         <Icon
           icon="ph:folder-simple-duotone"
-          class="w-5 h-5 text-gray-400 dark:text-gray-600"
+          class="w-5 h-5 text-foreground-subtle"
         />
       {/snippet}
     </LazyImage>
   </div>
   <span
-    class="font-medium text-gray-900 dark:text-white truncate text-sm group-hover/name:text-blue-600 dark:group-hover/name:text-blue-400 transition-colors"
+    class="font-medium text-foreground truncate text-sm group-hover/name:text-info transition-colors"
   >
     {collection.name}
   </span>

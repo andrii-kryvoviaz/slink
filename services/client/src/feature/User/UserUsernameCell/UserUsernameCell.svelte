@@ -8,6 +8,6 @@
   let { username }: Props = $props();
 </script>
 
-<div class="font-mono text-sm text-gray-900 dark:text-gray-100">
+<div class="font-mono text-sm text-foreground">
   <CopyableText text={username} />
 </div>

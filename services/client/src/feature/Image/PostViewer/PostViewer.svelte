@@ -97,7 +97,7 @@
 
 {#if viewerState.isOpen}
   <div
-    class="fixed inset-0 z-50 bg-black overflow-hidden"
+    class="fixed inset-0 z-50 bg-scrim overflow-hidden"
     transition:fade={{ duration: 200 }}
     role="dialog"
     aria-modal="true"

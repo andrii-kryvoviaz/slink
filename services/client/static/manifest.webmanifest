@@ -4,8 +4,8 @@
   "description": "Self-hosted image sharing platform with complete control over your media. Upload, organize with nested tags, share with custom links, and manage storage across multiple providers",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#000000",
+  "background_color": "#0f172b",
+  "theme_color": "#0f172b",
   "orientation": "portrait-primary",
   "icons": [
     {

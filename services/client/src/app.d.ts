@@ -28,8 +28,7 @@ declare global {
       user: User | null;
       userPreferences: UserPreferencesResponse | null;
       uploadPolicy: UploadPolicy;
-      cookieManager: CookieManager;
-      locale: string;
+      cookies: CookieManager;
     }
     interface PageData {
       settings: UserSettings;

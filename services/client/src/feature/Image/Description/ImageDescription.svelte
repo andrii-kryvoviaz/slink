@@ -23,13 +23,11 @@
 >
   {#snippet header({ isLoading })}
     <div class="flex items-center gap-2 mb-1.5">
-      <span class="text-lg font-semibold text-gray-900 dark:text-white"
-        >Description</span
-      >
+      <span class="text-lg font-semibold text-foreground">Description</span>
       {#if isLoading}
         <Icon
           icon="lucide:loader-2"
-          class="h-3.5 w-3.5 text-gray-400 animate-spin"
+          class="h-3.5 w-3.5 text-foreground-muted animate-spin"
         />
       {/if}
     </div>

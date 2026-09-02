@@ -91,42 +91,44 @@
   {/if}
 {/snippet}
 
-<div class="mt-4 pt-4 border-t border-white/10">
+<div class="mt-4 pt-4 border-t border-on-surface-inverse/10">
   {#if activeRef}
-    <div class="mb-2 px-3 py-2 bg-white/5 rounded-lg">
+    <div class="mb-2 px-3 py-2 bg-on-surface-inverse/5 rounded-lg">
       <div class="flex items-center justify-between mb-1">
-        <span class="text-xs text-white/60">
+        <span class="text-xs text-on-surface-inverse/60">
           {#if isEditing}
-            Editing reply to <span class="font-medium text-white/80">
+            Editing reply to <span
+              class="font-medium text-on-surface-inverse/80"
+            >
               {@render refAuthorName()}
             </span>
           {:else}
-            Replying to <span class="font-medium text-white/80">
+            Replying to <span class="font-medium text-on-surface-inverse/80">
               {@render refAuthorName()}
             </span>
           {/if}
         </span>
         <button
           onclick={handleCancel}
-          class="p-1 text-white/40 hover:text-white/80 transition-colors"
+          class="p-1 text-on-surface-inverse/40 hover:text-on-surface-inverse/80 transition-colors"
         >
           <Icon icon="heroicons:x-mark" class="w-3 h-3" />
         </button>
       </div>
-      <p class="text-xs text-white/50 line-clamp-2">
+      <p class="text-xs text-on-surface-inverse/50 line-clamp-2">
         {@html activeRef.displayContent.toFormattedHtml()}
       </p>
     </div>
   {/if}
 
   <div
-    class="relative flex items-center bg-white/10 border border-white/20 rounded-full transition-all duration-200 focus-within:ring-1 focus-within:ring-white/30 focus-within:border-white/30"
+    class="relative flex items-center bg-on-surface-inverse/10 border border-on-surface-inverse/20 rounded-full transition-all duration-200 focus-within:ring-1 focus-within:ring-on-surface-inverse/30 focus-within:border-on-surface-inverse/30"
   >
     <textarea
       bind:this={textArea}
       bind:value={content}
       onkeydown={handleKeyDown}
-      class="flex-1 px-4 py-2.5 pr-12 text-sm bg-transparent text-white/90 placeholder-white/40 resize-none focus:outline-none"
+      class="flex-1 px-4 py-2.5 pr-12 text-sm bg-transparent text-on-surface-inverse/90 placeholder-on-surface-inverse/40 resize-none focus:outline-none"
       rows="1"
       placeholder={isEditing
         ? 'Edit your comment...'
@@ -144,7 +146,7 @@
           rounded="full"
           onclick={handleCancel}
           disabled={isSubmitting}
-          class="size-8! text-white/40 hover:text-white/80 hover:bg-white/10"
+          class="size-8! text-on-surface-inverse/40 hover:text-on-surface-inverse/80 hover:bg-on-surface-inverse/10"
         >
           <Icon icon="heroicons:x-mark" class="w-4 h-4" />
         </Button>
@@ -167,7 +169,7 @@
       </Button>
     </div>
   </div>
-  <p class="text-xs text-white/30 mt-2 pl-4">
+  <p class="text-xs text-on-surface-inverse/30 mt-2 pl-4">
     Use **bold** and *italic* for formatting • ⌘+Enter to submit
   </p>
 </div>

@@ -14,12 +14,23 @@ const LOCALE_LABELS: Record<string, string> = {
   zh: '中文',
 };
 
+const THEME_LABELS: Record<string, string> = {
+  default: 'Default',
+  nord: 'Nord',
+};
+
 export class PreferencesPage extends BasePage {
   static readonly URL = '/preferences';
 
   readonly localeTrigger = this.page
     .locator('[data-slot="select-trigger"]')
     .first();
+  readonly appearanceSection = this.page
+    .locator('section')
+    .filter({ has: this.page.getByRole('heading', { name: 'Appearance' }) });
+  readonly themeTrigger = this.appearanceSection.locator(
+    '[data-slot="select-trigger"]',
+  );
   readonly saveButton = this.page.locator('button[type="submit"]:visible');
 
   constructor(page: Page) {
@@ -43,6 +54,14 @@ export class PreferencesPage extends BasePage {
       await expect(option).toBeVisible({ timeout: 1000 });
     }).toPass({ timeout: 15000 });
 
+    await option.click();
+  }
+
+  async selectTheme(value: string) {
+    const label = THEME_LABELS[value] ?? value;
+    const option = this.page.getByRole('option', { name: label, exact: true });
+
+    await this.clickUntil(this.themeTrigger, option);
     await option.click();
   }
 

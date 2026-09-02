@@ -31,13 +31,13 @@
   </div>
   <div class="flex-1 min-w-0">
     <Dialog.Title
-      class="text-lg font-semibold text-slate-900 dark:text-white/95 tracking-tight"
+      class="text-lg font-semibold text-foreground dark:text-foreground/95 tracking-tight"
     >
       {@render title()}
     </Dialog.Title>
     {#if description}
       <Dialog.Description
-        class="text-sm text-slate-600 dark:text-slate-400/80 mt-1"
+        class="text-sm text-foreground-muted dark:text-foreground-muted/80 mt-1"
       >
         {@render description()}
       </Dialog.Description>

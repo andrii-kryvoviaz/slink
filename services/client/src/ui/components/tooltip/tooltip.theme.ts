@@ -6,29 +6,27 @@ export const tooltipVariants = cva(
     variants: {
       variant: {
         default:
-          'bg-slate-100 text-slate-900 border border-slate-300 shadow-sm backdrop-blur-sm dark:bg-slate-900 dark:text-slate-100 dark:border-slate-700',
+          'bg-muted-soft text-foreground border border-border shadow-sm backdrop-blur-sm',
         subtle:
-          'bg-slate-100/95 text-slate-900 border border-slate-200/50 shadow-sm backdrop-blur-sm dark:bg-slate-800/95 dark:text-slate-100 dark:border-slate-600/50',
+          'bg-muted/95 text-foreground border border-border/50 shadow-sm backdrop-blur-sm',
         glass:
-          'bg-white/80 text-slate-900 border border-slate-200/30 shadow-lg backdrop-blur-md backdrop-saturate-150 dark:bg-slate-900/80 dark:text-slate-100 dark:border-slate-700/30',
+          'bg-card/80 text-foreground border border-border/30 shadow-lg backdrop-blur-md backdrop-saturate-150',
         contrast:
-          'bg-slate-900 text-white border-0 shadow-lg font-medium dark:bg-white dark:text-slate-900',
+          'bg-foreground text-background border-0 shadow-lg font-medium',
         floating:
-          'bg-white text-slate-900 border border-slate-200 shadow-lg ring-1 ring-slate-900/5 dark:bg-slate-800 dark:text-slate-100 dark:border-slate-700 dark:ring-white/10',
+          'bg-card text-foreground border border-border shadow-lg ring-1 ring-hover',
         minimal:
-          'bg-slate-50/90 text-slate-600 border-0 shadow-sm backdrop-blur-sm dark:bg-slate-800/90 dark:text-slate-400',
+          'bg-muted-soft/90 text-foreground-muted border-0 shadow-sm backdrop-blur-sm',
         success:
-          'bg-green-50 text-green-900 border border-green-200 shadow-sm dark:bg-green-950 dark:text-green-100 dark:border-green-800',
+          'bg-success-wash dark:bg-success-wash/20 text-success-text-strong border border-success-border dark:border-success-border/30 shadow-sm',
         destructive:
-          'bg-red-50 text-red-900 border border-red-200 shadow-sm dark:bg-red-950 dark:text-red-100 dark:border-red-800',
-        info: 'bg-blue-50 text-blue-900 border border-blue-200 shadow-sm dark:bg-blue-950 dark:text-blue-100 dark:border-blue-800',
+          'bg-danger-wash dark:bg-danger-wash/20 text-danger-text-strong border border-danger-border dark:border-danger-border/30 shadow-sm',
+        info: 'bg-info-wash dark:bg-info-wash/20 text-info-text-strong border border-info-border dark:border-info-border/30 shadow-sm',
         warning:
-          'bg-yellow-50 text-yellow-900 border border-yellow-200 shadow-sm dark:bg-yellow-950 dark:text-yellow-100 dark:border-yellow-800',
-        primary:
-          'bg-violet-600 text-white border-0 shadow-md dark:bg-violet-500',
-        secondary:
-          'bg-slate-100 text-slate-900 border border-slate-200 shadow-sm dark:bg-slate-800 dark:text-slate-100 dark:border-slate-700',
-        dark: 'bg-neutral-900 text-white/90 border border-white/10 shadow-lg backdrop-blur-sm',
+          'bg-warning-wash dark:bg-warning-wash/20 text-warning-text-strong border border-warning-border dark:border-warning-border/30 shadow-sm',
+        primary: 'bg-accent text-on-accent border-0 shadow-md',
+        secondary: 'bg-muted text-foreground border border-border shadow-sm',
+        dark: 'bg-surface-inverse text-on-surface-inverse/90 border border-on-surface-inverse/10 shadow-lg backdrop-blur-sm',
       },
       size: {
         xs: 'text-xs px-2 py-1 max-w-48',
@@ -69,27 +67,22 @@ export const tooltipVariants = cva(
 export const tooltipArrowVariants = cva('z-50 size-2.5', {
   variants: {
     variant: {
-      default:
-        'bg-slate-100 border-l border-t border-slate-300 dark:bg-slate-900 dark:border-slate-700',
-      subtle:
-        'bg-slate-100 border-l border-t border-slate-200/50 dark:bg-slate-800 dark:border-slate-600/50',
-      glass:
-        'bg-white/80 border-l border-t border-slate-200/30 dark:bg-slate-900/80 dark:border-slate-700/30',
-      contrast: 'bg-slate-900 border-0 dark:bg-white',
-      floating:
-        'bg-white border-l border-t border-slate-200 dark:bg-slate-800 dark:border-slate-700',
-      minimal: 'bg-slate-50/90 border-0 dark:bg-slate-800/90',
+      default: 'bg-muted-soft border-l border-t border-border',
+      subtle: 'bg-muted border-l border-t border-border/50',
+      glass: 'bg-card/80 border-l border-t border-border/30',
+      contrast: 'bg-foreground border-0',
+      floating: 'bg-card border-l border-t border-border',
+      minimal: 'bg-muted-soft/90 border-0',
       success:
-        'bg-green-50 border-l border-t border-green-200 dark:bg-green-950 dark:border-green-800',
+        'bg-success-wash dark:bg-success-wash/20 border-l border-t border-success-border dark:border-success-border/30',
       destructive:
-        'bg-red-50 border-l border-t border-red-200 dark:bg-red-950 dark:border-red-800',
-      info: 'bg-blue-50 border-l border-t border-blue-200 dark:bg-blue-950 dark:border-blue-800',
+        'bg-danger-wash dark:bg-danger-wash/20 border-l border-t border-danger-border dark:border-danger-border/30',
+      info: 'bg-info-wash dark:bg-info-wash/20 border-l border-t border-info-border dark:border-info-border/30',
       warning:
-        'bg-yellow-50 border-l border-t border-yellow-200 dark:bg-yellow-950 dark:border-yellow-800',
-      primary: 'bg-violet-600 border-0 dark:bg-violet-500',
-      secondary:
-        'bg-slate-100 border-l border-t border-slate-200 dark:bg-slate-800 dark:border-slate-700',
-      dark: 'bg-neutral-900 border-l border-t border-white/10',
+        'bg-warning-wash dark:bg-warning-wash/20 border-l border-t border-warning-border dark:border-warning-border/30',
+      primary: 'bg-accent border-0',
+      secondary: 'bg-muted border-l border-t border-border',
+      dark: 'bg-surface-inverse border-l border-t border-on-surface-inverse/10',
     },
     rounded: {
       none: 'rounded-none',

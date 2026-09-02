@@ -7,6 +7,7 @@ import type { CookieManager } from '@slink/lib/auth/CookieManager';
 import { Session } from '@slink/lib/auth/Session';
 import type { TokenPair } from '@slink/lib/auth/Type/TokenPair';
 import { parseJwt } from '@slink/lib/auth/parseJwt';
+import { accountSettingsPolicy } from '@slink/lib/settings/SettingsPolicy';
 
 type Credentials = {
   username: string;
@@ -31,7 +32,7 @@ export class Auth {
     }: TokenPair & Omit<AuthDependencies, 'fetch'>,
     api: Pick<ApiClientType, 'user'>,
   ) {
-    cookieManager.setCookie(cookies, 'refreshToken', refreshToken, {
+    cookieManager.setCookie('refreshToken', refreshToken, {
       maxAge: Number(env.SESSION_TTL_SECONDS),
       httpOnly: true,
     });
@@ -59,7 +60,7 @@ export class Auth {
     cookies,
     cookieManager,
   }: TokenPair & Omit<AuthDependencies, 'fetch'>) {
-    cookieManager.setCookie(cookies, 'refreshToken', refreshToken, {
+    cookieManager.setCookie('refreshToken', refreshToken, {
       maxAge: Number(env.SESSION_TTL_SECONDS),
       httpOnly: true,
     });
@@ -81,7 +82,7 @@ export class Auth {
       api,
     );
 
-    cookieManager.deleteCookie(cookies, 'createdUserId');
+    cookieManager.deleteCookie('createdUserId');
 
     return user;
   }
@@ -148,7 +149,9 @@ export class Auth {
       return;
     }
 
-    cookieManager.deleteCookie(cookies, 'refreshToken');
+    cookieManager.deleteCookie('refreshToken');
+
+    cookieManager.use(accountSettingsPolicy).clear();
 
     if (sessionId) {
       await Session.destroy(cookies, cookieManager);

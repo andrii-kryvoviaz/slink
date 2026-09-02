@@ -54,7 +54,7 @@
           )}
       >
         <div
-          class="relative block w-full @xl:w-40 @2xl:w-48 @4xl:w-56 shrink-0 overflow-hidden bg-gray-100 dark:bg-gray-800/80"
+          class="relative block w-full @xl:w-40 @2xl:w-48 @4xl:w-56 shrink-0 overflow-hidden bg-muted dark:bg-muted/80"
         >
           <SelectionCheckbox
             id={item.id}
@@ -95,7 +95,7 @@
           <div class="flex items-start justify-between gap-3">
             <Link
               href={`/info/${item.id}`}
-              class="font-mono text-sm font-medium text-gray-900 dark:text-gray-100 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors truncate"
+              class="font-mono text-sm font-medium text-foreground hover:text-accent transition-colors truncate"
               title={item.attributes.fileName}
             >
               {item.attributes.fileName}

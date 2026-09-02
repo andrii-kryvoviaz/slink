@@ -34,14 +34,12 @@
 {#if state.licensingEnabled && state.licenses.length > 0}
   <div>
     <div class="flex items-center gap-2 mb-2">
-      <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
-        License
-      </h2>
+      <h2 class="text-lg font-semibold text-foreground">License</h2>
       {#if state.isLoading}
-        <span class="text-xs text-gray-500 dark:text-gray-400">Saving...</span>
+        <span class="text-xs text-foreground-muted">Saving...</span>
       {/if}
     </div>
-    <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">
+    <p class="text-xs text-foreground-muted mb-3">
       Choose how others can use this image
     </p>
     <Select

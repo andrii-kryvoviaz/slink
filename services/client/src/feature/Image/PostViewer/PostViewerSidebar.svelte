@@ -47,15 +47,19 @@
 </script>
 
 <div class="flex flex-col w-full h-full gap-4">
-  <div class="shrink-0 bg-white/5 backdrop-blur-sm rounded-2xl p-4">
+  <div
+    class="shrink-0 bg-on-surface-inverse/5 backdrop-blur-sm rounded-2xl p-4"
+  >
     <div class="flex items-center gap-3">
       <UserAvatar size="md" class="lg:hidden" user={image.owner} />
       <UserAvatar size="lg" class="hidden lg:block" user={image.owner} />
       <div class="flex-1 min-w-0">
-        <span class="block font-medium text-white text-sm truncate">
+        <span
+          class="block font-medium text-on-surface-inverse text-sm truncate"
+        >
           {image.owner.displayName}
         </span>
-        <div class="text-xs text-white/50">
+        <div class="text-xs text-on-surface-inverse/50">
           <FormattedDate date={image.attributes.createdAt.timestamp} />
         </div>
       </div>
@@ -124,7 +128,7 @@
     {#if hasDescription}
       <Collapsible.Root bind:open={descriptionOpen} class="mt-2 lg:mt-4">
         <Collapsible.Trigger
-          class="flex items-center justify-between w-full py-2 text-sm text-white/70 hover:text-white transition-colors group"
+          class="flex items-center justify-between w-full py-2 text-sm text-on-surface-inverse/70 hover:text-on-surface-inverse transition-colors group"
         >
           <span class="font-medium">Description</span>
           <Icon

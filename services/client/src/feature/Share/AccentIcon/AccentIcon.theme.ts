@@ -1,7 +1,7 @@
 import { tv } from 'tailwind-variants';
 
 export const accentIcon = tv({
-  base: 'flex items-center justify-center shrink-0 rounded-full shadow-sm bg-blue-100 border border-blue-200/40 text-blue-600 dark:bg-blue-900/30 dark:border-blue-800/30 dark:text-blue-400',
+  base: 'flex items-center justify-center shrink-0 rounded-full shadow-sm bg-info-solid/12 border border-info-border/40 dark:border-info-border/12 text-info',
   variants: {
     size: {
       md: 'h-10 w-10',

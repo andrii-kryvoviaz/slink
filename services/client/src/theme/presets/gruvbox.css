@@ -1,0 +1,36 @@
+@layer presets {
+  [data-theme='gruvbox'] {
+    --color-background: light-dark(
+      oklch(0.9555 0.0555 96.15),
+      oklch(0.2768 0 0)
+    );
+    --color-foreground: light-dark(
+      oklch(0.3441 0.0066 48.52),
+      oklch(0.8941 0.0566 89.24)
+    );
+    --color-accent: light-dark(
+      oklch(0.6217 0.1707 45.81),
+      oklch(0.7311 0.182 51.69)
+    );
+    --color-primary: light-dark(
+      oklch(0.4706 0.0816 215.81),
+      oklch(0.6927 0.042 169.77)
+    );
+    --color-success: light-dark(
+      oklch(0.5463 0.1124 106.46),
+      oklch(0.7652 0.1581 110.83)
+    );
+    --color-warning: light-dark(
+      oklch(0.6176 0.1277 70.67),
+      oklch(0.8325 0.1595 82.99)
+    );
+    --color-danger: light-dark(
+      oklch(0.4374 0.1789 28.26),
+      oklch(0.6597 0.2175 30.39)
+    );
+    --color-info: light-dark(
+      oklch(0.4706 0.0816 215.81),
+      oklch(0.6927 0.042 169.77)
+    );
+  }
+}

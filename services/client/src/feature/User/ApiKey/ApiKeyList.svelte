@@ -41,12 +41,12 @@
   {:else if !isLoading && apiKeys.length === 0}
     <div class="flex flex-col items-center justify-center py-16 text-center">
       <div
-        class="w-16 h-16 rounded-2xl bg-gray-100 dark:bg-gray-800/80 flex items-center justify-center mb-4"
+        class="w-16 h-16 rounded-2xl bg-muted flex items-center justify-center mb-4"
       >
-        <Icon icon="ph:key" class="h-8 w-8 text-gray-400 dark:text-gray-500" />
+        <Icon icon="ph:key" class="h-8 w-8 text-foreground-subtle" />
       </div>
-      <p class="text-gray-900 dark:text-white font-medium">No API keys yet</p>
-      <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 max-w-xs">
+      <p class="text-foreground font-medium">No API keys yet</p>
+      <p class="text-sm text-foreground-muted mt-1 max-w-xs">
         Create an API key to integrate with ShareX and other tools
       </p>
     </div>

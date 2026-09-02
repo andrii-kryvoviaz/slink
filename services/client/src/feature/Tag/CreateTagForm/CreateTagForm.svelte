@@ -80,7 +80,10 @@
         onkeydown={handleKeydown}
       >
         {#snippet leftIcon()}
-          <Icon icon="lucide:hash" class="h-4 w-4 text-slate-400" />
+          <Icon
+            icon="lucide:hash"
+            class="h-4 w-4 text-foreground-subtle dark:text-foreground-muted"
+          />
         {/snippet}
       </Input>
 
@@ -88,11 +91,11 @@
         <div class="flex items-baseline justify-between mb-3">
           <label
             for="parent-tag"
-            class="text-sm font-medium text-slate-700 dark:text-slate-300"
+            class="text-sm font-medium text-foreground-soft"
           >
             Parent Tag
           </label>
-          <span class="text-xs font-normal text-slate-400 dark:text-slate-500"
+          <span class="text-xs font-normal text-foreground-subtle"
             >Optional</span
           >
         </div>

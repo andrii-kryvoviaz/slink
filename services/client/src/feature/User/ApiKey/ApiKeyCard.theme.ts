@@ -5,9 +5,9 @@ export const apiKeyIconContainerVariants = cva(
   {
     variants: {
       status: {
-        expired: 'bg-red-50 dark:bg-red-900/20',
-        active: 'bg-amber-50 dark:bg-amber-900/20',
-        permanent: 'bg-emerald-50 dark:bg-emerald-900/20',
+        expired: 'bg-danger/8',
+        active: 'bg-warning/8',
+        permanent: 'bg-success/8',
       },
     },
     defaultVariants: {
@@ -19,9 +19,9 @@ export const apiKeyIconContainerVariants = cva(
 export const apiKeyIconVariants = cva('w-5 h-5', {
   variants: {
     status: {
-      expired: 'text-red-500 dark:text-red-400',
-      active: 'text-amber-500 dark:text-amber-400',
-      permanent: 'text-emerald-500 dark:text-emerald-400',
+      expired: 'text-danger',
+      active: 'text-warning',
+      permanent: 'text-success-strong',
     },
   },
   defaultVariants: {

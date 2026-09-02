@@ -42,7 +42,7 @@
     <button
       onclick={handleClick}
       onkeydown={handleKeydown}
-      class="group inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-sm font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 hover:bg-blue-100 dark:hover:bg-blue-500/20 border border-blue-200/50 dark:border-blue-500/20 hover:border-blue-300 dark:hover:border-blue-500/30 transition-all duration-200"
+      class="group inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-sm font-medium text-info bg-primary-solid/8 hover:bg-primary-solid/15 border border-info-border/50 dark:border-info-border/15 hover:border-info-border dark:hover:border-info-border/30 transition-all duration-200"
     >
       {count}
       <Icon
@@ -51,10 +51,10 @@
       />
     </button>
   {:else}
-    <span class="text-sm font-medium text-slate-600 dark:text-slate-400">
+    <span class="text-sm font-medium text-foreground-muted">
       {count}
     </span>
   {/if}
 {:else}
-  <span class="text-sm text-slate-400 dark:text-slate-500">—</span>
+  <span class="text-sm text-foreground-subtle">—</span>
 {/if}

@@ -9,9 +9,9 @@ export const status = tv({
   },
   variants: {
     kind: {
-      saving: { line: 'text-gray-500 dark:text-gray-400' },
-      saved: { line: 'text-emerald-600 dark:text-emerald-400' },
-      error: { line: 'text-red-600 dark:text-red-400' },
+      saving: { line: 'text-foreground-muted' },
+      saved: { line: 'text-success-text' },
+      error: { line: 'text-danger' },
     },
     spinning: {
       true: { icon: 'animate-spin' },

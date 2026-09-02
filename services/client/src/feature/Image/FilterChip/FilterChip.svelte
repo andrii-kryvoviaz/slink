@@ -40,7 +40,7 @@
       src={previewUrl}
       alt=""
       decoding="async"
-      class="h-4 w-4 shrink-0 rounded-full object-cover ring-1 ring-black/5 dark:ring-white/10"
+      class="h-4 w-4 shrink-0 rounded-full object-cover ring-1 ring-scrim/5 dark:ring-on-surface-inverse/10"
       style:filter={FILTER_MAP[value].cssFilter}
     />
   {/snippet}
