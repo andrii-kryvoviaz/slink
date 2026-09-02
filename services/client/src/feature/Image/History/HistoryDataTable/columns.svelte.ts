@@ -74,7 +74,7 @@ export function createHistoryColumns(
     },
     {
       accessorKey: 'fileName',
-      header: () => 'File Name',
+      header: 'File Name',
       accessorFn: (row) => row.attributes.fileName,
       meta: {
         className: 'min-w-[150px]',
@@ -87,7 +87,7 @@ export function createHistoryColumns(
     },
     {
       accessorKey: 'mimeType',
-      header: () => 'Type',
+      header: 'Type',
       accessorFn: (row) => row.metadata.mimeType,
       meta: {
         className: 'w-[80px] @max-6xl:hidden',
@@ -98,7 +98,7 @@ export function createHistoryColumns(
     },
     {
       accessorKey: 'dimensions',
-      header: () => 'Dimensions',
+      header: 'Dimensions',
       meta: {
         className: 'w-[120px] @max-5xl:hidden',
       },
@@ -108,7 +108,7 @@ export function createHistoryColumns(
     },
     {
       accessorKey: 'size',
-      header: () => 'Size',
+      header: 'Size',
       accessorFn: (row) => row.metadata.size,
       meta: {
         className: 'w-[90px] @max-lg:hidden',
@@ -119,7 +119,7 @@ export function createHistoryColumns(
     },
     {
       accessorKey: 'isPublic',
-      header: () => 'Visibility',
+      header: 'Visibility',
       accessorFn: (row) => row.attributes.isPublic,
       meta: {
         className: 'w-[100px] @max-md:hidden',
@@ -133,7 +133,7 @@ export function createHistoryColumns(
     },
     {
       accessorKey: 'views',
-      header: () => 'Views',
+      header: 'Views',
       accessorFn: (row) => row.attributes.views,
       meta: {
         className: 'w-[70px] text-center @max-6xl:hidden',
@@ -147,7 +147,7 @@ export function createHistoryColumns(
     },
     {
       accessorKey: 'createdAt',
-      header: () => 'Created',
+      header: 'Created',
       accessorFn: (row) => row.attributes.createdAt.timestamp,
       meta: {
         className: 'w-[140px] @max-2xl:hidden',
@@ -160,7 +160,7 @@ export function createHistoryColumns(
     },
     {
       id: 'tagsCollections',
-      header: () => 'Tags / Collections',
+      header: 'Tags / Collections',
       meta: {
         className: 'min-w-[150px] @max-4xl:hidden',
       },
@@ -197,7 +197,7 @@ export function createHistoryColumns(
     },
     {
       id: 'actions',
-      header: () => 'Actions',
+      header: 'Actions',
       enableHiding: false,
       meta: {
         className: 'text-right w-[132px]',

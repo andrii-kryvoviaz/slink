@@ -40,28 +40,28 @@
   const shareColumns: ColumnDef<ShareListItemResponse>[] = [
     {
       id: 'shareable',
-      header: () => 'Item',
+      header: 'Item',
       meta: { className: 'sm:w-[320px]' },
       cell: ({ row }) =>
         renderComponent(ShareableCell, { share: row.original, size: 'md' }),
     },
     {
       id: 'type',
-      header: () => 'Type',
+      header: 'Type',
       meta: { className: 'w-[120px]' },
       cell: ({ row }) =>
         renderComponent(ShareTypeBadge, { type: row.original.type }),
     },
     {
       id: 'attributes',
-      header: () => 'Attributes',
+      header: 'Attributes',
       meta: { className: 'w-[260px]' },
       cell: ({ row }) =>
         renderComponent(AttributesCell, { share: row.original }),
     },
     {
       accessorKey: 'createdAt',
-      header: () => 'Created',
+      header: 'Created',
       meta: { className: 'w-[160px]' },
       cell: ({ row }) =>
         renderComponent(FormattedDate, {
@@ -70,7 +70,7 @@
     },
     {
       id: 'actions',
-      header: () => 'Actions',
+      header: 'Actions',
       meta: { className: 'text-right w-[80px]' },
       enableHiding: false,
       cell: ({ row }) => renderComponent(ActionsCell, { share: row.original }),

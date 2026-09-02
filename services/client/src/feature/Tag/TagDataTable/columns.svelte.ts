@@ -19,6 +19,7 @@ export function createTagColumns(options: {
         renderComponent(SortableHeader, { label: 'Name', column }),
       meta: {
         className: 'sm:w-[300px]',
+        label: 'Name',
       },
       cell: ({ row }) => {
         const tag = row.original;
@@ -28,7 +29,7 @@ export function createTagColumns(options: {
     {
       accessorKey: 'imageCount',
       enableSorting: false,
-      header: () => 'Images',
+      header: 'Images',
       meta: {
         className: 'text-center',
       },
@@ -44,7 +45,7 @@ export function createTagColumns(options: {
     {
       accessorKey: 'children',
       enableSorting: false,
-      header: () => 'Children',
+      header: 'Children',
       meta: {
         className: 'text-center',
       },
@@ -60,7 +61,7 @@ export function createTagColumns(options: {
     },
     {
       id: 'actions',
-      header: () => 'Actions',
+      header: 'Actions',
       meta: {
         className: 'text-right',
       },
