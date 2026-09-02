@@ -1,6 +1,7 @@
 import { runtimeTranslator } from '$lib/utils/i18n/RuntimeTranslator.svelte';
 
-const DAY_MS = 1000 * 60 * 60 * 24;
+const HOUR_MS = 1000 * 60 * 60;
+const DAY_MS = HOUR_MS * 24;
 
 export function getLocale(): string {
   return runtimeTranslator.locale;
@@ -43,7 +44,11 @@ export function daysUntil(date: Date | string): number {
   return Math.floor((dateOnly.getTime() - todayOnly.getTime()) / DAY_MS);
 }
 
-type TimeUnit = 'day' | 'week' | 'month' | 'year';
+export function hoursUntil(date: Date | string): number {
+  return Math.floor((toDate(date).getTime() - Date.now()) / HOUR_MS);
+}
+
+type TimeUnit = 'hour' | 'day' | 'week' | 'month' | 'year';
 
 export function narrowUnit(value: number, unit: TimeUnit): string {
   return new Intl.NumberFormat(getLocale(), {
@@ -55,7 +60,7 @@ export function narrowUnit(value: number, unit: TimeUnit): string {
 
 function unitFromDays(
   absDays: number,
-): { value: number; unit: Exclude<TimeUnit, 'year'> } | null {
+): { value: number; unit: Exclude<TimeUnit, 'hour' | 'year'> } | null {
   if (absDays < 7) return { value: absDays, unit: 'day' };
   if (absDays < 30) return { value: Math.floor(absDays / 7), unit: 'week' };
   if (absDays < 365) return { value: Math.floor(absDays / 30), unit: 'month' };
