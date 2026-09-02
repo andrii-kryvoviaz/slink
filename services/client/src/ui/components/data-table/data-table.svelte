@@ -36,6 +36,7 @@
     isLoading?: boolean;
     emptyState?: Snippet;
     onRowClick?: (row: any) => void;
+    rowClass?: (row: TData) => string;
   }
 
   let {
@@ -43,6 +44,7 @@
     isLoading = false,
     emptyState,
     onRowClick,
+    rowClass,
   }: Props = $props();
 </script>
 
@@ -84,6 +86,7 @@
               class={cn(
                 'group/row border-border/60 hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-muted-soft transition-colors duration-200',
                 onRowClick && 'cursor-pointer',
+                rowClass?.(row.original),
               )}
               onclick={onRowClick ? () => onRowClick(row.original) : undefined}
             >
