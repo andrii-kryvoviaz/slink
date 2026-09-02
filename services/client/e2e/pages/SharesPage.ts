@@ -57,7 +57,9 @@ export class SharesPage extends BasePage {
 
   async expiresCell(row: Locator): Promise<Locator> {
     const headers = await this.page.getByRole('columnheader').allInnerTexts();
-    const index = headers.findIndex((text) => text.trim() === 'Expires');
+    const index = headers.findIndex(
+      (text) => text.trim().toLowerCase() === 'expires',
+    );
 
     return row.getByRole('cell').nth(index);
   }
