@@ -101,8 +101,9 @@ export const defaultSettings: Record<SettingsKey, unknown> = {
       pageSize: 10,
       columnVisibility: {
         shareable: true,
-        createdAt: true,
         attributes: true,
+        expires: true,
+        createdAt: true,
       },
     },
   },

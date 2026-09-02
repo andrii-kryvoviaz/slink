@@ -1,3 +1,6 @@
+export { default as ShareAttributeChips } from './ShareAttributeChips/ShareAttributeChips.svelte';
+export * from './ShareAttributeChips/ShareAttributeChips.theme';
 export { default as ShareAttributes } from './ShareAttributes.svelte';
-export { default as ShareVariantBadges } from './ShareVariantBadges.svelte';
+export * from './expiryDecision';
 export { hasVariantParams } from './hasVariantParams';
+export * from './variantLabels';
