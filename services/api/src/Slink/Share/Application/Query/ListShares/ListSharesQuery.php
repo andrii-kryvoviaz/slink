@@ -10,13 +10,16 @@ use Slink\Share\Domain\Enum\ShareTypeFilter;
 use Slink\Share\Domain\Enum\ShareableType;
 use Slink\Shared\Application\Query\QueryInterface;
 use Slink\Shared\Infrastructure\MessageBus\EnvelopedMessage;
+use Symfony\Component\Validator\Constraints as Assert;
 
 final readonly class ListSharesQuery implements QueryInterface {
   use EnvelopedMessage;
 
   public function __construct(
     private int $limit = 10,
+    #[Assert\Choice(choices: ['createdAt'])]
     private string $orderBy = 'createdAt',
+    #[Assert\Choice(choices: ['asc', 'desc'])]
     private string $order = 'desc',
     private ?string $cursor = null,
     private ?string $searchTerm = null,

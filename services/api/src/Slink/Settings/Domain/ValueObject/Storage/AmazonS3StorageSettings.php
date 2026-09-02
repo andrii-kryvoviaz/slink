@@ -6,6 +6,7 @@ namespace Slink\Settings\Domain\ValueObject\Storage;
 
 use Slink\Settings\Domain\Exception\S3BucketNotConfiguredException;
 use Slink\Settings\Domain\Exception\S3CredentialsNotConfiguredException;
+use Slink\Settings\Domain\Exception\S3EndpointNotValidException;
 use Slink\Settings\Domain\Exception\S3RegionNotConfiguredException;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use SensitiveParameter;
@@ -110,7 +111,16 @@ final readonly class AmazonS3StorageSettings extends AbstractCompoundValueObject
    */
   #[\Override]
   public static function fromPayload(array $payload): static {
-    $endpoint = $payload['endpoint'] ?? null;
+    $endpoint = trim((string) ($payload['endpoint'] ?? '')) ?: null;
+
+    if ($endpoint !== null && !str_contains($endpoint, '://')) {
+      $endpoint = 'https://' . $endpoint;
+    }
+
+    if ($endpoint !== null && !filter_var($endpoint, FILTER_VALIDATE_URL)) {
+      throw new S3EndpointNotValidException();
+    }
+
     $useCustomProvider = $payload['useCustomProvider'] ?? (bool) $endpoint;
     $region = trim((string) ($payload['region'] ?? ''));
     $bucket = trim((string) ($payload['bucket'] ?? ''));

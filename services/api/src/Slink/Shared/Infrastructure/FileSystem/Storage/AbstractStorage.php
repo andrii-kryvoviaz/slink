@@ -9,9 +9,10 @@ use Slink\Shared\Domain\FileSystem\Storage\ObjectStorageInterface;
 use Slink\Shared\Domain\FileSystem\Storage\StorageCacheInterface;
 use Slink\Shared\Domain\FileSystem\Storage\StorageInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
+use Symfony\Contracts\Service\ResetInterface;
 
 #[AutoconfigureTag(StorageInterface::class)]
-abstract class AbstractStorage implements StorageInterface, StorageCacheInterface {
+abstract class AbstractStorage implements StorageInterface, StorageCacheInterface, ResetInterface {
   /**
    * @var string
    */
@@ -45,7 +46,7 @@ abstract class AbstractStorage implements StorageInterface, StorageCacheInterfac
   private ?string $serverRoot = null;
 
   public function __construct(
-    ConfigurationProviderInterface $configurationProvider
+    private readonly ConfigurationProviderInterface $configurationProvider
   ) {
     $this->init($configurationProvider);
   }
@@ -55,6 +56,13 @@ abstract class AbstractStorage implements StorageInterface, StorageCacheInterfac
    * @return void
    */
   abstract function init(ConfigurationProviderInterface $configurationProvider): void;
+
+  /**
+   * @return void
+   */
+  public function reset(): void {
+    $this->init($this->configurationProvider);
+  }
 
   /**
    * @param string $serverRoot
