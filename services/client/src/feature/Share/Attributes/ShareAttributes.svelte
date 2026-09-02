@@ -4,13 +4,7 @@
 
   import Icon from '@iconify/svelte';
 
-  import {
-    daysUntil,
-    formatDate,
-    getLocale,
-    narrowFromDays,
-  } from '@slink/lib/utils/date.svelte';
-  import { localize } from '@slink/lib/utils/i18n';
+  import { type ExpiryTone, expiryDecision } from './expiryDecision';
 
   type BadgeVariant = 'blue' | 'amber' | 'red';
 
@@ -28,31 +22,15 @@
     emptyFallback = true,
   }: Props = $props();
 
-  const expiryDays = $derived(expiresAt === null ? null : daysUntil(expiresAt));
+  const BADGE_VARIANT: Record<ExpiryTone, BadgeVariant> = {
+    danger: 'red',
+    warning: 'amber',
+    default: 'blue',
+  };
 
-  const expiryLabel = $derived.by<string | null>(() => {
-    if (expiryDays === null) return null;
-    if (isExpired) return localize('Expired');
-    return narrowFromDays(expiryDays);
-  });
+  const expiry = $derived(expiryDecision(expiresAt, isExpired));
 
-  const expiryVariant = $derived.by<BadgeVariant>(() => {
-    if (isExpired || (expiryDays !== null && expiryDays < 0)) return 'red';
-    if (expiryDays !== null && expiryDays <= 1) return 'amber';
-    return 'blue';
-  });
-
-  const expiresAtFormatted = $derived(
-    expiresAt
-      ? new Intl.DateTimeFormat(getLocale(), { dateStyle: 'long' }).format(
-          new Date(expiresAt),
-        )
-      : '',
-  );
-
-  const expiryRelative = $derived(expiresAt ? formatDate(expiresAt) : '');
-
-  const hasAny = $derived(requiresPassword || expiryLabel !== null);
+  const hasAny = $derived(requiresPassword || expiry !== null);
 </script>
 
 <div class="flex items-center gap-1.5">
@@ -74,27 +52,27 @@
     </Tooltip>
   {/if}
 
-  {#if expiryLabel}
+  {#if expiry}
     <Tooltip side="top" size="sm">
       {#snippet trigger()}
-        <Badge variant={expiryVariant} size="xs" class="gap-1 leading-none">
+        <Badge
+          variant={BADGE_VARIANT[expiry.tone]}
+          size="xs"
+          class="gap-1 leading-none"
+        >
           <Icon icon="ph:clock" class="h-3 w-3" />
-          <span>{expiryLabel}</span>
+          <span>{expiry.narrow}</span>
         </Badge>
       {/snippet}
       <div class="flex items-start gap-2">
         <Icon icon="ph:clock" class="h-3.5 w-3.5 mt-0.5 shrink-0 opacity-70" />
         <div class="flex flex-col gap-0.5">
           {#if isExpired}
-            <span class="whitespace-nowrap"
-              >Expired on {expiresAtFormatted}</span
-            >
+            <span class="whitespace-nowrap">Expired on {expiry.longDate}</span>
           {:else}
-            <span class="whitespace-nowrap"
-              >Expires on {expiresAtFormatted}</span
-            >
+            <span class="whitespace-nowrap">Expires on {expiry.longDate}</span>
           {/if}
-          <span class="text-[11px] opacity-70">{expiryRelative}</span>
+          <span class="text-[11px] opacity-70">{expiry.relative}</span>
         </div>
       </div>
     </Tooltip>

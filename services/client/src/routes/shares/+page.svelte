@@ -1,21 +1,16 @@
 <script lang="ts">
   import { EmptyState, GhostRows, ShareSkeleton } from '@slink/feature/Layout';
-  import { ShareTypeBadge } from '@slink/feature/Share';
   import {
-    ActionsCell,
-    AttributesCell,
-    ShareableCell,
     SharesFilterBar,
+    createShareColumns,
+    shareRowClass,
   } from '@slink/feature/Share/MyShares';
-  import { FormattedDate, Subtitle, Title } from '@slink/feature/Text';
+  import { Subtitle, Title } from '@slink/feature/Text';
   import { Button } from '@slink/ui/components/button';
-  import { DataTable, renderComponent } from '@slink/ui/components/data-table';
+  import { DataTable } from '@slink/ui/components/data-table';
   import { ViewModeLayout } from '@slink/ui/components/view-mode-layout';
-  import type { ColumnDef } from '@tanstack/table-core';
 
   import { fade } from 'svelte/transition';
-
-  import type { ShareListItemResponse } from '@slink/api/Response/Share/ShareListItemResponse';
 
   import { skeleton } from '@slink/lib/actions/skeleton';
   import { provideSharesFeed } from '@slink/lib/state/SharesFeed.svelte';
@@ -34,48 +29,7 @@
   feed.reset();
   feed.hydrate({ hasItems: data.hasAny });
 
-  const toTimestamp = (iso: string): number =>
-    Math.floor(new Date(iso).getTime() / 1000);
-
-  const shareColumns: ColumnDef<ShareListItemResponse>[] = [
-    {
-      id: 'shareable',
-      header: 'Item',
-      meta: { className: 'sm:w-[320px]' },
-      cell: ({ row }) =>
-        renderComponent(ShareableCell, { share: row.original, size: 'md' }),
-    },
-    {
-      id: 'type',
-      header: 'Type',
-      meta: { className: 'w-[120px]' },
-      cell: ({ row }) =>
-        renderComponent(ShareTypeBadge, { type: row.original.type }),
-    },
-    {
-      id: 'attributes',
-      header: 'Attributes',
-      meta: { className: 'w-[260px]' },
-      cell: ({ row }) =>
-        renderComponent(AttributesCell, { share: row.original }),
-    },
-    {
-      accessorKey: 'createdAt',
-      header: 'Created',
-      meta: { className: 'w-[160px]' },
-      cell: ({ row }) =>
-        renderComponent(FormattedDate, {
-          date: toTimestamp(row.original.createdAt),
-        }),
-    },
-    {
-      id: 'actions',
-      header: 'Actions',
-      meta: { className: 'text-right w-[80px]' },
-      enableHiding: false,
-      cell: ({ row }) => renderComponent(ActionsCell, { share: row.original }),
-    },
-  ];
+  const shareColumns = createShareColumns();
 </script>
 
 <svelte:head>
@@ -107,7 +61,11 @@
       }}
     >
       {#snippet table({ table: sharesTable, feed: tableFeed })}
-        <DataTable table={sharesTable!} isLoading={tableFeed.isLoading} />
+        <DataTable
+          table={sharesTable!}
+          isLoading={tableFeed.isLoading}
+          rowClass={shareRowClass}
+        />
       {/snippet}
       {#snippet loading()}
         <ShareSkeleton count={feed.meta.size} />

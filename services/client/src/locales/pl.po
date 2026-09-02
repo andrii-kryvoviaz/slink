@@ -5220,3 +5220,7 @@ msgstr "Motyw: {0}"
 #: src/feature/Layout/ModeSwitch/ModeSwitchHoverCard.svelte
 msgid "Customize"
 msgstr "Dostosuj"
+
+#: src/feature/Share/MyShares/SharesDataTable/columns.svelte.ts
+msgid "Expires"
+msgstr "Wygaśnięcie"

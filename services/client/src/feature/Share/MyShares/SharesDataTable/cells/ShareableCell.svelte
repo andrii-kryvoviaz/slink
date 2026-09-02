@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { ShortLink } from '@slink/feature/Share/ShortLink';
   import { LazyImage } from '@slink/ui/components/lazy-image';
 
   import Icon from '@iconify/svelte';
@@ -27,24 +28,34 @@
   });
 </script>
 
-<a {href} class={theme.root()} title={share.shareable.name}>
-  <div class={theme.thumb()}>
-    <LazyImage
-      src={PreviewUrl.shareable(share, { width: 96, height: 96 })}
-      alt={share.shareable.name}
-      class="w-full h-full object-cover"
-      containerClass="w-full h-full"
-    >
-      {#snippet placeholder()}
-        {#if share.type === 'collection'}
-          <Icon icon="ph:folder-simple-duotone" class={theme.thumbIcon()} />
-        {:else}
-          <Icon icon="ph:image-duotone" class={theme.thumbIcon()} />
-        {/if}
-      {/snippet}
-    </LazyImage>
+<div class={theme.root()}>
+  <a {href} class={theme.thumbWrap()} tabindex="-1" aria-hidden="true">
+    <div class={theme.thumb()}>
+      <LazyImage
+        src={PreviewUrl.shareable(share, { width: 96, height: 96 })}
+        alt={share.shareable.name}
+        class="w-full h-full object-cover"
+        containerClass="w-full h-full"
+      >
+        {#snippet placeholder()}
+          {#if share.type === 'collection'}
+            <Icon icon="ph:folder-simple-duotone" class={theme.thumbIcon()} />
+          {:else}
+            <Icon icon="ph:image-duotone" class={theme.thumbIcon()} />
+          {/if}
+        {/snippet}
+      </LazyImage>
+    </div>
+    {#if share.type === 'collection'}
+      <span class={theme.corner()}>
+        <Icon icon="ph:folder-simple" class={theme.cornerIcon()} />
+      </span>
+    {/if}
+  </a>
+  <div class={theme.text()}>
+    <a {href} class={theme.name()} title={share.shareable.name}>
+      {share.shareable.name}
+    </a>
+    <ShortLink url={share.shareUrl} />
   </div>
-  <div class="min-w-0 flex-1">
-    <div class={theme.name()}>{share.shareable.name}</div>
-  </div>
-</a>
+</div>

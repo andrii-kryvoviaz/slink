@@ -5166,3 +5166,7 @@ msgstr "主题：{0}"
 #: src/feature/Layout/ModeSwitch/ModeSwitchHoverCard.svelte
 msgid "Customize"
 msgstr "自定义"
+
+#: src/feature/Share/MyShares/SharesDataTable/columns.svelte.ts
+msgid "Expires"
+msgstr "过期时间"
