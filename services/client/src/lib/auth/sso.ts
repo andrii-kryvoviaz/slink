@@ -9,11 +9,8 @@ export class SsoError {
 
   private constructor() {}
 
-  public static redirect(
-    { cookies, locals }: RequestEvent,
-    message: string,
-  ): never {
-    locals.cookies.setCookie(cookies, SsoError.COOKIE_NAME, message, {
+  public static redirect({ locals }: RequestEvent, message: string): never {
+    locals.cookies.setCookie(SsoError.COOKIE_NAME, message, {
       httpOnly: true,
     });
 
@@ -26,7 +23,7 @@ export class SsoError {
       return null;
     }
 
-    locals.cookies.deleteCookie(cookies, SsoError.COOKIE_NAME);
+    locals.cookies.deleteCookie(SsoError.COOKIE_NAME);
     return value;
   }
 

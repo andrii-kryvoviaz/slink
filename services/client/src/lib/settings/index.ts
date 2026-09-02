@@ -1,6 +1,6 @@
 export { customization } from './Customization.svelte';
 export * from './Settings.enums';
-export { settingsPolicy } from './SettingsPolicy';
+export * from './SettingsPolicy';
 export { themes, type ThemeDescriptor } from './themes.svelte';
 export * from './UploadPolicy';
 export {
@@ -8,5 +8,4 @@ export {
   type CookieSettings,
   type ViewMode,
   type ShareFormat,
-  type SettingsKey,
 } from './UserSettings.svelte';

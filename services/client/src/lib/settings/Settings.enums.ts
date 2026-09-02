@@ -27,6 +27,39 @@ export enum Locale {
   ZH = 'zh',
 }
 
+export type SettingsKey =
+  | 'mode'
+  | 'theme'
+  | 'locale'
+  | 'sidebar'
+  | 'navigation'
+  | 'userAdmin'
+  | 'table'
+  | 'history'
+  | 'tags'
+  | 'share'
+  | 'comment'
+  | 'uploadOptions'
+  | 'banners'
+  | 'collections';
+
+export const settingsKeys: SettingsKey[] = [
+  'mode',
+  'theme',
+  'locale',
+  'sidebar',
+  'navigation',
+  'userAdmin',
+  'table',
+  'history',
+  'tags',
+  'share',
+  'comment',
+  'uploadOptions',
+  'banners',
+  'collections',
+];
+
 const resolveEnum = <T extends Record<string, string>>(
   values: T,
   value: unknown,

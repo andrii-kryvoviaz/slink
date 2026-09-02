@@ -5,9 +5,8 @@ import type { AppSidebarGroup } from '@slink/feature/Navigation/Sidebar/types';
 import type { ApiClientType } from '@slink/api/Client';
 import type { UserPreferencesResponse } from '@slink/api/Response/User/UserPreferencesResponse';
 
-import type { ScopedCookieManager } from '@slink/lib/auth/CookiePolicy';
+import type { CookieManager } from '@slink/lib/auth/CookieManager';
 import type { User } from '@slink/lib/auth/Type/User';
-import type { cookiePolicies } from '@slink/lib/server/hooks/locals/cookies.hook';
 import type { GlobalSettings } from '@slink/lib/settings/Type/GlobalSettings';
 import type { UploadPolicy } from '@slink/lib/settings/UploadPolicy';
 import type { UserSettings } from '@slink/lib/settings/UserSettings.svelte';
@@ -29,7 +28,7 @@ declare global {
       user: User | null;
       userPreferences: UserPreferencesResponse | null;
       uploadPolicy: UploadPolicy;
-      cookies: ScopedCookieManager<typeof cookiePolicies>;
+      cookies: CookieManager;
     }
     interface PageData {
       settings: UserSettings;

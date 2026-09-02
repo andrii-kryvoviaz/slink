@@ -72,7 +72,7 @@ export const ApiProxy = (options: ApiOptions): Handle => {
       } catch (error) {
         console.warn('Token refresh failed:', error);
 
-        locals.cookies.deleteCookie(cookies, 'refreshToken');
+        locals.cookies.deleteCookie('refreshToken');
         await Session.destroy(cookies, locals.cookies);
 
         return getResponseWithCookies({

@@ -29,7 +29,7 @@ export const load: PageServerLoad = async (event) => {
     });
 
     if ('approval_required' in response) {
-      locals.cookies.setCookie(cookies, 'createdUserId', response.userId);
+      locals.cookies.setCookie('createdUserId', response.userId);
       redirect(302, '/profile/awaiting-approval');
     }
 

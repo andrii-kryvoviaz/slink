@@ -59,7 +59,7 @@ class SessionManager {
 
     await this._provider.create(sessionId, lifetime);
 
-    cookieManager.setCookie(cookies, 'sessionId', sessionId, {
+    cookieManager.setCookie('sessionId', sessionId, {
       maxAge: lifetime,
       httpOnly: true,
     });
@@ -109,7 +109,7 @@ class SessionManager {
 
     if (!sessionId) return;
 
-    cookieManager.deleteCookie(cookies, 'sessionId');
+    cookieManager.deleteCookie('sessionId');
 
     await this._provider.destroy(sessionId);
   }
