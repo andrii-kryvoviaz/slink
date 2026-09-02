@@ -5184,3 +5184,7 @@ msgstr "Thème : {0}"
 #: src/feature/Layout/ModeSwitch/ModeSwitchHoverCard.svelte
 msgid "Customize"
 msgstr "Personnaliser"
+
+#: src/feature/Share/MyShares/SharesDataTable/columns.svelte.ts
+msgid "Expires"
+msgstr "Expiration"

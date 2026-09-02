@@ -5202,3 +5202,7 @@ msgstr "Тема: {0}"
 #: src/feature/Layout/ModeSwitch/ModeSwitchHoverCard.svelte
 msgid "Customize"
 msgstr "Налаштувати"
+
+#: src/feature/Share/MyShares/SharesDataTable/columns.svelte.ts
+msgid "Expires"
+msgstr "Термін дії"
