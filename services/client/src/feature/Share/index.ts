@@ -4,7 +4,6 @@ export { default as ShareAttributeChips } from './Attributes/ShareAttributeChips
 export * from './Attributes/ShareAttributeChips/ShareAttributeChips.theme';
 export { default as ShareAttributes } from './Attributes/ShareAttributes.svelte';
 export * from './Attributes/expiryDecision';
-export * from './Attributes/hasVariantParams';
 export * from './Attributes/variantLabels';
 export { default as ChipPopover } from './Chips/ChipPopover.svelte';
 export { default as AttributeChips } from './Chips/ShareAttributeChips.svelte';
