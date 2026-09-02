@@ -31,6 +31,8 @@ export * from './Password/State.svelte';
 export { default as Provider } from './Provider/Provider.svelte';
 export * from './Registry/ShareStateRegistry.svelte';
 export * from './Reroute/ShareReroute';
+export { default as ShortLink } from './ShortLink/ShortLink.svelte';
+export * from './ShortLink/ShortLink.theme';
 export * from './State/Context';
 export * from './State/State.svelte';
 export { default as StatusIndicator } from './StatusIndicator/StatusIndicator.svelte';

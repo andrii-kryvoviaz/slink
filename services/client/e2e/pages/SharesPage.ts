@@ -44,11 +44,11 @@ export class SharesPage extends BasePage {
   }
 
   copyLinkButton(row: Locator) {
-    return row.getByRole('button', { name: 'Copy link' });
+    return row.getByRole('button', { name: /Copy link/ });
   }
 
   shortLinkFor(row: Locator) {
-    return this.copyLinkButton(row).locator('xpath=preceding-sibling::span[1]');
+    return this.copyLinkButton(row).locator('span').first();
   }
 
   copiedIndicator(row: Locator) {

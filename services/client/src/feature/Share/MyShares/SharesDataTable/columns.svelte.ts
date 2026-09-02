@@ -23,7 +23,7 @@ export function createShareColumns(): ColumnDef<ShareListItemResponse>[] {
     {
       id: 'attributes',
       header: 'Attributes',
-      meta: { className: 'w-[200px] @max-md:hidden' },
+      meta: { className: 'w-[256px] @max-md:hidden' },
       cell: ({ row }) =>
         renderComponent(AttributesCell, { share: row.original }),
     },
@@ -58,7 +58,7 @@ export function createShareColumns(): ColumnDef<ShareListItemResponse>[] {
 
 export function shareRowClass(share: ShareListItemResponse): string {
   if (share.isExpired) {
-    return '[&>td:not(:last-child)]:opacity-60';
+    return '[&>td:not(:last-child)>*]:opacity-60';
   }
 
   return '';

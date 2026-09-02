@@ -12,10 +12,6 @@ export const shareableCell = tv({
     cornerIcon: 'h-2.5 w-2.5',
     text: 'flex flex-col min-w-0 leading-tight gap-0.5',
     name: 'font-medium text-foreground truncate text-sm group-hover/shareable:text-info hover:text-info transition-colors',
-    linkRow: 'flex items-center gap-1 min-w-0',
-    meta: 'font-mono text-xs text-foreground-muted truncate',
-    copy: 'inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md text-foreground-muted hover:text-foreground [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover/row:opacity-100 [@media(hover:none)]:opacity-100 focus-visible:opacity-100 transition-opacity duration-150',
-    copyIcon: 'h-3.5 w-3.5',
   },
   variants: {
     size: {
@@ -26,11 +22,6 @@ export const shareableCell = tv({
       sm: {
         thumb: 'h-8 w-8',
         thumbIcon: 'h-4 w-4',
-      },
-    },
-    copied: {
-      true: {
-        copyIcon: 'text-success-text',
       },
     },
   },

@@ -1,8 +1,7 @@
 <script lang="ts">
+  import { ShortLink } from '@slink/feature/Share/ShortLink';
   import { LazyImage } from '@slink/ui/components/lazy-image';
 
-  import { useAutoReset } from '$lib/utils/time/useAutoReset.svelte';
-  import { copyText } from '$lib/utils/ui/clipboard';
   import Icon from '@iconify/svelte';
 
   import type { ShareListItemResponse } from '@slink/api/Response/Share/ShareListItemResponse';
@@ -20,8 +19,6 @@
 
   const theme = $derived(shareableCell({ size }));
 
-  const copied = useAutoReset(1500);
-
   const href = $derived.by<string>(() => {
     if (share.type === 'collection') {
       return routes.collection.detail(share.shareable.id);
@@ -29,18 +26,6 @@
 
     return routes.image.info(share.shareable.id);
   });
-
-  const shortLink = $derived(routes.share.shortLinkText(share.shareUrl));
-
-  const handleCopy = async (): Promise<void> => {
-    const isCopied = await copyText(share.shareUrl);
-
-    if (!isCopied) {
-      return;
-    }
-
-    copied.trigger();
-  };
 </script>
 
 <div class={theme.root()}>
@@ -71,23 +56,6 @@
     <a {href} class={theme.name()} title={share.shareable.name}>
       {share.shareable.name}
     </a>
-    <div class={theme.linkRow()}>
-      <span class={theme.meta()}>{shortLink}</span>
-      <button
-        type="button"
-        aria-label="Copy link"
-        class={theme.copy()}
-        onclick={handleCopy}
-      >
-        {#if copied.active}
-          <Icon
-            icon="ph:check-circle"
-            class={theme.copyIcon({ copied: true })}
-          />
-        {:else}
-          <Icon icon="ph:copy" class={theme.copyIcon()} />
-        {/if}
-      </button>
-    </div>
+    <ShortLink url={share.shareUrl} />
   </div>
 </div>
