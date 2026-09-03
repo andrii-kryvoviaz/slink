@@ -2,6 +2,8 @@ import { ApiClient } from '@slink/api';
 
 import type { BookmarkItem } from '@slink/api/Response';
 
+import type { MediaItem } from '@slink/lib/state/MediaFeedAdapter';
+import type { MediaFeed } from '@slink/lib/state/MediaFeedAdapter';
 import { AbstractPaginatedFeed } from '@slink/lib/state/core/AbstractPaginatedFeed.svelte';
 import type {
   LoadParams,
@@ -10,7 +12,10 @@ import type {
 } from '@slink/lib/state/core/AbstractPaginatedFeed.svelte';
 import { useState } from '@slink/lib/state/core/ContextAwareState';
 
-class UserBookmarksFeed extends AbstractPaginatedFeed<BookmarkItem> {
+class UserBookmarksFeed
+  extends AbstractPaginatedFeed<BookmarkItem>
+  implements MediaFeed
+{
   public constructor() {
     super({
       defaultPageSize: 12,
@@ -36,12 +41,26 @@ class UserBookmarksFeed extends AbstractPaginatedFeed<BookmarkItem> {
     await this.removeItems([bookmark.id]);
   }
 
-  public async applyBookmarkChange(
-    bookmark: BookmarkItem,
-    isBookmarked: boolean,
-  ): Promise<void> {
-    if (isBookmarked) return;
-    await this.removeItems([bookmark.id]);
+  public get media(): MediaItem[] {
+    return this._items
+      .map((bookmark) => bookmark.image)
+      .filter((image): image is MediaItem => 'url' in image);
+  }
+
+  public getMediaIndex(imageId: string): number {
+    return this.media.findIndex((image) => image.id === imageId);
+  }
+
+  public updateItemMedia(imageId: string, updates: Partial<MediaItem>): void {
+    const bookmark = this._items.find((item) => item.image.id === imageId);
+    if (!bookmark) return;
+
+    if (updates.isBookmarked === false) {
+      this.removeItems([bookmark.id]);
+      return;
+    }
+
+    this.update(bookmark.id, { image: updates });
   }
 }
 

@@ -3,7 +3,7 @@
 
   import type { AuthenticatedUser } from '@slink/api/Response';
 
-  import type { MediaItem } from '@slink/lib/state/CollectionItemsFeed.svelte';
+  import type { MediaItem } from '@slink/lib/state/MediaFeedAdapter';
 
   import PostViewerSidebar from './PostViewerSidebar.svelte';
 

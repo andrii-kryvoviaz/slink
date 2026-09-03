@@ -14,7 +14,7 @@
 
   import type { AuthenticatedUser } from '@slink/api/Response';
 
-  import type { MediaItem } from '@slink/lib/state/CollectionItemsFeed.svelte';
+  import type { MediaItem } from '@slink/lib/state/MediaFeedAdapter';
   import { usePostViewerState } from '@slink/lib/state/PostViewerState.svelte';
 
   import PostViewerDescription from './PostViewerDescription.svelte';

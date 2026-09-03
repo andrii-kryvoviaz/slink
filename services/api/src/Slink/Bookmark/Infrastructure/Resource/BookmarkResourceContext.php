@@ -13,8 +13,9 @@ final readonly class BookmarkResourceContext extends AbstractResourceContext {
    * @param array<string> $imageIds
    */
   public function __construct(
-    array        $groups = ['public'],
-    public array $imageIds = [],
+    array          $groups = ['public'],
+    public array   $imageIds = [],
+    public ?string $viewerUserId = null,
   ) {
     parent::__construct($groups);
   }
@@ -29,6 +30,6 @@ final readonly class BookmarkResourceContext extends AbstractResourceContext {
       $imageIds[] = $bookmark->getImageId();
     }
 
-    return new self($this->getGroups(), $imageIds);
+    return new self($this->getGroups(), $imageIds, $this->viewerUserId);
   }
 }

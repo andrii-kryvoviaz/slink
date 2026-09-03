@@ -34,7 +34,7 @@ final readonly class GetUserBookmarksHandler implements QueryHandlerInterface {
 
     $total = $this->repository->countByUserId($userId);
 
-    $items = $this->resourceProcessor->many($bookmarks, new BookmarkResourceContext());
+    $items = $this->resourceProcessor->many($bookmarks, new BookmarkResourceContext(viewerUserId: $userId));
     $paginator = $this->cursorPaginator->paginate($items, $query->getLimit());
 
     return Collection::fromCursorPaginator(

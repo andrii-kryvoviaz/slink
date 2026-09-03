@@ -45,7 +45,10 @@ final readonly class BookmarkedImageProvider implements ResourceDataProviderInte
       uuids: $context->imageIds,
     ));
 
-    $items = $this->imageResourceProcessor->many($images, new ImageResourceContext());
+    $items = $this->imageResourceProcessor->many($images, new ImageResourceContext(
+      groups: ['public', 'bookmark', 'license'],
+      viewerUserId: $context->viewerUserId,
+    ));
 
     $result = [];
 

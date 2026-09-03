@@ -1,12 +1,9 @@
 import { ApiClient } from '@slink/api';
 
-import type {
-  CollectionItem,
-  CollectionResponse,
-  ImageListingItem,
-} from '@slink/api/Response';
+import type { CollectionItem, CollectionResponse } from '@slink/api/Response';
 import type { ShareResponse } from '@slink/api/Response/Share/ShareResponse';
 
+import type { MediaItem } from '@slink/lib/state/MediaFeedAdapter';
 import { AbstractPaginatedFeed } from '@slink/lib/state/core/AbstractPaginatedFeed.svelte';
 import type {
   LoadParams,
@@ -14,8 +11,6 @@ import type {
   SearchParams,
 } from '@slink/lib/state/core/AbstractPaginatedFeed.svelte';
 import { useState } from '@slink/lib/state/core/ContextAwareState';
-
-export type MediaItem = ImageListingItem;
 
 export class CollectionItemsFeed extends AbstractPaginatedFeed<CollectionItem> {
   private _collectionId: string | null = $state(null);

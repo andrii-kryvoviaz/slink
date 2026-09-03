@@ -2,7 +2,7 @@ import { ApiClient } from '@slink/api';
 
 import { replaceState } from '$app/navigation';
 
-import type { MediaItem } from '@slink/lib/state/CollectionItemsFeed.svelte';
+import type { MediaItem } from '@slink/lib/state/MediaFeedAdapter';
 import { useState } from '@slink/lib/state/core/ContextAwareState';
 
 export interface PostViewerFeed {

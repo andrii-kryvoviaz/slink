@@ -52,9 +52,7 @@ test.describe('Explore bookmark', () => {
     await explorePage.toggleBookmark(bookmarkButton, 'true');
     await saved;
 
-    const bookmarkLink = page
-      .locator(`main a[href*="post=${imageId}"]`)
-      .first();
+    const bookmarkLink = page.locator(`main img[src*="${imageId}"]`).first();
     await expect(async () => {
       await page.goto('/bookmarks');
       await expect(bookmarkLink).toBeVisible({ timeout: 2000 });

@@ -27,7 +27,7 @@ test.describe('Bookmarks page removal', () => {
     await explorePage.toggleBookmark(bookmarkButton, 'true');
     await saved;
 
-    const card = page.locator(`main a[href*="post=${imageId}"]`).first();
+    const card = page.locator(`main img[src*="${imageId}"]`).first();
     await expect(async () => {
       await page.goto('/bookmarks');
       await expect(card).toBeVisible({ timeout: 2000 });

@@ -36,8 +36,8 @@
   import { intersect } from '@slink/lib/actions/intersect';
   import { skeleton } from '@slink/lib/actions/skeleton';
   import type { CollectionsState } from '@slink/lib/settings/UserSettings.svelte';
-  import { CollectionImagesFeedAdapter } from '@slink/lib/state/CollectionImagesFeedAdapter';
   import { useCollectionItemsFeed } from '@slink/lib/state/CollectionItemsFeed.svelte';
+  import { MediaFeedAdapter } from '@slink/lib/state/MediaFeedAdapter';
   import { usePostViewerState } from '@slink/lib/state/PostViewerState.svelte';
 
   import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
@@ -97,7 +97,7 @@
     });
   });
 
-  const feedAdapter = new CollectionImagesFeedAdapter(itemsFeed);
+  const feedAdapter = new MediaFeedAdapter(itemsFeed);
   postViewerState.setFeed(feedAdapter, 'collection');
 
   $effect(() => {

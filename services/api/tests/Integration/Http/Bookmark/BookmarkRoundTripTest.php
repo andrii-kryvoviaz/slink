@@ -167,6 +167,10 @@ final class BookmarkRoundTripTest extends HttpTestCase {
     self::assertArrayHasKey('attributes', $image);
     self::assertArrayHasKey('fileName', $image['attributes']);
     self::assertArrayHasKey('metadata', $image);
+    self::assertArrayHasKey('license', $image);
+    self::assertIsInt($image['bookmarkCount'] ?? null);
+    self::assertSame(1, $image['bookmarkCount']);
+    self::assertTrue($image['isBookmarked'] ?? false);
   }
 
   #[Test]

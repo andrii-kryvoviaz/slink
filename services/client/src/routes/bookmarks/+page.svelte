@@ -1,6 +1,10 @@
 <script lang="ts">
   import { LoadMoreButton } from '@slink/feature/Action';
-  import { BookmarkButton, ImagePlaceholder } from '@slink/feature/Image';
+  import {
+    BookmarkButton,
+    ImagePlaceholder,
+    PostViewer,
+  } from '@slink/feature/Image';
   import {
     EmptyState,
     GhostGrid,
@@ -19,6 +23,8 @@
   import type { BookmarkItem } from '@slink/api/Response/Bookmark/BookmarkResponse';
 
   import { skeleton } from '@slink/lib/actions/skeleton';
+  import { MediaFeedAdapter } from '@slink/lib/state/MediaFeedAdapter';
+  import { usePostViewerState } from '@slink/lib/state/PostViewerState.svelte';
   import { useUserBookmarksFeed } from '@slink/lib/state/UserBookmarksFeed.svelte';
 
   import type { PageServerData } from './$types';
@@ -30,8 +36,10 @@
   let { data }: Props = $props();
 
   const bookmarksFeed = useUserBookmarksFeed();
+  const postViewerState = usePostViewerState();
   bookmarksFeed.reset();
   bookmarksFeed.hydrate({ hasItems: data.hasAny });
+  postViewerState.setFeed(new MediaFeedAdapter(bookmarksFeed));
 
   $effect(() => {
     if (untrack(() => bookmarksFeed.needsLoad)) {
@@ -39,8 +47,20 @@
     }
   });
 
+  $effect(() => {
+    if (!postViewerState.isOpen && bookmarksFeed.isDirty) {
+      postViewerState.openFromUrlAsync();
+    }
+  });
+
   const handleRemoveBookmark = (bookmark: BookmarkItem) =>
     bookmarksFeed.removeBookmark(bookmark);
+
+  const openPostViewer = (imageId: string) => {
+    const index = bookmarksFeed.getMediaIndex(imageId);
+    if (index === -1) return;
+    postViewerState.open(index);
+  };
 </script>
 
 <svelte:head>
@@ -113,9 +133,10 @@
               in:fly={{ y: 20, duration: 400, delay: Math.random() * 200 }}
               class="group/card break-inside-avoid rounded-xl overflow-hidden bg-card/80 backdrop-blur-sm border border-border/30 hover:border-border/50 shadow-sm hover:shadow-lg dark:shadow-scrim/20 dark:hover:shadow-scrim/40 transition-all duration-300"
             >
-              <a
-                href="/explore?post={image.id}"
-                class="group/image relative block"
+              <button
+                type="button"
+                class="group/image relative block w-full text-left"
+                onclick={() => openPostViewer(image.id)}
               >
                 <ImagePlaceholder
                   uniqueId={image.id}
@@ -174,7 +195,7 @@
                     />
                   </div>
                 </div>
-              </a>
+              </button>
 
               <div
                 class="absolute top-3 right-3 opacity-0 group-hover/card:opacity-100 transition-all duration-300 translate-y-1 group-hover/card:translate-y-0"
@@ -186,7 +207,7 @@
                   size="sm"
                   variant="overlay"
                   onBookmarkChange={(isBookmarked: boolean) =>
-                    bookmarksFeed.applyBookmarkChange(bookmark, isBookmarked)}
+                    bookmarksFeed.updateItemMedia(image.id, { isBookmarked })}
                 />
               </div>
 
@@ -236,3 +257,5 @@
     {/if}
   </div>
 </main>
+
+<PostViewer />
