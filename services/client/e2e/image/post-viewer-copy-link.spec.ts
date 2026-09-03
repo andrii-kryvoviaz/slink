@@ -97,6 +97,33 @@ test.describe('Post viewer copy link', () => {
     expect(clipboardText).toContain(`alt="${fileName}"`);
   });
 
+  test('does not reopen the viewer when navigating away and back to explore', async ({
+    api,
+    page,
+    explorePage,
+  }) => {
+    await api.content.uploadImage({ isPublic: true });
+
+    const exploreLink = page.getByRole('link', { name: 'Explore' });
+
+    await page.goto('/history');
+    await exploreLink.click();
+    await page.waitForURL(/\/explore/);
+
+    await explorePage.openFirstItem();
+    await expect(explorePage.viewer).toBeVisible();
+
+    await page.goBack();
+    await page.waitForURL(/\/history/);
+    await expect(explorePage.viewer).toHaveCount(0);
+
+    await exploreLink.click();
+    await page.waitForURL(/\/explore/);
+    await explorePage.feedItems.first().waitFor({ state: 'visible' });
+
+    await expect(explorePage.viewer).toHaveCount(0);
+  });
+
   test('shows a bookmark control instead of copy link for a non-owner viewing a public image', async ({
     explorePage,
     actor,

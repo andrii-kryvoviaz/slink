@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Button } from '@slink/ui/components/button';
   import { Shortcut } from '@slink/ui/components/shortcut';
+  import { onDestroy } from 'svelte';
 
   import { browser } from '$app/environment';
   import { page } from '$app/state';
@@ -27,6 +28,10 @@
     } else if (browser) {
       document.body.style.overflow = '';
     }
+  });
+
+  onDestroy(() => {
+    viewerState.close();
   });
 
   function handleClose() {
