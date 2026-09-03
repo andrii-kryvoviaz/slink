@@ -1,6 +1,7 @@
 @theme static {
-  --color-on-success: oklch(
-    from var(--color-success) clamp(0, (var(--on-color-flip) - l) * 1000, 1) 0 h
+  --color-on-success: lab(
+    from var(--color-success) clamp(0, (var(--on-color-flip) - l) * 1000, 100) 0
+      0
   );
   --color-success-strong: light-dark(
     oklch(
@@ -30,12 +31,13 @@
       from var(--color-success) calc(l - 0.069) calc(c * 1.0478) calc(h - 2.132)
     )
   );
-  --color-on-success-surface: oklch(
+  --color-on-success-surface: lab(
     from var(--color-success-surface)
-      clamp(0, (var(--on-color-flip) - l) * 1000, 1) 0 h
+      clamp(0, (var(--on-color-flip) - l) * 1000, 100) 0 0
   );
-  --color-on-warning: oklch(
-    from var(--color-warning) clamp(0, (var(--on-color-flip) - l) * 1000, 1) 0 h
+  --color-on-warning: lab(
+    from var(--color-warning) clamp(0, (var(--on-color-flip) - l) * 1000, 100) 0
+      0
   );
   --color-warning-strong: light-dark(
     oklch(
@@ -53,9 +55,9 @@
         calc(h - 14.349)
     )
   );
-  --color-on-warning-solid: oklch(
+  --color-on-warning-solid: lab(
     from var(--color-warning-solid)
-      clamp(0, (var(--on-color-flip) - l) * 1000, 1) 0 h
+      clamp(0, (var(--on-color-flip) - l) * 1000, 100) 0 0
   );
   --color-warning-surface: light-dark(
     oklch(
@@ -67,16 +69,17 @@
         calc(h - 14.349)
     )
   );
-  --color-on-warning-surface: oklch(
+  --color-on-warning-surface: lab(
     from var(--color-warning-surface)
-      clamp(0, (var(--on-color-flip) - l) * 1000, 1) 0 h
+      clamp(0, (var(--on-color-flip) - l) * 1000, 100) 0 0
   );
-  --color-on-danger: oklch(
-    from var(--color-danger) clamp(0, (var(--on-color-flip) - l) * 1000, 1) 0 h
+  --color-on-danger: lab(
+    from var(--color-danger) clamp(0, (var(--on-color-flip) - l) * 1000, 100) 0
+      0
   );
-  --color-on-danger-solid: oklch(
+  --color-on-danger-solid: lab(
     from var(--color-danger-solid)
-      clamp(0, (var(--on-color-flip) - l) * 1000, 1) 0 h
+      clamp(0, (var(--on-color-flip) - l) * 1000, 100) 0 0
   );
   --color-danger-strong: light-dark(
     oklch(
@@ -102,12 +105,12 @@
       from var(--color-danger) calc(l - 0.067) calc(c * 1.2408) calc(h + 3.115)
     )
   );
-  --color-on-danger-surface: oklch(
+  --color-on-danger-surface: lab(
     from var(--color-danger-surface)
-      clamp(0, (var(--on-color-flip) - l) * 1000, 1) 0 h
+      clamp(0, (var(--on-color-flip) - l) * 1000, 100) 0 0
   );
-  --color-on-info: oklch(
-    from var(--color-info) clamp(0, (var(--on-color-flip) - l) * 1000, 1) 0 h
+  --color-on-info: lab(
+    from var(--color-info) clamp(0, (var(--on-color-flip) - l) * 1000, 100) 0 0
   );
   --color-info-strong: light-dark(
     oklch(
@@ -139,13 +142,13 @@
       from var(--color-info) calc(l - 0.161) calc(c * 1.4848) calc(h + 8.257)
     )
   );
-  --color-on-info-solid: oklch(
-    from var(--color-info-solid) clamp(0, (var(--on-color-flip) - l) * 1000, 1)
-      0 h
+  --color-on-info-solid: lab(
+    from var(--color-info-solid)
+      clamp(0, (var(--on-color-flip) - l) * 1000, 100) 0 0
   );
-  --color-on-info-surface: oklch(
+  --color-on-info-surface: lab(
     from var(--color-info-surface)
-      clamp(0, (var(--on-color-flip) - l) * 1000, 1) 0 h
+      clamp(0, (var(--on-color-flip) - l) * 1000, 100) 0 0
   );
   --color-danger-wash: light-dark(
     oklch(

@@ -1,5 +1,5 @@
 @theme static {
-  --on-color-flip: 0.58;
+  --on-color-flip: 60;
 
   --color-card: light-dark(
     oklch(
@@ -140,9 +140,9 @@
     oklch(from var(--color-muted) calc(l - 0.038) c h),
     oklch(from var(--color-muted) calc(l + 0.056) c h)
   );
-  --color-on-surface-inverse: oklch(
+  --color-on-surface-inverse: lab(
     from var(--color-surface-inverse)
-      clamp(0, (var(--on-color-flip) - l) * 1000, 1) 0 h
+      clamp(0, (var(--on-color-flip) - l) * 1000, 100) 0 0
   );
   --color-surface-raised: oklch(
     from var(--color-card) clamp(0, l + 0.162, 1) c h
@@ -151,9 +151,9 @@
   --color-surface-inverse-danger: color-mix(
     in oklab,
     var(--color-danger) 65%,
-    oklch(
+    lab(
       from var(--color-surface-inverse)
-        clamp(0, (var(--on-color-flip) - l) * 1000, 1) 0 h
+        clamp(0, (var(--on-color-flip) - l) * 1000, 100) 0 0
     )
   );
 }

@@ -1,6 +1,7 @@
 @theme static {
-  --color-on-primary: oklch(
-    from var(--color-primary) clamp(0, (var(--on-color-flip) - l) * 1000, 1) 0 h
+  --color-on-primary: lab(
+    from var(--color-primary) clamp(0, (var(--on-color-flip) - l) * 1000, 100) 0
+      0
   );
   --color-primary-strong: light-dark(
     oklch(
@@ -17,9 +18,9 @@
       from var(--color-primary) calc(l - 0.084) calc(c * 1.297) calc(h + 5.191)
     )
   );
-  --color-on-primary-solid: oklch(
+  --color-on-primary-solid: lab(
     from var(--color-primary-solid)
-      clamp(0, (var(--on-color-flip) - l) * 1000, 1) 0 h
+      clamp(0, (var(--on-color-flip) - l) * 1000, 100) 0 0
   );
   --color-primary-surface: light-dark(
     oklch(
@@ -37,9 +38,9 @@
       from var(--color-primary) calc(l - 0.161) calc(c * 1.4848) calc(h + 8.257)
     )
   );
-  --color-on-primary-surface: oklch(
+  --color-on-primary-surface: lab(
     from var(--color-primary-surface)
-      clamp(0, (var(--on-color-flip) - l) * 1000, 1) 0 h
+      clamp(0, (var(--on-color-flip) - l) * 1000, 100) 0 0
   );
   --color-primary-wash: light-dark(
     oklch(

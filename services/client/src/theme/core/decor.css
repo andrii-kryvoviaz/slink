@@ -15,9 +15,9 @@
       from var(--color-accent) calc(l - 0.046) calc(c * 1.456) calc(h + 26.965)
     )
   );
-  --color-on-decor-violet: oklch(
-    from var(--color-accent) clamp(0, (var(--on-color-flip) - l) * 1000, 1) 0
-      calc(h + 15.892)
+  --color-on-decor-violet: lab(
+    from var(--color-accent) clamp(0, (var(--on-color-flip) - l) * 1000, 100) 0
+      0
   );
   --color-decor-violet-wash: light-dark(
     oklch(

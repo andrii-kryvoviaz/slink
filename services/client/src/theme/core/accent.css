@@ -1,6 +1,7 @@
 @theme static {
-  --color-on-accent: oklch(
-    from var(--color-accent) clamp(0, (var(--on-color-flip) - l) * 1000, 1) 0 h
+  --color-on-accent: lab(
+    from var(--color-accent) clamp(0, (var(--on-color-flip) - l) * 1000, 100) 0
+      0
   );
   --color-accent-strong: light-dark(
     oklch(
@@ -16,9 +17,9 @@
       from var(--color-accent) calc(l - 0.088) calc(c * 1.2802) calc(h + 0.182)
     )
   );
-  --color-on-accent-solid: oklch(
+  --color-on-accent-solid: lab(
     from var(--color-accent-solid)
-      clamp(0, (var(--on-color-flip) - l) * 1000, 1) 0 h
+      clamp(0, (var(--on-color-flip) - l) * 1000, 100) 0 0
   );
   --color-accent-surface: light-dark(
     oklch(
@@ -28,9 +29,9 @@
       from var(--color-accent) calc(l - 0.088) calc(c * 1.2802) calc(h + 0.182)
     )
   );
-  --color-on-accent-surface: oklch(
+  --color-on-accent-surface: lab(
     from var(--color-accent-surface)
-      clamp(0, (var(--on-color-flip) - l) * 1000, 1) 0 h
+      clamp(0, (var(--on-color-flip) - l) * 1000, 100) 0 0
   );
   --color-accent-wash: light-dark(
     oklch(
