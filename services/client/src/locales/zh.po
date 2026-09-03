@@ -5170,3 +5170,7 @@ msgstr "自定义"
 #: src/feature/Share/MyShares/SharesDataTable/columns.svelte.ts
 msgid "Expires"
 msgstr "过期时间"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "This SVG could not be processed. It may be malformed or nested too deeply."
+msgstr "无法处理此 SVG。它可能格式错误或嵌套层级过深。"

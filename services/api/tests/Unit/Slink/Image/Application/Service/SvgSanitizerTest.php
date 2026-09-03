@@ -7,6 +7,7 @@ namespace Tests\Unit\Slink\Image\Application\Service;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Image\Application\Service\SvgSanitizer;
+use Slink\Image\Domain\Exception\UnsanitizableImageException;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\File\File;
 
@@ -46,6 +47,22 @@ class SvgSanitizerTest extends TestCase {
         $this->assertStringNotContainsString('<script>', $sanitizedSvg);
         $this->assertStringNotContainsString('alert("XSS")', $sanitizedSvg);
         $this->assertStringContainsString('<rect', $sanitizedSvg);
+    }
+    
+    #[Test]
+    public function itDoesNotEmitScriptContentWhenParserRejectsSvg(): void {
+        $sanitizer = new SvgSanitizer();
+        
+        $deeplyNestedSvg = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">'
+            . str_repeat('<g>', 300)
+            . '<svg:script>alert(document.domain)</svg:script>'
+            . str_repeat('</g>', 300)
+            . '</svg>';
+        
+        $this->expectException(UnsanitizableImageException::class);
+        $this->expectExceptionMessage('This SVG could not be processed. It may be malformed or nested too deeply.');
+
+        $this->assertStringNotContainsString('alert(', $sanitizer->sanitize($deeplyNestedSvg));
     }
     
     #[Test]
@@ -336,9 +353,9 @@ class SvgSanitizerTest extends TestCase {
         
         $maliciousSvg = '<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <image href="data:text/html,<script>alert(\'DATA_HTML\')</script>" />
-  <image xlink:href="data:image/svg+xml,<svg><script>alert(\'DATA_SVG\')</script></svg>" />
-  <use href="data:text/html,<iframe src=javascript:alert(\'DATA_IFRAME\')></iframe>" />
+  <image href="data:text/html,&lt;script&gt;alert(\'DATA_HTML\')&lt;/script&gt;" />
+  <image xlink:href="data:image/svg+xml,&lt;svg&gt;&lt;script&gt;alert(\'DATA_SVG\')&lt;/script&gt;&lt;/svg&gt;" />
+  <use href="data:text/html,&lt;iframe src=javascript:alert(\'DATA_IFRAME\')&gt;&lt;/iframe&gt;" />
   <rect x="10" y="10" width="50" height="50" />
 </svg>';
         
@@ -385,7 +402,7 @@ class SvgSanitizerTest extends TestCase {
     <filter id="maliciousFilter">
       <feImage href="javascript:alert(\'FILTER_JS\')" />
       <feImage xlink:href="http://evil.com/tracker.php" />
-      <feImage href="data:text/html,<script>alert(\'FILTER_DATA\')</script>" />
+      <feImage href="data:text/html,&lt;script&gt;alert(\'FILTER_DATA\')&lt;/script&gt;" />
       <feGaussianBlur onload="alert(\'FILTER_BLUR\')" stdDeviation="5" />
     </filter>
   </defs>

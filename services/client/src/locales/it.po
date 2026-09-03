@@ -5188,3 +5188,7 @@ msgstr "Personalizza"
 #: src/feature/Share/MyShares/SharesDataTable/columns.svelte.ts
 msgid "Expires"
 msgstr "Scadenza"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "This SVG could not be processed. It may be malformed or nested too deeply."
+msgstr "Impossibile elaborare questo SVG. Potrebbe essere malformato o annidato troppo in profondità."

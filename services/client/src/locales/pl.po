@@ -5224,3 +5224,7 @@ msgstr "Dostosuj"
 #: src/feature/Share/MyShares/SharesDataTable/columns.svelte.ts
 msgid "Expires"
 msgstr "Wygaśnięcie"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "This SVG could not be processed. It may be malformed or nested too deeply."
+msgstr "Nie można przetworzyć tego pliku SVG. Może być nieprawidłowy lub zbyt głęboko zagnieżdżony."

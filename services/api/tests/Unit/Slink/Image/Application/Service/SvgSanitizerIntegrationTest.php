@@ -19,11 +19,11 @@ class SvgSanitizerIntegrationTest extends TestCase {
         <!DOCTYPE svg [<!ENTITY xxe SYSTEM "file:///etc/passwd">]>
         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
             <script>alert("script_attack")</script>
-            <rect onclick="alert(\"event_handler\")" href="javascript:alert()"/>
+            <rect onclick="alert(&quot;event_handler&quot;)" href="javascript:alert()"/>
             <image xlink:href="http://evil.com/tracker.php"/>
             <style>@import url("http://evil.com/malicious.css"); .evil { expression(alert("css")); }</style>
-            <foreignObject><iframe src="data:text/html,<script>alert()</script>"></iframe></foreignObject>
-            <use href="data:image/svg+xml,<svg><script>alert()</script></svg>"/>
+            <foreignObject><iframe src="data:text/html,&lt;script&gt;alert()&lt;/script&gt;"></iframe></foreignObject>
+            <use href="data:image/svg+xml,&lt;svg&gt;&lt;script&gt;alert()&lt;/script&gt;&lt;/svg&gt;"/>
         </svg>';
         
         $sanitized = $sanitizer->sanitize($complexAttack);

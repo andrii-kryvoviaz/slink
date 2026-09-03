@@ -15,6 +15,7 @@ use Slink\Image\Application\Service\Sanitizer\Rule\JavaScriptUrlRemovalRule;
 use Slink\Image\Application\Service\Sanitizer\Rule\ScriptRemovalRule;
 use Slink\Image\Application\Service\Sanitizer\Rule\CssExpressionRemovalRule;
 use Slink\Image\Application\Service\Sanitizer\Rule\CssImportRemovalRule;
+use Slink\Image\Domain\Exception\UnsanitizableImageException;
 use Slink\Image\Domain\Service\ImageSanitizerInterface;
 use Symfony\Component\HttpFoundation\File\File;
 use RuntimeException;
@@ -46,12 +47,10 @@ final class SvgSanitizer implements ImageSanitizerInterface {
         $sanitizedContent = $this->baseSanitizer->sanitize($svgContent);
         
         if ($sanitizedContent === false) {
-            $sanitizedContent = $this->enhancedSanitizer->sanitize($svgContent);
-        } else {
-            $sanitizedContent = $this->enhancedSanitizer->sanitize($sanitizedContent);
+            throw new UnsanitizableImageException();
         }
         
-        return $sanitizedContent;
+        return $this->enhancedSanitizer->sanitize($sanitizedContent);
     }
     
     public function sanitizeFile(File $file): File {
