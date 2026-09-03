@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Slink\Bookmark\Application\Query\GetUserBookmarks;
 
 use Slink\Bookmark\Domain\Repository\BookmarkRepositoryInterface;
+use Slink\Bookmark\Infrastructure\Resource\BookmarkResourceContext;
+use Slink\Bookmark\Infrastructure\Resource\BookmarkResourceProcessor;
 use Slink\Shared\Application\Http\Collection;
-use Slink\Shared\Application\Http\Item;
 use Slink\Shared\Application\Query\QueryHandlerInterface;
 use Slink\Shared\Infrastructure\Pagination\CursorPaginationTrait;
 use Slink\Shared\Infrastructure\Pagination\CursorPaginator;
@@ -16,6 +17,7 @@ final readonly class GetUserBookmarksHandler implements QueryHandlerInterface {
 
   public function __construct(
     private BookmarkRepositoryInterface $repository,
+    private BookmarkResourceProcessor   $resourceProcessor,
     private CursorPaginator             $cursorPaginator,
   ) {
   }
@@ -32,7 +34,7 @@ final readonly class GetUserBookmarksHandler implements QueryHandlerInterface {
 
     $total = $this->repository->countByUserId($userId);
 
-    $items = iterator_map($bookmarks, fn($bookmark) => Item::fromEntity($bookmark));
+    $items = $this->resourceProcessor->many($bookmarks, new BookmarkResourceContext());
     $paginator = $this->cursorPaginator->paginate($items, $query->getLimit());
 
     return Collection::fromCursorPaginator(

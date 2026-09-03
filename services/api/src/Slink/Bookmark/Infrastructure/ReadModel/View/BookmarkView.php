@@ -7,13 +7,10 @@ namespace Slink\Bookmark\Infrastructure\ReadModel\View;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Slink\Bookmark\Infrastructure\ReadModel\Repository\BookmarkRepository;
-use Slink\Image\Domain\ValueObject\ImageAttributes;
-use Slink\Image\Domain\ValueObject\ImageMetadata;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
 use Slink\Shared\Domain\Contract\CursorAwareInterface;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
-use Slink\User\Domain\ValueObject\GuestUser;
 use Slink\User\Infrastructure\ReadModel\View\UserView;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Serializer\Attribute\SerializedName;
@@ -75,38 +72,6 @@ class BookmarkView extends AbstractView implements CursorAwareInterface {
 
   public function getCursorTimestamp(): DateTimeInterface {
     return $this->createdAt;
-  }
-
-  /**
-   * @return array{id: string, available: bool, owner?: UserView|GuestUser, attributes?: ImageAttributes, metadata?: ImageMetadata|null}
-   */
-  #[Groups(['public'])]
-  #[SerializedName('image')]
-  public function getImageData(): array {
-    try {
-      $image = $this->image;
-      $isAvailable = $image->getAttributes()->isPublic();
-    } catch (\Throwable) {
-      return [
-        'id' => $this->image->getUuid(),
-        'available' => false,
-      ];
-    }
-
-    if (!$isAvailable) {
-      return [
-        'id' => $image->getUuid(),
-        'available' => false,
-      ];
-    }
-
-    return [
-      'id' => $image->getUuid(),
-      'available' => true,
-      'owner' => $image->getOwner(),
-      'attributes' => $image->getAttributes(),
-      'metadata' => $image->getMetadata(),
-    ];
   }
 
   #[Groups(['bookmarkers'])]

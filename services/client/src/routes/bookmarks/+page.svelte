@@ -88,7 +88,7 @@
     {:else if bookmarksFeed.items.length > 0}
       <Masonry items={bookmarksFeed.items} class="gap-4">
         {#snippet itemTemplate(bookmark)}
-          {#if !bookmark.image.available}
+          {#if !('url' in bookmark.image)}
             <div
               in:fly={{ y: 20, duration: 400, delay: Math.random() * 200 }}
               class="break-inside-avoid bg-muted rounded-2xl border border-border overflow-hidden p-8 text-center"
@@ -119,13 +119,8 @@
               >
                 <ImagePlaceholder
                   uniqueId={image.id}
-                  src={image.url ?? ''}
-                  metadata={image.metadata ?? {
-                    height: 0,
-                    width: 0,
-                    mimeType: undefined,
-                    size: undefined,
-                  }}
+                  src={image.url}
+                  metadata={image.metadata}
                   showMetadata={false}
                   showOpenInNewTab={false}
                   rounded={false}
@@ -142,14 +137,13 @@
                     class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-scrim/40 backdrop-blur-md text-on-surface-inverse text-xs"
                   >
                     <Icon icon="ph:eye" class="w-3.5 h-3.5" />
-                    <span>{image.attributes?.views}</span>
+                    <span>{image.attributes.views}</span>
                   </div>
                   <div
                     class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-scrim/40 backdrop-blur-md text-on-surface-inverse text-xs"
                   >
                     <Icon icon="ph:frame-corners" class="w-3.5 h-3.5" />
-                    <span>{image.metadata?.width}×{image.metadata?.height}</span
-                    >
+                    <span>{image.metadata.width}×{image.metadata.height}</span>
                   </div>
                 </div>
 
@@ -187,7 +181,7 @@
               >
                 <BookmarkButton
                   imageId={image.id}
-                  imageOwnerId={image.owner?.id ?? ''}
+                  imageOwnerId={image.owner.id}
                   isBookmarked={true}
                   size="sm"
                   variant="overlay"
@@ -198,17 +192,15 @@
 
               <div class="p-3">
                 <div class="flex items-center gap-2.5">
-                  {#if image.owner}
-                    <UserAvatar size="sm" user={image.owner} />
-                  {/if}
+                  <UserAvatar size="sm" user={image.owner} />
                   <div class="flex-1 min-w-0">
                     <p
                       class="font-medium text-foreground text-sm leading-tight truncate"
                     >
-                      {image.owner?.displayName}
+                      {image.owner.displayName}
                     </p>
                     <div class="text-xs text-foreground-muted mt-0.5">
-                      {#if image.attributes?.createdAt?.timestamp}
+                      {#if image.attributes.createdAt.timestamp}
                         <FormattedDate
                           date={image.attributes.createdAt.timestamp}
                         />
@@ -217,7 +209,7 @@
                   </div>
                 </div>
 
-                {#if image.attributes?.description?.trim()}
+                {#if image.attributes.description.trim()}
                   <p
                     class="mt-3 text-sm text-foreground-muted leading-relaxed line-clamp-2"
                   >

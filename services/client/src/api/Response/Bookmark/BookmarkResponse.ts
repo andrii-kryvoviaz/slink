@@ -1,18 +1,9 @@
 import type { ListingMetadata } from '@slink/api/Response/Common/ListingMetadata';
 import type { ImageListingItem } from '@slink/api/Response/Image/ImageListingResponse';
 
-export interface BookmarkImage {
-  id: string;
-  available: boolean;
-  url?: string;
-  owner?: ImageListingItem['owner'];
-  attributes?: ImageListingItem['attributes'];
-  metadata?: ImageListingItem['metadata'];
-}
-
 export interface BookmarkItem {
   id: string;
-  image: BookmarkImage;
+  image: Pick<ImageListingItem, 'id'> | ImageListingItem;
   createdAt: {
     formattedDate: string;
     timestamp: number;

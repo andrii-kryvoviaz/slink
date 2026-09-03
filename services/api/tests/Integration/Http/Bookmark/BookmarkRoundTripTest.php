@@ -51,6 +51,42 @@ final class BookmarkRoundTripTest extends HttpTestCase {
     return $ids;
   }
 
+  /**
+   * @return array<int, array<string, mixed>>
+   */
+  private function listBookmarks(string $token): array {
+    $this->apiRequest('GET', '/api/bookmarks', $token);
+
+    $response = $this->client->getResponse();
+    self::assertSame(200, $response->getStatusCode(), 'List bookmarks failed: ' . (string) $response->getContent());
+
+    /** @var array{data?: array<int, array<string, mixed>>} $payload */
+    $payload = \json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+    return $payload['data'] ?? [];
+  }
+
+  private function uploadGuestImage(): string {
+    $this->client->request('POST', '/api/upload', [], ['image' => $this->sampleImage()]);
+
+    $response = $this->client->getResponse();
+    self::assertContains($response->getStatusCode(), [200, 201], 'Guest upload failed: ' . (string) $response->getContent());
+
+    return $this->extractId((string) $response->getContent());
+  }
+
+  private function setImagePublic(string $token, string $imageId, bool $isPublic): void {
+    $status = $this->apiRequest(
+      'PATCH',
+      \sprintf('/api/image/%s', $imageId),
+      $token,
+      ['CONTENT_TYPE' => 'application/json'],
+      \json_encode(['isPublic' => $isPublic, 'description' => null], JSON_THROW_ON_ERROR),
+    );
+
+    self::assertContains($status, [200, 204], 'Update image failed: ' . (string) $this->client->getResponse()->getContent());
+  }
+
   #[Test]
   public function authenticatedUserCanRoundTripBookmark(): void {
     $this->createUser('bookmark-owner@local.test', 'bookmarkowner', self::PASSWORD);
@@ -105,6 +141,70 @@ final class BookmarkRoundTripTest extends HttpTestCase {
     $payload = \json_decode((string) $this->client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
     self::assertTrue($payload['isBookmarked'] ?? false, 'Add bookmark response must report isBookmarked=true.');
+  }
+
+  #[Test]
+  public function bookmarkListingCarriesPublicImageUrl(): void {
+    $this->createUser('bookmark-url-owner@local.test', 'bookmarkurlowner', self::PASSWORD);
+    $this->createUser('bookmark-url-reader@local.test', 'bookmarkurlreader', self::PASSWORD);
+    $ownerToken = $this->login('bookmarkurlowner', self::PASSWORD);
+    $nonOwnerToken = $this->login('bookmarkurlreader', self::PASSWORD);
+    $imageId = $this->uploadImage($ownerToken, true);
+
+    $this->addBookmark($nonOwnerToken, $imageId);
+
+    $bookmarks = $this->listBookmarks($nonOwnerToken);
+    self::assertCount(1, $bookmarks);
+
+    /** @var array<string, mixed> $image */
+    $image = $bookmarks[0]['image'];
+
+    self::assertArrayNotHasKey('imageId', $bookmarks[0]);
+    self::assertSame($imageId, $image['id'] ?? null);
+    self::assertArrayNotHasKey('available', $image);
+    self::assertSame(\sprintf('/api/image/public/%s.png', $imageId), $image['url'] ?? null, 'Bookmark listing must carry image.url.');
+    self::assertArrayHasKey('owner', $image);
+    self::assertArrayHasKey('attributes', $image);
+    self::assertArrayHasKey('fileName', $image['attributes']);
+    self::assertArrayHasKey('metadata', $image);
+  }
+
+  #[Test]
+  public function bookmarkListingMarksNonPublicImageUnavailable(): void {
+    $this->createUser('bookmark-priv-owner@local.test', 'bookmarkprivowner', self::PASSWORD);
+    $this->createUser('bookmark-priv-reader@local.test', 'bookmarkprivreader', self::PASSWORD);
+    $ownerToken = $this->login('bookmarkprivowner', self::PASSWORD);
+    $nonOwnerToken = $this->login('bookmarkprivreader', self::PASSWORD);
+    $imageId = $this->uploadImage($ownerToken, true);
+
+    $this->addBookmark($nonOwnerToken, $imageId);
+    $this->setImagePublic($ownerToken, $imageId, false);
+
+    $bookmarks = $this->listBookmarks($nonOwnerToken);
+    self::assertCount(1, $bookmarks);
+    self::assertArrayNotHasKey('imageId', $bookmarks[0]);
+    self::assertSame(['id' => $imageId], $bookmarks[0]['image']);
+  }
+
+  #[Test]
+  public function bookmarkListingCarriesUrlForGuestUploadedImage(): void {
+    $this->setAccessSettings(['allowGuestUploads' => true, 'allowUnauthenticatedAccess' => true]);
+    $this->createUser('bookmark-guest-reader@local.test', 'bookmarkguestreader', self::PASSWORD);
+    $nonOwnerToken = $this->login('bookmarkguestreader', self::PASSWORD);
+    $imageId = $this->uploadGuestImage();
+
+    $this->addBookmark($nonOwnerToken, $imageId);
+
+    $bookmarks = $this->listBookmarks($nonOwnerToken);
+    self::assertCount(1, $bookmarks);
+
+    /** @var array<string, mixed> $image */
+    $image = $bookmarks[0]['image'];
+
+    self::assertArrayNotHasKey('imageId', $bookmarks[0]);
+    self::assertArrayNotHasKey('available', $image);
+    self::assertSame(\sprintf('/api/image/public/%s.png', $imageId), $image['url'] ?? null, 'Bookmark listing must carry image.url for guest uploads.');
+    self::assertSame('guest', $image['owner']['id'] ?? null);
   }
 
   #[Test]
