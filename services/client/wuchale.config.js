@@ -1,47 +1,37 @@
-import { adapter as svelte, svelteKitDefaultHeuristic } from '@wuchale/svelte';
-import { defaultHeuristic, defineConfig } from 'wuchale';
+import { createSvelteHeuristic, adapter as svelte } from '@wuchale/svelte';
+import { defaultHeuristic, defaultHeuristicOpts, defineConfig } from 'wuchale';
 import { adapter as js } from 'wuchale/adapter-vanilla';
 
-const CLASS_BUILDERS = new Set(['className', 'cn', 'clsx']);
+const svelteHeuristic = createSvelteHeuristic({
+  ...defaultHeuristicOpts,
+  ignoreCalls: [
+    ...defaultHeuristicOpts.ignoreCalls,
+    'Symbol',
+    'className',
+    'cn',
+    'clsx',
+  ],
+});
 
-const isRoutePath = (message) => (message.msgStr?.[0] ?? '').startsWith('/');
+const inClassAttribute = (text) =>
+  text.path.some(
+    (scope) => scope.type === 'attribute' && scope.name === 'class',
+  );
 
-const jsDefaultHeuristic = (message) => {
-  if (!defaultHeuristic(message)) {
-    return false;
-  }
-  return message.details.scope !== 'script' || message.details.funcName != null;
-};
+const isRoutePath = (text) => String(text.body).startsWith('/');
 
 export default defineConfig({
   locales: ['en', 'de', 'es', 'fr', 'it', 'pl', 'uk', 'ja', 'zh'],
   adapters: {
     main: svelte({
       loader: 'sveltekit',
-      heuristic: (message) => {
-        if (message.details?.call === 'Symbol') {
-          return false;
-        }
-        if (message.details?.call && CLASS_BUILDERS.has(message.details.call)) {
-          return false;
-        }
-        if (message.details?.attribute === 'class') {
-          return false;
-        }
-        if (isRoutePath(message)) {
-          return false;
-        }
-        return svelteKitDefaultHeuristic(message);
-      },
+      heuristic: (text, file) =>
+        !inClassAttribute(text) && svelteHeuristic(text, file),
     }),
     js: js({
       loader: 'vite',
-      heuristic: (message) => {
-        if (isRoutePath(message)) {
-          return false;
-        }
-        return jsDefaultHeuristic(message);
-      },
+      heuristic: (text, file) =>
+        !isRoutePath(text) && defaultHeuristic(text, file),
       files: [
         'src/**/+{page,layout}.{js,ts}',
         'src/**/+{page,layout}.server.{js,ts}',

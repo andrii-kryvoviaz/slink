@@ -15,6 +15,7 @@ vite.config.ts.timestamp-*
 src/locales/.wuchale/
 src/locales/*.loader.*
 src/locales/data.js
+src/locales/plural.js
 
 /test-results/
 /playwright-report/

@@ -1,11 +1,12 @@
 msgid ""
 msgstr ""
-"Plural-Forms: nplurals=1; plural=0;\n"
 "Source-Language: en\n"
 "Language: zh\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1\n"
+"X-Plurals-Order: other\n"
 
 #: src/routes/info/[id]/+page.server.ts
 msgid "Take me to my Uploads"
@@ -798,7 +799,6 @@ msgstr "查看并管理你上传的图片"
 msgid "View More"
 msgstr "查看更多"
 
-#: src/feature/Share/Type/ShareTypeBadge.svelte
 #: src/routes/collection/[id]/+page.svelte
 #: src/routes/history/+page.svelte
 msgid "Collection"
@@ -1090,7 +1090,6 @@ msgstr "缩放到 {0}"
 #: src/feature/Image/History/Actions/DeleteAction.svelte
 #: src/feature/Image/ShareFormat/shareFormats.language.ts
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
-#: src/feature/Share/Type/ShareTypeBadge.svelte
 #: src/routes/admin/settings/image/+page.svelte
 msgid "Image"
 msgstr "图像"
@@ -2204,10 +2203,10 @@ msgstr "继续添加"
 
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
+#: src/feature/Share/MyShares/SharesDataTable/columns.svelte.ts
 #: src/feature/Tag/TagDataTable/columns.svelte.ts
 #: src/feature/User/UserActions/UserActions.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
-#: src/routes/shares/+page.svelte
 #: src/ui/components/actions-menu/actions-menu.svelte
 msgid "Actions"
 msgstr "操作"
@@ -2630,6 +2629,7 @@ msgstr "选择 {0}"
 
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Tag/TagDataTable/columns.svelte.ts
+#: src/feature/Tag/TagDataTable/columns.svelte.ts
 msgid "Name"
 msgstr "名称"
 
@@ -2639,7 +2639,7 @@ msgstr "项目数"
 
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
-#: src/routes/shares/+page.svelte
+#: src/feature/Share/MyShares/SharesDataTable/columns.svelte.ts
 msgid "Created"
 msgstr "创建时间"
 
@@ -2697,7 +2697,7 @@ msgid "Visibility Options"
 msgstr "可见性选项"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
-#: src/lib/settings/themes.language.ts
+#: src/lib/settings/themes.svelte.ts
 #: src/routes/help/faq/+page.svelte
 msgid "Default"
 msgstr "默认"
@@ -3491,7 +3491,6 @@ msgid "File Name"
 msgstr "文件名"
 
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
-#: src/routes/shares/+page.svelte
 msgid "Type"
 msgstr "类型"
 
@@ -3803,7 +3802,7 @@ msgstr "返回首页"
 msgid "Saved"
 msgstr "已保存"
 
-#: src/feature/Share/Attributes/ShareAttributes.svelte
+#: src/feature/Share/Attributes/expiry.language.ts
 #: src/feature/Share/Chips/ShareAttributeChips.svelte
 #: src/feature/Share/Controls/List.svelte
 #: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
@@ -3895,6 +3894,7 @@ msgstr "输入密码"
 msgid "Replace password"
 msgstr "更换密码"
 
+#: src/feature/Share/Attributes/ShareAttributeChips/ShareAttributeChips.svelte
 #: src/feature/Share/Attributes/ShareAttributes.svelte
 #: src/feature/Share/Chips/ShareAttributeChips.svelte
 #: src/feature/Share/Controls/List.svelte
@@ -3960,7 +3960,7 @@ msgstr "密码保护"
 msgid "All types"
 msgstr "所有类型"
 
-#: src/routes/shares/+page.svelte
+#: src/feature/Share/MyShares/SharesDataTable/columns.svelte.ts
 msgid "Item"
 msgstr "项目"
 
@@ -3986,6 +3986,7 @@ msgstr "发布操作"
 #: src/feature/Image/CopyLinkButton/CopyLinkButton.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
 #: src/feature/Share/Controls/List.svelte
+#: src/feature/Share/ShortLink/ShortLink.svelte
 msgid "Copy link"
 msgstr "复制链接"
 
@@ -3997,7 +3998,7 @@ msgstr "停止发布此链接"
 msgid "The link will stop working for anyone who has it."
 msgstr "该链接将对所有拥有它的人停止工作。"
 
-#: src/routes/shares/+page.svelte
+#: src/feature/Share/MyShares/SharesDataTable/columns.svelte.ts
 msgid "Attributes"
 msgstr "属性"
 
@@ -4214,17 +4215,22 @@ msgstr "已封禁"
 msgid "Overview of key metrics and activity"
 msgstr "关键指标与活动概览"
 
+#: src/feature/Share/Attributes/ShareAttributeChips/ShareAttributeChips.svelte
 #: src/feature/Share/Attributes/ShareAttributes.svelte
 msgid "Password required to open this link"
 msgstr "打开此链接需要密码"
 
-#. 0: expiresAtFormatted
+#. 0: expiry.longDate
+#. 0: expiry.longDate
 #: src/feature/Share/Attributes/ShareAttributes.svelte
+#: src/feature/Share/MyShares/SharesDataTable/cells/ExpiresCell.svelte
 msgid "Expired on {0}"
 msgstr "已于 {0} 过期"
 
-#. 0: expiresAtFormatted
+#. 0: expiry.longDate
+#. 0: expiry.longDate
 #: src/feature/Share/Attributes/ShareAttributes.svelte
+#: src/feature/Share/MyShares/SharesDataTable/cells/ExpiresCell.svelte
 msgid "Expires on {0}"
 msgstr "有效期至 {0}"
 
@@ -4413,15 +4419,15 @@ msgstr "<0/> 无限"
 msgid "Loading more"
 msgstr "加载中"
 
-#: src/feature/Share/Attributes/ShareVariantBadges.svelte
+#: src/feature/Share/Attributes/ShareAttributeChips/ShareAttributeChips.svelte
 msgid "Image dimensions"
 msgstr "图像尺寸"
 
-#: src/feature/Share/Attributes/ShareVariantBadges.svelte
+#: src/feature/Share/Attributes/ShareAttributeChips/ShareAttributeChips.svelte
 msgid "Image format"
 msgstr "图像格式"
 
-#: src/feature/Share/Attributes/ShareVariantBadges.svelte
+#: src/feature/Share/Attributes/ShareAttributeChips/ShareAttributeChips.svelte
 msgid "Applied filter"
 msgstr "已应用滤镜"
 
@@ -5115,6 +5121,7 @@ msgstr "禁用账号并删除内容"
 msgid "Deletes their images, collections, and bookmarks by others. Comments stay, shown as deleted."
 msgstr "删除该用户的图片、合集，以及其他用户对这些图片的收藏。评论会保留，显示为已删除。"
 
+#: src/feature/Layout/ModeSwitch/ModeSwitchHoverCard.svelte
 #: src/routes/preferences/+page.svelte
 msgid "Appearance"
 msgstr "外观"
@@ -5127,31 +5134,31 @@ msgstr "主题"
 msgid "Choose your preferred color theme for the interface"
 msgstr "选择您首选的界面配色主题"
 
-#: src/lib/settings/themes.language.ts
+#: src/lib/settings/themes.svelte.ts
 msgid "Nord"
 msgstr "Nord"
 
-#: src/lib/settings/themes.language.ts
+#: src/lib/settings/themes.svelte.ts
 msgid "Catppuccin"
 msgstr "Catppuccin"
 
-#: src/lib/settings/themes.language.ts
+#: src/lib/settings/themes.svelte.ts
 msgid "Gruvbox"
 msgstr "Gruvbox"
 
-#: src/lib/settings/themes.language.ts
+#: src/lib/settings/themes.svelte.ts
 msgid "Rosé Pine"
 msgstr "Rosé Pine"
 
-#: src/lib/settings/themes.language.ts
+#: src/lib/settings/themes.svelte.ts
 msgid "Tokyo Night"
 msgstr "Tokyo Night"
 
-#: src/lib/settings/themes.language.ts
+#: src/lib/settings/themes.svelte.ts
 msgid "Everforest"
 msgstr "Everforest"
 
-#: src/lib/settings/themes.language.ts
+#: src/lib/settings/themes.svelte.ts
 msgid "Monochrome"
 msgstr "单色"
 
@@ -5159,6 +5166,7 @@ msgstr "单色"
 msgid "Toggle light and dark mode."
 msgstr "切换浅色和深色模式。"
 
+#. 0: themeLabel
 #: src/feature/Layout/ModeSwitch/ModeSwitchHoverCard.svelte
 msgid "Theme: {0}"
 msgstr "主题：{0}"

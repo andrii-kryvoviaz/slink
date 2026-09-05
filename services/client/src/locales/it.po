@@ -1,11 +1,12 @@
 msgid ""
 msgstr ""
-"Plural-Forms: nplurals=2; plural=(n != 1) ? 1 : 0;\n"
 "Source-Language: en\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3\n"
+"X-Plurals-Order: one, many, other\n"
 
 #: src/routes/info/[id]/+page.server.ts
 msgid "Take me to my Uploads"
@@ -798,7 +799,6 @@ msgstr "Visualizza e gestisci le tue immagini caricate"
 msgid "View More"
 msgstr "Mostra altro"
 
-#: src/feature/Share/Type/ShareTypeBadge.svelte
 #: src/routes/collection/[id]/+page.svelte
 #: src/routes/history/+page.svelte
 msgid "Collection"
@@ -1090,7 +1090,6 @@ msgstr "Scala a {0}"
 #: src/feature/Image/History/Actions/DeleteAction.svelte
 #: src/feature/Image/ShareFormat/shareFormats.language.ts
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
-#: src/feature/Share/Type/ShareTypeBadge.svelte
 #: src/routes/admin/settings/image/+page.svelte
 msgid "Image"
 msgstr "Immagine"
@@ -2204,10 +2203,10 @@ msgstr "Aggiungi altro"
 
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
+#: src/feature/Share/MyShares/SharesDataTable/columns.svelte.ts
 #: src/feature/Tag/TagDataTable/columns.svelte.ts
 #: src/feature/User/UserActions/UserActions.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
-#: src/routes/shares/+page.svelte
 #: src/ui/components/actions-menu/actions-menu.svelte
 msgid "Actions"
 msgstr "Azioni"
@@ -2630,6 +2629,7 @@ msgstr "Seleziona {0}"
 
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Tag/TagDataTable/columns.svelte.ts
+#: src/feature/Tag/TagDataTable/columns.svelte.ts
 msgid "Name"
 msgstr "Nome"
 
@@ -2639,7 +2639,7 @@ msgstr "Elementi"
 
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
-#: src/routes/shares/+page.svelte
+#: src/feature/Share/MyShares/SharesDataTable/columns.svelte.ts
 msgid "Created"
 msgstr "Creato"
 
@@ -2697,7 +2697,7 @@ msgid "Visibility Options"
 msgstr "Opzioni di visibilità"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
-#: src/lib/settings/themes.language.ts
+#: src/lib/settings/themes.svelte.ts
 #: src/routes/help/faq/+page.svelte
 msgid "Default"
 msgstr "Predefinito"
@@ -3492,7 +3492,6 @@ msgid "File Name"
 msgstr "Nome file"
 
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
-#: src/routes/shares/+page.svelte
 msgid "Type"
 msgstr "Tipo"
 
@@ -3811,7 +3810,7 @@ msgstr "Torna alla home"
 msgid "Saved"
 msgstr "Salvato"
 
-#: src/feature/Share/Attributes/ShareAttributes.svelte
+#: src/feature/Share/Attributes/expiry.language.ts
 #: src/feature/Share/Chips/ShareAttributeChips.svelte
 #: src/feature/Share/Controls/List.svelte
 #: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
@@ -3904,6 +3903,7 @@ msgstr "Inserisci una password"
 msgid "Replace password"
 msgstr "Sostituisci password"
 
+#: src/feature/Share/Attributes/ShareAttributeChips/ShareAttributeChips.svelte
 #: src/feature/Share/Attributes/ShareAttributes.svelte
 #: src/feature/Share/Chips/ShareAttributeChips.svelte
 #: src/feature/Share/Controls/List.svelte
@@ -3970,7 +3970,7 @@ msgstr "Protetto da password"
 msgid "All types"
 msgstr "Tutti i tipi"
 
-#: src/routes/shares/+page.svelte
+#: src/feature/Share/MyShares/SharesDataTable/columns.svelte.ts
 msgid "Item"
 msgstr "Elemento"
 
@@ -3996,6 +3996,7 @@ msgstr "Azioni di pubblicazione"
 #: src/feature/Image/CopyLinkButton/CopyLinkButton.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
 #: src/feature/Share/Controls/List.svelte
+#: src/feature/Share/ShortLink/ShortLink.svelte
 msgid "Copy link"
 msgstr "Copia link"
 
@@ -4007,7 +4008,7 @@ msgstr "Smetti di pubblicare questo link"
 msgid "The link will stop working for anyone who has it."
 msgstr "Il link smetterà di funzionare per chiunque lo possieda."
 
-#: src/routes/shares/+page.svelte
+#: src/feature/Share/MyShares/SharesDataTable/columns.svelte.ts
 msgid "Attributes"
 msgstr "Attributi"
 
@@ -4226,17 +4227,22 @@ msgstr "Bannato"
 msgid "Overview of key metrics and activity"
 msgstr "Panoramica delle metriche chiave e delle attività"
 
+#: src/feature/Share/Attributes/ShareAttributeChips/ShareAttributeChips.svelte
 #: src/feature/Share/Attributes/ShareAttributes.svelte
 msgid "Password required to open this link"
 msgstr "Password richiesta per aprire questo link"
 
-#. 0: expiresAtFormatted
+#. 0: expiry.longDate
+#. 0: expiry.longDate
 #: src/feature/Share/Attributes/ShareAttributes.svelte
+#: src/feature/Share/MyShares/SharesDataTable/cells/ExpiresCell.svelte
 msgid "Expired on {0}"
 msgstr "Scaduto il {0}"
 
-#. 0: expiresAtFormatted
+#. 0: expiry.longDate
+#. 0: expiry.longDate
 #: src/feature/Share/Attributes/ShareAttributes.svelte
+#: src/feature/Share/MyShares/SharesDataTable/cells/ExpiresCell.svelte
 msgid "Expires on {0}"
 msgstr "Scade il {0}"
 
@@ -4427,15 +4433,15 @@ msgstr "<0/> Infinito"
 msgid "Loading more"
 msgstr "Caricamento"
 
-#: src/feature/Share/Attributes/ShareVariantBadges.svelte
+#: src/feature/Share/Attributes/ShareAttributeChips/ShareAttributeChips.svelte
 msgid "Image dimensions"
 msgstr "Dimensioni immagine"
 
-#: src/feature/Share/Attributes/ShareVariantBadges.svelte
+#: src/feature/Share/Attributes/ShareAttributeChips/ShareAttributeChips.svelte
 msgid "Image format"
 msgstr "Formato immagine"
 
-#: src/feature/Share/Attributes/ShareVariantBadges.svelte
+#: src/feature/Share/Attributes/ShareAttributeChips/ShareAttributeChips.svelte
 msgid "Applied filter"
 msgstr "Filtro applicato"
 
@@ -5133,6 +5139,7 @@ msgstr "Disabilita ed elimina i contenuti"
 msgid "Deletes their images, collections, and bookmarks by others. Comments stay, shown as deleted."
 msgstr "Elimina le sue immagini, le sue raccolte e i preferiti che altri hanno aggiunto alle sue immagini. I commenti restano, mostrati come eliminati."
 
+#: src/feature/Layout/ModeSwitch/ModeSwitchHoverCard.svelte
 #: src/routes/preferences/+page.svelte
 msgid "Appearance"
 msgstr "Aspetto"
@@ -5145,31 +5152,31 @@ msgstr "Tema"
 msgid "Choose your preferred color theme for the interface"
 msgstr "Scegli il tema colore preferito per l'interfaccia"
 
-#: src/lib/settings/themes.language.ts
+#: src/lib/settings/themes.svelte.ts
 msgid "Nord"
 msgstr "Nord"
 
-#: src/lib/settings/themes.language.ts
+#: src/lib/settings/themes.svelte.ts
 msgid "Catppuccin"
 msgstr "Catppuccin"
 
-#: src/lib/settings/themes.language.ts
+#: src/lib/settings/themes.svelte.ts
 msgid "Gruvbox"
 msgstr "Gruvbox"
 
-#: src/lib/settings/themes.language.ts
+#: src/lib/settings/themes.svelte.ts
 msgid "Rosé Pine"
 msgstr "Rosé Pine"
 
-#: src/lib/settings/themes.language.ts
+#: src/lib/settings/themes.svelte.ts
 msgid "Tokyo Night"
 msgstr "Tokyo Night"
 
-#: src/lib/settings/themes.language.ts
+#: src/lib/settings/themes.svelte.ts
 msgid "Everforest"
 msgstr "Everforest"
 
-#: src/lib/settings/themes.language.ts
+#: src/lib/settings/themes.svelte.ts
 msgid "Monochrome"
 msgstr "Monocromatico"
 
@@ -5177,6 +5184,7 @@ msgstr "Monocromatico"
 msgid "Toggle light and dark mode."
 msgstr "Passa dalla modalità chiara a quella scura."
 
+#. 0: themeLabel
 #: src/feature/Layout/ModeSwitch/ModeSwitchHoverCard.svelte
 msgid "Theme: {0}"
 msgstr "Tema: {0}"

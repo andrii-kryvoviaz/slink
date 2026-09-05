@@ -1546,6 +1546,11 @@
   resolved "https://registry.yarnpkg.com/@sveltejs/acorn-typescript/-/acorn-typescript-1.0.10.tgz#72376d9f46c04be82b714b1c33f0956911a7a6d6"
   integrity sha512-4WfKk68eTih+MiJD4fSbxN7E8kVBmTMPWHUPYjvl2N0rMs53YLTT8/YjKU5Dtnz5LqDjl7LEw4U7lXR2W3J5WA==
 
+"@sveltejs/acorn-typescript@^1.0.13":
+  version "1.0.13"
+  resolved "https://registry.yarnpkg.com/@sveltejs/acorn-typescript/-/acorn-typescript-1.0.13.tgz#8c7c3cc7014e212f2e8fccee0159dbecfe602405"
+  integrity sha512-wgKggnhZVL9Bfx1OaKKTrYY9BFRk6C8UAkQNUcIv1+llzYrIqy+RZm5HPKzn0NpEBvTVhTqB4kQyllZywsRBRQ==
+
 "@sveltejs/acorn-typescript@^1.0.9":
   version "1.0.9"
   resolved "https://registry.yarnpkg.com/@sveltejs/acorn-typescript/-/acorn-typescript-1.0.9.tgz#ac0bde368d6623727b0e0bc568cf6b4e5d5c4baa"
@@ -1916,12 +1921,12 @@
     tinyglobby "^0.2.9"
     vite-plugin-pwa "^1.2.0"
 
-"@wuchale/svelte@0.20.7":
-  version "0.20.7"
-  resolved "https://registry.yarnpkg.com/@wuchale/svelte/-/svelte-0.20.7.tgz#61d55a3280bc597b9bf4568eff464ead6a926037"
-  integrity sha512-Qb5KYvi/CNCzkJV/DFuqZcwjkej5g0+LJfF+yiiyNRPKLwqAd/zUbpsWbvtPJJKn2g0Idr6pgk4RZZE+MC/pvA==
+"@wuchale/svelte@0.21.1":
+  version "0.21.1"
+  resolved "https://registry.yarnpkg.com/@wuchale/svelte/-/svelte-0.21.1.tgz#46a71f80f131ca394ac1db4d494bca9a457802aa"
+  integrity sha512-P0LphoWqKOH52AMPqHN4BgbvAJ4D8frnEyjv/2HVzF9vLsMXJYJPW3VkAf5Q0rKWxsXhhIfk/p1wnP8BGXqEJg==
   dependencies:
-    wuchale "^0.25.8"
+    wuchale "^0.26.0"
 
 "@yarnpkg/lockfile@^1.1.0":
   version "1.1.0"
@@ -1938,10 +1943,10 @@ acorn@^8.12.1, acorn@^8.15.0, acorn@^8.16.0:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.16.0.tgz#4ce79c89be40afe7afe8f3adb902a1f1ce9ac08a"
   integrity sha512-UVJyE9MttOsBQIDKw1skb9nAwQuR5wuGD3+82K6JgJlm/Y+KI92oNsMNGZCYdDsVtRHSak0pcV5Dno5+4jh9sw==
 
-acorn@^8.17.0:
-  version "8.17.0"
-  resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.17.0.tgz#1785adb84faf8d8add10369b93826fc2bd08f1fe"
-  integrity sha512-xRQbDb9BnwDafYNn6Vwl839DYVjqXYb1XVGtWAZ1kcDc6iwAL4hg3B1dZlRiuENFeO2H53gFG3in621AdERVAg==
+acorn@^8.18.0:
+  version "8.18.0"
+  resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.18.0.tgz#4faf01b2d6d326bfeed97aea1f52220b5f4c1940"
+  integrity sha512-lGq+9yr1/GuAWaVYIHRjvvySG5/4VfKIvC8EWxStPdcDh/Ka7FG3twP6v4d5BkravUilhIAsG4Qj83t02LWUPQ==
 
 ajv@^6.14.0:
   version "6.15.0"
@@ -3582,6 +3587,13 @@ magic-string@^1.0.0:
   dependencies:
     "@jridgewell/sourcemap-codec" "^1.5.5"
 
+magic-string@^1.2.3:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/magic-string/-/magic-string-1.2.3.tgz#68f070ca0f05697c3ae57ce44a88fc7d483d4df1"
+  integrity sha512-Bpb0W2TbLKOZ7vJnOUnVRGq3WL2p+ISV29M6hYPL1AFCpyKZpdr5ytiXoTSSxRVhg8YW7f65+6gbG8WG6PCa/g==
+  dependencies:
+    "@jridgewell/sourcemap-codec" "^1.5.5"
+
 math-intrinsics@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/math-intrinsics/-/math-intrinsics-1.1.0.tgz#a0dd74be81e2aa5c2f27e65ce283605ee4e2b7f9"
@@ -5159,29 +5171,16 @@ workbox-window@7.4.1, workbox-window@^7.4.1:
     "@types/trusted-types" "^2.0.2"
     workbox-core "7.4.1"
 
-wuchale@0.25.6:
-  version "0.25.6"
-  resolved "https://registry.yarnpkg.com/wuchale/-/wuchale-0.25.6.tgz#71f3c6e3b63d4fb1a29f2eb963db5821c2904f09"
-  integrity sha512-GKs1xbU3ra0filKodUtjQuIHuiHnYbCLM8mxuiKRGWTjz/FOmYxuZEoWNXF5uyONxJybNaxvwGFzROVtWFbS8g==
+wuchale@0.26.4, wuchale@^0.26.0:
+  version "0.26.4"
+  resolved "https://registry.yarnpkg.com/wuchale/-/wuchale-0.26.4.tgz#68c0e0e951608d0d4b632a738f18c0ccd6de9429"
+  integrity sha512-0blrWImX+rmAmsQTjcsGJFz+5zndPtM+StUxHmyqp9kjng3YRF3DwVnHXjnhgFVw/4/kZJycK3zfVwvlllw9dw==
   dependencies:
-    "@sveltejs/acorn-typescript" "^1.0.10"
-    acorn "^8.17.0"
+    "@sveltejs/acorn-typescript" "^1.0.13"
+    acorn "^8.18.0"
     chokidar "^5.0.0"
-    magic-string "^0.30.21"
-    picomatch "^4.0.4"
-    pofile "^1.1.4"
-    tinyglobby "^0.2.17"
-
-wuchale@^0.25.8:
-  version "0.25.8"
-  resolved "https://registry.yarnpkg.com/wuchale/-/wuchale-0.25.8.tgz#9f28af1e781999c4798aa8b60a1964482abc39cb"
-  integrity sha512-XD6MMmgHmHwcWtA5RS5BmDtiKXPuSw07QHP3oi2+bF+YQQht4vcdKbWIYhVSiLX/JweW6kwn/EWoJUtAx1Ie/Q==
-  dependencies:
-    "@sveltejs/acorn-typescript" "^1.0.10"
-    acorn "^8.17.0"
-    chokidar "^5.0.0"
-    magic-string "^0.30.21"
-    picomatch "^4.0.4"
+    magic-string "^1.2.3"
+    picomatch "^4.0.7"
     pofile "^1.1.4"
     tinyglobby "^0.2.17"
 

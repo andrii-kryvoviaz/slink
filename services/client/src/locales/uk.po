@@ -1,11 +1,12 @@
 msgid ""
 msgstr ""
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "Source-Language: en\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4\n"
+"X-Plurals-Order: one, few, many, other\n"
 
 #: src/routes/info/[id]/+page.server.ts
 msgid "Take me to my Uploads"
@@ -798,7 +799,6 @@ msgstr "Переглядайте та керуйте завантаженими 
 msgid "View More"
 msgstr "Показати більше"
 
-#: src/feature/Share/Type/ShareTypeBadge.svelte
 #: src/routes/collection/[id]/+page.svelte
 #: src/routes/history/+page.svelte
 msgid "Collection"
@@ -1090,7 +1090,6 @@ msgstr "Масштабувати до {0}"
 #: src/feature/Image/History/Actions/DeleteAction.svelte
 #: src/feature/Image/ShareFormat/shareFormats.language.ts
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
-#: src/feature/Share/Type/ShareTypeBadge.svelte
 #: src/routes/admin/settings/image/+page.svelte
 msgid "Image"
 msgstr "Зображення"
@@ -2204,10 +2203,10 @@ msgstr "Додати ще"
 
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
+#: src/feature/Share/MyShares/SharesDataTable/columns.svelte.ts
 #: src/feature/Tag/TagDataTable/columns.svelte.ts
 #: src/feature/User/UserActions/UserActions.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
-#: src/routes/shares/+page.svelte
 #: src/ui/components/actions-menu/actions-menu.svelte
 msgid "Actions"
 msgstr "Дії"
@@ -2630,6 +2629,7 @@ msgstr "Обрати {0}"
 
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Tag/TagDataTable/columns.svelte.ts
+#: src/feature/Tag/TagDataTable/columns.svelte.ts
 msgid "Name"
 msgstr "Назва"
 
@@ -2639,7 +2639,7 @@ msgstr "Елементи"
 
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
-#: src/routes/shares/+page.svelte
+#: src/feature/Share/MyShares/SharesDataTable/columns.svelte.ts
 msgid "Created"
 msgstr "Створено"
 
@@ -2697,7 +2697,7 @@ msgid "Visibility Options"
 msgstr "Параметри видимості"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
-#: src/lib/settings/themes.language.ts
+#: src/lib/settings/themes.svelte.ts
 #: src/routes/help/faq/+page.svelte
 msgid "Default"
 msgstr "За замовчуванням"
@@ -3493,7 +3493,6 @@ msgid "File Name"
 msgstr "Ім'я файлу"
 
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
-#: src/routes/shares/+page.svelte
 msgid "Type"
 msgstr "Тип"
 
@@ -3819,7 +3818,7 @@ msgstr "На головну"
 msgid "Saved"
 msgstr "Збережено"
 
-#: src/feature/Share/Attributes/ShareAttributes.svelte
+#: src/feature/Share/Attributes/expiry.language.ts
 #: src/feature/Share/Chips/ShareAttributeChips.svelte
 #: src/feature/Share/Controls/List.svelte
 #: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
@@ -3913,6 +3912,7 @@ msgstr "Введіть пароль"
 msgid "Replace password"
 msgstr "Змінити пароль"
 
+#: src/feature/Share/Attributes/ShareAttributeChips/ShareAttributeChips.svelte
 #: src/feature/Share/Attributes/ShareAttributes.svelte
 #: src/feature/Share/Chips/ShareAttributeChips.svelte
 #: src/feature/Share/Controls/List.svelte
@@ -3980,7 +3980,7 @@ msgstr "Захищено паролем"
 msgid "All types"
 msgstr "Усі типи"
 
-#: src/routes/shares/+page.svelte
+#: src/feature/Share/MyShares/SharesDataTable/columns.svelte.ts
 msgid "Item"
 msgstr "Елемент"
 
@@ -4006,6 +4006,7 @@ msgstr "Дії з публікацією"
 #: src/feature/Image/CopyLinkButton/CopyLinkButton.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
 #: src/feature/Share/Controls/List.svelte
+#: src/feature/Share/ShortLink/ShortLink.svelte
 msgid "Copy link"
 msgstr "Копіювати посилання"
 
@@ -4017,7 +4018,7 @@ msgstr "Скасувати публікацію цього посилання"
 msgid "The link will stop working for anyone who has it."
 msgstr "Посилання перестане працювати для всіх, хто його має."
 
-#: src/routes/shares/+page.svelte
+#: src/feature/Share/MyShares/SharesDataTable/columns.svelte.ts
 msgid "Attributes"
 msgstr "Атрибути"
 
@@ -4238,17 +4239,22 @@ msgstr "Заблокований"
 msgid "Overview of key metrics and activity"
 msgstr "Огляд ключових метрик та активності"
 
+#: src/feature/Share/Attributes/ShareAttributeChips/ShareAttributeChips.svelte
 #: src/feature/Share/Attributes/ShareAttributes.svelte
 msgid "Password required to open this link"
 msgstr "Щоб відкрити це посилання, потрібен пароль"
 
-#. 0: expiresAtFormatted
+#. 0: expiry.longDate
+#. 0: expiry.longDate
 #: src/feature/Share/Attributes/ShareAttributes.svelte
+#: src/feature/Share/MyShares/SharesDataTable/cells/ExpiresCell.svelte
 msgid "Expired on {0}"
 msgstr "Термін дії закінчився {0}"
 
-#. 0: expiresAtFormatted
+#. 0: expiry.longDate
+#. 0: expiry.longDate
 #: src/feature/Share/Attributes/ShareAttributes.svelte
+#: src/feature/Share/MyShares/SharesDataTable/cells/ExpiresCell.svelte
 msgid "Expires on {0}"
 msgstr "Діє до {0}"
 
@@ -4441,15 +4447,15 @@ msgstr "<0/> Безкінечно"
 msgid "Loading more"
 msgstr "Завантаження"
 
-#: src/feature/Share/Attributes/ShareVariantBadges.svelte
+#: src/feature/Share/Attributes/ShareAttributeChips/ShareAttributeChips.svelte
 msgid "Image dimensions"
 msgstr "Розмір зображення"
 
-#: src/feature/Share/Attributes/ShareVariantBadges.svelte
+#: src/feature/Share/Attributes/ShareAttributeChips/ShareAttributeChips.svelte
 msgid "Image format"
 msgstr "Формат зображення"
 
-#: src/feature/Share/Attributes/ShareVariantBadges.svelte
+#: src/feature/Share/Attributes/ShareAttributeChips/ShareAttributeChips.svelte
 msgid "Applied filter"
 msgstr "Застосований фільтр"
 
@@ -5151,6 +5157,7 @@ msgstr "Вимкнути та видалити контент"
 msgid "Deletes their images, collections, and bookmarks by others. Comments stay, shown as deleted."
 msgstr "Видаляє зображення й колекції користувача та закладки інших користувачів на ці зображення. Коментарі залишаються, показані як видалені."
 
+#: src/feature/Layout/ModeSwitch/ModeSwitchHoverCard.svelte
 #: src/routes/preferences/+page.svelte
 msgid "Appearance"
 msgstr "Зовнішній вигляд"
@@ -5163,31 +5170,31 @@ msgstr "Тема"
 msgid "Choose your preferred color theme for the interface"
 msgstr "Оберіть бажану колірну тему інтерфейсу"
 
-#: src/lib/settings/themes.language.ts
+#: src/lib/settings/themes.svelte.ts
 msgid "Nord"
 msgstr "Nord"
 
-#: src/lib/settings/themes.language.ts
+#: src/lib/settings/themes.svelte.ts
 msgid "Catppuccin"
 msgstr "Catppuccin"
 
-#: src/lib/settings/themes.language.ts
+#: src/lib/settings/themes.svelte.ts
 msgid "Gruvbox"
 msgstr "Gruvbox"
 
-#: src/lib/settings/themes.language.ts
+#: src/lib/settings/themes.svelte.ts
 msgid "Rosé Pine"
 msgstr "Rosé Pine"
 
-#: src/lib/settings/themes.language.ts
+#: src/lib/settings/themes.svelte.ts
 msgid "Tokyo Night"
 msgstr "Tokyo Night"
 
-#: src/lib/settings/themes.language.ts
+#: src/lib/settings/themes.svelte.ts
 msgid "Everforest"
 msgstr "Everforest"
 
-#: src/lib/settings/themes.language.ts
+#: src/lib/settings/themes.svelte.ts
 msgid "Monochrome"
 msgstr "Монохромна"
 
@@ -5195,6 +5202,7 @@ msgstr "Монохромна"
 msgid "Toggle light and dark mode."
 msgstr "Перемикання між світлим і темним режимом."
 
+#. 0: themeLabel
 #: src/feature/Layout/ModeSwitch/ModeSwitchHoverCard.svelte
 msgid "Theme: {0}"
 msgstr "Тема: {0}"

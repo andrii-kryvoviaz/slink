@@ -43,7 +43,7 @@
     "@typescript-eslint/eslint-plugin": "^8.69.0",
     "@typescript-eslint/parser": "^8.69.0",
     "@vite-pwa/sveltekit": "^1.1.0",
-    "@wuchale/svelte": "0.20.7",
+    "@wuchale/svelte": "0.21.1",
     "apexcharts": "7.1.0",
     "bits-ui": "^2.19.0",
     "class-variance-authority": "^0.7.1",
@@ -74,7 +74,7 @@
     "vite": "8.2.2",
     "vite-plugin-pwa": "^1.3.0",
     "workbox-window": "^7.4.1",
-    "wuchale": "0.25.6"
+    "wuchale": "0.26.4"
   },
   "lint-staged": {
     "*.{js,ts,svelte}": [
