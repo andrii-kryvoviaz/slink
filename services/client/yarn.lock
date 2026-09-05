@@ -1150,10 +1150,10 @@
   resolved "https://registry.yarnpkg.com/@keyv/serialize/-/serialize-1.1.1.tgz#0c01dd3a3483882af7cf3878d4e71d505c81fc4a"
   integrity sha512-dXn3FZhPv0US+7dtJsIi2R+c7qWYiReoEh5zUntWCf4oSpMNib8FDhSoed6m3QyZdx5hK7iLFkYk3rNxwt8vTA==
 
-"@lucide/svelte@^0.577.0":
-  version "0.577.0"
-  resolved "https://registry.yarnpkg.com/@lucide/svelte/-/svelte-0.577.0.tgz#467278dfbb7f80ba0005014afa2f67088881a400"
-  integrity sha512-0P6mkySd2MapIEgq08tADPmcN4DHndC/02PWwaLkOerXlx5Sv9aT4BxyXLIY+eccr0g/nEyCYiJesqS61YdBZQ==
+"@lucide/svelte@^1.41.0":
+  version "1.41.0"
+  resolved "https://registry.yarnpkg.com/@lucide/svelte/-/svelte-1.41.0.tgz#167836a4205053f3fe538da0c31928a8c064a797"
+  integrity sha512-N5dInvHWGxNcnu3VJvbO2zOJA832Uy4he6qGwcqd8i3m8iYGlLoebp+e+X8NfncXXLnXkYvru5BnkUVdNdo1xg==
 
 "@napi-rs/lzma-linux-x64-gnu@1.5.1":
   version "1.5.1"

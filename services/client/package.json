@@ -29,7 +29,7 @@
     "@floating-ui/dom": "^1.8.0",
     "@iconify/svelte": "5.2.2",
     "@internationalized/date": "^3.12.4",
-    "@lucide/svelte": "^0.577.0",
+    "@lucide/svelte": "^1.41.0",
     "@playwright/test": "^1.62.1",
     "@sveltejs/adapter-auto": "7.0.1",
     "@sveltejs/adapter-node": "^5.5.7",
