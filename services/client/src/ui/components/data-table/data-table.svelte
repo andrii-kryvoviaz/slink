@@ -2,9 +2,12 @@
   lang="ts"
   generics="TData extends import('@tanstack/table-core').RowData"
 >
-  import { FlexRender } from '@slink/ui/components/data-table';
+  import type { DataTableFeatures } from '@slink/ui/components/data-table';
   import * as Table from '@slink/ui/components/table';
-  import type { Table as TanstackTable } from '@tanstack/table-core';
+  import {
+    FlexRender,
+    type Table as TanstackTable,
+  } from '@tanstack/svelte-table';
   import type { Snippet } from 'svelte';
   import { tv } from 'tailwind-variants';
 
@@ -32,11 +35,11 @@
   });
 
   interface Props {
-    table: TanstackTable<TData>;
+    table: TanstackTable<DataTableFeatures, TData>;
     isLoading?: boolean;
     emptyState?: Snippet;
     onRowClick?: (row: any) => void;
-    rowClass?: (row: TData) => string;
+    rowClass?: (row: NoInfer<TData>) => string;
   }
 
   let {
@@ -61,14 +64,11 @@
             {#each headerGroup.headers as header (header.id)}
               <Table.Head
                 class={tableHeadVariants({
-                  class: (header.column.columnDef.meta as any)?.className,
+                  class: header.column.columnDef.meta?.className,
                 })}
               >
                 {#if !header.isPlaceholder}
-                  <FlexRender
-                    content={header.column.columnDef.header}
-                    context={header.getContext()}
-                  />
+                  <FlexRender {header} />
                 {/if}
               </Table.Head>
             {/each}
@@ -93,13 +93,10 @@
               {#each row.getVisibleCells() as cell (cell.id)}
                 <Table.Cell
                   class={tableCellVariants({
-                    class: (cell.column.columnDef.meta as any)?.className,
+                    class: cell.column.columnDef.meta?.className,
                   })}
                 >
-                  <FlexRender
-                    content={cell.column.columnDef.cell}
-                    context={cell.getContext()}
-                  />
+                  <FlexRender {cell} />
                 </Table.Cell>
               {/each}
             </Table.Row>

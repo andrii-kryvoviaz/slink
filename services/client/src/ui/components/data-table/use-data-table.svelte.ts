@@ -1,20 +1,37 @@
 import {
   type ColumnDef,
+  type ColumnVisibilityState,
   type PaginationState,
   type RowData,
   type SortingState,
-  type VisibilityState,
-  getCoreRowModel,
-} from '@tanstack/table-core';
+  columnVisibilityFeature,
+  createTable,
+  metaHelper,
+  rowPaginationFeature,
+  rowSortingFeature,
+  tableFeatures,
+} from '@tanstack/svelte-table';
 
 import type { TableSettingsState } from '@slink/lib/settings/composables/useTableSettings.svelte';
 
-import { createSvelteTable } from './data-table.svelte.js';
+interface DataTableColumnMeta {
+  className?: string;
+  label?: string;
+}
+
+const features = tableFeatures({
+  rowSortingFeature,
+  rowPaginationFeature,
+  columnVisibilityFeature,
+  columnMeta: metaHelper<DataTableColumnMeta>(),
+});
+
+export type DataTableFeatures = typeof features;
 
 interface UseDataTableOptions<TData extends RowData> {
   data: () => TData[];
-  columns: ColumnDef<TData>[];
-  initialVisibility?: VisibilityState;
+  columns: ColumnDef<DataTableFeatures, TData>[];
+  initialVisibility?: ColumnVisibilityState;
   initialSorting?: SortingState;
   currentPage: () => number;
   pageSize?: () => number;
@@ -22,7 +39,7 @@ interface UseDataTableOptions<TData extends RowData> {
   getRowId?: (row: TData) => string;
   onPageChange?: (page: number) => void;
   onSortingChange?: (orderBy: string | null, order: 'asc' | 'desc') => void;
-  onColumnVisibilityChange?: (visibility: VisibilityState) => void;
+  onColumnVisibilityChange?: (visibility: ColumnVisibilityState) => void;
   tableSettings?: TableSettingsState;
 }
 
@@ -41,11 +58,12 @@ export function useDataTable<TData extends RowData>(
     pageSize: resolvedPageSize(),
   });
   let sorting = $state<SortingState>([...(options.initialSorting ?? [])]);
-  let columnVisibility = $state<VisibilityState>({
+  let columnVisibility = $state<ColumnVisibilityState>({
     ...(options.initialVisibility ?? {}),
   });
 
-  const table = createSvelteTable({
+  const table = createTable({
+    features,
     get data() {
       return options.data();
     },
@@ -62,7 +80,6 @@ export function useDataTable<TData extends RowData>(
         return columnVisibility;
       },
     },
-    getCoreRowModel: getCoreRowModel(),
     manualPagination: true,
     manualSorting: true,
     get pageCount() {
@@ -139,7 +156,7 @@ export function useDataTable<TData extends RowData>(
     });
   }
 
-  const setColumnVisibility = (visibility: VisibilityState) => {
+  const setColumnVisibility = (visibility: ColumnVisibilityState) => {
     columnVisibility = visibility;
   };
 

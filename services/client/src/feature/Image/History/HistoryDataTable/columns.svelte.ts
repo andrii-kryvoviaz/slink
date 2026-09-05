@@ -3,7 +3,10 @@ import { ViewCountBadge, VisibilityBadge } from '@slink/feature/Image';
 import { formatMimeType } from '@slink/feature/Image/utils/formatMimeType';
 import { ImageTagList } from '@slink/feature/Tag';
 import { FormattedDate } from '@slink/feature/Text';
-import { renderComponent } from '@slink/ui/components/data-table';
+import {
+  type DataTableFeatures,
+  renderComponent,
+} from '@slink/ui/components/data-table';
 import type { ColumnDef } from '@tanstack/table-core';
 
 import { bytesToSize } from '$lib/utils/bytesConverter';
@@ -34,7 +37,7 @@ export function createHistoryColumns(
   getSelectionState: () => SelectionState | undefined,
   getAllItemIds: () => string[],
   callbacks: HistoryColumnCallbacks,
-): ColumnDef<ImageListingItem>[] {
+): ColumnDef<DataTableFeatures, ImageListingItem>[] {
   return [
     {
       id: 'select',

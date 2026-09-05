@@ -1,5 +1,8 @@
 import { FormattedDate } from '@slink/feature/Text';
-import { renderComponent } from '@slink/ui/components/data-table';
+import {
+  type DataTableFeatures,
+  renderComponent,
+} from '@slink/ui/components/data-table';
 import type { ColumnDef } from '@tanstack/table-core';
 
 import type { ShareListItemResponse } from '@slink/api/Response/Share/ShareListItemResponse';
@@ -12,7 +15,10 @@ import ShareableCell from './cells/ShareableCell.svelte';
 const toTimestamp = (iso: string): number =>
   Math.floor(new Date(iso).getTime() / 1000);
 
-export function createShareColumns(): ColumnDef<ShareListItemResponse>[] {
+export function createShareColumns(): ColumnDef<
+  DataTableFeatures,
+  ShareListItemResponse
+>[] {
   return [
     {
       id: 'shareable',

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { DataTableFeatures } from '@slink/ui/components/data-table';
   import type { Column } from '@tanstack/table-core';
 
   import Icon from '@iconify/svelte';
@@ -7,7 +8,10 @@
 
   interface Props {
     label: string;
-    column: Column<any, any>;
+    column: Pick<
+      Column<DataTableFeatures, any, any>,
+      'getIsSorted' | 'getToggleSortingHandler'
+    >;
   }
 
   let { label, column }: Props = $props();

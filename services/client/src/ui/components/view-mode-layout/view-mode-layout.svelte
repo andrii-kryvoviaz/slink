@@ -64,7 +64,10 @@
     return c && isTableMode(c) ? c : undefined;
   }
 
-  const tableInstances = new Map<ViewMode, ReturnType<typeof useDataTable>>();
+  const tableInstances = new Map<
+    ViewMode,
+    ReturnType<typeof useDataTable<any>>
+  >();
 
   if (config) {
     for (const [key, modeConfig] of Object.entries(config)) {

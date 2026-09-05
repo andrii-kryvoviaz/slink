@@ -1,8 +1,13 @@
 export { default as DataTable } from './data-table.svelte';
-export { default as FlexRender } from './flex-render.svelte';
 export { default as PageSizeSelect } from './page-size-select.svelte';
 export { default as ColumnToggle } from './column-toggle.svelte';
 export { SortableHeader } from './SortableHeader';
-export { renderComponent, renderSnippet } from './render-helpers.js';
-export { createSvelteTable } from './data-table.svelte.js';
-export { useDataTable } from './use-data-table.svelte.js';
+export {
+  FlexRender,
+  renderComponent,
+  renderSnippet,
+} from '@tanstack/svelte-table';
+export {
+  type DataTableFeatures,
+  useDataTable,
+} from './use-data-table.svelte.js';

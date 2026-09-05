@@ -1,5 +1,8 @@
 import { FormattedDate } from '@slink/feature/Text';
-import { renderComponent } from '@slink/ui/components/data-table';
+import {
+  type DataTableFeatures,
+  renderComponent,
+} from '@slink/ui/components/data-table';
 import type { ColumnDef } from '@tanstack/table-core';
 
 import type { CollectionResponse } from '@slink/api/Response';
@@ -7,7 +10,10 @@ import type { CollectionResponse } from '@slink/api/Response';
 import CollectionActionsCell from './cells/CollectionActionsCell.svelte';
 import CollectionNameCell from './cells/CollectionNameCell.svelte';
 
-export function createCollectionColumns(): ColumnDef<CollectionResponse>[] {
+export function createCollectionColumns(): ColumnDef<
+  DataTableFeatures,
+  CollectionResponse
+>[] {
   return [
     {
       accessorKey: 'name',

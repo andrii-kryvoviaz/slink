@@ -1,5 +1,6 @@
 import { TagActionsCell, TagCountCell, TagNameCell } from '@slink/feature/Tag';
 import {
+  type DataTableFeatures,
   SortableHeader,
   renderComponent,
 } from '@slink/ui/components/data-table';
@@ -10,7 +11,7 @@ import type { Tag } from '@slink/api/Resources/TagResource';
 export function createTagColumns(options: {
   onDelete: (tag: Tag) => Promise<void>;
   onMove: (tagId: string, newParentId: string | null) => Promise<void>;
-}): ColumnDef<Tag>[] {
+}): ColumnDef<DataTableFeatures, Tag>[] {
   return [
     {
       accessorKey: 'name',

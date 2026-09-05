@@ -1,3 +1,4 @@
+import type { DataTableFeatures } from '@slink/ui/components/data-table';
 import type {
   ColumnDef,
   RowData,
@@ -23,7 +24,7 @@ export interface BaseModeConfig {
 export interface TableModeConfig<
   TData extends RowData = any,
 > extends BaseModeConfig {
-  columns: ColumnDef<TData>[];
+  columns: ColumnDef<DataTableFeatures, TData>[];
   data?: TData[];
   currentPage?: number;
   totalPages?: number;
@@ -43,12 +44,12 @@ export interface ListingContext {
   feed: AbstractPaginatedFeed<any>;
   handlePageSizeChange: (size: number) => Promise<void>;
   tableSettings: TableSettingsState;
-  table?: TanstackTable<any>;
+  table?: TanstackTable<DataTableFeatures, any>;
   pageSize?: number;
 }
 
 export interface ToolbarContext extends ListingContext {
-  table?: TanstackTable<any>;
+  table?: TanstackTable<DataTableFeatures, any>;
   pageSize?: number;
   pagination: PaginationContext;
 }

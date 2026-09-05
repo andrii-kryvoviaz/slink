@@ -5,7 +5,10 @@ import {
   UserStatusCell,
   UserUsernameCell,
 } from '@slink/feature/User';
-import { renderComponent } from '@slink/ui/components/data-table';
+import {
+  type DataTableFeatures,
+  renderComponent,
+} from '@slink/ui/components/data-table';
 import type { ColumnDef } from '@tanstack/table-core';
 
 import type { User } from '$lib/auth/Type/User';
@@ -18,7 +21,7 @@ interface UserColumnCallbacks {
 
 export function createUserColumns(
   callbacks: UserColumnCallbacks,
-): ColumnDef<User>[] {
+): ColumnDef<DataTableFeatures, User>[] {
   return [
     {
       accessorKey: 'displayName',

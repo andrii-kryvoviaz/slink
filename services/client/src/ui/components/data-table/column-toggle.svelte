@@ -1,12 +1,13 @@
 <script lang="ts">
   import { Button } from '@slink/ui/components/button';
+  import type { DataTableFeatures } from '@slink/ui/components/data-table';
   import { Select } from '@slink/ui/components/select';
   import type { Table as TanstackTable } from '@tanstack/table-core';
 
   import Icon from '@iconify/svelte';
 
   interface Props {
-    table: TanstackTable<any>;
+    table: TanstackTable<DataTableFeatures, any>;
   }
 
   let { table }: Props = $props();
@@ -16,10 +17,13 @@
   );
 
   const columnItems = $derived(
-    hidableColumns.map(({ id, columnDef: { header, meta } }) => ({
-      value: id,
-      label: meta?.label ?? (typeof header === 'string' ? header : id),
-    })),
+    hidableColumns.map((col) => {
+      const { header, meta } = col.columnDef;
+      return {
+        value: col.id,
+        label: meta?.label ?? (typeof header === 'string' ? header : col.id),
+      };
+    }),
   );
 
   const visibleColumnIds = $derived(

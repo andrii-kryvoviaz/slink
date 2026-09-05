@@ -1,6 +1,7 @@
 <script lang="ts">
   import {
     ColumnToggle,
+    type DataTableFeatures,
     PageSizeSelect,
   } from '@slink/ui/components/data-table';
   import { TablePagination } from '@slink/ui/components/table-pagination';
@@ -17,7 +18,7 @@
     pageSize: number;
     pageSizeOptions: number[];
     showPageSize: boolean;
-    activeTable?: TanstackTable<any>;
+    activeTable?: TanstackTable<DataTableFeatures, any>;
     toolbarContext: ToolbarContext;
     toolbar?: Snippet<[ToolbarContext]>;
     onPageSizeChange: (size: number) => void | Promise<void>;
