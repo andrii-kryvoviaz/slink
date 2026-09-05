@@ -44,7 +44,7 @@
     "@typescript-eslint/parser": "^8.69.0",
     "@vite-pwa/sveltekit": "^1.1.0",
     "@wuchale/svelte": "0.20.7",
-    "apexcharts": "6.10.0",
+    "apexcharts": "7.1.0",
     "bits-ui": "^2.19.0",
     "class-variance-authority": "^0.7.1",
     "crawler-user-agents": "^1.60.0",
