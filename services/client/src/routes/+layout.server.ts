@@ -1,4 +1,4 @@
-import { createAppSidebarItems } from '@slink/feature/Navigation/Sidebar/config.svelte';
+import { createAppSidebarItems } from '@slink/feature/Navigation/Sidebar/config';
 import type { AppSidebarGroup } from '@slink/feature/Navigation/Sidebar/types';
 
 import { isAdmin, isAuthorized } from '@slink/lib/auth/utils';

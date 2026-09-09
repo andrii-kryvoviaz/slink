@@ -1,4 +1,8 @@
-import { createSvelteHeuristic, adapter as svelte } from '@wuchale/svelte';
+import {
+  createSvelteHeuristic,
+  defaultArgs,
+  adapter as svelte,
+} from '@wuchale/svelte';
 import { defaultHeuristic, defaultHeuristicOpts, defineConfig } from 'wuchale';
 import { adapter as js } from 'wuchale/adapter-vanilla';
 
@@ -20,6 +24,8 @@ const inClassAttribute = (text) =>
 
 const isRoutePath = (text) => String(text.body).startsWith('/');
 
+const asJsModule = (file) => file.replace(/\.svelte\.ts$/, '.svelte.js');
+
 export default defineConfig({
   locales: ['en', 'de', 'es', 'fr', 'it', 'pl', 'uk', 'ja', 'zh'],
   adapters: {
@@ -27,6 +33,12 @@ export default defineConfig({
       loader: 'sveltekit',
       heuristic: (text, file) =>
         !inClassAttribute(text) && svelteHeuristic(text, file),
+      runtime: {
+        initReactive: (path, file, ctx) =>
+          defaultArgs.runtime.initReactive(path, asJsModule(file), ctx),
+        useReactive: (path, file, ctx) =>
+          defaultArgs.runtime.useReactive(path, asJsModule(file), ctx),
+      },
     }),
     js: js({
       loader: 'vite',
@@ -35,6 +47,7 @@ export default defineConfig({
       files: [
         'src/**/+{page,layout}.{js,ts}',
         'src/**/+{page,layout}.server.{js,ts}',
+        'src/feature/Navigation/Sidebar/config.ts',
         'src/lib/utils/i18n/!(*.svelte).ts',
         'src/**/*.language.ts',
       ],
