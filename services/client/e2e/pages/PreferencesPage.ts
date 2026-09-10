@@ -31,6 +31,9 @@ export class PreferencesPage extends BasePage {
   readonly themeTrigger = this.appearanceSection.locator(
     '[data-slot="select-trigger"]',
   );
+  readonly autoPublishSwitch = this.page.locator(
+    'xpath=//input[@name="externalUploadAutoPublish"]/preceding-sibling::*[@role="switch"][1]',
+  );
   readonly saveButton = this.page.locator('button[type="submit"]:visible');
 
   constructor(page: Page) {
