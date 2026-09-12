@@ -42,14 +42,16 @@ final readonly class UpdateUserPreferencesHandler implements CommandHandlerInter
     $user->updatePreferences($preferences);
     $this->userStore->store($user);
 
-    if ($command->syncLicenseToImages) {
-      if (isset($command->defaultLicense)) {
-        $license = License::from($command->defaultLicense);
-      } else {
-        $license = null;
-      }
-
-      $this->licenseSyncService->syncLicenseForUser(ID::fromString($userId), $license);
+    if (!$command->syncLicenseToImages) {
+      return;
     }
+
+    if (isset($command->defaultLicense)) {
+      $license = License::from($command->defaultLicense);
+    } else {
+      $license = null;
+    }
+
+    $this->licenseSyncService->syncLicenseForUser(ID::fromString($userId), $license);
   }
 }
