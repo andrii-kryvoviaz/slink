@@ -95,7 +95,7 @@ final class UpdateUserPreferencesTest extends HttpTestCase {
   }
 
   #[Test]
-  public function aNullLicenseLeavesTheStoredLicenseUnchanged(): void {
+  public function aNullLicenseClearsTheStoredLicense(): void {
     self::assertContains(
       $this->patch(['license.default' => 'cc-by']),
       [200, 204],
@@ -109,7 +109,42 @@ final class UpdateUserPreferencesTest extends HttpTestCase {
 
     $preferences = $this->read('/api/user/preferences');
 
-    self::assertSame('cc-by', $preferences['license.default'] ?? null);
+    self::assertNull($preferences['license.default'] ?? null);
+  }
+
+  #[Test]
+  public function aStringBooleanIsStoredAsABoolean(): void {
+    self::assertContains(
+      $this->patch(['image.externalUploadAutoPublish' => 'true']),
+      [200, 204],
+      'True string patch failed: ' . (string) $this->client->getResponse()->getContent(),
+    );
+
+    $preferences = $this->read('/api/user/preferences');
+    self::assertSame(true, $preferences['image.externalUploadAutoPublish'] ?? null);
+
+    self::assertContains(
+      $this->patch(['image.externalUploadAutoPublish' => 'false']),
+      [200, 204],
+      'False string patch failed: ' . (string) $this->client->getResponse()->getContent(),
+    );
+
+    $preferences = $this->read('/api/user/preferences');
+    self::assertSame(false, $preferences['image.externalUploadAutoPublish'] ?? null);
+  }
+
+  #[Test]
+  public function anInvalidValueIsRejectedAndNothingChanges(): void {
+    self::assertContains(
+      $this->patch(['display.theme' => 'nord']),
+      [200, 204],
+      'Seed theme failed: ' . (string) $this->client->getResponse()->getContent(),
+    );
+
+    self::assertSame(422, $this->patch(['display.theme' => 'solarized']));
+
+    $preferences = $this->read('/api/user/preferences');
+    self::assertSame('nord', $preferences['display.theme'] ?? null);
   }
 
   #[Test]
@@ -122,6 +157,28 @@ final class UpdateUserPreferencesTest extends HttpTestCase {
 
     self::assertContains(
       $this->patch(['license.default' => 'cc-by', 'license.syncToImages' => true]),
+      [200, 204],
+      'Sync license patch failed: ' . (string) $this->client->getResponse()->getContent(),
+    );
+
+    $detail = $this->read(\sprintf('/api/image/%s/detail', $imageId));
+    self::assertSame('cc-by', $detail['license'] ?? null);
+
+    $preferences = $this->read('/api/user/preferences');
+    self::assertArrayNotHasKey('license.syncToImages', $preferences);
+    self::assertSame('cc-by', $preferences['license.default'] ?? null);
+  }
+
+  #[Test]
+  public function aStringSyncTriggerLicensesExistingImages(): void {
+    $this->saveSettings('image', ['maxSize' => '5M', 'enableLicensing' => true]);
+    $imageId = $this->uploadImage($this->ownerToken, false);
+
+    $before = $this->read(\sprintf('/api/image/%s/detail', $imageId));
+    self::assertNotSame('cc-by', $before['license'] ?? null);
+
+    self::assertContains(
+      $this->patch(['license.default' => 'cc-by', 'license.syncToImages' => 'true']),
       [200, 204],
       'Sync license patch failed: ' . (string) $this->client->getResponse()->getContent(),
     );

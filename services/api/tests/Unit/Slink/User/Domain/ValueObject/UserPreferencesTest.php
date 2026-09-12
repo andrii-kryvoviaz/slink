@@ -217,12 +217,13 @@ final class UserPreferencesTest extends TestCase {
     }
 
     #[Test]
-    public function itDoesNotClearExternalUploadAutoPublishWhenNullApplied(): void {
+    public function itStoresNullWhenNullApplied(): void {
         $preferences = UserPreferences::create(externalUploadAutoPublish: true);
 
         $updated = $preferences->applyChanges(['image.externalUploadAutoPublish' => null]);
 
-        $this->assertTrue($updated->getExternalUploadAutoPublish());
+        $this->assertArrayHasKey('image.externalUploadAutoPublish', $updated->toPayload());
+        $this->assertNull($updated->toPayload()['image.externalUploadAutoPublish']);
     }
 
     #[Test]
