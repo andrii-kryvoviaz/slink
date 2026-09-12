@@ -31,7 +31,7 @@
 
   interface PageData {
     user: User;
-    preferences: UserPreferencesResponse;
+    preferences: UserPreferencesResponse | null;
     licenses: License[];
     licensingEnabled: boolean;
     uploadPolicy: UploadPolicy;

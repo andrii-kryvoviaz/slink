@@ -106,13 +106,11 @@
     return undefined;
   });
 
-  const selectedCount = $derived(
-    type === 'single'
-      ? selectedItem
-        ? 1
-        : 0
-      : (inner.value as string[]).length,
-  );
+  const selectedCount = $derived.by(() => {
+    if (type !== 'single') return (inner.value as string[]).length;
+    if (selectedItem) return 1;
+    return 0;
+  });
 
   const displayValue = $derived.by<string>(() => {
     if (selectedCount === 0) return placeholder;
@@ -152,7 +150,7 @@
             />
           {/if}
           <span
-            class={cn('truncate', !selectedItem ? 'text-foreground-muted' : '')}
+            class={cn('truncate', !selectedItem && 'text-foreground-muted')}
           >
             {displayValue}
           </span>

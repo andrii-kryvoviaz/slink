@@ -1,13 +1,13 @@
 import { AbstractResource } from '@slink/api/AbstractResource';
-import type { UserListFilter } from '@slink/api/Request/UserRequest';
+import type {
+  UserListFilter,
+  UserPreferencesPatch,
+} from '@slink/api/Request/UserRequest';
 import type { EmptyResponse, UserListingResponse } from '@slink/api/Response';
 import type { AuthenticatedUser } from '@slink/api/Response/User/AuthenticatedUser';
 import type { CheckStatusResponse } from '@slink/api/Response/User/CheckStatusResponse';
 import type { SingleUserResponse } from '@slink/api/Response/User/SingleUserResponse';
-import type {
-  UserPreferencesPatch,
-  UserPreferencesResponse,
-} from '@slink/api/Response/User/UserPreferencesResponse';
+import type { UserPreferencesResponse } from '@slink/api/Response/User/UserPreferencesResponse';
 
 import { UserRole, UserStatus } from '@slink/lib/auth/Type/User';
 

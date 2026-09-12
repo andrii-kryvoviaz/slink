@@ -23,7 +23,7 @@ export class PreferencesPageState {
   private _changeHandlers: Array<{ field: string; handler: ChangeHandler }> =
     [];
 
-  constructor(preferences: UserPreferencesResponse) {
+  constructor(preferences: UserPreferencesResponse | null) {
     this.locale = (preferences?.['display.language'] as Locale) ?? Locale.EN;
     this.theme = resolveTheme(preferences?.['display.theme']);
     this.landingPage =
