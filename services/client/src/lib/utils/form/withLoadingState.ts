@@ -4,6 +4,7 @@ import { invalidateAll } from '$app/navigation';
 import type { Writable } from 'svelte/store';
 
 type WithLoadingStateOptions = {
+  reset?: boolean;
   invalidate?: boolean;
   onSubmit?: () => void;
   onSuccess?: (data: Record<string, unknown>) => void | Promise<void>;
@@ -31,7 +32,7 @@ export function withLoadingState(
         await invalidateAll();
       }
 
-      await update();
+      await update({ reset: options.reset });
 
       if (result.type === 'success') {
         await options.onSuccess?.(result.data as Record<string, unknown>);

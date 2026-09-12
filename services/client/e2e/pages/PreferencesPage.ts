@@ -32,7 +32,7 @@ export class PreferencesPage extends BasePage {
     '[data-slot="select-trigger"]',
   );
   readonly autoPublishSwitch = this.page.locator(
-    'xpath=//input[@name="externalUploadAutoPublish"]/preceding-sibling::*[@role="switch"][1]',
+    'xpath=//input[@name="image.externalUploadAutoPublish"]/preceding-sibling::*[@role="switch"][1]',
   );
   readonly saveButton = this.page.locator('button[type="submit"]:visible');
 
@@ -104,9 +104,17 @@ export class PreferencesPage extends BasePage {
   }
 
   async turnSwitchOn(switchLocator: Locator) {
+    await this.setSwitch(switchLocator, 'true');
+  }
+
+  async turnSwitchOff(switchLocator: Locator) {
+    await this.setSwitch(switchLocator, 'false');
+  }
+
+  private async setSwitch(switchLocator: Locator, checked: 'true' | 'false') {
     await expect(async () => {
       await switchLocator.click();
-      await expect(switchLocator).toHaveAttribute('aria-checked', 'true', {
+      await expect(switchLocator).toHaveAttribute('aria-checked', checked, {
         timeout: 1000,
       });
     }).toPass({ timeout: 15000 });
