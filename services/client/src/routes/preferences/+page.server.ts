@@ -73,7 +73,10 @@ export const actions: Actions = {
         defaultLandingPage: defaultLandingPage || null,
         defaultVisibility: defaultVisibility || null,
         exifMetadataPreference: exifMetadataPreference || null,
-        externalUploadAutoPublish: externalUploadAutoPublish === 'true',
+        externalUploadAutoPublish:
+          externalUploadAutoPublish === undefined
+            ? null
+            : externalUploadAutoPublish === 'true',
         displayLanguage: displayLanguage || null,
         displayTheme: displayTheme || null,
       });

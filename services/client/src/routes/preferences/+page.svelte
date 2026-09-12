@@ -233,18 +233,18 @@
         </div>
       </section>
 
-      {#if !data.uploadPolicy.allowOnlyPublicImages}
-        <section class="space-y-1">
-          <div class="flex items-center justify-between gap-4 pb-3">
-            <h2
-              class="text-sm font-medium text-foreground-muted uppercase tracking-wider"
-            >
-              Image Uploads
-            </h2>
-          </div>
-          <div
-            class="divide-y divide-muted rounded-xl bg-muted-soft/50 dark:bg-muted-soft/30 border border-muted overflow-hidden"
+      <section class="space-y-1">
+        <div class="flex items-center justify-between gap-4 pb-3">
+          <h2
+            class="text-sm font-medium text-foreground-muted uppercase tracking-wider"
           >
+            Image Uploads
+          </h2>
+        </div>
+        <div
+          class="divide-y divide-muted rounded-xl bg-muted-soft/50 dark:bg-muted-soft/30 border border-muted overflow-hidden"
+        >
+          {#if !data.uploadPolicy.allowOnlyPublicImages}
             <SettingItem>
               {#snippet label()}
                 Default Visibility
@@ -263,42 +263,42 @@
                 value={state.visibility ?? ''}
               />
             </SettingItem>
+          {/if}
 
-            <SettingItem>
-              {#snippet label()}
-                EXIF Metadata
-              {/snippet}
-              {#snippet hint()}
-                Override how metadata is stripped from your uploads.
-              {/snippet}
-              <Select
-                items={exifPreferenceOptions}
-                bind:value={state.exifPreference}
-                placeholder="Select metadata handling..."
-              />
-              <input
-                type="hidden"
-                name="exifMetadataPreference"
-                value={state.exifPreference}
-              />
-            </SettingItem>
+          <SettingItem>
+            {#snippet label()}
+              EXIF Metadata
+            {/snippet}
+            {#snippet hint()}
+              Override how metadata is stripped from your uploads.
+            {/snippet}
+            <Select
+              items={exifPreferenceOptions}
+              bind:value={state.exifPreference}
+              placeholder="Select metadata handling..."
+            />
+            <input
+              type="hidden"
+              name="exifMetadataPreference"
+              value={state.exifPreference}
+            />
+          </SettingItem>
 
-            <SettingItem>
-              {#snippet label()}
-                Auto-publish API uploads
-              {/snippet}
-              {#snippet hint()}
-                Make uploads from API tools (e.g. ShareX) immediately shareable.
-              {/snippet}
-              <Switch
-                id="externalUploadAutoPublish"
-                name="externalUploadAutoPublish"
-                bind:checked={state.externalUploadAutoPublish}
-              />
-            </SettingItem>
-          </div>
-        </section>
-      {/if}
+          <SettingItem>
+            {#snippet label()}
+              Auto-publish API uploads
+            {/snippet}
+            {#snippet hint()}
+              Make uploads from API tools (e.g. ShareX) immediately shareable.
+            {/snippet}
+            <Switch
+              id="externalUploadAutoPublish"
+              name="externalUploadAutoPublish"
+              bind:checked={state.externalUploadAutoPublish}
+            />
+          </SettingItem>
+        </div>
+      </section>
 
       {#if data.licensingEnabled}
         <section class="space-y-1">
