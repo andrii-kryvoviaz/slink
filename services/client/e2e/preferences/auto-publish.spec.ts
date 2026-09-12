@@ -60,20 +60,6 @@ test.describe('Auto-publish preference', { tag: '@serial' }, () => {
   });
 });
 
-async function saveAndReload(page: Page, preferencesPage: PreferencesPage) {
-  const saved = page.waitForResponse(
-    (response) =>
-      response.url().includes('?/updatePreferences') &&
-      response.request().method() === 'POST',
-  );
-
-  await preferencesPage.save();
-  expect((await saved).ok()).toBe(true);
-
-  await page.reload();
-  await expect(preferencesPage.heading).toBeVisible();
-}
-
 test.describe('Preferences form forwarding', { tag: '@serial' }, () => {
   let context: BrowserContext;
   let page: Page;
@@ -110,7 +96,7 @@ test.describe('Preferences form forwarding', { tag: '@serial' }, () => {
       'true',
     );
 
-    await preferencesPage.turnSwitchOff(preferencesPage.autoPublishSwitch);
+    await preferencesPage.setSwitch(preferencesPage.autoPublishSwitch, false);
 
     await expect(preferencesPage.autoPublishSwitch).toHaveAttribute(
       'aria-checked',
@@ -120,7 +106,7 @@ test.describe('Preferences form forwarding', { tag: '@serial' }, () => {
       page.locator('input[name="image.externalUploadAutoPublish"]'),
     ).toHaveValue('false');
 
-    await saveAndReload(page, preferencesPage);
+    await preferencesPage.saveAndReload();
 
     await expect(preferencesPage.autoPublishSwitch).toHaveAttribute(
       'aria-checked',
@@ -142,7 +128,7 @@ test.describe('Preferences form forwarding', { tag: '@serial' }, () => {
       preferencesPage.visibilityTrigger,
       'Public',
     );
-    await saveAndReload(page, preferencesPage);
+    await preferencesPage.saveAndReload();
     await expect(preferencesPage.visibilityTrigger).toHaveText('Public');
 
     await settingsApi.set('image', { allowOnlyPublicImages: true });
@@ -159,7 +145,7 @@ test.describe('Preferences form forwarding', { tag: '@serial' }, () => {
       preferencesPage.landingPageTrigger,
       'Upload',
     );
-    await saveAndReload(page, preferencesPage);
+    await preferencesPage.saveAndReload();
 
     await settingsApi.set('image', { allowOnlyPublicImages: false });
     await page.reload();
@@ -178,7 +164,7 @@ test.describe('Preferences form forwarding', { tag: '@serial' }, () => {
     await expect(preferencesPage.heading).toBeVisible();
 
     const licenseTitle = await preferencesPage.pickAnyLicense();
-    await saveAndReload(page, preferencesPage);
+    await preferencesPage.saveAndReload();
     await expect(preferencesPage.licenseTrigger).toHaveText(licenseTitle);
 
     await settingsApi.set('image', { enableLicensing: false });
@@ -188,7 +174,7 @@ test.describe('Preferences form forwarding', { tag: '@serial' }, () => {
     await expect(preferencesPage.licensingSection).toHaveCount(0);
 
     await preferencesPage.selectTheme('nord');
-    await saveAndReload(page, preferencesPage);
+    await preferencesPage.saveAndReload();
 
     await settingsApi.set('image', { enableLicensing: true });
     await page.reload();

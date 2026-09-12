@@ -7,20 +7,6 @@ import { signInContext } from '../helpers/session';
 import { LayoutControls } from '../pages/LayoutControls';
 import { PreferencesPage } from '../pages/PreferencesPage';
 
-async function saveAndReload(page: Page, preferencesPage: PreferencesPage) {
-  const saved = page.waitForResponse(
-    (response) =>
-      response.url().includes('?/updatePreferences') &&
-      response.request().method() === 'POST',
-  );
-
-  await preferencesPage.save();
-  expect((await saved).ok()).toBe(true);
-
-  await page.reload();
-  await expect(preferencesPage.heading).toBeVisible();
-}
-
 test.describe('Preferences persistence', { tag: '@serial' }, () => {
   let context: BrowserContext;
   let page: Page;
@@ -87,8 +73,8 @@ test.describe('Preferences persistence', { tag: '@serial' }, () => {
     const licenseTitle = await preferencesPage.pickAnyLicense();
     await preferencesPage.selectTheme('nord');
 
-    await preferencesPage.turnSwitchOn(preferencesPage.autoPublishSwitch);
-    await preferencesPage.turnSwitchOn(preferencesPage.syncLicenseSwitch);
+    await preferencesPage.setSwitch(preferencesPage.autoPublishSwitch, true);
+    await preferencesPage.setSwitch(preferencesPage.syncLicenseSwitch, true);
 
     await expect(preferencesPage.autoPublishSwitch).toHaveAttribute(
       'aria-checked',
@@ -99,7 +85,7 @@ test.describe('Preferences persistence', { tag: '@serial' }, () => {
       'true',
     );
 
-    await saveAndReload(page, preferencesPage);
+    await preferencesPage.saveAndReload();
 
     await expect(preferencesPage.landingPageTrigger).toHaveText('Upload');
     await expect(preferencesPage.visibilityTrigger).toHaveText('Public');
@@ -121,7 +107,7 @@ test.describe('Preferences persistence', { tag: '@serial' }, () => {
       'Explore',
     );
 
-    await saveAndReload(page, preferencesPage);
+    await preferencesPage.saveAndReload();
 
     await expect(preferencesPage.landingPageTrigger).toHaveText('Explore');
     await expect(preferencesPage.visibilityTrigger).toHaveText('Public');
@@ -136,5 +122,24 @@ test.describe('Preferences persistence', { tag: '@serial' }, () => {
       'aria-checked',
       'false',
     );
+
+    await preferencesPage.selectOption(
+      preferencesPage.landingPageTrigger,
+      'Upload',
+    );
+    await preferencesPage.save();
+    await expect(await preferencesPage.waitForToast()).toContainText(
+      'Preferences updated successfully',
+    );
+    await expect(preferencesPage.landingPageTrigger).toHaveText('Upload');
+
+    await preferencesPage.selectOption(
+      preferencesPage.exifTrigger,
+      'Always keep',
+    );
+    await preferencesPage.saveAndReload();
+
+    await expect(preferencesPage.landingPageTrigger).toHaveText('Upload');
+    await expect(preferencesPage.exifTrigger).toHaveText('Always keep');
   });
 });

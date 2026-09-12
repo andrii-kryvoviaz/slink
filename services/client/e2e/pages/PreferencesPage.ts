@@ -84,15 +84,24 @@ export class PreferencesPage extends BasePage {
   }
 
   async selectTheme(value: string) {
-    const label = THEME_LABELS[value] ?? value;
-    const option = this.page.getByRole('option', { name: label, exact: true });
-
-    await this.clickUntil(this.themeTrigger, option);
-    await option.click();
+    await this.selectOption(this.themeTrigger, THEME_LABELS[value] ?? value);
   }
 
   async save() {
+    const saved = this.page.waitForResponse(
+      (response) =>
+        response.url().includes('?/updatePreferences') &&
+        response.request().method() === 'POST',
+    );
+
     await this.saveButton.click();
+    expect((await saved).ok()).toBe(true);
+  }
+
+  async saveAndReload() {
+    await this.save();
+    await this.page.reload();
+    await expect(this.heading).toBeVisible();
   }
 
   async selectOption(trigger: Locator, label: string) {
@@ -118,20 +127,16 @@ export class PreferencesPage extends BasePage {
     return label;
   }
 
-  async turnSwitchOn(switchLocator: Locator) {
-    await this.setSwitch(switchLocator, 'true');
-  }
-
-  async turnSwitchOff(switchLocator: Locator) {
-    await this.setSwitch(switchLocator, 'false');
-  }
-
-  private async setSwitch(switchLocator: Locator, checked: 'true' | 'false') {
+  async setSwitch(switchLocator: Locator, checked: boolean) {
     await expect(async () => {
       await switchLocator.click();
-      await expect(switchLocator).toHaveAttribute('aria-checked', checked, {
-        timeout: 1000,
-      });
+      await expect(switchLocator).toHaveAttribute(
+        'aria-checked',
+        String(checked),
+        {
+          timeout: 1000,
+        },
+      );
     }).toPass({ timeout: 15000 });
   }
 }

@@ -7,20 +7,6 @@ import { provisionUser } from '../helpers/provisioning';
 import { signInContext } from '../helpers/session';
 import { PreferencesPage } from '../pages/PreferencesPage';
 
-async function saveAndReload(page: Page, preferencesPage: PreferencesPage) {
-  const saved = page.waitForResponse(
-    (response) =>
-      response.url().includes('?/updatePreferences') &&
-      response.request().method() === 'POST',
-  );
-
-  await preferencesPage.save();
-  expect((await saved).ok()).toBe(true);
-
-  await page.reload();
-  await expect(preferencesPage.heading).toBeVisible();
-}
-
 test.describe('Default license', { tag: '@serial' }, () => {
   let context: BrowserContext;
   let page: Page;
@@ -81,7 +67,7 @@ test.describe('Default license', { tag: '@serial' }, () => {
 
     await expect(page.locator('input[name="license.default"]')).toHaveValue('');
 
-    await saveAndReload(page, preferencesPage);
+    await preferencesPage.saveAndReload();
 
     await expect(preferencesPage.licenseTrigger).toHaveText('No license');
 
@@ -105,7 +91,7 @@ test.describe('Default license', { tag: '@serial' }, () => {
       'Upload',
     );
 
-    await saveAndReload(page, preferencesPage);
+    await preferencesPage.saveAndReload();
 
     await expect(preferencesPage.landingPageTrigger).toHaveText('Upload');
     await expect(preferencesPage.licenseTrigger).toHaveText('No license');
@@ -123,7 +109,7 @@ test.describe('Default license', { tag: '@serial' }, () => {
     const title = await preferencesPage.pickAnyLicense();
     expect(title).not.toBe('No license');
 
-    await saveAndReload(page, preferencesPage);
+    await preferencesPage.saveAndReload();
 
     await expect(preferencesPage.licenseTrigger).toHaveText(title);
 
