@@ -95,7 +95,7 @@ export class PreferencesPage extends BasePage {
     );
 
     await this.saveButton.click();
-    expect((await saved).ok()).toBe(true);
+    expect((await (await saved).json()).type).toBe('success');
   }
 
   async saveAndReload() {
