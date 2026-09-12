@@ -1,4 +1,4 @@
-import { type Page, expect } from '@playwright/test';
+import { type Locator, type Page, expect } from '@playwright/test';
 
 import { BasePage } from './BasePage';
 
@@ -36,8 +36,31 @@ export class PreferencesPage extends BasePage {
   );
   readonly saveButton = this.page.locator('button[type="submit"]:visible');
 
+  readonly navigationSection = this.page
+    .locator('section')
+    .filter({ has: this.page.getByRole('heading', { name: 'Navigation' }) });
+  readonly imageUploadsSection = this.page.locator('section').filter({
+    has: this.page.getByRole('heading', { name: 'Image Uploads' }),
+  });
+  readonly licensingSection = this.page.locator('section').filter({
+    has: this.page.getByRole('heading', { name: 'Image Licensing' }),
+  });
+
+  readonly landingPageTrigger = this.triggerForSetting('Default Landing Page');
+  readonly visibilityTrigger = this.triggerForSetting('Default Visibility');
+  readonly exifTrigger = this.triggerForSetting('EXIF Metadata');
+  readonly licenseTrigger = this.triggerForSetting('Default License');
+
+  readonly syncLicenseSwitch = this.licensingSection.getByRole('switch');
+
   constructor(page: Page) {
     super(page);
+  }
+
+  private triggerForSetting(label: string): Locator {
+    return this.page.locator(
+      `xpath=//h3[normalize-space()="${label}"]/ancestor::div[.//*[@data-slot="select-trigger"]][1]//*[@data-slot="select-trigger"]`,
+    );
   }
 
   get heading() {
@@ -70,5 +93,22 @@ export class PreferencesPage extends BasePage {
 
   async save() {
     await this.saveButton.click();
+  }
+
+  async selectOption(trigger: Locator, label: string) {
+    const option = this.page.getByRole('option', { name: label, exact: true });
+
+    await this.clickUntil(trigger, option);
+    await option.click();
+    await expect(this.page.getByRole('option')).toHaveCount(0);
+  }
+
+  async turnSwitchOn(switchLocator: Locator) {
+    await expect(async () => {
+      await switchLocator.click();
+      await expect(switchLocator).toHaveAttribute('aria-checked', 'true', {
+        timeout: 1000,
+      });
+    }).toPass({ timeout: 15000 });
   }
 }
