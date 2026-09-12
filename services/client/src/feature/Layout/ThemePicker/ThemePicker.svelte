@@ -10,6 +10,7 @@
     value: ThemeName;
     disabled?: boolean;
     class?: string;
+    name?: string;
   }
 
   let {
@@ -17,6 +18,7 @@
     value = $bindable(),
     disabled = false,
     class: className,
+    name,
   }: Props = $props();
 
   const items = $derived(
@@ -32,6 +34,7 @@
   {items}
   {value}
   {disabled}
+  {name}
   class={className}
   onValueChange={handleChange}
 />

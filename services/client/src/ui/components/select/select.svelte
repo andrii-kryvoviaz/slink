@@ -26,6 +26,7 @@
     trigger?: Snippet<[Record<string, unknown>]>;
     itemClass?: string;
     align?: 'start' | 'center' | 'end';
+    name?: string;
   };
 
   type SingleSelectProps = BaseProps & {
