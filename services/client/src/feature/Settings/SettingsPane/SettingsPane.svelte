@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Loader } from '@slink/feature/Layout';
+  import { SettingsSection } from '@slink/feature/Settings';
   import { Button } from '@slink/ui/components/button';
   import type { Snippet } from 'svelte';
 
@@ -44,52 +45,35 @@
   };
 </script>
 
-<section class="space-y-1">
-  <div class="flex items-center justify-between gap-4 pb-3">
-    <div>
-      {#if title}
-        <h2
-          class="text-sm font-medium text-foreground-muted uppercase tracking-wider"
+<SettingsSection {title} {description}>
+  {#snippet body(cards: Snippet)}
+    <form method="POST" onsubmit={handleSubmit}>
+      {@render cards()}
+
+      <div class="flex items-center justify-end gap-3 pt-4">
+        {#if loading}
+          <div class="flex items-center gap-2 text-sm text-foreground-muted">
+            <Loader variant="minimal" size="xs" />
+            <span>Saving...</span>
+          </div>
+        {/if}
+
+        {#if actions}
+          {@render actions?.()}
+        {/if}
+
+        <Button
+          type="submit"
+          variant="soft-blue"
+          rounded="full"
+          size="sm"
+          disabled={loading}
         >
-          {@render title?.()}
-        </h2>
-      {/if}
-      {#if description}
-        <p class="text-xs text-foreground-subtle mt-1">
-          {@render description?.()}
-        </p>
-      {/if}
-    </div>
-  </div>
+          Save Changes
+        </Button>
+      </div>
+    </form>
+  {/snippet}
 
-  <form method="POST" onsubmit={handleSubmit}>
-    <div
-      class="divide-y divide-muted rounded-xl bg-muted-soft/50 dark:bg-muted-soft/30 border border-muted overflow-hidden"
-    >
-      {@render children?.(settingsPage.errors)}
-    </div>
-
-    <div class="flex items-center justify-end gap-3 pt-4">
-      {#if loading}
-        <div class="flex items-center gap-2 text-sm text-foreground-muted">
-          <Loader variant="minimal" size="xs" />
-          <span>Saving...</span>
-        </div>
-      {/if}
-
-      {#if actions}
-        {@render actions?.()}
-      {/if}
-
-      <Button
-        type="submit"
-        variant="soft-blue"
-        rounded="full"
-        size="sm"
-        disabled={loading}
-      >
-        Save Changes
-      </Button>
-    </div>
-  </form>
-</section>
+  {@render children?.(settingsPage.errors)}
+</SettingsSection>
