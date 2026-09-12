@@ -9,3 +9,7 @@ export type UserPreferencesResponse = {
   'display.language': string | null;
   'display.theme': string | null;
 };
+
+export type UserPreferencesPatch = Partial<UserPreferencesResponse> & {
+  'license.syncToImages'?: boolean;
+};

@@ -4,7 +4,10 @@ import type { EmptyResponse, UserListingResponse } from '@slink/api/Response';
 import type { AuthenticatedUser } from '@slink/api/Response/User/AuthenticatedUser';
 import type { CheckStatusResponse } from '@slink/api/Response/User/CheckStatusResponse';
 import type { SingleUserResponse } from '@slink/api/Response/User/SingleUserResponse';
-import type { UserPreferencesResponse } from '@slink/api/Response/User/UserPreferencesResponse';
+import type {
+  UserPreferencesPatch,
+  UserPreferencesResponse,
+} from '@slink/api/Response/User/UserPreferencesResponse';
 
 import { UserRole, UserStatus } from '@slink/lib/auth/Type/User';
 
@@ -88,36 +91,9 @@ export class UserResource extends AbstractResource {
     return this.get('/user/preferences');
   }
 
-  public async updatePreferences({
-    defaultLicense,
-    syncLicenseToImages = false,
-    defaultLandingPage,
-    defaultVisibility,
-    exifMetadataPreference,
-    externalUploadAutoPublish,
-    displayLanguage,
-    displayTheme,
-  }: {
-    defaultLicense?: string | null;
-    syncLicenseToImages?: boolean;
-    defaultLandingPage?: string | null;
-    defaultVisibility?: string | null;
-    exifMetadataPreference?: string | null;
-    externalUploadAutoPublish?: boolean | null;
-    displayLanguage?: string | null;
-    displayTheme?: string | null;
-  }): Promise<EmptyResponse> {
-    return this.patch('/user/preferences', {
-      json: {
-        'license.default': defaultLicense,
-        'license.syncToImages': syncLicenseToImages,
-        'navigation.landingPage': defaultLandingPage,
-        'image.defaultVisibility': defaultVisibility,
-        'image.stripExifMetadataOverride': exifMetadataPreference,
-        'image.externalUploadAutoPublish': externalUploadAutoPublish,
-        'display.language': displayLanguage,
-        'display.theme': displayTheme,
-      },
-    });
+  public async updatePreferences(
+    preferences: UserPreferencesPatch,
+  ): Promise<EmptyResponse> {
+    return this.patch('/user/preferences', { json: preferences });
   }
 }

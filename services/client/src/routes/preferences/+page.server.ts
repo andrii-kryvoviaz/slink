@@ -1,6 +1,7 @@
 import { fail, redirect } from '@sveltejs/kit';
 
 import { HttpException } from '@slink/api/Exceptions';
+import type { UserPreferencesPatch } from '@slink/api/Response';
 
 import { formData } from '@slink/utils/form/formData';
 
@@ -68,18 +69,18 @@ export const actions: Actions = {
 
     try {
       await locals.api.user.updatePreferences({
-        defaultLicense: defaultLicense || null,
-        syncLicenseToImages: syncLicenseToImages === 'true',
-        defaultLandingPage: defaultLandingPage || null,
-        defaultVisibility: defaultVisibility || null,
-        exifMetadataPreference: exifMetadataPreference || null,
-        externalUploadAutoPublish:
+        'license.default': defaultLicense || null,
+        'license.syncToImages': syncLicenseToImages === 'true',
+        'navigation.landingPage': defaultLandingPage || null,
+        'image.defaultVisibility': defaultVisibility || null,
+        'image.stripExifMetadataOverride': exifMetadataPreference || null,
+        'image.externalUploadAutoPublish':
           externalUploadAutoPublish === undefined
             ? null
             : externalUploadAutoPublish === 'true',
-        displayLanguage: displayLanguage || null,
-        displayTheme: displayTheme || null,
-      });
+        'display.language': displayLanguage || null,
+        'display.theme': displayTheme || null,
+      } as UserPreferencesPatch);
     } catch (e) {
       if (e instanceof HttpException) {
         return fail(422, {
