@@ -71,6 +71,9 @@ test.describe('Admin storage settings', { tag: '@serial' }, () => {
     await expect(storageSettingsPage.heading).toBeVisible();
     await expect(storageSettingsPage.smbWorkgroup).toBeVisible();
 
+    await expect(storageSettingsPage.providerTrigger).toHaveText(
+      'Network Storage (SMB)',
+    );
     await expect(storageSettingsPage.smbWorkgroup).toHaveValue(
       SMB_CREDENTIALS.workgroup,
     );

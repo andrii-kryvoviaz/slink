@@ -74,20 +74,6 @@ async function saveAndReload(page: Page, preferencesPage: PreferencesPage) {
   await expect(preferencesPage.heading).toBeVisible();
 }
 
-async function pickAnyLicense(
-  preferencesPage: PreferencesPage,
-): Promise<string> {
-  const anyOption = preferencesPage.page.getByRole('option').first();
-
-  await preferencesPage.clickUntil(preferencesPage.licenseTrigger, anyOption);
-  const label = ((await anyOption.textContent()) ?? '').trim();
-
-  await anyOption.click();
-  await expect(preferencesPage.page.getByRole('option')).toHaveCount(0);
-
-  return label;
-}
-
 test.describe('Preferences form forwarding', { tag: '@serial' }, () => {
   let context: BrowserContext;
   let page: Page;
@@ -141,9 +127,7 @@ test.describe('Preferences form forwarding', { tag: '@serial' }, () => {
       'false',
     );
     await expect(preferencesPage.exifTrigger).toHaveText('Use server default');
-    await expect(preferencesPage.licenseTrigger).toHaveText(
-      'Select a license...',
-    );
+    await expect(preferencesPage.licenseTrigger).toHaveText('No license');
   });
 
   test('only-public mode leaves the stored default visibility unchanged', async ({
@@ -193,7 +177,7 @@ test.describe('Preferences form forwarding', { tag: '@serial' }, () => {
     await preferencesPage.goto();
     await expect(preferencesPage.heading).toBeVisible();
 
-    const licenseTitle = await pickAnyLicense(preferencesPage);
+    const licenseTitle = await preferencesPage.pickAnyLicense();
     await saveAndReload(page, preferencesPage);
     await expect(preferencesPage.licenseTrigger).toHaveText(licenseTitle);
 

@@ -103,6 +103,21 @@ export class PreferencesPage extends BasePage {
     await expect(this.page.getByRole('option')).toHaveCount(0);
   }
 
+  async pickAnyLicense(): Promise<string> {
+    const anyOption = this.page
+      .getByRole('option')
+      .filter({ hasNotText: 'No license' })
+      .first();
+
+    await this.clickUntil(this.licenseTrigger, anyOption);
+    const label = ((await anyOption.textContent()) ?? '').trim();
+
+    await anyOption.click();
+    await expect(this.page.getByRole('option')).toHaveCount(0);
+
+    return label;
+  }
+
   async turnSwitchOn(switchLocator: Locator) {
     await this.setSwitch(switchLocator, 'true');
   }

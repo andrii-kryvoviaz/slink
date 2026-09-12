@@ -91,12 +91,13 @@
 
   let formError = $state<string | null>(null);
 
-  const licenseOptions = $derived(
-    licenses.map((license) => ({
+  const licenseOptions = $derived([
+    { value: '', label: 'No license' },
+    ...licenses.map((license) => ({
       value: license.id,
       label: getLicenseLabels(license.id).title,
     })),
-  );
+  ]);
 
   const selectedLicenseLabels = $derived(
     selectedLicenseInfo ? getLicenseLabels(selectedLicenseInfo.id) : null,

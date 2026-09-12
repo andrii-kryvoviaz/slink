@@ -21,20 +21,6 @@ async function saveAndReload(page: Page, preferencesPage: PreferencesPage) {
   await expect(preferencesPage.heading).toBeVisible();
 }
 
-async function pickAnyLicense(
-  preferencesPage: PreferencesPage,
-): Promise<string> {
-  const anyOption = preferencesPage.page.getByRole('option').first();
-
-  await preferencesPage.clickUntil(preferencesPage.licenseTrigger, anyOption);
-  const label = ((await anyOption.textContent()) ?? '').trim();
-
-  await anyOption.click();
-  await expect(preferencesPage.page.getByRole('option')).toHaveCount(0);
-
-  return label;
-}
-
 test.describe('Preferences persistence', { tag: '@serial' }, () => {
   let context: BrowserContext;
   let page: Page;
@@ -83,9 +69,7 @@ test.describe('Preferences persistence', { tag: '@serial' }, () => {
       'aria-checked',
       'false',
     );
-    await expect(preferencesPage.licenseTrigger).toHaveText(
-      'Select a license...',
-    );
+    await expect(preferencesPage.licenseTrigger).toHaveText('No license');
     await expect(preferencesPage.themeTrigger).toHaveText('Default');
 
     await preferencesPage.selectOption(
@@ -100,7 +84,7 @@ test.describe('Preferences persistence', { tag: '@serial' }, () => {
       preferencesPage.exifTrigger,
       'Always strip',
     );
-    const licenseTitle = await pickAnyLicense(preferencesPage);
+    const licenseTitle = await preferencesPage.pickAnyLicense();
     await preferencesPage.selectTheme('nord');
 
     await preferencesPage.turnSwitchOn(preferencesPage.autoPublishSwitch);

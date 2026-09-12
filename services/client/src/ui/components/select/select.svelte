@@ -107,7 +107,11 @@
   });
 
   const selectedCount = $derived(
-    type === 'single' ? (value ? 1 : 0) : (inner.value as string[]).length,
+    type === 'single'
+      ? selectedItem
+        ? 1
+        : 0
+      : (inner.value as string[]).length,
   );
 
   const displayValue = $derived.by<string>(() => {
@@ -147,7 +151,9 @@
               class="w-4 h-4 shrink-0 text-foreground-muted"
             />
           {/if}
-          <span class={cn('truncate', !value ? 'text-foreground-muted' : '')}>
+          <span
+            class={cn('truncate', !selectedItem ? 'text-foreground-muted' : '')}
+          >
             {displayValue}
           </span>
         </div>
