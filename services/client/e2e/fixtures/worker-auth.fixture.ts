@@ -48,7 +48,7 @@ export const test = base.extend<{}, WorkerAuthFixtures>({
     async ({ workerUserReady, browser }, use) => {
       const fileName = path.resolve(
         test.info().project.outputDir,
-        `.auth/${test.info().parallelIndex}.json`,
+        `.auth/${workerUserReady.user.username}.json`,
       );
 
       if (fs.existsSync(fileName)) {
