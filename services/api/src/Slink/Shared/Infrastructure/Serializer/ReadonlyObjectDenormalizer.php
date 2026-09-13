@@ -24,13 +24,19 @@ final class ReadonlyObjectDenormalizer implements DenormalizerInterface {
    * @param array<string, mixed> $context
    */
   public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool {
-    return class_exists($type) && (new \ReflectionClass($type))->isReadOnly();
+    if (!class_exists($type)) {
+      return false;
+    }
+
+    $reflection = new \ReflectionClass($type);
+
+    return $reflection->isReadOnly() && null === $reflection->getConstructor();
   }
 
   /**
    * @return array<string, bool>
    */
   public function getSupportedTypes(?string $format): array {
-    return ['*' => false];
+    return ['object' => true];
   }
 }

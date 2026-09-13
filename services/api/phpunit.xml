@@ -53,6 +53,8 @@
     </coverage>
 
     <extensions>
-        <bootstrap class="DG\BypassFinals\PHPUnitExtension" />
+        <bootstrap class="DG\BypassFinals\PHPUnitExtension">
+            <parameter name="bypassReadOnly" value="false"/>
+        </bootstrap>
     </extensions>
 </phpunit>
