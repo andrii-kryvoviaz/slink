@@ -90,13 +90,28 @@ final class UpdateUserPreferencesTest extends HttpTestCase {
   }
 
   #[Test]
-  public function aNullLicenseClearsTheStoredLicense(): void {
+  public function aNullLicenseLeavesTheStoredLicenseUnchanged(): void {
     $this->patch(['license.default' => 'cc-by']);
     $this->patch(['license.default' => null]);
 
     $preferences = $this->read('/api/user/preferences');
 
-    self::assertNull($preferences['license.default'] ?? null);
+    self::assertSame('cc-by', $preferences['license.default'] ?? null);
+  }
+
+  #[Test]
+  public function noneStoresNoneAndANewUploadGetsNoLicense(): void {
+    $this->saveSettings('image', ['maxSize' => '5M', 'enableLicensing' => true]);
+
+    $this->patch(['license.default' => 'none']);
+
+    $preferences = $this->read('/api/user/preferences');
+    self::assertSame('none', $preferences['license.default'] ?? null);
+
+    $imageId = $this->uploadImage($this->ownerToken, false);
+    $detail = $this->read(\sprintf('/api/image/%s/detail', $imageId));
+
+    self::assertNull($detail['license'] ?? null);
   }
 
   #[Test]

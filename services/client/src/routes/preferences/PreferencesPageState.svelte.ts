@@ -16,7 +16,7 @@ export class PreferencesPageState {
   visibility = $state('private');
   exifPreference = $state('default');
   externalUploadAutoPublish = $state(false);
-  license = $state('');
+  license = $state('none');
   syncToImages = $state(false);
 
   private _snapshot: Record<string, unknown> = {};
@@ -33,7 +33,7 @@ export class PreferencesPageState {
       preferences?.['image.stripExifMetadataOverride'] ?? 'default';
     this.externalUploadAutoPublish =
       preferences?.['image.externalUploadAutoPublish'] ?? false;
-    this.license = preferences?.['license.default'] ?? '';
+    this.license = preferences?.['license.default'] ?? 'none';
     this._takeSnapshot();
   }
 

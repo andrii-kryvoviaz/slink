@@ -92,7 +92,7 @@
   let formError = $state<string | null>(null);
 
   const licenseOptions = $derived([
-    { value: '', label: 'No license' },
+    { value: 'none', label: 'No license' },
     ...licenses.map((license) => ({
       value: license.id,
       label: getLicenseLabels(license.id).title,

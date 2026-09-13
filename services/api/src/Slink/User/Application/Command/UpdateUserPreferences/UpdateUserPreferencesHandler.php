@@ -9,6 +9,7 @@ use Slink\Shared\Application\Command\CommandHandlerInterface;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Domain\Repository\UserStoreRepositoryInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 final readonly class UpdateUserPreferencesHandler implements CommandHandlerInterface {
@@ -24,6 +25,7 @@ final readonly class UpdateUserPreferencesHandler implements CommandHandlerInter
 
     /** @var array<string, string|bool|null> $changes */
     $changes = $this->normalizer->normalize($command, null, [
+      AbstractObjectNormalizer::SKIP_NULL_VALUES => true,
       AbstractNormalizer::IGNORED_ATTRIBUTES => ['syncLicenseToImages'],
     ]);
 
@@ -31,7 +33,7 @@ final readonly class UpdateUserPreferencesHandler implements CommandHandlerInter
     $user->updatePreferences($preferences);
     $this->userStore->store($user);
 
-    if (!($command->syncLicenseToImages ?? false)) {
+    if (!$command->shouldSyncLicenseToImages()) {
       return;
     }
 

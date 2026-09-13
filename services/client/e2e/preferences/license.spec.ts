@@ -65,14 +65,16 @@ test.describe('Default license', { tag: '@serial' }, () => {
     await noLicenseOption.click();
     await expect(preferencesPage.page.getByRole('option')).toHaveCount(0);
 
-    await expect(page.locator('input[name="license.default"]')).toHaveValue('');
+    await expect(page.locator('input[name="license.default"]')).toHaveValue(
+      'none',
+    );
 
     await preferencesPage.saveAndReload();
 
     await expect(preferencesPage.licenseTrigger).toHaveText('No license');
 
     const preferences = await owner.preferences.getPreferences();
-    expect(preferences['license.default'] ?? null).toBeNull();
+    expect(preferences['license.default']).toBe('none');
 
     expect(pageErrors).toEqual([]);
     expect(consoleErrors).toEqual([]);
@@ -97,7 +99,7 @@ test.describe('Default license', { tag: '@serial' }, () => {
     await expect(preferencesPage.licenseTrigger).toHaveText('No license');
 
     const preferences = await owner.preferences.getPreferences();
-    expect(preferences['license.default'] ?? null).toBeNull();
+    expect(preferences['license.default']).toBe('none');
   });
 
   test('picking a real license again works', async ({ settingsApi }) => {
@@ -114,6 +116,6 @@ test.describe('Default license', { tag: '@serial' }, () => {
     await expect(preferencesPage.licenseTrigger).toHaveText(title);
 
     const preferences = await owner.preferences.getPreferences();
-    expect(preferences['license.default']).toBeTruthy();
+    expect(preferences['license.default']).not.toBe('none');
   });
 });

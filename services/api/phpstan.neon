@@ -15,10 +15,6 @@ parameters:
                 - src/UI/Console/Command/*
                 - src/Slink/*/ValueObject/*
         -
-            message: '#^Class [a-zA-Z0-9\\_]+ has an uninitialized readonly property [a-zA-Z0-9\$_]+\. Assign it in the constructor\.$#'
-            paths:
-                - src/Slink/User/Application/Command/UpdateUserPreferences/*
-        -
             message: '#^Return type of call to method PHPUnit\\Framework\\TestCase\:\:createMock\(\) contains unresolvable type\.$#'
             paths:
                 - tests/*

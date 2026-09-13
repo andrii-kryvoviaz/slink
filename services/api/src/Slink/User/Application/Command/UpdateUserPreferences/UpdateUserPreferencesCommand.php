@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Slink\User\Application\Command\UpdateUserPreferences;
 
-use Slink\Image\Domain\Enum\License;
 use Slink\Shared\Application\Command\CommandInterface;
 use Slink\Shared\Infrastructure\MessageBus\EnvelopedMessage;
 use Slink\User\Domain\Enum\DefaultVisibility;
@@ -12,39 +11,68 @@ use Slink\User\Domain\Enum\DisplayLanguage;
 use Slink\User\Domain\Enum\DisplayTheme;
 use Slink\User\Domain\Enum\ExifMetadataPreference;
 use Slink\User\Domain\Enum\LandingPage;
+use Slink\User\Domain\ValueObject\UserPreferences;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final readonly class UpdateUserPreferencesCommand implements CommandInterface {
   use EnvelopedMessage;
 
-  #[SerializedName('license.default')]
-  #[Assert\Choice(callback: [License::class, 'values'], message: 'Invalid license type.')]
-  public ?string $defaultLicense;
+  public function __construct(
+    #[SerializedName('license.default')]
+    #[Assert\Choice(callback: [UserPreferences::class, 'licenseChoices'], message: 'Invalid license type.')]
+    private ?string $defaultLicense = null,
+    #[SerializedName('license.syncToImages')]
+    private bool $syncLicenseToImages = false,
+    #[SerializedName('navigation.landingPage')]
+    #[Assert\Choice(callback: [LandingPage::class, 'values'], message: 'Invalid landing page.')]
+    private ?string $defaultLandingPage = null,
+    #[SerializedName('image.defaultVisibility')]
+    #[Assert\Choice(callback: [DefaultVisibility::class, 'values'], message: 'Invalid default visibility.')]
+    private ?string $defaultVisibility = null,
+    #[SerializedName('display.language')]
+    #[Assert\Choice(callback: [DisplayLanguage::class, 'values'], message: 'Invalid display language.')]
+    private ?string $displayLanguage = null,
+    #[SerializedName('display.theme')]
+    #[Assert\Choice(callback: [DisplayTheme::class, 'values'], message: 'Invalid display theme.')]
+    private ?string $displayTheme = null,
+    #[SerializedName('image.externalUploadAutoPublish')]
+    private ?bool $externalUploadAutoPublish = null,
+    #[SerializedName('image.stripExifMetadataOverride')]
+    #[Assert\Choice(callback: [ExifMetadataPreference::class, 'values'], message: 'Invalid EXIF metadata preference.')]
+    private ?string $exifMetadataPreference = null,
+  ) {
+  }
 
-  #[SerializedName('license.syncToImages')]
-  public bool $syncLicenseToImages;
+  public function getDefaultLicense(): ?string {
+    return $this->defaultLicense;
+  }
 
-  #[SerializedName('navigation.landingPage')]
-  #[Assert\Choice(callback: [LandingPage::class, 'values'], message: 'Invalid landing page.')]
-  public ?string $defaultLandingPage;
+  public function getDefaultLandingPage(): ?string {
+    return $this->defaultLandingPage;
+  }
 
-  #[SerializedName('image.defaultVisibility')]
-  #[Assert\Choice(callback: [DefaultVisibility::class, 'values'], message: 'Invalid default visibility.')]
-  public ?string $defaultVisibility;
+  public function getDefaultVisibility(): ?string {
+    return $this->defaultVisibility;
+  }
 
-  #[SerializedName('display.language')]
-  #[Assert\Choice(callback: [DisplayLanguage::class, 'values'], message: 'Invalid display language.')]
-  public ?string $displayLanguage;
+  public function getDisplayLanguage(): ?string {
+    return $this->displayLanguage;
+  }
 
-  #[SerializedName('display.theme')]
-  #[Assert\Choice(callback: [DisplayTheme::class, 'values'], message: 'Invalid display theme.')]
-  public ?string $displayTheme;
+  public function getDisplayTheme(): ?string {
+    return $this->displayTheme;
+  }
 
-  #[SerializedName('image.externalUploadAutoPublish')]
-  public ?bool $externalUploadAutoPublish;
+  public function getExternalUploadAutoPublish(): ?bool {
+    return $this->externalUploadAutoPublish;
+  }
 
-  #[SerializedName('image.stripExifMetadataOverride')]
-  #[Assert\Choice(callback: [ExifMetadataPreference::class, 'values'], message: 'Invalid EXIF metadata preference.')]
-  public ?string $exifMetadataPreference;
+  public function getExifMetadataPreference(): ?string {
+    return $this->exifMetadataPreference;
+  }
+
+  public function shouldSyncLicenseToImages(): bool {
+    return $this->syncLicenseToImages;
+  }
 }

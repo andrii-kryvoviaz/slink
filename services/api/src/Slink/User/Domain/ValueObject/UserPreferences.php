@@ -13,12 +13,21 @@ use Slink\User\Domain\Enum\ExifMetadataPreference;
 use Slink\User\Domain\Enum\LandingPage;
 
 final readonly class UserPreferences extends AbstractCompoundValueObject {
+  public const string NO_LICENSE = 'none';
+
   /**
    * @param array<string, string|bool|null> $data
    */
   private function __construct(
     private array $data = [],
   ) {}
+
+  /**
+   * @return array<string>
+   */
+  public static function licenseChoices(): array {
+    return [...License::values(), self::NO_LICENSE];
+  }
 
   public static function create(?License $defaultLicense = null, ?LandingPage $defaultLandingPage = null, ?DefaultVisibility $defaultVisibility = null, ?DisplayLanguage $displayLanguage = null, ?DisplayTheme $displayTheme = null, ?bool $externalUploadAutoPublish = null, ?ExifMetadataPreference $exifMetadataPreference = null): self {
     return new self([

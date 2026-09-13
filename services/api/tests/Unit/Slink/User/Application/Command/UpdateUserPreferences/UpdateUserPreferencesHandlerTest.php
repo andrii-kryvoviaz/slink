@@ -9,7 +9,6 @@ use PHPUnit\Framework\TestCase;
 use Slink\Image\Application\Service\LicenseSyncServiceInterface;
 use Slink\Image\Domain\Enum\License;
 use Slink\Shared\Domain\ValueObject\ID;
-use Slink\Shared\Infrastructure\Serializer\ReadonlyObjectDenormalizer;
 use Slink\User\Application\Command\UpdateUserPreferences\UpdateUserPreferencesCommand;
 use Slink\User\Application\Command\UpdateUserPreferences\UpdateUserPreferencesHandler;
 use Slink\User\Domain\Enum\ExifMetadataPreference;
@@ -21,7 +20,6 @@ use Symfony\Component\Serializer\Mapping\Loader\AttributeLoader;
 use Symfony\Component\Serializer\NameConverter\MetadataAwareNameConverter;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Normalizer\PropertyNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
 final class UpdateUserPreferencesHandlerTest extends TestCase {
@@ -29,10 +27,7 @@ final class UpdateUserPreferencesHandlerTest extends TestCase {
     #[Test]
     public function itUpdatesUserPreferencesWithoutExistingPreferences(): void {
         $userId = ID::generate()->toString();
-        $command = $this->command([
-            'license.default' => 'cc-by',
-            'image.stripExifMetadataOverride' => 'strip',
-        ]);
+        $command = new UpdateUserPreferencesCommand(defaultLicense: 'cc-by', exifMetadataPreference: 'strip');
 
         $user = $this->createMock(User::class);
         $user->method('getPreferences')->willReturn(UserPreferences::empty());
@@ -66,7 +61,7 @@ final class UpdateUserPreferencesHandlerTest extends TestCase {
     #[Test]
     public function itUpdatesUserPreferencesWithExistingPreferences(): void {
         $userId = ID::generate()->toString();
-        $command = $this->command(['license.default' => 'cc-by-sa']);
+        $command = new UpdateUserPreferencesCommand(defaultLicense: 'cc-by-sa');
 
         $existingPrefs = UserPreferences::create(License::CC_BY);
 
@@ -98,10 +93,7 @@ final class UpdateUserPreferencesHandlerTest extends TestCase {
     #[Test]
     public function itSyncsLicenseToImagesWhenRequested(): void {
         $userId = ID::generate()->toString();
-        $command = $this->command([
-            'license.default' => 'cc0',
-            'license.syncToImages' => true,
-        ]);
+        $command = new UpdateUserPreferencesCommand(defaultLicense: 'cc0', syncLicenseToImages: true);
 
         $user = $this->createMock(User::class);
         $user->method('getPreferences')->willReturn(UserPreferences::empty());
@@ -131,7 +123,7 @@ final class UpdateUserPreferencesHandlerTest extends TestCase {
     #[Test]
     public function itDoesNotSyncLicenseWhenNotRequested(): void {
         $userId = ID::generate()->toString();
-        $command = $this->command(['license.default' => 'cc-by-nc']);
+        $command = new UpdateUserPreferencesCommand(defaultLicense: 'cc-by-nc');
 
         $user = $this->createMock(User::class);
         $user->method('getPreferences')->willReturn(UserPreferences::empty());
@@ -158,17 +150,18 @@ final class UpdateUserPreferencesHandlerTest extends TestCase {
     }
 
     #[Test]
-    public function itSyncsNullLicenseToImages(): void {
+    public function noneSyncsNullLicenseToImages(): void {
         $userId = ID::generate()->toString();
-        $command = $this->command([
-            'license.default' => null,
-            'license.syncToImages' => true,
-        ]);
+        $command = new UpdateUserPreferencesCommand(defaultLicense: 'none', syncLicenseToImages: true);
 
         $user = $this->createMock(User::class);
         $user->method('getPreferences')->willReturn(UserPreferences::empty());
         $user->expects($this->once())
-            ->method('updatePreferences');
+            ->method('updatePreferences')
+            ->with($this->callback(function ($prefs) {
+                return $prefs instanceof UserPreferences
+                    && $prefs->toPayload()['license.default'] === 'none';
+            }));
 
         $userStore = $this->createMock(UserStoreRepositoryInterface::class);
         $licenseSyncService = $this->createMock(LicenseSyncServiceInterface::class);
@@ -191,10 +184,7 @@ final class UpdateUserPreferencesHandlerTest extends TestCase {
     #[Test]
     public function itHandlesUserWithNoImages(): void {
         $userId = ID::generate()->toString();
-        $command = $this->command([
-            'license.default' => 'cc-by-nd',
-            'license.syncToImages' => true,
-        ]);
+        $command = new UpdateUserPreferencesCommand(defaultLicense: 'cc-by-nd', syncLicenseToImages: true);
 
         $user = $this->createMock(User::class);
         $user->method('getPreferences')->willReturn(UserPreferences::empty());
@@ -225,7 +215,7 @@ final class UpdateUserPreferencesHandlerTest extends TestCase {
         $oldLicense = License::AllRightsReserved;
         $newLicense = License::PublicDomain;
 
-        $command = $this->command(['license.default' => $newLicense->value]);
+        $command = new UpdateUserPreferencesCommand(defaultLicense: $newLicense->value);
 
         $existingPrefs = UserPreferences::create($oldLicense);
 
@@ -260,10 +250,7 @@ final class UpdateUserPreferencesHandlerTest extends TestCase {
             'display.theme' => 'nord',
         ]);
 
-        $command = $this->command([
-            'display.theme' => null,
-            'license.syncToImages' => true,
-        ]);
+        $command = new UpdateUserPreferencesCommand(displayTheme: null, syncLicenseToImages: true);
 
         $user = $this->createMock(User::class);
         $user->method('getPreferences')->willReturn($existingPrefs);
@@ -273,7 +260,7 @@ final class UpdateUserPreferencesHandlerTest extends TestCase {
                 return $prefs instanceof UserPreferences
                     && $prefs->toPayload() === [
                         'license.default' => 'cc-by',
-                        'display.theme' => null,
+                        'display.theme' => 'nord',
                     ];
             }));
 
@@ -301,7 +288,7 @@ final class UpdateUserPreferencesHandlerTest extends TestCase {
         $userId = ID::generate()->toString();
         $storedPrefs = UserPreferences::create(License::CC_BY);
 
-        $command = $this->command(['license.syncToImages' => true]);
+        $command = new UpdateUserPreferencesCommand(syncLicenseToImages: true);
 
         $user = $this->createMock(User::class);
         $user->method('getPreferences')->willReturn($storedPrefs);
@@ -331,17 +318,51 @@ final class UpdateUserPreferencesHandlerTest extends TestCase {
         $handler($command, $userId);
     }
 
-    /**
-     * @param array<string, mixed> $body
-     */
-    private function command(array $body): UpdateUserPreferencesCommand {
-        return $this->denormalizer()->denormalize($body, UpdateUserPreferencesCommand::class);
-    }
+    #[Test]
+    public function theChangeSetHoldsOnlyTheSubmittedPreferenceKeys(): void {
+        $userId = ID::generate()->toString();
+        $command = new UpdateUserPreferencesCommand(
+            defaultLicense: 'cc-by',
+            syncLicenseToImages: true,
+            defaultLandingPage: 'upload',
+            defaultVisibility: 'public',
+            displayLanguage: 'de',
+            displayTheme: 'nord',
+            externalUploadAutoPublish: true,
+            exifMetadataPreference: 'strip',
+        );
 
-    private function denormalizer(): ReadonlyObjectDenormalizer {
-        $metadata = new ClassMetadataFactory(new AttributeLoader());
+        $user = $this->createMock(User::class);
+        $user->method('getPreferences')->willReturn(UserPreferences::empty());
+        $user->expects($this->once())
+            ->method('updatePreferences')
+            ->with($this->callback(function ($prefs) {
+                $this->assertInstanceOf(UserPreferences::class, $prefs);
+                $this->assertEqualsCanonicalizing([
+                    'license.default',
+                    'navigation.landingPage',
+                    'image.defaultVisibility',
+                    'display.language',
+                    'display.theme',
+                    'image.externalUploadAutoPublish',
+                    'image.stripExifMetadataOverride',
+                ], array_keys($prefs->toPayload()));
 
-        return new ReadonlyObjectDenormalizer(new PropertyNormalizer($metadata, new MetadataAwareNameConverter($metadata)));
+                return true;
+            }));
+
+        $userStore = $this->createMock(UserStoreRepositoryInterface::class);
+        $licenseSyncService = $this->createStub(LicenseSyncServiceInterface::class);
+
+        $userStore->expects($this->once())
+            ->method('get')
+            ->willReturn($user);
+
+        $userStore->expects($this->once())
+            ->method('store');
+
+        $handler = new UpdateUserPreferencesHandler($userStore, $licenseSyncService, $this->normalizer());
+        $handler($command, $userId);
     }
 
     private function normalizer(): NormalizerInterface {

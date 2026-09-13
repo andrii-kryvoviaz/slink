@@ -48,11 +48,7 @@ export const actions: Actions = {
     const form = await request.formData();
 
     try {
-      await locals.api.user.updatePreferences(
-        Object.fromEntries(
-          [...form].map(([key, value]) => [key, value || null]),
-        ),
-      );
+      await locals.api.user.updatePreferences(Object.fromEntries([...form]));
     } catch (e) {
       if (e instanceof HttpException) {
         return fail(422, {

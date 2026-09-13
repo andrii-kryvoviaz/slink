@@ -308,4 +308,22 @@ final class UserPreferencesTest extends TestCase {
 
         $this->assertFalse($preferences->resolveVisibility(false));
     }
+
+    #[Test]
+    public function itExposesNoneInLicenseChoices(): void {
+        $choices = UserPreferences::licenseChoices();
+
+        $this->assertContains('none', $choices);
+
+        foreach (License::values() as $value) {
+            $this->assertContains($value, $choices);
+        }
+    }
+
+    #[Test]
+    public function itReturnsNullLicenseForNone(): void {
+        $preferences = UserPreferences::fromPayload(['license.default' => 'none']);
+
+        $this->assertNull($preferences->getDefaultLicense());
+    }
 }
