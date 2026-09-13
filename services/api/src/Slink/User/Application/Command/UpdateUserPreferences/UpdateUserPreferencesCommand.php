@@ -15,7 +15,7 @@ use Slink\User\Domain\Enum\LandingPage;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class UpdateUserPreferencesCommand implements CommandInterface {
+final readonly class UpdateUserPreferencesCommand implements CommandInterface {
   use EnvelopedMessage;
 
   #[SerializedName('license.default')]
@@ -23,7 +23,7 @@ final class UpdateUserPreferencesCommand implements CommandInterface {
   public ?string $defaultLicense;
 
   #[SerializedName('license.syncToImages')]
-  public bool $syncLicenseToImages = false;
+  public bool $syncLicenseToImages;
 
   #[SerializedName('navigation.landingPage')]
   #[Assert\Choice(callback: [LandingPage::class, 'values'], message: 'Invalid landing page.')]

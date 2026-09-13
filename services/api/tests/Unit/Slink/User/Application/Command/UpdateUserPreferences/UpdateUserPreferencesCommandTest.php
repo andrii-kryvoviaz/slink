@@ -6,7 +6,12 @@ namespace Tests\Unit\Slink\User\Application\Command\UpdateUserPreferences;
 
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use Slink\Shared\Infrastructure\Serializer\ReadonlyObjectDenormalizer;
 use Slink\User\Application\Command\UpdateUserPreferences\UpdateUserPreferencesCommand;
+use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
+use Symfony\Component\Serializer\Mapping\Loader\AttributeLoader;
+use Symfony\Component\Serializer\NameConverter\MetadataAwareNameConverter;
+use Symfony\Component\Serializer\Normalizer\PropertyNormalizer;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -22,8 +27,7 @@ final class UpdateUserPreferencesCommandTest extends TestCase {
 
     #[Test]
     public function itAcceptsValidExifMetadataPreference(): void {
-        $command = new UpdateUserPreferencesCommand();
-        $command->exifMetadataPreference = 'keep';
+        $command = $this->command(['image.stripExifMetadataOverride' => 'keep']);
 
         $violations = $this->validator()->validate($command);
 
@@ -32,8 +36,7 @@ final class UpdateUserPreferencesCommandTest extends TestCase {
 
     #[Test]
     public function itRejectsInvalidExifMetadataPreference(): void {
-        $command = new UpdateUserPreferencesCommand();
-        $command->exifMetadataPreference = 'invalid';
+        $command = $this->command(['image.stripExifMetadataOverride' => 'invalid']);
 
         $violations = $this->validator()->validate($command);
 
@@ -41,6 +44,19 @@ final class UpdateUserPreferencesCommandTest extends TestCase {
 
         $violation = $violations->get(0);
         $this->assertSame('exifMetadataPreference', $violation->getPropertyPath());
+    }
+
+    /**
+     * @param array<string, mixed> $body
+     */
+    private function command(array $body): UpdateUserPreferencesCommand {
+        return $this->denormalizer()->denormalize($body, UpdateUserPreferencesCommand::class);
+    }
+
+    private function denormalizer(): ReadonlyObjectDenormalizer {
+        $metadata = new ClassMetadataFactory(new AttributeLoader());
+
+        return new ReadonlyObjectDenormalizer(new PropertyNormalizer($metadata, new MetadataAwareNameConverter($metadata)));
     }
 
     private function validator(): ValidatorInterface {
