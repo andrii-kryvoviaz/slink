@@ -55,7 +55,9 @@ test.describe('Preferences persistence', { tag: '@serial' }, () => {
       'aria-checked',
       'false',
     );
-    await expect(preferencesPage.licenseTrigger).toHaveText('No license');
+    await expect(preferencesPage.licenseTrigger).toHaveText(
+      'All Rights Reserved',
+    );
     await expect(preferencesPage.themeTrigger).toHaveText('Default');
 
     await preferencesPage.selectOption(

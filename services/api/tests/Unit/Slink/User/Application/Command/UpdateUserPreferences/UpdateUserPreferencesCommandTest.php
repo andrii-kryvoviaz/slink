@@ -42,8 +42,8 @@ final class UpdateUserPreferencesCommandTest extends TestCase {
     }
 
     #[Test]
-    public function itAcceptsNoneAsALicense(): void {
-        $command = new UpdateUserPreferencesCommand(defaultLicense: 'none');
+    public function itAcceptsAValidLicense(): void {
+        $command = new UpdateUserPreferencesCommand(defaultLicense: 'cc-by');
 
         $violations = $this->validator()->validate($command);
 

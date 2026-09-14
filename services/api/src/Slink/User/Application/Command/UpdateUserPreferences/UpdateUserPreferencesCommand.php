@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Slink\User\Application\Command\UpdateUserPreferences;
 
+use Slink\Image\Domain\Enum\License;
 use Slink\Shared\Application\Command\CommandInterface;
 use Slink\Shared\Infrastructure\MessageBus\EnvelopedMessage;
 use Slink\User\Domain\Enum\DefaultVisibility;
@@ -11,7 +12,6 @@ use Slink\User\Domain\Enum\DisplayLanguage;
 use Slink\User\Domain\Enum\DisplayTheme;
 use Slink\User\Domain\Enum\ExifMetadataPreference;
 use Slink\User\Domain\Enum\LandingPage;
-use Slink\User\Domain\ValueObject\UserPreferences;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -20,7 +20,7 @@ final readonly class UpdateUserPreferencesCommand implements CommandInterface {
 
   public function __construct(
     #[SerializedName('license.default')]
-    #[Assert\Choice(callback: [UserPreferences::class, 'licenseChoices'], message: 'Invalid license type.')]
+    #[Assert\Choice(callback: [License::class, 'values'], message: 'Invalid license type.')]
     private ?string $defaultLicense = null,
     #[SerializedName('license.syncToImages')]
     private bool $syncLicenseToImages = false,

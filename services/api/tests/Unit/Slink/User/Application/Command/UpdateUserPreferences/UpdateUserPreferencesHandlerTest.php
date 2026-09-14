@@ -150,38 +150,6 @@ final class UpdateUserPreferencesHandlerTest extends TestCase {
     }
 
     #[Test]
-    public function noneSyncsNullLicenseToImages(): void {
-        $userId = ID::generate()->toString();
-        $command = new UpdateUserPreferencesCommand(defaultLicense: 'none', syncLicenseToImages: true);
-
-        $user = $this->createMock(User::class);
-        $user->method('getPreferences')->willReturn(UserPreferences::empty());
-        $user->expects($this->once())
-            ->method('updatePreferences')
-            ->with($this->callback(function ($prefs) {
-                return $prefs instanceof UserPreferences
-                    && $prefs->toPayload()['license.default'] === 'none';
-            }));
-
-        $userStore = $this->createMock(UserStoreRepositoryInterface::class);
-        $licenseSyncService = $this->createMock(LicenseSyncServiceInterface::class);
-
-        $userStore->expects($this->once())
-            ->method('get')
-            ->willReturn($user);
-
-        $userStore->expects($this->once())
-            ->method('store');
-
-        $licenseSyncService->expects($this->once())
-            ->method('syncLicenseForUser')
-            ->with(ID::fromString($userId), null);
-
-        $handler = new UpdateUserPreferencesHandler($userStore, $licenseSyncService, $this->normalizer());
-        $handler($command, $userId);
-    }
-
-    #[Test]
     public function itHandlesUserWithNoImages(): void {
         $userId = ID::generate()->toString();
         $command = new UpdateUserPreferencesCommand(defaultLicense: 'cc-by-nd', syncLicenseToImages: true);

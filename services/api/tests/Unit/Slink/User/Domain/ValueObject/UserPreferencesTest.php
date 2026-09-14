@@ -17,7 +17,7 @@ final class UserPreferencesTest extends TestCase {
     public function itCreatesEmptyPreferences(): void {
         $preferences = UserPreferences::empty();
 
-        $this->assertNull($preferences->getDefaultLicense());
+        $this->assertSame(License::AllRightsReserved, $preferences->getDefaultLicense());
         $this->assertNull($preferences->getDefaultLandingPage());
     }
 
@@ -41,14 +41,14 @@ final class UserPreferencesTest extends TestCase {
     public function itCreatesPreferencesWithoutLicense(): void {
         $preferences = UserPreferences::create(null);
 
-        $this->assertNull($preferences->getDefaultLicense());
+        $this->assertSame(License::AllRightsReserved, $preferences->getDefaultLicense());
     }
 
     #[Test]
     public function itCreatesPreferencesWithDefaultNullLicense(): void {
         $preferences = UserPreferences::create();
 
-        $this->assertNull($preferences->getDefaultLicense());
+        $this->assertSame(License::AllRightsReserved, $preferences->getDefaultLicense());
     }
 
     #[Test]
@@ -77,7 +77,7 @@ final class UserPreferencesTest extends TestCase {
 
         $updated = $preferences->withDefaultLicense(null);
 
-        $this->assertNull($updated->getDefaultLicense());
+        $this->assertSame(License::AllRightsReserved, $updated->getDefaultLicense());
     }
 
     #[Test]
@@ -135,7 +135,7 @@ final class UserPreferencesTest extends TestCase {
 
         $preferences = UserPreferences::fromPayload($payload);
 
-        $this->assertNull($preferences->getDefaultLicense());
+        $this->assertSame(License::AllRightsReserved, $preferences->getDefaultLicense());
     }
 
     #[Test]
@@ -144,7 +144,7 @@ final class UserPreferencesTest extends TestCase {
 
         $preferences = UserPreferences::fromPayload($payload);
 
-        $this->assertNull($preferences->getDefaultLicense());
+        $this->assertSame(License::AllRightsReserved, $preferences->getDefaultLicense());
     }
 
     #[Test]
@@ -153,7 +153,7 @@ final class UserPreferencesTest extends TestCase {
 
         $preferences = UserPreferences::fromPayload($payload);
 
-        $this->assertNull($preferences->getDefaultLicense());
+        $this->assertSame(License::AllRightsReserved, $preferences->getDefaultLicense());
     }
 
     #[Test]
@@ -307,23 +307,5 @@ final class UserPreferencesTest extends TestCase {
         $preferences = UserPreferences::empty();
 
         $this->assertFalse($preferences->resolveVisibility(false));
-    }
-
-    #[Test]
-    public function itExposesNoneInLicenseChoices(): void {
-        $choices = UserPreferences::licenseChoices();
-
-        $this->assertContains('none', $choices);
-
-        foreach (License::values() as $value) {
-            $this->assertContains($value, $choices);
-        }
-    }
-
-    #[Test]
-    public function itReturnsNullLicenseForNone(): void {
-        $preferences = UserPreferences::fromPayload(['license.default' => 'none']);
-
-        $this->assertNull($preferences->getDefaultLicense());
     }
 }

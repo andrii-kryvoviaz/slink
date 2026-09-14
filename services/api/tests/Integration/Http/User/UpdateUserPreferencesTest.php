@@ -100,21 +100,6 @@ final class UpdateUserPreferencesTest extends HttpTestCase {
   }
 
   #[Test]
-  public function noneStoresNoneAndANewUploadGetsNoLicense(): void {
-    $this->saveSettings('image', ['maxSize' => '5M', 'enableLicensing' => true]);
-
-    $this->patch(['license.default' => 'none']);
-
-    $preferences = $this->read('/api/user/preferences');
-    self::assertSame('none', $preferences['license.default'] ?? null);
-
-    $imageId = $this->uploadImage($this->ownerToken, false);
-    $detail = $this->read(\sprintf('/api/image/%s/detail', $imageId));
-
-    self::assertNull($detail['license'] ?? null);
-  }
-
-  #[Test]
   public function aStringBooleanIsStoredAsABoolean(): void {
     $this->patch(['image.externalUploadAutoPublish' => 'true']);
 
@@ -128,19 +113,21 @@ final class UpdateUserPreferencesTest extends HttpTestCase {
   }
 
   #[Test]
-  public function anInvalidValueIsRejectedAndNothingChanges(): void {
-    $this->patch(['display.theme' => 'nord']);
+  #[TestWith(['display.theme', 'nord', 'solarized'])]
+  #[TestWith(['license.default', 'cc-by', 'none'])]
+  public function anInvalidValueIsRejectedAndNothingChanges(string $key, string $stored, string $invalid): void {
+    $this->patch([$key => $stored]);
 
     self::assertSame(422, $this->apiRequest(
       'PATCH',
       '/api/user/preferences',
       $this->ownerToken,
       ['CONTENT_TYPE' => 'application/json'],
-      \json_encode(['display.theme' => 'solarized'], JSON_THROW_ON_ERROR),
+      \json_encode([$key => $invalid], JSON_THROW_ON_ERROR),
     ));
 
     $preferences = $this->read('/api/user/preferences');
-    self::assertSame('nord', $preferences['display.theme'] ?? null);
+    self::assertSame($stored, $preferences[$key] ?? null);
   }
 
   #[Test]

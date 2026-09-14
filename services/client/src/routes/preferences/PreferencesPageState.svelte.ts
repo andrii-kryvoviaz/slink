@@ -1,6 +1,7 @@
 import type { UserPreferencesResponse } from '@slink/api/Response';
 
 import { LandingPage } from '@slink/lib/enum/LandingPage';
+import type { LicenseId } from '@slink/lib/enum/License';
 import {
   Locale,
   Theme,
@@ -16,7 +17,7 @@ export class PreferencesPageState {
   visibility = $state('private');
   exifPreference = $state('default');
   externalUploadAutoPublish = $state(false);
-  license = $state('none');
+  license = $state<LicenseId>('all-rights-reserved');
   syncToImages = $state(false);
 
   private _snapshot: Record<string, unknown> = {};
@@ -33,7 +34,8 @@ export class PreferencesPageState {
       preferences?.['image.stripExifMetadataOverride'] ?? 'default';
     this.externalUploadAutoPublish =
       preferences?.['image.externalUploadAutoPublish'] ?? false;
-    this.license = preferences?.['license.default'] ?? 'none';
+    this.license =
+      (preferences?.['license.default'] as LicenseId) ?? 'all-rights-reserved';
     this._takeSnapshot();
   }
 

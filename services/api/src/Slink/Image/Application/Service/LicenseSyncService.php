@@ -18,7 +18,7 @@ final readonly class LicenseSyncService implements LicenseSyncServiceInterface {
   ) {
   }
 
-  public function syncLicenseForUser(ID $userId, ?License $license): void {
+  public function syncLicenseForUser(ID $userId, License $license): void {
     if (!$this->configurationProvider->get('image.enableLicensing')) {
       return;
     }

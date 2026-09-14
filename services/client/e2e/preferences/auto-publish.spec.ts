@@ -113,7 +113,9 @@ test.describe('Preferences form forwarding', { tag: '@serial' }, () => {
       'false',
     );
     await expect(preferencesPage.exifTrigger).toHaveText('Use server default');
-    await expect(preferencesPage.licenseTrigger).toHaveText('No license');
+    await expect(preferencesPage.licenseTrigger).toHaveText(
+      'All Rights Reserved',
+    );
   });
 
   test('only-public mode leaves the stored default visibility unchanged', async ({

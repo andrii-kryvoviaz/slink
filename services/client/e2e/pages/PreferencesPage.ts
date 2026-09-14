@@ -113,9 +113,10 @@ export class PreferencesPage extends BasePage {
   }
 
   async pickAnyLicense(): Promise<string> {
+    const current = ((await this.licenseTrigger.textContent()) ?? '').trim();
     const anyOption = this.page
       .getByRole('option')
-      .filter({ hasNotText: 'No license' })
+      .filter({ hasNotText: current })
       .first();
 
     await this.clickUntil(this.licenseTrigger, anyOption);

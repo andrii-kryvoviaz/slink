@@ -113,37 +113,4 @@ final class LicenseSyncServiceTest extends TestCase {
         
         $this->service->syncLicenseForUser($userId, $license);
     }
-
-    #[Test]
-    public function itSyncsNullLicenseToImages(): void {
-        $userId = ID::generate();
-        
-        $this->configurationProvider->expects($this->once())
-            ->method('get')
-            ->with('image.enableLicensing')
-            ->willReturn(true);
-        
-        $imageView = $this->createStub(ImageView::class);
-        $imageView->method('getUuid')->willReturn(ID::generate()->toString());
-        
-        $this->imageRepository->expects($this->once())
-            ->method('findByUserId')
-            ->with($userId)
-            ->willReturn([$imageView]);
-        
-        $image = $this->createMock(Image::class);
-        $image->expects($this->once())
-            ->method('updateLicense')
-            ->with(null);
-        
-        $this->imageStore->expects($this->once())
-            ->method('get')
-            ->willReturn($image);
-        
-        $this->imageStore->expects($this->once())
-            ->method('store')
-            ->with($image);
-        
-        $this->service->syncLicenseForUser($userId, null);
-    }
 }
