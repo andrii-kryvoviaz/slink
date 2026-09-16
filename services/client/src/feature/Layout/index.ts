@@ -33,6 +33,7 @@ export { default as ModeSwitchHoverCard } from './ModeSwitch/ModeSwitchHoverCard
 export * from './ModeSwitch/ModeSwitch.theme';
 export * from './ModeSwitch/ModeSwitch.types';
 export { default as OverflowBadgeList } from './OverflowBadgeList/OverflowBadgeList.svelte';
+export { default as PageHeader } from './PageHeader/PageHeader.svelte';
 export { default as CollectionSkeleton } from './Skeleton/CollectionSkeleton.svelte';
 export { default as ExploreSkeleton } from './Skeleton/ExploreSkeleton.svelte';
 export { default as HistorySkeleton } from './Skeleton/HistorySkeleton.svelte';
