@@ -8,9 +8,35 @@ import { defaultSettings } from '@slink/lib/settings/UserSettings.svelte';
 
 type TableKey = 'users' | 'tags' | 'history' | 'collections' | 'shares';
 
-export type TableSettingsState = ReturnType<typeof useTableSettings>;
+interface PageSizeFeed {
+  pageSize: number;
+  setPageSize(size: number): void;
+}
 
-export function useTableSettings(key: TableKey) {
+export type TableSettingsState = {
+  pageSize: number;
+  columnVisibility: Record<string, boolean>;
+};
+
+export function useTableSettings(
+  key: TableKey | null,
+  feed: PageSizeFeed,
+): TableSettingsState {
+  if (key === null) {
+    return {
+      get pageSize() {
+        return feed.pageSize;
+      },
+      set pageSize(v: number) {
+        feed.setPageSize(v);
+      },
+      get columnVisibility() {
+        return {};
+      },
+      set columnVisibility(_v: Record<string, boolean>) {},
+    };
+  }
+
   const { settings } = page.data;
   const defaults = (defaultSettings.table as TableState)[key];
 

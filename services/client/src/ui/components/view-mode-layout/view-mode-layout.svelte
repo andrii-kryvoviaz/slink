@@ -57,7 +57,7 @@
     more,
   }: Props = $props();
 
-  const tableSettings = useTableSettings(feed.key!);
+  const tableSettings = useTableSettings(feed.key, feed);
 
   function resolveTableConfig(modeKey: ViewMode): TableModeConfig | undefined {
     const c = config?.[modeKey];
