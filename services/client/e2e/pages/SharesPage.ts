@@ -7,9 +7,6 @@ export class SharesPage extends BasePage {
 
   private static readonly COPIED_ICON_SELECTOR = 'svg.text-success-text';
 
-  readonly actionsTrigger = this.page.getByRole('button', {
-    name: 'Share actions',
-  });
   readonly emptyHeading = this.page.getByRole('heading', {
     name: 'No shares yet',
   });
@@ -19,6 +16,12 @@ export class SharesPage extends BasePage {
   readonly unpublishConfirm = this.page.getByRole('button', {
     name: 'Unpublish',
     exact: true,
+  });
+  readonly actionsPopover = this.page.locator(
+    '[data-slot="action-popover-content"]',
+  );
+  readonly copyLinkMenuItem = this.actionsPopover.getByRole('button', {
+    name: /Copy link/,
   });
 
   constructor(page: Page) {
@@ -64,11 +67,12 @@ export class SharesPage extends BasePage {
     return row.getByRole('cell').nth(index);
   }
 
+  actionsTriggerFor(row: Locator) {
+    return row.getByRole('button', { name: 'Share actions' }).first();
+  }
+
   async unpublishRow(row: Locator) {
-    await this.clickUntil(
-      row.getByRole('button', { name: 'Share actions' }).first(),
-      this.unpublishMenuItem,
-    );
+    await this.clickUntil(this.actionsTriggerFor(row), this.unpublishMenuItem);
     await this.unpublishMenuItem.click();
     await this.unpublishConfirm.click();
   }

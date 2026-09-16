@@ -26,7 +26,6 @@
     intro?: Snippet;
     header?: Snippet;
     introActive?: boolean;
-    onCopy?: () => void | Promise<void>;
     onUnpublish?: () => void | Promise<void>;
   }
 
@@ -42,7 +41,6 @@
     intro,
     header,
     introActive = false,
-    onCopy,
     onUnpublish,
   }: Props = $props();
 
@@ -77,7 +75,6 @@
           {header}
           onOpenExpiration={() => (view = 'expiration')}
           onOpenPassword={() => (view = 'password')}
-          {onCopy}
           onOpenUnpublish={onUnpublish ? () => (view = 'unpublish') : undefined}
         />
       {:else if view === 'expiration'}

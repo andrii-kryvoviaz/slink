@@ -1,7 +1,7 @@
 <script lang="ts">
+  import { Copyable } from '@slink/ui/components/copyable';
   import type { Snippet } from 'svelte';
 
-  import { useAutoReset } from '$lib/utils/time/useAutoReset.svelte';
   import Icon from '@iconify/svelte';
   import { cubicOut } from 'svelte/easing';
   import { fly, scale } from 'svelte/transition';
@@ -13,34 +13,14 @@
     header?: Snippet;
     onOpenExpiration: () => void;
     onOpenPassword: () => void;
-    onCopy?: () => void | Promise<void>;
     onOpenUnpublish?: () => void;
   }
 
-  let {
-    header,
-    onOpenExpiration,
-    onOpenPassword,
-    onCopy,
-    onOpenUnpublish,
-  }: Props = $props();
+  let { header, onOpenExpiration, onOpenPassword, onOpenUnpublish }: Props =
+    $props();
 
   const share = getShareControls();
   const list = controls.list();
-  const copiedState = useAutoReset(1500);
-
-  const handleCopy = async (): Promise<void> => {
-    if (!onCopy) {
-      return;
-    }
-
-    try {
-      await onCopy();
-      copiedState.trigger();
-    } catch {
-      // swallow; parent decides how to surface failures
-    }
-  };
 </script>
 
 <div in:fly|local={{ x: -6, duration: 120 }} class={list.wrap()}>
@@ -50,35 +30,37 @@
     </div>
   {/if}
 
-  {#if onCopy}
-    <button type="button" class={list.item()} onclick={handleCopy}>
-      <span class="inline-flex h-5 w-5 shrink-0 items-center justify-center">
-        {#if copiedState.active}
-          <span
-            in:scale|local={{ duration: 150, easing: cubicOut }}
-            class="inline-flex"
-          >
-            <Icon icon="ph:check" class="h-5 w-5 text-success-strong" />
-          </span>
-        {:else}
-          <span
-            in:scale|local={{ duration: 150, easing: cubicOut }}
-            class="inline-flex"
-          >
-            <Icon icon="ph:copy" class={list.icon()} />
-          </span>
-        {/if}
-      </span>
-      <div class={list.labels()}>
-        <span class={list.label()}>Copy link</span>
-        {#if copiedState.active}
-          <span class={list.sublabel()}>Copied to clipboard</span>
-        {:else}
-          <span class={list.sublabel()}>Copy the share link</span>
-        {/if}
-      </div>
-    </button>
-  {/if}
+  <Copyable text={share.ensurePublished} delay={1500}>
+    {#snippet children({ copied, copy })}
+      <button type="button" class={list.item()} onclick={copy}>
+        <span class="inline-flex h-5 w-5 shrink-0 items-center justify-center">
+          {#if copied}
+            <span
+              in:scale|local={{ duration: 150, easing: cubicOut }}
+              class="inline-flex"
+            >
+              <Icon icon="ph:check" class="h-5 w-5 text-success-strong" />
+            </span>
+          {:else}
+            <span
+              in:scale|local={{ duration: 150, easing: cubicOut }}
+              class="inline-flex"
+            >
+              <Icon icon="ph:copy" class={list.icon()} />
+            </span>
+          {/if}
+        </span>
+        <div class={list.labels()}>
+          <span class={list.label()}>Copy link</span>
+          {#if copied}
+            <span class={list.sublabel()}>Copied to clipboard</span>
+          {:else}
+            <span class={list.sublabel()}>Copy the share link</span>
+          {/if}
+        </div>
+      </button>
+    {/snippet}
+  </Copyable>
 
   <button type="button" class={list.item()} onclick={onOpenExpiration}>
     <Icon icon="ph:clock" class={list.icon()} />

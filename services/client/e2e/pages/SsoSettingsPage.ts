@@ -44,6 +44,14 @@ export class SsoSettingsPage extends BasePage {
     return this.page.getByRole('button', { name: 'Admin Approval options' });
   }
 
+  get callbackUrlButton(): Locator {
+    return this.page.getByRole('button', { name: /\/profile\/sso\/callback$/ });
+  }
+
+  get callbackUrlCopyButton(): Locator {
+    return this.callbackUrlButton.locator('xpath=following-sibling::button');
+  }
+
   async openRegistrationPolicyInfo() {
     await this.openHoverCard(this.registrationPolicyInfo);
   }

@@ -26,10 +26,27 @@ export class BasePage {
     await locator.fill(value);
   }
 
-  async clickUntil(trigger: Locator, target: Locator) {
+  async clickUntil(
+    trigger: Locator,
+    target: Locator,
+    beforeClick?: () => Promise<void>,
+  ) {
     await expect(async () => {
+      await beforeClick?.();
       await trigger.click();
       await expect(target).toBeVisible({ timeout: 1000 });
     }).toPass({ timeout: 15000 });
+  }
+
+  async gotoWithPausedClock(goto: () => Promise<void>) {
+    const installedAt = Date.now();
+
+    await this.page.clock.install({ time: installedAt });
+    await goto();
+    await this.page.clock.pauseAt(installedAt + 60_000);
+  }
+
+  async clickUntilOnPausedClock(trigger: Locator, target: Locator) {
+    await this.clickUntil(trigger, target, () => this.page.clock.runFor(100));
   }
 }

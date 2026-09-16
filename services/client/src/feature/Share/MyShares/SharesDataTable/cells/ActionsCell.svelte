@@ -59,7 +59,6 @@
   <ShareProvider state={shareState}>
     <SharePopover
       triggerLabel="Share actions"
-      onCopy={shareState.copy}
       onUnpublish={shareState.unpublish}
     >
       {#snippet trigger()}

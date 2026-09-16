@@ -12,6 +12,14 @@ export class IntegrationsPage extends BasePage {
   });
   readonly createdKeyHeading = this.page.getByText('Important Notice');
   readonly createdKeyInput = this.page.locator('input[readonly]').first();
+  readonly copyKeyButton = this.page.getByRole('button', {
+    name: 'Copy',
+    exact: true,
+  });
+  readonly copiedKeyButton = this.page.getByRole('button', {
+    name: 'Copied',
+    exact: true,
+  });
   readonly closeButton = this.page
     .locator('button[data-slot="button"]:not([data-dialog-close])', {
       hasText: 'Close',

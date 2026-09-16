@@ -10,7 +10,7 @@
   }
 
   interface Props {
-    text: string;
+    text: string | (() => Promise<string | void>);
     delay?: number;
     children: Snippet<[CopyState]>;
   }
@@ -19,8 +19,22 @@
 
   const copied = useAutoReset(delay);
 
+  const resolveText = async (): Promise<string | void> => {
+    if (typeof text === 'string') {
+      return text;
+    }
+
+    return text();
+  };
+
   const copy = async (): Promise<void> => {
-    const isCopied = await copyText(text);
+    const resolved = await resolveText().catch(() => undefined);
+
+    if (!resolved) {
+      return;
+    }
+
+    const isCopied = await copyText(resolved);
 
     if (!isCopied) {
       return;

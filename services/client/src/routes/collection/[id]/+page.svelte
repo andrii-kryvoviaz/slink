@@ -250,7 +250,6 @@
                   width="w-80 p-3"
                   triggerLabel="Share collection"
                   introActive={!share.isInitialized}
-                  onCopy={() => share.copy()}
                   onUnpublish={() => share.unpublish()}
                 >
                   {#snippet trigger()}

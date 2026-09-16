@@ -1,12 +1,13 @@
 <script lang="ts">
   import { Button } from '@slink/ui/components/button';
+  import { Copyable } from '@slink/ui/components/copyable';
   import { InputGroup } from '@slink/ui/components/input-group';
   import type { Snippet } from 'svelte';
 
-  import { useAutoReset } from '$lib/utils/time/useAutoReset.svelte';
-  import { copyText } from '$lib/utils/ui/clipboard';
   import Icon from '@iconify/svelte';
+  import type { Attachment } from 'svelte/attachments';
   import { cubicOut } from 'svelte/easing';
+  import type { MouseEventHandler } from 'svelte/elements';
   import { scale } from 'svelte/transition';
 
   import {
@@ -50,9 +51,6 @@
     actionSlot,
   }: Props = $props();
 
-  const isCopiedState = useAutoReset(delay);
-  let inputElement: HTMLInputElement | undefined = $state();
-
   const resolveValue = async (): Promise<string> => {
     if (onBeforeCopy) {
       const result = await onBeforeCopy();
@@ -63,97 +61,91 @@
     return value;
   };
 
-  const handleCopy = async () => {
-    const textToCopy = await resolveValue();
-    const success = await copyText(textToCopy);
-    if (!success) return;
-    isCopiedState.trigger();
-    inputElement?.select();
-  };
+  const syncSelection =
+    (copied: boolean): Attachment<HTMLInputElement> =>
+    (input) => {
+      if (copied) {
+        input.select();
+        return;
+      }
 
-  let prevActive = false;
-  $effect(() => {
-    if (prevActive && !isCopiedState.active) {
-      inputElement?.blur();
-    }
-    prevActive = isCopiedState.active;
-  });
+      input.blur();
+    };
 
-  const handleInputClick = () => {
-    if (inputElement) {
-      inputElement.select();
-    }
+  const handleInputClick: MouseEventHandler<HTMLInputElement> = (event) => {
+    event.currentTarget.select();
   };
 
   const inputClasses = $derived(
     CopyContainerInputTheme({ variant, size, mono: true }),
   );
   const buttonClasses = $derived(CopyContainerButtonTheme({ size }));
-
-  const copyState: CopyState = $derived({
-    isCopied: isCopiedState.active,
-    isLoading,
-    copy: handleCopy,
-  });
 </script>
 
 <div class="flex w-full items-center">
-  <InputGroup {variant} {size} {fluid}>
-    <div class="flex-1 min-w-0">
-      <input
-        bind:this={inputElement}
-        class={inputClasses}
-        type="text"
-        {value}
-        {placeholder}
-        readonly
-        onclick={handleInputClick}
-      />
-    </div>
-    <div class="shrink-0 pr-1">
-      {#if actionSlot}
-        {@render actionSlot(copyState)}
-      {:else}
-        <Button
-          class={buttonClasses}
-          variant="primary"
-          size="xs"
-          rounded="sm"
-          disabled={isCopiedState.active || isLoading}
-          onclick={handleCopy}
-        >
-          {#if isLoading}
-            <div
-              class="flex items-center gap-1.5"
-              in:scale={{ duration: 150, easing: cubicOut }}
-            >
-              <Icon icon="lucide:loader-2" class="h-3.5 w-3.5 animate-spin" />
-              <span>Signing...</span>
-            </div>
-          {:else if isCopiedState.active}
-            <div
-              class="flex items-center gap-1.5"
-              in:scale={{ duration: 150, easing: cubicOut }}
-            >
-              {#if copyButtonContent}
-                {@render copyButtonContent()}
-              {:else}
-                <Icon icon="lucide:check" class="h-3.5 w-3.5" />
-                <span>Copied</span>
-              {/if}
-            </div>
+  <Copyable text={resolveValue} {delay}>
+    {#snippet children({ copied, copy })}
+      <InputGroup {variant} {size} {fluid}>
+        <div class="flex-1 min-w-0">
+          <input
+            {@attach syncSelection(copied)}
+            class={inputClasses}
+            type="text"
+            {value}
+            {placeholder}
+            readonly
+            onclick={handleInputClick}
+          />
+        </div>
+        <div class="shrink-0 pr-1">
+          {#if actionSlot}
+            {@render actionSlot({ isCopied: copied, isLoading, copy })}
           {:else}
-            <div class="flex items-center gap-1.5">
-              {#if copyButtonContent}
-                {@render copyButtonContent()}
+            <Button
+              class={buttonClasses}
+              variant="primary"
+              size="xs"
+              rounded="sm"
+              disabled={copied || isLoading}
+              onclick={copy}
+            >
+              {#if isLoading}
+                <div
+                  class="flex items-center gap-1.5"
+                  in:scale={{ duration: 150, easing: cubicOut }}
+                >
+                  <Icon
+                    icon="lucide:loader-2"
+                    class="h-3.5 w-3.5 animate-spin"
+                  />
+                  <span>Signing...</span>
+                </div>
+              {:else if copied}
+                <div
+                  class="flex items-center gap-1.5"
+                  in:scale={{ duration: 150, easing: cubicOut }}
+                >
+                  {#if copyButtonContent}
+                    {@render copyButtonContent()}
+                  {:else}
+                    <Icon icon="lucide:check" class="h-3.5 w-3.5" />
+                    <span>Copied</span>
+                  {/if}
+                </div>
               {:else}
-                <Icon icon="lucide:copy" class="h-3.5 w-3.5" />
-                <span>Copy</span>
+                <div class="flex items-center gap-1.5">
+                  {#if copyButtonContent}
+                    {@render copyButtonContent()}
+                  {:else}
+                    <Icon icon="lucide:copy" class="h-3.5 w-3.5" />
+                    <span>Copy</span>
+                  {/if}
+                </div>
               {/if}
-            </div>
+            </Button>
           {/if}
-        </Button>
-      {/if}
-    </div>
-  </InputGroup>
+        </div>
+      </InputGroup>
+    {/snippet}
+  </Copyable>
 </div>

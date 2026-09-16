@@ -6,7 +6,6 @@ import {
 } from '@slink/feature/Share';
 
 import { bindRequestState } from '$lib/utils/store/bindRequestState.svelte';
-import { copyText } from '$lib/utils/ui/clipboard';
 import { printErrorsAsToastMessage } from '$lib/utils/ui/printErrorsAsToastMessage';
 import { routes } from '$lib/utils/url/routes';
 
@@ -150,16 +149,6 @@ export class ShareState {
     await this._config.onEnsurePublished?.(shareId);
 
     return this._shareUrl ?? undefined;
-  };
-
-  copy = async (): Promise<void> => {
-    const url = await this.ensurePublished();
-
-    if (!url) {
-      return;
-    }
-
-    await copyText(url);
   };
 
   unpublish = async (): Promise<void> => {
