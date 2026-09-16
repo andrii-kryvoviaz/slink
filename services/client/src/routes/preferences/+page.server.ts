@@ -2,8 +2,6 @@ import { fail, redirect } from '@sveltejs/kit';
 
 import { HttpException } from '@slink/api/Exceptions';
 
-import { formData } from '@slink/utils/form/formData';
-
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals, parent }) => {
@@ -17,15 +15,7 @@ export const load: PageServerLoad = async ({ locals, parent }) => {
 
   const licensingEnabled = globalSettings?.image?.enableLicensing ?? false;
 
-  const preferences = locals.userPreferences ?? {
-    'license.default': null,
-    'navigation.landingPage': null,
-    'image.defaultVisibility': null,
-    'image.stripExifMetadataOverride': null,
-    'image.externalUploadAutoPublish': null,
-    'display.language': null,
-    'display.theme': null,
-  };
+  const preferences = locals.userPreferences ?? null;
 
   let licenses: {
     id: string;
@@ -55,31 +45,10 @@ export const load: PageServerLoad = async ({ locals, parent }) => {
 
 export const actions: Actions = {
   updatePreferences: async ({ request, locals }) => {
-    const {
-      defaultLicense,
-      syncLicenseToImages,
-      defaultLandingPage,
-      defaultVisibility,
-      exifMetadataPreference,
-      externalUploadAutoPublish,
-      displayLanguage,
-      displayTheme,
-    } = await formData(request);
+    const form = await request.formData();
 
     try {
-      await locals.api.user.updatePreferences({
-        defaultLicense: defaultLicense || null,
-        syncLicenseToImages: syncLicenseToImages === 'true',
-        defaultLandingPage: defaultLandingPage || null,
-        defaultVisibility: defaultVisibility || null,
-        exifMetadataPreference: exifMetadataPreference || null,
-        externalUploadAutoPublish:
-          externalUploadAutoPublish === undefined
-            ? null
-            : externalUploadAutoPublish === 'true',
-        displayLanguage: displayLanguage || null,
-        displayTheme: displayTheme || null,
-      });
+      await locals.api.user.updatePreferences(Object.fromEntries([...form]));
     } catch (e) {
       if (e instanceof HttpException) {
         return fail(422, {

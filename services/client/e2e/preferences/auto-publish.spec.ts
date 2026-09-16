@@ -59,3 +59,129 @@ test.describe('Auto-publish preference', { tag: '@serial' }, () => {
     );
   });
 });
+
+test.describe('Preferences form forwarding', { tag: '@serial' }, () => {
+  let context: BrowserContext;
+  let page: Page;
+  let preferencesPage: PreferencesPage;
+
+  test.beforeAll(async ({ browser }) => {
+    const account = unique('pfwd');
+    const api = await provisionUser(account);
+
+    await api.preferences.updatePreferences({
+      'image.externalUploadAutoPublish': true,
+    });
+
+    context = await signInContext(browser, account);
+    page = await context.newPage();
+    preferencesPage = new PreferencesPage(page);
+  });
+
+  test.afterAll(async () => {
+    await context?.close();
+  });
+
+  test('turning auto-publish off persists as off', async ({ settingsApi }) => {
+    await settingsApi.set('image', {
+      enableLicensing: true,
+      allowOnlyPublicImages: false,
+    });
+
+    await preferencesPage.goto();
+    await expect(preferencesPage.heading).toBeVisible();
+
+    await expect(preferencesPage.autoPublishSwitch).toHaveAttribute(
+      'aria-checked',
+      'true',
+    );
+
+    await preferencesPage.setSwitch(preferencesPage.autoPublishSwitch, false);
+
+    await expect(preferencesPage.autoPublishSwitch).toHaveAttribute(
+      'aria-checked',
+      'false',
+    );
+    await expect(
+      page.locator('input[name="image.externalUploadAutoPublish"]'),
+    ).toHaveValue('false');
+
+    await preferencesPage.saveAndReload();
+
+    await expect(preferencesPage.autoPublishSwitch).toHaveAttribute(
+      'aria-checked',
+      'false',
+    );
+    await expect(preferencesPage.exifTrigger).toHaveText('Use server default');
+    await expect(preferencesPage.licenseTrigger).toHaveText(
+      'All Rights Reserved',
+    );
+  });
+
+  test('only-public mode leaves the stored default visibility unchanged', async ({
+    settingsApi,
+  }) => {
+    await settingsApi.set('image', { allowOnlyPublicImages: false });
+
+    await preferencesPage.goto();
+    await expect(preferencesPage.heading).toBeVisible();
+
+    await preferencesPage.selectOption(
+      preferencesPage.visibilityTrigger,
+      'Public',
+    );
+    await preferencesPage.saveAndReload();
+    await expect(preferencesPage.visibilityTrigger).toHaveText('Public');
+
+    await settingsApi.set('image', { allowOnlyPublicImages: true });
+    await preferencesPage.goto();
+    await expect(preferencesPage.heading).toBeVisible();
+
+    await expect(preferencesPage.visibilityTrigger).toHaveCount(0);
+    await expect(
+      page.locator('input[name="image.defaultVisibility"]'),
+    ).toHaveCount(0);
+    await expect(preferencesPage.autoPublishSwitch).toBeAttached();
+
+    await preferencesPage.selectOption(
+      preferencesPage.landingPageTrigger,
+      'Upload',
+    );
+    await preferencesPage.saveAndReload();
+
+    await settingsApi.set('image', { allowOnlyPublicImages: false });
+    await page.reload();
+    await expect(preferencesPage.heading).toBeVisible();
+
+    await expect(preferencesPage.visibilityTrigger).toHaveText('Public');
+    await expect(preferencesPage.landingPageTrigger).toHaveText('Upload');
+  });
+
+  test('licensing disabled leaves the stored default license unchanged', async ({
+    settingsApi,
+  }) => {
+    await settingsApi.set('image', { enableLicensing: true });
+
+    await preferencesPage.goto();
+    await expect(preferencesPage.heading).toBeVisible();
+
+    const licenseTitle = await preferencesPage.pickAnyLicense();
+    await preferencesPage.saveAndReload();
+    await expect(preferencesPage.licenseTrigger).toHaveText(licenseTitle);
+
+    await settingsApi.set('image', { enableLicensing: false });
+    await page.reload();
+    await expect(preferencesPage.heading).toBeVisible();
+
+    await expect(preferencesPage.licensingSection).toHaveCount(0);
+
+    await preferencesPage.selectTheme('nord');
+    await preferencesPage.saveAndReload();
+
+    await settingsApi.set('image', { enableLicensing: true });
+    await page.reload();
+    await expect(preferencesPage.heading).toBeVisible();
+
+    await expect(preferencesPage.licenseTrigger).toHaveText(licenseTitle);
+  });
+});

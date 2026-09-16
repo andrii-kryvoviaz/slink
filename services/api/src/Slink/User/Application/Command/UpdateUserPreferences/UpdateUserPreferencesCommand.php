@@ -12,7 +12,6 @@ use Slink\User\Domain\Enum\DisplayLanguage;
 use Slink\User\Domain\Enum\DisplayTheme;
 use Slink\User\Domain\Enum\ExifMetadataPreference;
 use Slink\User\Domain\Enum\LandingPage;
-use Slink\User\Domain\ValueObject\UserPreferences;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -45,62 +44,35 @@ final readonly class UpdateUserPreferencesCommand implements CommandInterface {
   ) {
   }
 
-  public function getPreferences(): UserPreferences {
-    return UserPreferences::create(
-      defaultLicense: $this->getDefaultLicense(),
-      defaultLandingPage: $this->getDefaultLandingPage(),
-      defaultVisibility: $this->getDefaultVisibility(),
-      displayLanguage: $this->getDisplayLanguage(),
-      displayTheme: $this->getDisplayTheme(),
-      externalUploadAutoPublish: $this->externalUploadAutoPublish,
-      exifMetadataPreference: $this->getExifMetadataPreference(),
-    );
+  public function getDefaultLicense(): ?string {
+    return $this->defaultLicense;
   }
 
-  /**
-   * @return array<string, string|bool|null>
-   */
-  public function toPayload(): array {
-    return [
-      'license.default' => $this->defaultLicense,
-      'navigation.landingPage' => $this->defaultLandingPage,
-      'image.defaultVisibility' => $this->defaultVisibility,
-      'display.language' => $this->displayLanguage,
-      'display.theme' => $this->displayTheme,
-      'image.externalUploadAutoPublish' => $this->externalUploadAutoPublish,
-      'image.stripExifMetadataOverride' => $this->exifMetadataPreference,
-    ];
+  public function getDefaultLandingPage(): ?string {
+    return $this->defaultLandingPage;
   }
 
-  public function getDefaultLicense(): ?License {
-    return $this->defaultLicense ? License::tryFrom($this->defaultLicense) : null;
+  public function getDefaultVisibility(): ?string {
+    return $this->defaultVisibility;
   }
 
-  public function getDefaultLandingPage(): ?LandingPage {
-    return $this->defaultLandingPage ? LandingPage::tryFrom($this->defaultLandingPage) : null;
+  public function getDisplayLanguage(): ?string {
+    return $this->displayLanguage;
   }
 
-  public function getDefaultVisibility(): ?DefaultVisibility {
-    return $this->defaultVisibility ? DefaultVisibility::tryFrom($this->defaultVisibility) : null;
-  }
-
-  public function getDisplayLanguage(): ?DisplayLanguage {
-    return $this->displayLanguage ? DisplayLanguage::tryFrom($this->displayLanguage) : null;
-  }
-
-  public function getDisplayTheme(): ?DisplayTheme {
-    return $this->displayTheme ? DisplayTheme::tryFrom($this->displayTheme) : null;
-  }
-
-  public function getExifMetadataPreference(): ?ExifMetadataPreference {
-    return $this->exifMetadataPreference ? ExifMetadataPreference::tryFrom($this->exifMetadataPreference) : null;
-  }
-
-  public function shouldSyncLicenseToImages(): bool {
-    return $this->syncLicenseToImages;
+  public function getDisplayTheme(): ?string {
+    return $this->displayTheme;
   }
 
   public function getExternalUploadAutoPublish(): ?bool {
     return $this->externalUploadAutoPublish;
+  }
+
+  public function getExifMetadataPreference(): ?string {
+    return $this->exifMetadataPreference;
+  }
+
+  public function shouldSyncLicenseToImages(): bool {
+    return $this->syncLicenseToImages;
   }
 }

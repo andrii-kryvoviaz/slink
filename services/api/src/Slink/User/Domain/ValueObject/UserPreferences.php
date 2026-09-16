@@ -36,10 +36,10 @@ final readonly class UserPreferences extends AbstractCompoundValueObject {
     return new self();
   }
 
-  public function getDefaultLicense(): ?License {
+  public function getDefaultLicense(): License {
     return isset($this->data['license.default']) && is_string($this->data['license.default'])
-      ? License::tryFrom($this->data['license.default'])
-      : null;
+      ? License::tryFrom($this->data['license.default']) ?? License::AllRightsReserved
+      : License::AllRightsReserved;
   }
 
   public function getDefaultLandingPage(): ?LandingPage {

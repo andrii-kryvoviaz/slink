@@ -1,7 +1,7 @@
 <script lang="ts">
   import { getLicenseLabels } from '@slink/feature/Image';
   import { Loader, ThemePicker, ThemePreview } from '@slink/feature/Layout';
-  import { SettingItem } from '@slink/feature/Settings';
+  import { SettingItem, SettingsSection } from '@slink/feature/Settings';
   import { Notice, Subtitle, Title } from '@slink/feature/Text';
   import { Select } from '@slink/ui/components';
   import { Button } from '@slink/ui/components/button';
@@ -10,7 +10,6 @@
   import { enhance } from '$app/forms';
   import { page } from '$app/state';
   import Icon from '@iconify/svelte';
-  import { writable } from 'svelte/store';
   import { fade } from 'svelte/transition';
 
   import type { UserPreferencesResponse } from '@slink/api/Response';
@@ -32,7 +31,7 @@
 
   interface PageData {
     user: User;
-    preferences: UserPreferencesResponse;
+    preferences: UserPreferencesResponse | null;
     licenses: License[];
     licensingEnabled: boolean;
     uploadPolicy: UploadPolicy;
@@ -45,16 +44,16 @@
   let { data }: Props = $props();
 
   const { settings } = page.data;
-  const state = new PreferencesPageState(data.preferences);
+  const formState = new PreferencesPageState(data.preferences);
 
-  state.onChanged('locale', (locale) =>
+  formState.onChanged('locale', (locale) =>
     applyLocale(locale as Locale, settings),
   );
 
   let licenses = $derived(data.licenses);
 
   let selectedLicenseInfo = $derived(
-    licenses.find((l) => l.id === state.license),
+    licenses.find((l) => l.id === formState.license),
   );
 
   const visibilityOptions = [
@@ -90,7 +89,7 @@
     false,
   );
 
-  const formError = writable<string | null>(null);
+  let formError = $state<string | null>(null);
 
   const licenseOptions = $derived(
     licenses.map((license) => ({
@@ -121,265 +120,207 @@
     action="?/updatePreferences"
     method="POST"
     use:enhance={withLoadingState(isPreferencesFormLoading, {
+      reset: false,
       onSubmit: () => {
-        formError.set(null);
+        formError = null;
       },
       onSuccess: async () => {
-        await state.commit();
-        settings.theme.current = resolveTheme(state.theme);
+        await formState.commit();
+        settings.theme.current = resolveTheme(formState.theme);
         toast.success(messages.preferences.updated);
       },
       onError: (data) => {
         const errors = data?.errors as Record<string, string> | undefined;
-        formError.set(errors?.message ?? messages.general.somethingWentWrong);
+        formError = errors?.message ?? messages.general.somethingWentWrong;
       },
     })}
   >
-    {#if $formError}
+    {#if formError}
       <Notice variant="error" class="mb-5">
-        {$formError}
+        {formError}
       </Notice>
     {/if}
     <div class="space-y-8">
-      <section class="space-y-1">
-        <div class="flex items-center justify-between gap-4 pb-3">
-          <h2
-            class="text-sm font-medium text-foreground-muted uppercase tracking-wider"
-          >
-            Language
-          </h2>
-        </div>
+      <SettingsSection>
+        {#snippet title()}
+          Language
+        {/snippet}
+        <SettingItem>
+          {#snippet label()}
+            Display Language
+          {/snippet}
+          {#snippet hint()}
+            Choose your preferred language for the interface
+          {/snippet}
+          <Select
+            items={localeOptions}
+            bind:value={formState.locale}
+            name="display.language"
+          />
+        </SettingItem>
+      </SettingsSection>
 
-        <div
-          class="divide-y divide-muted rounded-xl bg-muted-soft/50 dark:bg-muted-soft/30 border border-muted overflow-hidden"
-        >
+      <SettingsSection id="appearance" class="scroll-mt-20">
+        {#snippet title()}
+          Appearance
+        {/snippet}
+        <SettingItem>
+          {#snippet label()}
+            Theme
+          {/snippet}
+          {#snippet hint()}
+            Choose your preferred color theme for the interface
+          {/snippet}
+          {#snippet footer()}
+            <div class="px-4 pb-4">
+              <ThemePreview theme={formState.theme} />
+            </div>
+          {/snippet}
+          <ThemePicker
+            {themes}
+            bind:value={formState.theme}
+            name="display.theme"
+          />
+        </SettingItem>
+      </SettingsSection>
+
+      <SettingsSection>
+        {#snippet title()}
+          Navigation
+        {/snippet}
+        <SettingItem>
+          {#snippet label()}
+            Default Landing Page
+          {/snippet}
+          {#snippet hint()}
+            The page to show when you visit the site
+          {/snippet}
+          <Select
+            items={landingPageOptions}
+            bind:value={formState.landingPage}
+            placeholder="Select a landing page..."
+            name="navigation.landingPage"
+          />
+        </SettingItem>
+      </SettingsSection>
+
+      <SettingsSection>
+        {#snippet title()}
+          Image Uploads
+        {/snippet}
+        {#if !data.uploadPolicy.allowOnlyPublicImages}
           <SettingItem>
             {#snippet label()}
-              Display Language
+              Default Visibility
             {/snippet}
             {#snippet hint()}
-              Choose your preferred language for the interface
-            {/snippet}
-            <Select items={localeOptions} bind:value={state.locale} />
-            <input
-              type="hidden"
-              name="displayLanguage"
-              value={state.locale ?? ''}
-            />
-          </SettingItem>
-        </div>
-      </section>
-
-      <section id="appearance" class="space-y-1 scroll-mt-20">
-        <div class="flex items-center justify-between gap-4 pb-3">
-          <h2
-            class="text-sm font-medium text-foreground-muted uppercase tracking-wider"
-          >
-            Appearance
-          </h2>
-        </div>
-
-        <div
-          class="divide-y divide-muted rounded-xl bg-muted-soft/50 dark:bg-muted-soft/30 border border-muted overflow-hidden"
-        >
-          <SettingItem>
-            {#snippet label()}
-              Theme
-            {/snippet}
-            {#snippet hint()}
-              Choose your preferred color theme for the interface
-            {/snippet}
-            {#snippet footer()}
-              <div class="px-4 pb-4">
-                <ThemePreview theme={state.theme} />
-              </div>
-            {/snippet}
-            <ThemePicker {themes} bind:value={state.theme} />
-            <input type="hidden" name="displayTheme" value={state.theme} />
-          </SettingItem>
-        </div>
-      </section>
-
-      <section class="space-y-1">
-        <div class="flex items-center justify-between gap-4 pb-3">
-          <h2
-            class="text-sm font-medium text-foreground-muted uppercase tracking-wider"
-          >
-            Navigation
-          </h2>
-        </div>
-
-        <div
-          class="divide-y divide-muted rounded-xl bg-muted-soft/50 dark:bg-muted-soft/30 border border-muted overflow-hidden"
-        >
-          <SettingItem>
-            {#snippet label()}
-              Default Landing Page
-            {/snippet}
-            {#snippet hint()}
-              The page to show when you visit the site
+              New uploads will be set to public or private by default
             {/snippet}
             <Select
-              items={landingPageOptions}
-              bind:value={state.landingPage}
-              placeholder="Select a landing page..."
-            />
-            <input
-              type="hidden"
-              name="defaultLandingPage"
-              value={state.landingPage ?? ''}
+              items={visibilityOptions}
+              bind:value={formState.visibility}
+              placeholder="Select visibility..."
+              name="image.defaultVisibility"
             />
           </SettingItem>
-        </div>
-      </section>
+        {/if}
 
-      <section class="space-y-1">
-        <div class="flex items-center justify-between gap-4 pb-3">
-          <h2
-            class="text-sm font-medium text-foreground-muted uppercase tracking-wider"
-          >
-            Image Uploads
-          </h2>
-        </div>
-        <div
-          class="divide-y divide-muted rounded-xl bg-muted-soft/50 dark:bg-muted-soft/30 border border-muted overflow-hidden"
-        >
-          {#if !data.uploadPolicy.allowOnlyPublicImages}
-            <SettingItem>
-              {#snippet label()}
-                Default Visibility
-              {/snippet}
-              {#snippet hint()}
-                New uploads will be set to public or private by default
-              {/snippet}
-              <Select
-                items={visibilityOptions}
-                bind:value={state.visibility}
-                placeholder="Select visibility..."
-              />
-              <input
-                type="hidden"
-                name="defaultVisibility"
-                value={state.visibility ?? ''}
-              />
-            </SettingItem>
-          {/if}
+        <SettingItem>
+          {#snippet label()}
+            EXIF Metadata
+          {/snippet}
+          {#snippet hint()}
+            Override how metadata is stripped from your uploads.
+          {/snippet}
+          <Select
+            items={exifPreferenceOptions}
+            bind:value={formState.exifPreference}
+            placeholder="Select metadata handling..."
+            name="image.stripExifMetadataOverride"
+          />
+        </SettingItem>
 
-          <SettingItem>
-            {#snippet label()}
-              EXIF Metadata
-            {/snippet}
-            {#snippet hint()}
-              Override how metadata is stripped from your uploads.
-            {/snippet}
-            <Select
-              items={exifPreferenceOptions}
-              bind:value={state.exifPreference}
-              placeholder="Select metadata handling..."
-            />
-            <input
-              type="hidden"
-              name="exifMetadataPreference"
-              value={state.exifPreference}
-            />
-          </SettingItem>
-
-          <SettingItem>
-            {#snippet label()}
-              Auto-publish API uploads
-            {/snippet}
-            {#snippet hint()}
-              Make uploads from API tools (e.g. ShareX) immediately shareable.
-            {/snippet}
-            <Switch
-              id="externalUploadAutoPublish"
-              name="externalUploadAutoPublish"
-              bind:checked={state.externalUploadAutoPublish}
-            />
-          </SettingItem>
-        </div>
-      </section>
+        <SettingItem>
+          {#snippet label()}
+            Auto-publish API uploads
+          {/snippet}
+          {#snippet hint()}
+            Make uploads from API tools (e.g. ShareX) immediately shareable.
+          {/snippet}
+          <Switch
+            name="image.externalUploadAutoPublish"
+            bind:checked={formState.externalUploadAutoPublish}
+          />
+        </SettingItem>
+      </SettingsSection>
 
       {#if data.licensingEnabled}
-        <section class="space-y-1">
-          <div class="flex items-center justify-between gap-4 pb-3">
-            <h2
-              class="text-sm font-medium text-foreground-muted uppercase tracking-wider"
-            >
-              Image Licensing
-            </h2>
-          </div>
-          <div
-            class="divide-y divide-muted rounded-xl bg-muted-soft/50 dark:bg-muted-soft/30 border border-muted overflow-hidden"
-          >
-            <SettingItem>
-              {#snippet label()}
-                Default License
-              {/snippet}
-              {#snippet hint()}
-                This license will be automatically applied to new uploads
-              {/snippet}
-              {#snippet footer()}
-                {#if selectedLicenseInfo && selectedLicenseLabels}
-                  <Notice
-                    variant="info"
-                    appearance="subtle"
-                    size="sm"
-                    class="px-4"
-                  >
-                    <div class="flex gap-3">
-                      <Icon icon="ph:scales" class="w-4 h-4 shrink-0 mt-0.5" />
-                      <div class="space-y-1">
-                        <p class="font-medium">{selectedLicenseLabels.title}</p>
-                        <p class="text-xs opacity-75">
-                          {selectedLicenseLabels.description}
-                        </p>
-                        {#if selectedLicenseInfo.url}
-                          <a
-                            href={selectedLicenseInfo.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            class="inline-flex items-center gap-1 text-xs hover:underline"
-                          >
-                            <span>Learn more</span>
-                            <Icon
-                              icon="heroicons:arrow-top-right-on-square"
-                              class="w-3 h-3"
-                            />
-                          </a>
-                        {/if}
-                      </div>
+        <SettingsSection>
+          {#snippet title()}
+            Image Licensing
+          {/snippet}
+          <SettingItem>
+            {#snippet label()}
+              Default License
+            {/snippet}
+            {#snippet hint()}
+              This license will be automatically applied to new uploads
+            {/snippet}
+            {#snippet footer()}
+              {#if selectedLicenseInfo && selectedLicenseLabels}
+                <Notice
+                  variant="info"
+                  appearance="subtle"
+                  size="sm"
+                  class="px-4"
+                >
+                  <div class="flex gap-3">
+                    <Icon icon="ph:scales" class="w-4 h-4 shrink-0 mt-0.5" />
+                    <div class="space-y-1">
+                      <p class="font-medium">{selectedLicenseLabels.title}</p>
+                      <p class="text-xs opacity-75">
+                        {selectedLicenseLabels.description}
+                      </p>
+                      {#if selectedLicenseInfo.url}
+                        <a
+                          href={selectedLicenseInfo.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="inline-flex items-center gap-1 text-xs hover:underline"
+                        >
+                          <span>Learn more</span>
+                          <Icon
+                            icon="heroicons:arrow-top-right-on-square"
+                            class="w-3 h-3"
+                          />
+                        </a>
+                      {/if}
                     </div>
-                  </Notice>
-                {/if}
-              {/snippet}
-              <Select
-                items={licenseOptions}
-                bind:value={state.license}
-                placeholder="Select a license..."
-              />
-              <input
-                type="hidden"
-                name="defaultLicense"
-                value={state.license ?? ''}
-              />
-            </SettingItem>
+                  </div>
+                </Notice>
+              {/if}
+            {/snippet}
+            <Select
+              items={licenseOptions}
+              bind:value={formState.license}
+              placeholder="Select a license..."
+              name="license.default"
+            />
+          </SettingItem>
 
-            <SettingItem>
-              {#snippet label()}
-                Sync to existing images
-              {/snippet}
-              {#snippet hint()}
-                Apply this license to all your existing images
-              {/snippet}
-              <Switch
-                id="syncLicenseToImages"
-                name="syncLicenseToImages"
-                bind:checked={state.syncToImages}
-              />
-            </SettingItem>
-          </div>
-        </section>
+          <SettingItem>
+            {#snippet label()}
+              Sync to existing images
+            {/snippet}
+            {#snippet hint()}
+              Apply this license to all your existing images
+            {/snippet}
+            <Switch
+              name="license.syncToImages"
+              bind:checked={formState.syncToImages}
+            />
+          </SettingItem>
+        </SettingsSection>
       {/if}
     </div>
 

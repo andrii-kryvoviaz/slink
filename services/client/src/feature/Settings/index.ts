@@ -19,6 +19,7 @@ export { default as ResetSettingPopover } from './ResetSettingConfirmation/Reset
 export { default as SettingsPageLayout } from './SettingsPageLayout.svelte';
 export { default as SettingItem } from './SettingsPane/SettingItem.svelte';
 export { default as SettingsPane } from './SettingsPane/SettingsPane.svelte';
+export { default as SettingsSection } from './SettingsSection/SettingsSection.svelte';
 export { default as SettingsSkeleton } from './SettingsSkeleton.svelte';
 export { default as ShareSettings } from './ShareSettings/ShareSettings.svelte';
 export { default as StorageSettings } from './StorageSettings/StorageSettings.svelte';

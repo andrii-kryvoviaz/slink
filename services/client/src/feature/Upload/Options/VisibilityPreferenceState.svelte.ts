@@ -11,7 +11,9 @@ export class VisibilityPreferenceState {
 
   private _update = bindRequestState(
     ReactiveState<void>((visibility: Visibility) =>
-      ApiClient.user.updatePreferences({ defaultVisibility: visibility }),
+      ApiClient.user.updatePreferences({
+        'image.defaultVisibility': visibility,
+      }),
     ),
   );
 

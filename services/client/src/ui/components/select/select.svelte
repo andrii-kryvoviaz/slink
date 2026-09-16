@@ -26,6 +26,7 @@
     trigger?: Snippet<[Record<string, unknown>]>;
     itemClass?: string;
     align?: 'start' | 'center' | 'end';
+    name?: string;
   };
 
   type SingleSelectProps = BaseProps & {
@@ -105,9 +106,11 @@
     return undefined;
   });
 
-  const selectedCount = $derived(
-    type === 'single' ? (value ? 1 : 0) : (inner.value as string[]).length,
-  );
+  const selectedCount = $derived.by(() => {
+    if (type !== 'single') return (inner.value as string[]).length;
+    if (selectedItem) return 1;
+    return 0;
+  });
 
   const displayValue = $derived.by<string>(() => {
     if (selectedCount === 0) return placeholder;
@@ -146,7 +149,9 @@
               class="w-4 h-4 shrink-0 text-foreground-muted"
             />
           {/if}
-          <span class={cn('truncate', !value ? 'text-foreground-muted' : '')}>
+          <span
+            class={cn('truncate', !selectedItem && 'text-foreground-muted')}
+          >
             {displayValue}
           </span>
         </div>

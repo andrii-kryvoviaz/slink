@@ -11,6 +11,7 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use UI\Http\Rest\Response\ApiResponse;
 
 #[AsController]
@@ -20,7 +21,7 @@ final class UpdateUserPreferencesController {
 
   public function __invoke(
     #[CurrentUser] JwtUser $user,
-    #[MapRequestPayload] UpdateUserPreferencesCommand $command
+    #[MapRequestPayload(serializationContext: [AbstractNormalizer::FILTER_BOOL => true])] UpdateUserPreferencesCommand $command
   ): ApiResponse {
     $this->handle($command->withContext([
       'userId' => $user->getUserIdentifier(),
