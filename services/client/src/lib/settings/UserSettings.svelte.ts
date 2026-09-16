@@ -36,6 +36,7 @@ export type TableState = {
   shares: TableKeySettings;
 };
 export type HistoryState = { viewMode: ViewMode };
+export type ExploreState = { viewMode: ViewMode };
 export type TagsState = { viewMode: ViewMode };
 export type CollectionLoadStrategy = 'load_more' | 'infinite_scroll';
 export type CollectionsState = {
@@ -108,6 +109,7 @@ export const defaultSettings: Record<SettingsKey, unknown> = {
     },
   },
   history: { viewMode: 'table' },
+  explore: { viewMode: 'grid' },
   tags: { viewMode: 'table' },
   share: { format: 'direct' },
   comment: { sortOrder: SortOrder.Asc },
@@ -183,6 +185,7 @@ export class UserSettings {
   );
   _table = $state<TableState>(defaultSettings.table as TableState);
   _history = $state<HistoryState>(defaultSettings.history as HistoryState);
+  _explore = $state<ExploreState>(defaultSettings.explore as ExploreState);
   _tags = $state<TagsState>(defaultSettings.tags as TagsState);
   _share = $state<ShareState>(defaultSettings.share as ShareState);
   _comment = $state<CommentState>(defaultSettings.comment as CommentState);
@@ -288,6 +291,15 @@ export class UserSettings {
   set history(v: HistoryState) {
     this._history = v;
     persist('history', v);
+  }
+
+  get explore(): ExploreState {
+    return this._explore;
+  }
+
+  set explore(v: ExploreState) {
+    this._explore = v;
+    persist('explore', v);
   }
 
   get tags(): TagsState {

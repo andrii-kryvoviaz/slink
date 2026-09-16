@@ -36,6 +36,7 @@ export type SettingsKey =
   | 'userAdmin'
   | 'table'
   | 'history'
+  | 'explore'
   | 'tags'
   | 'share'
   | 'comment'
@@ -52,6 +53,7 @@ export const settingsKeys: SettingsKey[] = [
   'userAdmin',
   'table',
   'history',
+  'explore',
   'tags',
   'share',
   'comment',
