@@ -112,7 +112,7 @@ final readonly class UserPreferences extends AbstractCompoundValueObject {
    * @param array<string, string|bool|null> $payload
    */
   public function applyChanges(array $payload): self {
-    return new self([...$this->data, ...$payload]);
+    return new self([...$this->data, ...array_filter($payload, fn($v) => $v !== null)]);
   }
 
   /**

@@ -208,7 +208,7 @@
         {#snippet title()}
           Image Uploads
         {/snippet}
-        {#if data.uploadPolicy.canChooseVisibility}
+        {#if !data.uploadPolicy.allowOnlyPublicImages}
           <SettingItem>
             {#snippet label()}
               Default Visibility

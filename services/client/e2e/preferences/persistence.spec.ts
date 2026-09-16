@@ -5,7 +5,10 @@ import { unique } from '../helpers/accounts';
 import { provisionUser } from '../helpers/provisioning';
 import { signInContext } from '../helpers/session';
 import { LayoutControls } from '../pages/LayoutControls';
-import { PreferencesPage } from '../pages/PreferencesPage';
+import {
+  PreferencesPage,
+  type PreferencesState,
+} from '../pages/PreferencesPage';
 
 test.describe('Preferences persistence', { tag: '@serial' }, () => {
   let context: BrowserContext;
@@ -48,17 +51,15 @@ test.describe('Preferences persistence', { tag: '@serial' }, () => {
     await expect(preferencesPage.licenseTrigger).toHaveCount(1);
     await expect(preferencesPage.syncLicenseSwitch).toHaveCount(1);
 
-    await expect(preferencesPage.landingPageTrigger).toHaveText('Explore');
-    await expect(preferencesPage.visibilityTrigger).toHaveText('Private');
-    await expect(preferencesPage.exifTrigger).toHaveText('Use server default');
-    await expect(preferencesPage.autoPublishSwitch).toHaveAttribute(
-      'aria-checked',
-      'false',
-    );
-    await expect(preferencesPage.licenseTrigger).toHaveText(
-      'All Rights Reserved',
-    );
-    await expect(preferencesPage.themeTrigger).toHaveText('Default');
+    await preferencesPage.expectState({
+      landingPage: 'Explore',
+      visibility: 'Private',
+      exif: 'Use server default',
+      license: 'All Rights Reserved',
+      theme: 'Default',
+      autoPublish: false,
+      syncLicense: false,
+    });
 
     await preferencesPage.selectOption(
       preferencesPage.landingPageTrigger,
@@ -89,20 +90,18 @@ test.describe('Preferences persistence', { tag: '@serial' }, () => {
 
     await preferencesPage.saveAndReload();
 
-    await expect(preferencesPage.landingPageTrigger).toHaveText('Upload');
-    await expect(preferencesPage.visibilityTrigger).toHaveText('Public');
-    await expect(preferencesPage.exifTrigger).toHaveText('Always strip');
-    await expect(preferencesPage.autoPublishSwitch).toHaveAttribute(
-      'aria-checked',
-      'true',
-    );
-    await expect(preferencesPage.licenseTrigger).toHaveText(licenseTitle);
-    await expect(preferencesPage.themeTrigger).toHaveText('Nord');
+    const saved: PreferencesState = {
+      landingPage: 'Upload',
+      visibility: 'Public',
+      exif: 'Always strip',
+      license: licenseTitle,
+      theme: 'Nord',
+      autoPublish: true,
+      syncLicense: false,
+    };
+
+    await preferencesPage.expectState(saved);
     await expect.poll(() => layoutControls.readTheme()).toBe('nord');
-    await expect(preferencesPage.syncLicenseSwitch).toHaveAttribute(
-      'aria-checked',
-      'false',
-    );
 
     await preferencesPage.selectOption(
       preferencesPage.landingPageTrigger,
@@ -111,19 +110,7 @@ test.describe('Preferences persistence', { tag: '@serial' }, () => {
 
     await preferencesPage.saveAndReload();
 
-    await expect(preferencesPage.landingPageTrigger).toHaveText('Explore');
-    await expect(preferencesPage.visibilityTrigger).toHaveText('Public');
-    await expect(preferencesPage.exifTrigger).toHaveText('Always strip');
-    await expect(preferencesPage.autoPublishSwitch).toHaveAttribute(
-      'aria-checked',
-      'true',
-    );
-    await expect(preferencesPage.licenseTrigger).toHaveText(licenseTitle);
-    await expect(preferencesPage.themeTrigger).toHaveText('Nord');
-    await expect(preferencesPage.syncLicenseSwitch).toHaveAttribute(
-      'aria-checked',
-      'false',
-    );
+    await preferencesPage.expectState({ ...saved, landingPage: 'Explore' });
 
     await preferencesPage.selectOption(
       preferencesPage.landingPageTrigger,
@@ -141,7 +128,6 @@ test.describe('Preferences persistence', { tag: '@serial' }, () => {
     );
     await preferencesPage.saveAndReload();
 
-    await expect(preferencesPage.landingPageTrigger).toHaveText('Upload');
-    await expect(preferencesPage.exifTrigger).toHaveText('Always keep');
+    await preferencesPage.expectState({ ...saved, exif: 'Always keep' });
   });
 });

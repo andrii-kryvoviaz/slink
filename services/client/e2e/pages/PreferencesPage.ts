@@ -19,6 +19,16 @@ const THEME_LABELS: Record<string, string> = {
   nord: 'Nord',
 };
 
+export type PreferencesState = {
+  landingPage: string;
+  visibility: string;
+  exif: string;
+  license: string;
+  theme: string;
+  autoPublish: boolean;
+  syncLicense: boolean;
+};
+
 export class PreferencesPage extends BasePage {
   static readonly URL = '/preferences';
 
@@ -72,15 +82,7 @@ export class PreferencesPage extends BasePage {
   }
 
   async selectLocale(value: string) {
-    const label = LOCALE_LABELS[value] ?? value;
-    const option = this.page.getByRole('option', { name: label });
-
-    await expect(async () => {
-      await this.localeTrigger.click();
-      await expect(option).toBeVisible({ timeout: 1000 });
-    }).toPass({ timeout: 15000 });
-
-    await option.click();
+    await this.selectOption(this.localeTrigger, LOCALE_LABELS[value] ?? value);
   }
 
   async selectTheme(value: string) {
@@ -102,6 +104,22 @@ export class PreferencesPage extends BasePage {
     await this.save();
     await this.page.reload();
     await expect(this.heading).toBeVisible();
+  }
+
+  async expectState(state: PreferencesState) {
+    await expect(this.landingPageTrigger).toHaveText(state.landingPage);
+    await expect(this.visibilityTrigger).toHaveText(state.visibility);
+    await expect(this.exifTrigger).toHaveText(state.exif);
+    await expect(this.licenseTrigger).toHaveText(state.license);
+    await expect(this.themeTrigger).toHaveText(state.theme);
+    await expect(this.autoPublishSwitch).toHaveAttribute(
+      'aria-checked',
+      String(state.autoPublish),
+    );
+    await expect(this.syncLicenseSwitch).toHaveAttribute(
+      'aria-checked',
+      String(state.syncLicense),
+    );
   }
 
   async selectOption(trigger: Locator, label: string) {
