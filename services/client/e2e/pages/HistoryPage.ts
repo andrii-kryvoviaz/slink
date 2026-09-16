@@ -170,6 +170,12 @@ export class HistoryPage extends BasePage {
     await formatItem.click();
   }
 
+  tableCopyLinkButton(id: string) {
+    return this.tableRowFor(id)
+      .getByLabel('Copy image link', { exact: true })
+      .filter({ visible: true });
+  }
+
   async clipboardImageTypes(): Promise<string[]> {
     return this.page.evaluate(async () => {
       const items = await navigator.clipboard.read();

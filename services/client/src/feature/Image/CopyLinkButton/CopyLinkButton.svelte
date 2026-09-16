@@ -3,13 +3,9 @@
   import { Tooltip, type TooltipVariant } from '@slink/ui/components/tooltip';
   import { mergeProps } from 'bits-ui';
 
-  import { useAutoReset } from '$lib/utils/time/useAutoReset.svelte';
-  import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
   import Icon from '@iconify/svelte';
 
-  import type { ShareFormat } from '@slink/lib/settings';
-  import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
-
+  import { ShareFormatCopyState } from '../ShareFormat/ShareFormatCopyState.svelte';
   import SplitCopyControl from '../ShareFormat/SplitCopyControl.svelte';
   import { copyImageWithFormat } from '../ShareFormat/copyImageWithFormat';
   import {
@@ -29,31 +25,22 @@
     tooltipVariant = 'subtle',
   }: Props = $props();
 
-  const copiedState = useAutoReset(1500);
+  const formatCopy = new ShareFormatCopyState(
+    (format) => copyImageWithFormat(image, format),
+    1500,
+  );
 
-  let isCopying = $state(false);
-  const isDisabled = $derived(isCopying || copiedState.active);
+  const isDisabled = $derived(formatCopy.copying || formatCopy.copied);
 
   const classes = $derived(copyLinkIconVariants({ variant }));
-
-  const handleCopy = async (format: ShareFormat) => {
-    isCopying = true;
-    try {
-      if (await copyImageWithFormat(image, format)) {
-        copiedState.trigger();
-        return;
-      }
-      toast.error(messages.general.somethingWentWrong);
-    } catch {
-      return;
-    } finally {
-      isCopying = false;
-    }
-  };
 </script>
 
 <Toolbar.Group>
-  <SplitCopyControl tone="dark" caretDisabled={isCopying} onCopy={handleCopy}>
+  <SplitCopyControl
+    tone="dark"
+    caretDisabled={formatCopy.copying}
+    onCopy={formatCopy.copy}
+  >
     {#snippet main({ selectedFormat, select })}
       <Tooltip
         side="top"
@@ -67,26 +54,26 @@
               onclick: () => select(selectedFormat),
             })}
             class="group"
-            active={copiedState.active}
+            active={formatCopy.copied}
             disabled={isDisabled}
-            aria-label={copiedState.active ? 'Copied' : 'Copy link'}
+            aria-label={formatCopy.copied ? 'Copied' : 'Copy link'}
             aria-live="polite"
           >
-            {#if copiedState.active}
+            {#if formatCopy.copied}
               <Icon icon="lucide:check" class={classes.icon()} />
             {:else}
               <Icon icon="ph:link" class={classes.icon()} />
             {/if}
           </Toolbar.Button>
         {/snippet}
-        {#if copiedState.active}Copied{:else}Copy link{/if}
+        {#if formatCopy.copied}Copied{:else}Copy link{/if}
       </Tooltip>
     {/snippet}
     {#snippet caret({ props })}
       <Toolbar.Button
         {...props}
         class="w-[26px]"
-        disabled={isCopying}
+        disabled={formatCopy.copying}
         aria-label="Copy link format"
       >
         <Icon icon="ph:caret-down" class={classes.caretIcon()} />

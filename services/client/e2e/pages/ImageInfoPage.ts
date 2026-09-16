@@ -26,6 +26,15 @@ export class ImageInfoPage extends BasePage {
     name: 'Save',
     exact: true,
   });
+  readonly shareLinkInput = this.page.locator('input[readonly]');
+  readonly copyShareLinkButton = this.page.getByRole('button', {
+    name: 'Copy',
+    exact: true,
+  });
+  readonly copiedShareLinkButton = this.page.getByRole('button', {
+    name: 'Copied',
+    exact: true,
+  });
 
   constructor(page: Page) {
     super(page);

@@ -24,13 +24,11 @@
   const iconClass = $derived(iconSizeVariants({ layout: context.layout }));
   const capsule = $derived(shareCapsuleVariants({ layout: context.layout }));
 
-  const copyDisabled = $derived(
-    actions.shareIsLoading || actions.isCopied.active,
-  );
+  const copyDisabled = $derived(actions.shareIsLoading || actions.isCopied);
 
   const copyTooltip = $derived.by(() => {
     if (actions.shareIsLoading) return 'Generating...';
-    if (actions.isCopied.active) return 'Copied!';
+    if (actions.isCopied) return 'Copied!';
     return 'Copy link';
   });
 </script>
@@ -55,7 +53,7 @@
         <div class={cn(iconClass, 'flex items-center justify-center')}>
           <Loader variant="minimal" size="xs" />
         </div>
-      {:else if actions.isCopied.active}
+      {:else if actions.isCopied}
         <div in:scale={{ duration: 300, easing: cubicOut }}>
           <Icon icon="lucide:check" class={cn(iconClass, 'text-success')} />
         </div>

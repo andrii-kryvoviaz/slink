@@ -23,19 +23,17 @@ test.describe('Share publish roundtrip', () => {
 
     const shareLinkPattern = /\/i\/[^/?#]+/;
 
-    const linkInput = page.locator('input[readonly]');
-    await expect(linkInput).toHaveValue(shareLinkPattern);
+    await expect(imageInfoPage.shareLinkInput).toHaveValue(shareLinkPattern);
 
-    const copyButton = page.getByRole('button', { name: 'Copy', exact: true });
-    await expect(copyButton).toBeVisible();
-    await expect(copyButton).toBeEnabled();
+    await expect(imageInfoPage.copyShareLinkButton).toBeVisible();
+    await expect(imageInfoPage.copyShareLinkButton).toBeEnabled();
 
     await imageInfoPage.clickUntil(
-      copyButton,
+      imageInfoPage.copyShareLinkButton,
       page.getByRole('button', { name: 'Copied' }),
     );
 
-    await expect(linkInput).toHaveValue(shareLinkPattern);
+    await expect(imageInfoPage.shareLinkInput).toHaveValue(shareLinkPattern);
 
     const clipboardUrl = await page.evaluate(() =>
       navigator.clipboard.readText(),

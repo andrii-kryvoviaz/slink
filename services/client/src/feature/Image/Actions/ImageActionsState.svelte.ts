@@ -24,6 +24,7 @@ import {
 } from '@slink/lib/state/ImagePickerState.svelte';
 import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
 
+import { ShareFormatCopyState } from '../ShareFormat/ShareFormatCopyState.svelte';
 import { copyImageWithFormat } from '../ShareFormat/copyImageWithFormat';
 
 export interface ImageActionsConfig {
@@ -75,7 +76,15 @@ export class ImageActionsState {
   );
 
   private _downloadLoading = useAutoReset(500);
-  private _isCopied = useAutoReset(1000);
+  private _formatCopy = new ShareFormatCopyState(
+    (format) =>
+      copyImageWithFormat(
+        this._config.getImage(),
+        format,
+        this._resolveShareUrl,
+      ),
+    1000,
+  );
   private _overlays = createExclusiveToggle(
     'collection',
     'tag',
@@ -146,8 +155,8 @@ export class ImageActionsState {
     return this._deletion.isLoading;
   }
 
-  get isCopied() {
-    return this._isCopied;
+  get isCopied(): boolean {
+    return this._formatCopy.copied;
   }
 
   get overlays() {
@@ -212,17 +221,7 @@ export class ImageActionsState {
 
   handleCopy = async (format: ShareFormat): Promise<void> => {
     this._overlays.close();
-    const image = this._config.getImage();
-
-    try {
-      if (await copyImageWithFormat(image, format, this._resolveShareUrl)) {
-        this._isCopied.trigger();
-        return;
-      }
-      toast.error(messages.general.somethingWentWrong);
-    } catch {
-      return;
-    }
+    await this._formatCopy.copy(format);
   };
 
   handleCollectionToggle = ({

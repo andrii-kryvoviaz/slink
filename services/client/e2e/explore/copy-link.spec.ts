@@ -1,50 +1,65 @@
 import { expect, test } from '../fixtures/auth.fixture';
 
+const SHARE_LINK_PATTERN = /\/i\/[^/?#]+/;
+
 test.use({
   permissions: ['clipboard-read', 'clipboard-write'],
 });
 
 test.describe('Image share link copy', () => {
-  test('copies the share link from the image info page', async ({
+  test('owner copies the share link, which stays copied until the 2000ms reset', async ({
     api,
     page,
-    explorePage,
+    imageInfoPage,
   }) => {
     const imageId = await api.content.uploadImage({ isPublic: false });
 
-    await page.goto(`/info/${imageId}`);
+    await imageInfoPage.gotoWithPausedClock(async () => {
+      await imageInfoPage.goto(imageId);
+      await expect(imageInfoPage.shareLinkInput).toHaveValue(
+        SHARE_LINK_PATTERN,
+      );
+      await imageInfoPage.copyShareLinkButton.click();
+      await expect(imageInfoPage.copiedShareLinkButton).toBeVisible();
+      await expect(imageInfoPage.copyShareLinkButton).toBeEnabled();
+      await page.evaluate(() => navigator.clipboard.writeText(''));
+    });
 
-    const copyButton = page.getByRole('button', { name: 'Copy' });
-    await expect(copyButton).toBeVisible();
+    await imageInfoPage.copyShareLinkButton.click();
+    await expect(imageInfoPage.copiedShareLinkButton).toBeDisabled();
 
-    await explorePage.clickUntil(
-      copyButton,
-      page.getByRole('button', { name: 'Copied' }),
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
+      await imageInfoPage.shareLinkInput.inputValue(),
     );
 
-    await expect(page.getByRole('button', { name: 'Copied' })).toBeVisible();
+    await page.clock.runFor(1999);
+    await expect(imageInfoPage.copiedShareLinkButton).toBeDisabled();
+
+    await page.clock.runFor(1);
+    await expect(imageInfoPage.copyShareLinkButton).toBeEnabled();
   });
 
-  test('writes a non-empty value to the clipboard', async ({
+  test('owner sees an error toast and no copied state when the clipboard write fails', async ({
     api,
     page,
-    explorePage,
+    imageInfoPage,
   }) => {
+    await page.addInitScript(() => {
+      Clipboard.prototype.writeText = () =>
+        Promise.reject(new Error('Clipboard write denied'));
+    });
+
     const imageId = await api.content.uploadImage({ isPublic: false });
 
-    await page.goto(`/info/${imageId}`);
+    await imageInfoPage.goto(imageId);
+    await expect(imageInfoPage.shareLinkInput).toHaveValue(SHARE_LINK_PATTERN);
 
-    const copyButton = page.getByRole('button', { name: 'Copy' });
-    await expect(copyButton).toBeVisible();
+    await imageInfoPage.copyShareLinkButton.click();
 
-    await explorePage.clickUntil(
-      copyButton,
-      page.getByRole('button', { name: 'Copied' }),
+    await expect(await imageInfoPage.waitForToast()).toContainText(
+      'Something went wrong',
     );
-
-    const clipboardText = await page.evaluate(() =>
-      navigator.clipboard.readText(),
-    );
-    expect(clipboardText.length).toBeGreaterThan(0);
+    await expect(imageInfoPage.copiedShareLinkButton).toHaveCount(0);
+    await expect(imageInfoPage.copyShareLinkButton).toBeEnabled();
   });
 });

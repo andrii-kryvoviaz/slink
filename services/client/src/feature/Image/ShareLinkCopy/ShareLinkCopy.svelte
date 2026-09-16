@@ -5,14 +5,15 @@
   import * as DropdownMenu from '@slink/ui/components/dropdown-menu/index.js';
 
   import { page } from '$app/state';
-  import { useAutoReset } from '$lib/utils/time/useAutoReset.svelte';
   import Icon from '@iconify/svelte';
   import { cubicOut } from 'svelte/easing';
   import { scale } from 'svelte/transition';
 
   import type { ShareFormat } from '@slink/lib/settings';
 
+  import { ShareFormatCopyState } from '../ShareFormat/ShareFormatCopyState.svelte';
   import ShareFormatMenu from '../ShareFormat/ShareFormatMenu.svelte';
+  import { copyWithFormat } from '../ShareFormat/copyWithFormat';
   import {
     type ShareFormatDescriptor,
     getShareFormat,
@@ -38,8 +39,6 @@
   let displayValue = $derived(shareUrl ?? value);
 
   let selectedFormat = $derived(settings.share.format);
-  let isCopying = $state(false);
-  const isCopiedState = useAutoReset(2000);
 
   const setSelectedFormat = (format: ShareFormat) => {
     settings.share = { format };
@@ -62,20 +61,15 @@
     throw new Error('Share link is not available');
   };
 
-  const handleCopy = async () => {
-    const format = getSelectedFormat();
-
-    isCopying = true;
-    try {
-      const success = await format
-        .copy({ content: () => value, share: () => resolveUrl() }, imageAlt)
-        .catch(() => false);
-      if (!success) return;
-      isCopiedState.trigger();
-    } finally {
-      isCopying = false;
-    }
-  };
+  const formatCopy = new ShareFormatCopyState(
+    (format) =>
+      copyWithFormat(
+        format,
+        { content: () => value, share: resolveUrl },
+        imageAlt,
+      ),
+    2000,
+  );
 </script>
 
 {#snippet actions(loading: boolean)}
@@ -85,18 +79,18 @@
       variant="primary"
       size="xs"
       rounded="sm"
-      disabled={isCopiedState.active || loading || isCopying}
-      onclick={() => handleCopy()}
+      disabled={formatCopy.copied || loading || formatCopy.copying}
+      onclick={() => formatCopy.copy(selectedFormat)}
     >
-      {#if loading || isCopying}
+      {#if loading || formatCopy.copying}
         <div
           class="flex items-center gap-1.5"
           in:scale={{ duration: 150, easing: cubicOut }}
         >
           <Icon icon="lucide:loader-2" class="h-3.5 w-3.5 animate-spin" />
-          <span>{isCopying ? 'Copying...' : 'Signing...'}</span>
+          <span>{formatCopy.copying ? 'Copying...' : 'Signing...'}</span>
         </div>
-      {:else if isCopiedState.active}
+      {:else if formatCopy.copied}
         <div
           class="flex items-center gap-1.5"
           in:scale={{ duration: 150, easing: cubicOut }}
@@ -114,7 +108,7 @@
 
     <DropdownMenu.Root>
       <DropdownMenu.Trigger
-        disabled={loading || isCopying || isCopiedState.active}
+        disabled={loading || formatCopy.copying || formatCopy.copied}
       >
         {#snippet child({ props })}
           <Button
@@ -123,7 +117,7 @@
             variant="primary"
             size="xs"
             rounded="sm"
-            disabled={loading || isCopying || isCopiedState.active}
+            disabled={loading || formatCopy.copying || formatCopy.copied}
           >
             <span class="text-xs">{getSelectedFormat().short}</span>
             <Icon icon="ph:caret-down" class="h-3 w-3" />
@@ -149,7 +143,7 @@
     onHit={() => {
       const selection = window.getSelection();
       if (selection && !selection.isCollapsed) return false;
-      handleCopy();
+      formatCopy.copy(selectedFormat);
     }}
   />
 </div>

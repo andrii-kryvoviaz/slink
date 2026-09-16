@@ -97,6 +97,73 @@ test.describe('Post viewer copy link', () => {
     expect(clipboardText).toContain(`alt="${fileName}"`);
   });
 
+  test('owner copies the share link, which stays copied until the 1500ms reset', async ({
+    api,
+    page,
+    explorePage,
+  }) => {
+    const imageId = await api.content.uploadImage({ isPublic: true });
+    const share = await api.shares.publishImageShare(imageId);
+
+    const item = explorePage.viewer.locator(`[data-post-id="${imageId}"]`);
+    const copyButton = item.getByRole('button', {
+      name: 'Copy link',
+      exact: true,
+    });
+    const copiedButton = item.getByRole('button', { name: 'Copied' });
+
+    await explorePage.gotoWithPausedClock(async () => {
+      await explorePage.page.goto(`/explore?post=${imageId}`);
+      await expect(copyButton).toBeEnabled();
+    });
+
+    await copyButton.click();
+    await expect(copiedButton).toBeDisabled();
+
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
+      share.shareUrl,
+    );
+
+    await page.clock.runFor(1499);
+    await expect(copiedButton).toBeDisabled();
+
+    await page.clock.runFor(1);
+    await expect(copyButton).toBeEnabled();
+  });
+
+  test('owner sees one error toast and no copied state when the clipboard write fails', async ({
+    api,
+    page,
+    explorePage,
+  }) => {
+    await page.addInitScript(() => {
+      Clipboard.prototype.writeText = () =>
+        Promise.reject(new Error('Clipboard write denied'));
+    });
+
+    const imageId = await api.content.uploadImage({ isPublic: true });
+
+    const item = explorePage.viewer.locator(`[data-post-id="${imageId}"]`);
+    const copyButton = item.getByRole('button', {
+      name: 'Copy link',
+      exact: true,
+    });
+    const errorToasts = page
+      .locator('[data-sonner-toast]')
+      .filter({ hasText: 'Something went wrong' });
+
+    await explorePage.gotoWithPausedClock(async () => {
+      await explorePage.page.goto(`/explore?post=${imageId}`);
+      await expect(copyButton).toBeEnabled();
+    });
+
+    await copyButton.click();
+
+    await expect(errorToasts).toHaveCount(1);
+    await expect(copyButton).toBeEnabled();
+    await expect(item.getByRole('button', { name: 'Copied' })).toHaveCount(0);
+  });
+
   test('does not reopen the viewer when navigating away and back to explore', async ({
     api,
     page,

@@ -6,7 +6,7 @@ import { routes } from '$lib/utils/url/routes';
 import type { ShareFormat } from '@slink/lib/settings';
 import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
 
-import { getShareFormat } from './shareFormats.language';
+import { copyWithFormat } from './copyWithFormat';
 
 async function createShareUrl(id: string): Promise<string> {
   try {
@@ -29,5 +29,5 @@ export async function copyImageWithFormat(
     share: () => resolveShare(image.id),
   };
 
-  return getShareFormat(format).copy(source, image.fileName);
+  return copyWithFormat(format, source, image.fileName);
 }
