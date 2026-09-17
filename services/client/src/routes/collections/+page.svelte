@@ -23,6 +23,7 @@
   import { fade } from 'svelte/transition';
 
   import { skeleton } from '@slink/lib/actions/skeleton';
+  import { supportedViewModes } from '@slink/lib/settings';
   import { useCollectionListFeed } from '@slink/lib/state/CollectionListFeed.svelte';
   import { createCreateCollectionModalState } from '@slink/lib/state/CreateCollectionModalState.svelte';
 
@@ -65,7 +66,7 @@
         {#snippet actions()}
           <ViewModeToggle
             value={settings.collections.viewMode}
-            modes={['grid', 'table']}
+            modes={supportedViewModes.collections}
             on={{
               change: (mode) => {
                 settings.collections = {

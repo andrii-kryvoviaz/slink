@@ -118,6 +118,14 @@ export const defaultSettings: Record<SettingsKey, unknown> = {
   collections: { viewMode: 'grid', pageSize: 12, loadStrategy: 'load_more' },
 };
 
+export const supportedViewModes = {
+  userAdmin: ['grid', 'list'],
+  history: ['grid', 'list', 'table'],
+  explore: ['grid', 'list'],
+  tags: ['table', 'tree'],
+  collections: ['grid', 'table'],
+} satisfies Partial<Record<SettingsKey, ViewMode[]>>;
+
 export const USER_SETTINGS_BRAND = Symbol.for('slink:user-settings');
 
 function persist(key: SettingsKey, value: unknown): void {
@@ -230,7 +238,10 @@ export class UserSettings {
     const parsed = tryJson(raw);
 
     if (isObject(fallback) && isObject(parsed)) {
-      return deepMerge(fallback, parsed);
+      return UserSettings._withSupportedViewMode(
+        key,
+        deepMerge(fallback, parsed),
+      );
     }
 
     if (isObject(fallback)) {
@@ -238,6 +249,33 @@ export class UserSettings {
     }
 
     return parsed;
+  }
+
+  private static _hasSupportedViewModes(
+    key: SettingsKey,
+  ): key is keyof typeof supportedViewModes {
+    return key in supportedViewModes;
+  }
+
+  private static _withSupportedViewMode(
+    key: SettingsKey,
+    merged: Record<string, unknown>,
+  ): Record<string, unknown> {
+    if (!UserSettings._hasSupportedViewModes(key)) {
+      return merged;
+    }
+
+    const modes = supportedViewModes[key] as ViewMode[];
+    const viewMode = merged.viewMode;
+
+    if (typeof viewMode === 'string' && modes.includes(viewMode as ViewMode)) {
+      return merged;
+    }
+
+    return {
+      ...merged,
+      viewMode: (defaultSettings[key] as { viewMode: ViewMode }).viewMode,
+    };
   }
 
   private _readCookies(): Record<string, unknown> {

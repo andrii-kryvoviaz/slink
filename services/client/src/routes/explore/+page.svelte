@@ -24,6 +24,7 @@
 
   import { skeleton } from '@slink/lib/actions/skeleton';
   import { isAdmin } from '@slink/lib/auth/utils';
+  import { supportedViewModes } from '@slink/lib/settings';
   import { usePostViewerState } from '@slink/lib/state/PostViewerState.svelte';
   import { usePublicImagesFeed } from '@slink/lib/state/PublicImagesFeed.svelte';
 
@@ -129,7 +130,7 @@
       {#snippet actions()}
         <ViewModeToggle
           value={settings.explore.viewMode}
-          modes={['grid', 'list']}
+          modes={supportedViewModes.explore}
           on={{
             change: (mode) => {
               settings.explore = { viewMode: mode };

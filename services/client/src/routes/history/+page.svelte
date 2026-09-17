@@ -47,6 +47,7 @@
 
   import { skeleton } from '@slink/lib/actions/skeleton';
   import { createTagFilterManager } from '@slink/lib/composables/useTagFilterUrl';
+  import { supportedViewModes } from '@slink/lib/settings';
   import { createSelectionState } from '@slink/lib/state/SelectionState.svelte';
   import { useUploadHistoryFeed } from '@slink/lib/state/UploadHistoryFeed.svelte';
 
@@ -208,7 +209,7 @@
         {#snippet actions()}
           <ViewModeToggle
             value={settings.history.viewMode}
-            modes={['grid', 'list', 'table']}
+            modes={supportedViewModes.history}
             on={{
               change: (mode) => {
                 settings.history = { viewMode: mode };

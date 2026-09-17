@@ -20,6 +20,7 @@
 
   import type { Tag, TagOrderBy } from '@slink/api/Resources/TagResource';
 
+  import { supportedViewModes } from '@slink/lib/settings';
   import { createCreateTagModalState } from '@slink/lib/state/CreateTagModalState.svelte';
   import { useTagFeed } from '@slink/lib/state/TagFeed.svelte';
 
@@ -117,7 +118,7 @@
         {#snippet actions()}
           <ViewModeToggle
             value={mode}
-            modes={['table', 'tree']}
+            modes={supportedViewModes.tags}
             on={{
               change: (newMode) => {
                 settings.tags = { viewMode: newMode };

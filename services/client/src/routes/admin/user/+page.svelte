@@ -15,6 +15,7 @@
   import { fade } from 'svelte/transition';
 
   import { skeleton } from '@slink/lib/actions/skeleton';
+  import { supportedViewModes } from '@slink/lib/settings';
   import { useUserListFeed } from '@slink/lib/state/UserListFeed.svelte';
 
   import type { PageServerData } from './$types';
@@ -65,7 +66,7 @@
         {#snippet actions()}
           <ViewModeToggle
             value={settings.userAdmin.viewMode}
-            modes={['grid', 'list']}
+            modes={supportedViewModes.userAdmin}
             on={{
               change: (mode) => {
                 settings.userAdmin = { viewMode: mode };
