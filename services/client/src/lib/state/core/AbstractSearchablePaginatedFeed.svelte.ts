@@ -63,20 +63,30 @@ export abstract class AbstractSearchablePaginatedFeed<
     params: LoadParams & ExtendedSearchParams = {},
     options?: RequestStateOptions,
   ): Promise<void> {
-    const searchTerm =
-      params.searchTerm ?? (this._searchTerm.trim() || undefined);
-    const searchBy = searchTerm
-      ? (params.searchBy ?? this._searchBy)
-      : undefined;
+    await super.load(this._withSearch(params), options);
+  }
 
-    await super.load(
-      {
-        ...params,
-        searchTerm,
-        searchBy,
-      },
-      options,
-    );
+  public override async reload(
+    params: LoadParams & ExtendedSearchParams = {},
+    options?: RequestStateOptions,
+  ): Promise<void> {
+    await super.reload(this._withSearch(params), options);
+  }
+
+  private _withSearch(
+    params: LoadParams & ExtendedSearchParams,
+  ): LoadParams & ExtendedSearchParams {
+    let searchTerm = params.searchTerm;
+    if (searchTerm === undefined) {
+      searchTerm = this._searchTerm.trim() || undefined;
+    }
+
+    let searchBy: string | undefined;
+    if (searchTerm) {
+      searchBy = params.searchBy ?? this._searchBy;
+    }
+
+    return { ...params, searchTerm, searchBy };
   }
 
   get searchTerm(): string {
