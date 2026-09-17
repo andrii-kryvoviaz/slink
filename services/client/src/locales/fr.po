@@ -640,6 +640,7 @@ msgid "Private"
 msgstr "Privée"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/routes/explore/+page.svelte
 #: src/routes/preferences/+page.svelte
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Explore"
@@ -5200,3 +5201,7 @@ msgstr "Expiration"
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "This SVG could not be processed. It may be malformed or nested too deeply."
 msgstr "Ce SVG n'a pas pu être traité. Il est peut-être mal formé ou imbriqué trop profondément."
+
+#: src/routes/explore/+page.svelte
+msgid "Public images from everyone on this instance"
+msgstr ""

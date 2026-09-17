@@ -1,10 +1,20 @@
 <script lang="ts">
   import { LoadMoreButton } from '@slink/feature/Action';
-  import { ExploreGridView, PostViewer } from '@slink/feature/Image';
-  import { EmptyState, GhostGrid } from '@slink/feature/Layout';
-  import { ExploreSkeleton } from '@slink/feature/Layout';
+  import {
+    ExploreGridView,
+    ExploreListView,
+    PostViewer,
+  } from '@slink/feature/Image';
+  import {
+    EmptyState,
+    ExploreSkeleton,
+    GhostGrid,
+    GhostList,
+    PageHeader,
+    ViewModeToggle,
+  } from '@slink/feature/Layout';
   import { Button } from '@slink/ui/components/button';
-  import { untrack } from 'svelte';
+  import { ViewModeLayout } from '@slink/ui/components/view-mode-layout';
 
   import { page } from '$app/state';
   import Icon from '@iconify/svelte';
@@ -25,6 +35,8 @@
 
   let { data }: Props = $props();
 
+  const { settings } = page.data;
+
   const userIsAdmin = $derived(isAdmin(data.user));
   const licensingEnabled = $derived(
     data.globalSettings?.image?.enableLicensing ?? false,
@@ -40,6 +52,11 @@
     return () => publicFeedState.unsubscribe();
   });
 
+  const hasSearchInUrl = (): boolean => {
+    const params = new URLSearchParams(page.url.search);
+    return Boolean(params.get('search') && params.get('searchBy'));
+  };
+
   $effect(() => {
     const urlParams = new URLSearchParams(page.url.search);
     const search = urlParams.get('search');
@@ -52,8 +69,6 @@
       ) {
         publicFeedState.search(search, searchBy);
       }
-    } else if (untrack(() => publicFeedState.needsLoad)) {
-      publicFeedState.load();
     }
   });
 
@@ -90,6 +105,13 @@
   const handleImageDelete = async (imageId: string) => {
     await publicFeedState.removeItems([imageId]);
   };
+
+  const viewHandlers = {
+    open: openPostViewer,
+    bookmarkChange: handleBookmarkChange,
+    imageUpdate: handleImageUpdate,
+    imageDelete: handleImageDelete,
+  };
 </script>
 
 <svelte:head>
@@ -101,76 +123,112 @@
     class="container mx-auto px-4 sm:px-6 lg:px-8 py-8"
     use:skeleton={{ feed: publicFeedState }}
   >
-    {#if publicFeedState.showSkeleton}
-      <div in:fade={{ duration: 200 }}>
-        <ExploreSkeleton count={12} />
-      </div>
-    {:else if publicFeedState.isEmpty}
-      <div in:fade={{ duration: 200 }}>
-        {#if !publicFeedState.isSearching}
-          <EmptyState
-            kind="first-use"
-            title="Nothing shared yet"
-            description="Public images from everyone on this instance show up here. Yours could be first."
-          >
-            {#snippet preview()}
-              <GhostGrid />
-            {/snippet}
-            {#snippet action()}
-              <Button variant="primary" size="md" rounded="lg" href="/upload">
-                <Icon icon="ph:upload-simple" class="h-4 w-4" />
-                Upload an image
-              </Button>
-            {/snippet}
-            {#snippet hint()}
-              Uploads are private until you make them public
-            {/snippet}
-          </EmptyState>
-        {:else}
-          <EmptyState
-            kind="no-results"
-            icon="ph:magnifying-glass"
-            title="No images found"
-            description={`Nothing matches "${publicFeedState.searchTerm}". Try a different search term.`}
-          >
-            {#snippet action()}
-              <Button
-                variant="outline"
-                size="sm"
-                rounded="lg"
-                onclick={() => publicFeedState.resetSearch()}
-              >
-                Clear search
-              </Button>
-            {/snippet}
-          </EmptyState>
-        {/if}
-      </div>
-    {:else if publicFeedState.items.length > 0}
-      <ExploreGridView
-        items={publicFeedState.items}
-        {licensingEnabled}
-        {userIsAdmin}
-        on={{
-          open: openPostViewer,
-          bookmarkChange: handleBookmarkChange,
-          imageUpdate: handleImageUpdate,
-          imageDelete: handleImageDelete,
-        }}
-      />
+    <PageHeader>
+      {#snippet title()}Explore{/snippet}
+      {#snippet subtitle()}Public images from everyone on this instance{/snippet}
+      {#snippet actions()}
+        <ViewModeToggle
+          value={settings.explore.viewMode}
+          modes={['grid', 'list']}
+          on={{
+            change: (mode) => {
+              settings.explore = { viewMode: mode };
+            },
+          }}
+        />
+      {/snippet}
+    </PageHeader>
 
-      {#if publicFeedState.hasMore}
-        <div class="flex justify-center mt-12">
-          <LoadMoreButton
-            visible={publicFeedState.hasMore}
-            loading={publicFeedState.isLoading}
-            onclick={() => publicFeedState.nextPage({ debounce: 300 })}
-            variant="modern"
-            rounded="full"
-          />
+    <ViewModeLayout
+      feed={publicFeedState}
+      mode={settings.explore.viewMode}
+      onBeforeLoad={hasSearchInUrl}
+      config={{
+        grid: { toolbar: false, appendMode: 'auto' },
+        list: { toolbar: false, appendMode: 'auto' },
+      }}
+    >
+      {#snippet loading(mode)}
+        <div in:fade={{ duration: 200 }}>
+          <ExploreSkeleton count={12} viewMode={mode} />
         </div>
-      {/if}
-    {/if}
+      {/snippet}
+      {#snippet grid()}
+        <ExploreGridView
+          items={publicFeedState.items}
+          {licensingEnabled}
+          {userIsAdmin}
+          on={viewHandlers}
+        />
+      {/snippet}
+      {#snippet list()}
+        <ExploreListView
+          items={publicFeedState.items}
+          {licensingEnabled}
+          {userIsAdmin}
+          on={viewHandlers}
+        />
+      {/snippet}
+      {#snippet empty()}
+        <div in:fade={{ duration: 200 }}>
+          {#if !publicFeedState.isSearching}
+            <EmptyState
+              kind="first-use"
+              title="Nothing shared yet"
+              description="Public images from everyone on this instance show up here. Yours could be first."
+            >
+              {#snippet preview()}
+                {#if settings.explore.viewMode === 'list'}
+                  <GhostList />
+                {:else}
+                  <GhostGrid />
+                {/if}
+              {/snippet}
+              {#snippet action()}
+                <Button variant="primary" size="md" rounded="lg" href="/upload">
+                  <Icon icon="ph:upload-simple" class="h-4 w-4" />
+                  Upload an image
+                </Button>
+              {/snippet}
+              {#snippet hint()}
+                Uploads are private until you make them public
+              {/snippet}
+            </EmptyState>
+          {:else}
+            <EmptyState
+              kind="no-results"
+              icon="ph:magnifying-glass"
+              title="No images found"
+              description={`Nothing matches "${publicFeedState.searchTerm}". Try a different search term.`}
+            >
+              {#snippet action()}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  rounded="lg"
+                  onclick={() => publicFeedState.resetSearch()}
+                >
+                  Clear search
+                </Button>
+              {/snippet}
+            </EmptyState>
+          {/if}
+        </div>
+      {/snippet}
+      {#snippet more()}
+        {#if publicFeedState.hasMore}
+          <div class="flex justify-center mt-8">
+            <LoadMoreButton
+              visible={publicFeedState.hasMore}
+              loading={publicFeedState.isLoading}
+              onclick={() => publicFeedState.nextPage({ debounce: 300 })}
+              variant="modern"
+              rounded="full"
+            />
+          </div>
+        {/if}
+      {/snippet}
+    </ViewModeLayout>
   </div>
 </main>
 
