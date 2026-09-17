@@ -32,6 +32,35 @@ test.describe('Explore view mode', () => {
     await expect(explorePage.cardFor(imageId)).toBeVisible();
   });
 
+  test("list rows load thumbnails for another user's public images", async ({
+    page,
+    explorePage,
+    actor,
+  }) => {
+    const owner = await actor('owner');
+    const imageId = await owner.content.uploadImage({ isPublic: true });
+
+    await explorePage.goto();
+    await expect(explorePage.cardFor(imageId)).toBeVisible();
+
+    await explorePage.switchViewMode('List');
+
+    const row = explorePage.listRows.filter({
+      has: page.locator(`img[src*="${imageId}"]`),
+    });
+    const thumbnail = row.locator(`img[src*="${imageId}"]`);
+
+    await expect(row).toHaveCount(1);
+    await expect
+      .poll(() =>
+        thumbnail.evaluate(
+          (img: HTMLImageElement) => img.complete && img.naturalWidth > 0,
+        ),
+      )
+      .toBe(true);
+    await expect(row.getByText('Image unavailable')).toHaveCount(0);
+  });
+
   test('a list cookie paints rows without a click and a row opens the viewer', async ({
     page,
     explorePage,

@@ -13,8 +13,6 @@
 
   import { fade, fly } from 'svelte/transition';
 
-  import { PreviewUrl } from '@slink/utils/url';
-
   import type { ExploreViewProps } from '../ExploreView.types';
 
   let {
@@ -43,12 +41,7 @@
         >
           <div class="aspect-4/3 @xl:aspect-square w-full h-full">
             <ImagePlaceholder
-              src={PreviewUrl.image(image.attributes.fileName, {
-                width: 300,
-                height: 300,
-                crop: true,
-                format: 'webp',
-              })}
+              src={image.url}
               alt={image.attributes.description || image.attributes.fileName}
               metadata={image.metadata}
               uniqueId={image.id}
