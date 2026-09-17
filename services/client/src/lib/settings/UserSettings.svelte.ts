@@ -251,24 +251,15 @@ export class UserSettings {
     return parsed;
   }
 
-  private static _hasSupportedViewModes(
-    key: SettingsKey,
-  ): key is keyof typeof supportedViewModes {
-    return key in supportedViewModes;
-  }
-
   private static _withSupportedViewMode(
     key: SettingsKey,
     merged: Record<string, unknown>,
   ): Record<string, unknown> {
-    if (!UserSettings._hasSupportedViewModes(key)) {
-      return merged;
-    }
+    const modes: ViewMode[] | undefined = (
+      supportedViewModes as Partial<Record<SettingsKey, ViewMode[]>>
+    )[key];
 
-    const modes = supportedViewModes[key] as ViewMode[];
-    const viewMode = merged.viewMode;
-
-    if (typeof viewMode === 'string' && modes.includes(viewMode as ViewMode)) {
+    if (!modes || modes.includes(merged.viewMode as ViewMode)) {
       return merged;
     }
 
@@ -287,8 +278,8 @@ export class UserSettings {
   private _readCookie(name: string): string | undefined {
     const raw = cookie.get(name);
 
-    if (raw === undefined || raw === '') {
-      return raw;
+    if (raw === undefined) {
+      return undefined;
     }
 
     try {
