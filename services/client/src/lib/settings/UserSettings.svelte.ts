@@ -15,7 +15,7 @@ import {
 import { settingsPolicy } from '@slink/lib/settings/SettingsPolicy';
 
 import { cookie } from '@slink/utils/http/cookie';
-import { deepMerge } from '@slink/utils/object/deepMerge';
+import { deepMerge, isObject } from '@slink/utils/object/deepMerge';
 import { tryJson } from '@slink/utils/string/json';
 
 export type ViewMode = 'grid' | 'list' | 'table' | 'tree';
@@ -205,37 +205,59 @@ export class UserSettings {
     }
   }
 
+  static resolveCookies(
+    reader: (name: string) => string | undefined,
+  ): CookieSettings {
+    return settingsKeys.reduce((acc, key) => {
+      acc[key] = UserSettings._resolveSetting(
+        key,
+        reader(settingsPolicy.name(key)),
+      );
+      return acc;
+    }, {} as CookieSettings);
+  }
+
+  private static _resolveSetting(
+    key: SettingsKey,
+    raw: string | undefined,
+  ): unknown {
+    const fallback = defaultSettings[key];
+
+    if (raw === undefined || raw === '') {
+      return fallback;
+    }
+
+    const parsed = tryJson(raw);
+
+    if (isObject(fallback) && isObject(parsed)) {
+      return deepMerge(fallback, parsed);
+    }
+
+    if (isObject(fallback)) {
+      return fallback;
+    }
+
+    return parsed;
+  }
+
   private _readCookies(): Record<string, unknown> {
-    return settingsKeys.reduce(
-      (acc, key) => {
-        const value = cookie.get(settingsPolicy.name(key));
-        const parsed = value ? tryJson(value) : undefined;
-        const fallback = defaultSettings[key];
+    return UserSettings.resolveCookies((name) =>
+      this._readCookie(name),
+    ) as Record<string, unknown>;
+  }
 
-        if (parsed === undefined || parsed === null) {
-          acc[key] = fallback;
-          return acc;
-        }
+  private _readCookie(name: string): string | undefined {
+    const raw = cookie.get(name);
 
-        if (
-          typeof parsed === 'object' &&
-          !Array.isArray(parsed) &&
-          typeof fallback === 'object' &&
-          fallback !== null &&
-          !Array.isArray(fallback)
-        ) {
-          acc[key] = deepMerge(
-            fallback as Record<string, unknown>,
-            parsed as Record<string, unknown>,
-          );
-          return acc;
-        }
+    if (raw === undefined || raw === '') {
+      return raw;
+    }
 
-        acc[key] = parsed;
-        return acc;
-      },
-      {} as Record<string, unknown>,
-    );
+    try {
+      return decodeURIComponent(raw);
+    } catch {
+      return raw;
+    }
   }
 
   get sidebar(): SidebarState {
