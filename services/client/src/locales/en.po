@@ -98,7 +98,7 @@ msgid "No Data"
 msgstr "No Data"
 
 #: src/feature/Analytics/UserAnalytics.svelte
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/admin/user/+page.svelte
 msgid "Users"
 msgstr "Users"
@@ -106,6 +106,8 @@ msgstr "Users"
 #: src/feature/Collection/CreateCollectionForm.svelte
 #: src/feature/Collection/CreateCollectionModal.svelte
 #: src/feature/Comment/CommentInput.svelte
+#: src/feature/Image/Explore/ExploreGridView/ExploreGridView.svelte
+#: src/feature/Image/Explore/ExploreListView/ExploreListView.svelte
 #: src/feature/Image/SizePicker/ImageSizePicker.svelte
 #: src/feature/Navigation/TabMenu/TabMenuItem.svelte
 #: src/feature/Notification/NotificationListItem.svelte
@@ -117,7 +119,6 @@ msgstr "Users"
 #: src/feature/Text/HashtagText/HashtagText.svelte
 #: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 #: src/routes/collection/[id]/+page.svelte
-#: src/routes/explore/+page.svelte
 #: src/ui/components/card/selectable-card.svelte
 #: src/ui/components/dropzone/dropzone-input.svelte
 #: src/ui/components/filter/filter-search.svelte
@@ -429,7 +430,7 @@ msgstr "<0/> View History"
 msgid "Bookmarks | Slink"
 msgstr "Bookmarks | Slink"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/bookmarks/+page.svelte
 msgid "Bookmarks"
 msgstr "Bookmarks"
@@ -480,7 +481,7 @@ msgstr "Connect Slink with ShareX and other tools via API keys"
 msgid "Notifications | Slink"
 msgstr "Notifications | Slink"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/notifications/+page.svelte
 msgid "Notifications"
 msgstr "Notifications"
@@ -502,7 +503,7 @@ msgstr "All caught up"
 msgid "Collections | Slink"
 msgstr "Collections | Slink"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
 #: src/feature/Upload/Options/Collections.svelte
 #: src/routes/collections/+page.svelte
@@ -634,14 +635,14 @@ msgstr "Public"
 msgid "Private"
 msgstr "Private"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/explore/+page.svelte
 #: src/routes/preferences/+page.svelte
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Explore"
 msgstr "Explore"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/preferences/+page.svelte
 msgid "Upload"
 msgstr "Upload"
@@ -1266,7 +1267,7 @@ msgstr "<0/> Reset"
 msgid "New: {0} × {1}"
 msgstr "New: {0} × {1}"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/feature/Upload/Options/Tags.svelte
 msgid "Tags"
 msgstr "Tags"
@@ -1448,7 +1449,7 @@ msgstr "No storage data available"
 msgid "WEBP (Recommended)"
 msgstr "WEBP (Recommended)"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 #: src/routes/admin/settings/+page.svelte
 msgid "Image Settings"
@@ -1743,7 +1744,7 @@ msgstr "URL Shortening"
 msgid "Generate short URLs when copying image links"
 msgstr "Generate short URLs when copying image links"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 #: src/routes/admin/settings/+page.svelte
 msgid "Storage Configuration"
@@ -2256,7 +2257,7 @@ msgstr "<0/> You"
 msgid "Dashboard | Slink"
 msgstr "Dashboard | Slink"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/admin/dashboard/+page.svelte
 msgid "Dashboard"
 msgstr "Dashboard"
@@ -2269,7 +2270,7 @@ msgstr "Configure image uploads, processing options, and URL sharing preferences
 msgid "Configure storage providers, cache settings, and data management"
 msgstr "Configure storage providers, cache settings, and data management"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/admin/settings/+page.svelte
 msgid "Security Settings"
 msgstr "Security Settings"
@@ -2278,7 +2279,7 @@ msgstr "Security Settings"
 msgid "Manage user registration, access control, and authentication policies"
 msgstr "Manage user registration, access control, and authentication policies"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/admin/settings/+page.svelte
 #: src/routes/admin/settings/sso/+page.svelte
 msgid "Single Sign-On"
@@ -2292,7 +2293,7 @@ msgstr "Manage SSO/OIDC identity providers for external authentication"
 msgid "Settings | Slink"
 msgstr "Settings | Slink"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/admin/settings/+page.svelte
 msgid "Settings"
 msgstr "Settings"
@@ -3025,23 +3026,23 @@ msgstr "Strong"
 msgid "Very Strong"
 msgstr "Very Strong"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 msgid "History"
 msgstr "History"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 msgid "Administration"
 msgstr "Administration"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 msgid "System"
 msgstr "System"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 msgid "Help & FAQ"
 msgstr "Help & FAQ"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 msgid "GitHub"
 msgstr "GitHub"
 
@@ -3976,7 +3977,7 @@ msgstr "Item"
 msgid "Unpublish"
 msgstr "Unpublish"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 msgid "Shares"
 msgstr "Shares"
 
@@ -4291,7 +4292,6 @@ msgid "Copy the share link"
 msgstr "Copy the share link"
 
 #: src/feature/Collection/CollectionList/CollectionPickerList.svelte
-#: src/feature/Search/SearchBar.svelte
 #: src/feature/Tag/TagPicker/TagPickerList.svelte
 msgid "Search"
 msgstr "Search"
@@ -4899,7 +4899,7 @@ msgstr "<0/> New tag"
 msgid "Add images to fill this collection."
 msgstr "Add images to fill this collection."
 
-#: src/feature/Image/History/ImageMetadata.svelte
+#: src/feature/Image/ImageMetadata/ImageMetadata.svelte
 msgid "# bookmark"
 msgid_plural "# bookmarks"
 msgstr[0] "# bookmark"
@@ -5019,7 +5019,7 @@ msgstr "Fast and secure image sharing service"
 msgid "{0}: Image Sharing Service"
 msgstr "{0}: Image Sharing Service"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
 #: src/routes/admin/settings/+page.svelte
 #: src/routes/admin/settings/customization/+page.svelte
@@ -5191,3 +5191,7 @@ msgstr "Expires"
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "This SVG could not be processed. It may be malformed or nested too deeply."
 msgstr "This SVG could not be processed. It may be malformed or nested too deeply."
+
+#: src/feature/Image/Explore/ExploreListView/ExploreListView.svelte
+msgid "No description"
+msgstr "No description"

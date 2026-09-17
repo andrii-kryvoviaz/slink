@@ -98,7 +98,7 @@ msgid "No Data"
 msgstr "Немає даних"
 
 #: src/feature/Analytics/UserAnalytics.svelte
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/admin/user/+page.svelte
 msgid "Users"
 msgstr "Користувачі"
@@ -106,6 +106,8 @@ msgstr "Користувачі"
 #: src/feature/Collection/CreateCollectionForm.svelte
 #: src/feature/Collection/CreateCollectionModal.svelte
 #: src/feature/Comment/CommentInput.svelte
+#: src/feature/Image/Explore/ExploreGridView/ExploreGridView.svelte
+#: src/feature/Image/Explore/ExploreListView/ExploreListView.svelte
 #: src/feature/Image/SizePicker/ImageSizePicker.svelte
 #: src/feature/Navigation/TabMenu/TabMenuItem.svelte
 #: src/feature/Notification/NotificationListItem.svelte
@@ -117,7 +119,6 @@ msgstr "Користувачі"
 #: src/feature/Text/HashtagText/HashtagText.svelte
 #: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 #: src/routes/collection/[id]/+page.svelte
-#: src/routes/explore/+page.svelte
 #: src/ui/components/card/selectable-card.svelte
 #: src/ui/components/dropzone/dropzone-input.svelte
 #: src/ui/components/filter/filter-search.svelte
@@ -429,7 +430,7 @@ msgstr "<0/> Переглянути історію"
 msgid "Bookmarks | Slink"
 msgstr "Закладки | Slink"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/bookmarks/+page.svelte
 msgid "Bookmarks"
 msgstr "Закладки"
@@ -480,7 +481,7 @@ msgstr "Підключіть Slink до ShareX та інших інструме�
 msgid "Notifications | Slink"
 msgstr "Сповіщення | Slink"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/notifications/+page.svelte
 msgid "Notifications"
 msgstr "Сповіщення"
@@ -502,7 +503,7 @@ msgstr "Все прочитано"
 msgid "Collections | Slink"
 msgstr "Колекції | Slink"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
 #: src/feature/Upload/Options/Collections.svelte
 #: src/routes/collections/+page.svelte
@@ -634,14 +635,14 @@ msgstr "Публічне"
 msgid "Private"
 msgstr "Приватне"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/explore/+page.svelte
 #: src/routes/preferences/+page.svelte
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Explore"
 msgstr "Огляд"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/preferences/+page.svelte
 msgid "Upload"
 msgstr "Завантаження"
@@ -1266,7 +1267,7 @@ msgstr "<0/> Скинути"
 msgid "New: {0} × {1}"
 msgstr "Новий: {0} × {1}"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/feature/Upload/Options/Tags.svelte
 msgid "Tags"
 msgstr "Теги"
@@ -1448,7 +1449,7 @@ msgstr "Дані про сховище відсутні"
 msgid "WEBP (Recommended)"
 msgstr "WEBP (Рекомендовано)"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 #: src/routes/admin/settings/+page.svelte
 msgid "Image Settings"
@@ -1743,7 +1744,7 @@ msgstr "Скорочення URL"
 msgid "Generate short URLs when copying image links"
 msgstr "Генерувати короткі URL при копіюванні посилань на зображення"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 #: src/routes/admin/settings/+page.svelte
 msgid "Storage Configuration"
@@ -2256,7 +2257,7 @@ msgstr "<0/> Ви"
 msgid "Dashboard | Slink"
 msgstr "Панель керування | Slink"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/admin/dashboard/+page.svelte
 msgid "Dashboard"
 msgstr "Панель керування"
@@ -2269,7 +2270,7 @@ msgstr "Налаштуйте завантаження зображень, пар
 msgid "Configure storage providers, cache settings, and data management"
 msgstr "Налаштуйте провайдери сховищ, кеш та керування даними"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/admin/settings/+page.svelte
 msgid "Security Settings"
 msgstr "Безпека"
@@ -2278,7 +2279,7 @@ msgstr "Безпека"
 msgid "Manage user registration, access control, and authentication policies"
 msgstr "Керуйте реєстрацією, контролем доступу та політиками автентифікації"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/admin/settings/+page.svelte
 #: src/routes/admin/settings/sso/+page.svelte
 msgid "Single Sign-On"
@@ -2292,7 +2293,7 @@ msgstr "Керуйте SSO/OIDC провайдерами для зовнішнь
 msgid "Settings | Slink"
 msgstr "Налаштування | Slink"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/admin/settings/+page.svelte
 msgid "Settings"
 msgstr "Налаштування"
@@ -3025,23 +3026,23 @@ msgstr "Надійний"
 msgid "Very Strong"
 msgstr "Дуже надійний"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 msgid "History"
 msgstr "Історія"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 msgid "Administration"
 msgstr "Адміністрування"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 msgid "System"
 msgstr "Система"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 msgid "Help & FAQ"
 msgstr "Довідка та FAQ"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 msgid "GitHub"
 msgstr "GitHub"
 
@@ -3986,7 +3987,7 @@ msgstr "Елемент"
 msgid "Unpublish"
 msgstr "Скасувати публікацію"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 msgid "Shares"
 msgstr "Публікації"
 
@@ -4305,7 +4306,6 @@ msgid "Copy the share link"
 msgstr "Копіювати посилання на публікацію"
 
 #: src/feature/Collection/CollectionList/CollectionPickerList.svelte
-#: src/feature/Search/SearchBar.svelte
 #: src/feature/Tag/TagPicker/TagPickerList.svelte
 msgid "Search"
 msgstr "Пошук"
@@ -4914,7 +4914,7 @@ msgstr "<0/> Новий тег"
 msgid "Add images to fill this collection."
 msgstr "Додайте зображення, щоб наповнити цю колекцію."
 
-#: src/feature/Image/History/ImageMetadata.svelte
+#: src/feature/Image/ImageMetadata/ImageMetadata.svelte
 msgid "# bookmark"
 msgid_plural "# bookmarks"
 msgstr[0] "# закладка"
@@ -5037,7 +5037,7 @@ msgstr "Швидкий і безпечний сервіс для обміну з
 msgid "{0}: Image Sharing Service"
 msgstr "{0}: Сервіс обміну зображеннями"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
 #: src/routes/admin/settings/+page.svelte
 #: src/routes/admin/settings/customization/+page.svelte
@@ -5209,3 +5209,7 @@ msgstr "Термін дії"
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "This SVG could not be processed. It may be malformed or nested too deeply."
 msgstr "Не вдалося обробити цей SVG. Можливо, він пошкоджений або має надто глибоку вкладеність."
+
+#: src/feature/Image/Explore/ExploreListView/ExploreListView.svelte
+msgid "No description"
+msgstr "Немає опису"

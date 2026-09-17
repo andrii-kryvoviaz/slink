@@ -3,14 +3,15 @@
   import {
     AdminImageDropdown,
     CardActionsOverlay,
-    DimensionsBadge,
+    ImageMetadata,
     ImagePlaceholder,
     LicenseInfo,
     ViewCountBadge,
   } from '@slink/feature/Image';
-  import { ExpandableText, FormattedDate } from '@slink/feature/Text';
+  import { ImageTagList } from '@slink/feature/Tag';
   import { UserAvatar } from '@slink/feature/User';
 
+  import Icon from '@iconify/svelte';
   import { fade, fly } from 'svelte/transition';
 
   import type { ExploreViewProps } from '../ExploreView.types';
@@ -37,9 +38,11 @@
         tabindex="0"
       >
         <div
-          class="relative block w-full @xl:w-40 @2xl:w-48 @4xl:w-56 shrink-0 overflow-hidden bg-muted dark:bg-muted/80"
+          class="relative block w-full @xl:w-40 @2xl:w-44 shrink-0 overflow-hidden bg-muted dark:bg-muted/80"
         >
-          <div class="aspect-4/3 @xl:aspect-square w-full h-full">
+          <div
+            class="aspect-4/3 w-full @xl:absolute @xl:inset-0 @xl:aspect-auto"
+          >
             <ImagePlaceholder
               src={image.url}
               alt={image.attributes.description || image.attributes.fileName}
@@ -53,6 +56,11 @@
               class="h-full w-full transition-transform duration-300 group-hover:scale-105 motion-reduce:transform-none motion-reduce:transition-none"
             />
           </div>
+
+          <div class="absolute bottom-2 left-2 flex items-center gap-1.5">
+            <ViewCountBadge count={image.attributes.views} variant="overlay" />
+          </div>
+
           <CardActionsOverlay
             image={{
               id: image.id,
@@ -70,21 +78,24 @@
           />
         </div>
 
-        <div class="flex flex-col flex-1 gap-2 p-3 @xl:p-4 min-w-0">
-          <div class="flex items-start justify-between gap-3">
-            <div class="flex items-center gap-2.5 min-w-0">
+        <div class="flex flex-col flex-1 gap-1.5 p-3 @xl:px-4 @xl:py-3 min-w-0">
+          <div class="flex items-center justify-between gap-3">
+            <div class="flex items-center gap-2.5 min-w-0 flex-1">
               <UserAvatar size="sm" user={image.owner} />
-              <div class="min-w-0">
-                <p
-                  class="font-medium text-foreground text-sm leading-tight truncate"
-                >
-                  {image.owner.displayName}
-                </p>
-                <div class="text-xs text-foreground-muted mt-0.5">
-                  <FormattedDate date={image.attributes.createdAt.timestamp} />
-                </div>
-              </div>
+              <p
+                class="font-medium text-foreground text-sm leading-tight truncate"
+              >
+                {image.owner.displayName}
+              </p>
             </div>
+            {#if image.bookmarkCount > 0}
+              <span
+                class="flex items-center gap-1 text-xs text-foreground-muted shrink-0 tabular-nums"
+              >
+                <Icon icon="ph:bookmark-simple-fill" class="h-3.5 w-3.5" />
+                {image.bookmarkCount}
+              </span>
+            {/if}
             {#if userIsAdmin}
               <StopPropagation>
                 <AdminImageDropdown
@@ -99,25 +110,41 @@
           </div>
 
           {#if image.attributes.description?.trim()}
-            <p class="text-sm text-foreground-muted leading-relaxed">
-              <ExpandableText
-                maxLines={2}
-                text={image.attributes.description}
-              />
+            <p class="text-sm text-foreground-muted truncate">
+              {image.attributes.description}
+            </p>
+          {:else}
+            <p class="text-sm text-foreground-subtle truncate">
+              No description
             </p>
           {/if}
 
-          <div class="mt-auto flex flex-wrap items-center gap-2">
-            <ViewCountBadge count={image.attributes.views} variant="compact" />
-            <DimensionsBadge
-              width={image.metadata.width}
-              height={image.metadata.height}
-              variant="compact"
-            />
-            {#if licensingEnabled && image.license}
-              <LicenseInfo license={image.license} variant="inline" size="sm" />
-            {/if}
-          </div>
+          <ImageMetadata item={image} gap="md" showBookmarkCount={false} />
+
+          {#if image.tags?.length || (licensingEnabled && image.license)}
+            <div class="flex flex-wrap items-center gap-2">
+              {#if image.tags?.length}
+                <StopPropagation>
+                  <ImageTagList
+                    imageId={image.id}
+                    variant="neon"
+                    showImageCount={false}
+                    removable={false}
+                    initialTags={image.tags}
+                    maxVisible={3}
+                    disableHover
+                  />
+                </StopPropagation>
+              {/if}
+              {#if licensingEnabled && image.license}
+                <LicenseInfo
+                  license={image.license}
+                  variant="inline"
+                  size="sm"
+                />
+              {/if}
+            </div>
+          {/if}
         </div>
       </div>
     </li>

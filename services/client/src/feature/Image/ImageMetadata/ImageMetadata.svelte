@@ -14,9 +14,10 @@
   interface Props {
     item: ImageListingItem;
     gap?: Gap;
+    showBookmarkCount?: boolean;
   }
 
-  let { item, gap = 'sm' }: Props = $props();
+  let { item, gap = 'sm', showBookmarkCount = true }: Props = $props();
 </script>
 
 <div class={metadataContainerTheme({ gap })}>
@@ -25,7 +26,7 @@
   </span>
   <span>{item.metadata.width}×{item.metadata.height}</span>
   <span>{bytesToSize(item.metadata.size)}</span>
-  {#if item.bookmarkCount > 0}
+  {#if showBookmarkCount && item.bookmarkCount > 0}
     <span>{plural(item.bookmarkCount, ['# bookmark', '# bookmarks'])}</span>
   {/if}
   <FormattedDate date={item.attributes.createdAt.timestamp} />

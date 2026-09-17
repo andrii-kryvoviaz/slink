@@ -16,11 +16,11 @@
   import { cn } from '@slink/utils/ui';
   import { PreviewUrl } from '@slink/utils/url';
 
+  import ImageMetadata from '../ImageMetadata/ImageMetadata.svelte';
   import HistoryItemActions from './HistoryItemActions.svelte';
   import { HistoryItemLabels } from './HistoryItemLabels';
   import { historyListRowVariants } from './HistoryView.theme';
   import type { HistoryViewProps } from './HistoryView.types';
-  import ImageMetadata from './ImageMetadata.svelte';
 
   let { items = [], selectionState, on }: HistoryViewProps = $props();
 

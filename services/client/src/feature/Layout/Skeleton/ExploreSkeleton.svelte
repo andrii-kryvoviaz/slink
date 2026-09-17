@@ -18,16 +18,18 @@
 </script>
 
 {#if viewMode === 'list'}
-  <ul class="flex flex-col gap-3 {customClass}">
+  <ul class="@container flex flex-col gap-3 {customClass}">
     {#each Array(count) as _, index}
       <li
-        class="flex flex-col sm:flex-row w-full overflow-hidden rounded-lg border border-border bg-card dark:bg-card/60"
+        class="flex flex-col @xl:flex-row w-full overflow-hidden rounded-lg border border-border bg-card dark:bg-card/60 @xl:min-h-28"
         style="animation-delay: {index * 100}ms"
       >
         <div
-          class="relative w-full sm:w-40 md:w-48 lg:w-56 shrink-0 bg-muted dark:bg-muted/80"
+          class="relative w-full @xl:w-40 @2xl:w-44 shrink-0 bg-muted dark:bg-muted/80"
         >
-          <div class="aspect-4/3 sm:aspect-square">
+          <div
+            class="aspect-4/3 w-full @xl:absolute @xl:inset-0 @xl:aspect-auto"
+          >
             <Skeleton width="100%" height="100%" rounded="none" />
           </div>
           <div class="absolute bottom-2 left-2">
@@ -38,29 +40,17 @@
               class="opacity-60"
             />
           </div>
-          <div class="absolute bottom-2 right-2">
-            <Skeleton
-              width="45px"
-              height="24px"
-              rounded="full"
-              class="opacity-60"
-            />
-          </div>
         </div>
 
-        <div class="flex flex-col flex-1 gap-2 p-3 sm:p-4 min-w-0">
+        <div class="flex flex-col flex-1 gap-1.5 p-3 @xl:px-4 @xl:py-3 min-w-0">
           <div class="flex items-center gap-2.5">
-            <Skeleton width="28px" height="28px" rounded="full" />
-            <div class="flex-1 min-w-0">
-              <Skeleton width="100px" height="14px" class="mb-1" />
-              <Skeleton width="60px" height="10px" />
-            </div>
+            <Skeleton width="24px" height="24px" rounded="full" />
+            <Skeleton width="100px" height="14px" />
           </div>
 
-          <div>
-            <Skeleton width="100%" height="12px" class="mb-1" />
-            <Skeleton width="75%" height="12px" />
-          </div>
+          <Skeleton width="70%" height="12px" />
+
+          <Skeleton width="180px" height="12px" />
 
           <div class="flex gap-2">
             <Skeleton width="50px" height="22px" rounded="full" />
