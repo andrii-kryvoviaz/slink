@@ -18,6 +18,7 @@ export { default as ImageDescription } from './Description/ImageDescription.svel
 export { default as DimensionsBadge } from './DimensionsBadge/DimensionsBadge.svelte';
 export * from './DimensionsBadge/DimensionsBadge.theme';
 export { default as DownloadButton } from './DownloadButton/DownloadButton.svelte';
+export * from './Explore';
 export { default as FilterChip } from './FilterChip/FilterChip.svelte';
 export { default as FilterPicker } from './FilterPicker/FilterPicker.svelte';
 export * from './FilterPicker/FilterPicker.theme';
