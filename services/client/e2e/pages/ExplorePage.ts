@@ -11,6 +11,7 @@ export class ExplorePage extends BasePage {
     name: 'Search options',
   });
   readonly feedItems = this.page.locator('main [role="button"][tabindex="0"]');
+  readonly listRows = this.page.locator('main ul[role="list"] > li');
   readonly viewer = this.page.getByRole('dialog');
   readonly viewerClose = this.page.getByRole('button', {
     name: 'Close viewer',

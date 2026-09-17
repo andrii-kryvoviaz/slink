@@ -1,0 +1,64 @@
+import { expect, test } from '../fixtures/auth.fixture';
+
+test.describe('Explore view mode', () => {
+  test('switching to list renders rows, survives reload, and switches back', async ({
+    page,
+    explorePage,
+    actor,
+  }) => {
+    const owner = await actor('owner');
+    const imageId = await owner.content.uploadImage({ isPublic: true });
+
+    await explorePage.goto();
+    await expect(explorePage.cardFor(imageId)).toBeVisible();
+
+    await explorePage.switchViewMode('List');
+
+    await expect(
+      explorePage.listRows.filter({
+        has: page.locator(`img[src*="${imageId}"]`),
+      }),
+    ).toHaveCount(1);
+
+    await page.reload();
+    await expect(explorePage.viewModeOption('List')).toHaveAttribute(
+      'aria-checked',
+      'true',
+    );
+    await expect(explorePage.listRows.first()).toBeVisible();
+
+    await explorePage.switchViewMode('Grid');
+    await expect(explorePage.listRows).toHaveCount(0);
+    await expect(explorePage.cardFor(imageId)).toBeVisible();
+  });
+
+  test('a list cookie paints rows without a click and a row opens the viewer', async ({
+    page,
+    explorePage,
+    actor,
+  }) => {
+    const owner = await actor('owner');
+    await owner.content.uploadImage({ isPublic: true });
+
+    await page.context().addCookies([
+      {
+        name: 'settings.explore',
+        value: JSON.stringify({ viewMode: 'list' }),
+        url: process.env.E2E_BASE_URL ?? 'http://localhost:3100',
+      },
+    ]);
+
+    await explorePage.goto();
+    await expect(explorePage.viewModeOption('List')).toHaveAttribute(
+      'aria-checked',
+      'true',
+    );
+    await expect(explorePage.listRows.first()).toBeVisible();
+
+    await explorePage.clickUntil(
+      explorePage.listRows.first(),
+      explorePage.viewer,
+    );
+    expect(explorePage.currentPost()).toBeTruthy();
+  });
+});
