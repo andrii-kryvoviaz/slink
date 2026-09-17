@@ -287,11 +287,6 @@ msgstr "标记为已读"
 msgid "Continue with {0}"
 msgstr "使用 {0} 继续"
 
-#: src/feature/Navigation/Navbar/Navbar.svelte
-#: src/feature/Search/SearchBar.svelte
-msgid "Search images..."
-msgstr "搜索图片..."
-
 #: src/feature/Search/SearchBar.svelte
 msgid "Search by User"
 msgstr "按用户搜索"
@@ -4287,11 +4282,6 @@ msgstr "复制分享链接"
 msgid "Search"
 msgstr "搜索"
 
-#: src/feature/Search/SearchBar.svelte
-#: src/feature/Search/SearchBar.svelte
-msgid "Close search"
-msgstr "关闭搜索"
-
 #: src/feature/Layout/ViewModeToggle/ViewModeToggle.svelte
 msgid "View mode"
 msgstr "视图模式"
@@ -5183,7 +5173,3 @@ msgstr "过期时间"
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "This SVG could not be processed. It may be malformed or nested too deeply."
 msgstr "无法处理此 SVG。它可能格式错误或嵌套层级过深。"
-
-#: src/routes/explore/+page.svelte
-msgid "Public images from everyone on this instance"
-msgstr ""

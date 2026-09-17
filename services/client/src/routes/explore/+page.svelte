@@ -10,12 +10,14 @@
     ExploreSkeleton,
     GhostGrid,
     GhostList,
-    PageHeader,
     ViewModeToggle,
   } from '@slink/feature/Layout';
+  import { SearchBar } from '@slink/feature/Search';
   import { Button } from '@slink/ui/components/button';
   import { ViewModeLayout } from '@slink/ui/components/view-mode-layout';
+  import { untrack } from 'svelte';
 
+  import { goto } from '$app/navigation';
   import { page } from '$app/state';
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
@@ -27,6 +29,8 @@
   import { supportedViewModes } from '@slink/lib/settings';
   import { usePostViewerState } from '@slink/lib/state/PostViewerState.svelte';
   import { usePublicImagesFeed } from '@slink/lib/state/PublicImagesFeed.svelte';
+
+  import { urlParamUtils } from '@slink/utils/url';
 
   import type { PageServerData } from './$types';
 
@@ -53,23 +57,57 @@
     return () => publicFeedState.unsubscribe();
   });
 
-  const hasSearchInUrl = (): boolean => {
-    const params = new URLSearchParams(page.url.search);
-    return Boolean(params.get('search') && params.get('searchBy'));
+  const urlSearch = $derived({
+    term: (page.url.searchParams.get('search') ?? '').trim(),
+    by: (page.url.searchParams.get('searchBy') ?? 'user') as
+      'user' | 'description' | 'hashtag',
+  });
+
+  const hasSearchInUrl = (): boolean => urlSearch.term.length > 0;
+
+  const writeSearchToUrl = (searchTerm: string, searchBy: string) => {
+    const term = searchTerm.trim();
+    const params = urlParamUtils.create(window.location.href);
+    const current = params.toSearchParams();
+
+    if (term) {
+      params.set('search', term).set('searchBy', searchBy);
+    } else {
+      params.delete('search').delete('searchBy');
+    }
+
+    const next = params.toSearchParams();
+    const isUnchanged =
+      (next.get('search') ?? '') === (current.get('search') ?? '') &&
+      (next.get('searchBy') ?? '') === (current.get('searchBy') ?? '');
+
+    if (isUnchanged) return;
+
+    goto(params.buildUrl(), {
+      replaceState: true,
+      keepFocus: true,
+      noScroll: true,
+    });
   };
 
   $effect(() => {
-    const urlParams = new URLSearchParams(page.url.search);
-    const search = urlParams.get('search');
-    const searchBy = urlParams.get('searchBy');
+    const { term, by } = urlSearch;
+    const feed = untrack(() => ({
+      term: publicFeedState.searchTerm,
+      by: publicFeedState.searchBy,
+      searching: publicFeedState.isSearching,
+    }));
 
-    if (search && searchBy) {
-      if (
-        publicFeedState.searchTerm !== search ||
-        publicFeedState.searchBy !== searchBy
-      ) {
-        publicFeedState.search(search, searchBy);
+    if (term) {
+      if (feed.term !== term || feed.by !== by) {
+        publicFeedState.search(term, by);
       }
+      return;
+    }
+
+    if (feed.searching) {
+      publicFeedState.resetSearch();
+      publicFeedState.load();
     }
   });
 
@@ -124,21 +162,25 @@
     class="container mx-auto px-4 sm:px-6 lg:px-8 py-8"
     use:skeleton={{ feed: publicFeedState }}
   >
-    <PageHeader>
-      {#snippet title()}Explore{/snippet}
-      {#snippet subtitle()}Public images from everyone on this instance{/snippet}
-      {#snippet actions()}
-        <ViewModeToggle
-          value={settings.explore.viewMode}
-          modes={supportedViewModes.explore}
-          on={{
-            change: (mode) => {
-              settings.explore = { viewMode: mode };
-            },
-          }}
-        />
-      {/snippet}
-    </PageHeader>
+    <div class="mb-8 flex items-center gap-3">
+      <h1 class="sr-only">Explore</h1>
+      <SearchBar
+        searchTerm={urlSearch.term}
+        searchBy={urlSearch.by}
+        onsearch={({ searchTerm, searchBy }) =>
+          writeSearchToUrl(searchTerm, searchBy)}
+        onclear={() => writeSearchToUrl('', '')}
+      />
+      <ViewModeToggle
+        value={settings.explore.viewMode}
+        modes={supportedViewModes.explore}
+        on={{
+          change: (mode) => {
+            settings.explore = { viewMode: mode };
+          },
+        }}
+      />
+    </div>
 
     <ViewModeLayout
       feed={publicFeedState}
@@ -207,7 +249,7 @@
                   variant="outline"
                   size="sm"
                   rounded="lg"
-                  onclick={() => publicFeedState.resetSearch()}
+                  onclick={() => writeSearchToUrl('', '')}
                 >
                   Clear search
                 </Button>

@@ -5,7 +5,6 @@ import { BasePage } from './BasePage';
 export class ExplorePage extends BasePage {
   static readonly URL = '/explore';
 
-  readonly searchTrigger = this.page.getByRole('button', { name: 'Search' });
   readonly searchInput = this.page.getByPlaceholder(/Search/);
   readonly searchOptionsTrigger = this.page.getByRole('button', {
     name: 'Search options',

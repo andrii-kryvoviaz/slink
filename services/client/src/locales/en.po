@@ -287,11 +287,6 @@ msgstr "Mark as read"
 msgid "Continue with {0}"
 msgstr "Continue with {0}"
 
-#: src/feature/Navigation/Navbar/Navbar.svelte
-#: src/feature/Search/SearchBar.svelte
-msgid "Search images..."
-msgstr "Search images..."
-
 #: src/feature/Search/SearchBar.svelte
 msgid "Search by User"
 msgstr "Search by User"
@@ -4301,11 +4296,6 @@ msgstr "Copy the share link"
 msgid "Search"
 msgstr "Search"
 
-#: src/feature/Search/SearchBar.svelte
-#: src/feature/Search/SearchBar.svelte
-msgid "Close search"
-msgstr "Close search"
-
 #: src/feature/Layout/ViewModeToggle/ViewModeToggle.svelte
 msgid "View mode"
 msgstr "View mode"
@@ -5201,7 +5191,3 @@ msgstr "Expires"
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "This SVG could not be processed. It may be malformed or nested too deeply."
 msgstr "This SVG could not be processed. It may be malformed or nested too deeply."
-
-#: src/routes/explore/+page.svelte
-msgid "Public images from everyone on this instance"
-msgstr "Public images from everyone on this instance"
