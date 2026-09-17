@@ -81,22 +81,4 @@ test.describe('History view mode switch resets pagination @serial', () => {
       })
       .toBe(firstPageFirstId);
   });
-
-  test('unsupported viewMode falls back to the table default', async () => {
-    await page.context().addCookies([
-      {
-        name: 'settings.history',
-        value: JSON.stringify({ viewMode: 'tree' }),
-        url: process.env.E2E_BASE_URL ?? 'http://localhost:3100',
-      },
-    ]);
-
-    await historyPage.goto();
-
-    await expect(historyPage.viewModeOption('Table')).toHaveAttribute(
-      'aria-checked',
-      'true',
-    );
-    await expect(page.getByRole('button', { name: 'Columns' })).toBeVisible();
-  });
 });

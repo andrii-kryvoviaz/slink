@@ -1,17 +1,8 @@
 import { expect, test } from '../fixtures/auth.fixture';
 import { HistoryPage } from '../pages/HistoryPage';
 
-const BASE_URL = process.env.E2E_BASE_URL ?? 'http://localhost:3100';
 const DEFAULT_PAGE_SIZE = 12;
 const COOKIE_PAGE_SIZE = 96;
-
-function tablePageSizeCookie(pageSize: number) {
-  return {
-    name: 'settings.table',
-    value: JSON.stringify({ history: { pageSize } }),
-    url: BASE_URL,
-  };
-}
 
 function pageSizeButton(pageSize: number) {
   return { name: `Limit ${pageSize}` };
@@ -26,8 +17,12 @@ function ssrPageSize(html: string): string | null {
 test.describe('History table pageSize default is not shared across requests', () => {
   test('a settings.table cookie on one request does not change the next request default', async ({
     page,
+    layoutControls,
   }) => {
-    await page.context().addCookies([tablePageSizeCookie(COOKIE_PAGE_SIZE)]);
+    await layoutControls.setSettingCookie(
+      'table',
+      JSON.stringify({ history: { pageSize: COOKIE_PAGE_SIZE } }),
+    );
 
     const cookieHtml = await (await page.request.get(HistoryPage.URL)).text();
     expect(ssrPageSize(cookieHtml)).toBe(String(COOKIE_PAGE_SIZE));

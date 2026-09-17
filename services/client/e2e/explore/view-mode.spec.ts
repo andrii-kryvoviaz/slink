@@ -35,18 +35,16 @@ test.describe('Explore view mode', () => {
   test('a list cookie paints rows without a click and a row opens the viewer', async ({
     page,
     explorePage,
+    layoutControls,
     actor,
   }) => {
     const owner = await actor('owner');
     await owner.content.uploadImage({ isPublic: true });
 
-    await page.context().addCookies([
-      {
-        name: 'settings.explore',
-        value: JSON.stringify({ viewMode: 'list' }),
-        url: process.env.E2E_BASE_URL ?? 'http://localhost:3100',
-      },
-    ]);
+    await layoutControls.setSettingCookie(
+      'explore',
+      JSON.stringify({ viewMode: 'list' }),
+    );
 
     await explorePage.goto();
     await expect(explorePage.viewModeOption('List')).toHaveAttribute(

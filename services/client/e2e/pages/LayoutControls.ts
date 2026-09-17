@@ -83,9 +83,13 @@ export class LayoutControls extends BasePage {
   }
 
   async setThemeCookie(value: string) {
+    await this.setSettingCookie('theme', value);
+  }
+
+  async setSettingCookie(key: string, value: string) {
     await this.page.context().addCookies([
       {
-        name: 'settings.theme',
+        name: `settings.${key}`,
         value,
         url: process.env.E2E_BASE_URL ?? 'http://localhost:3100',
       },

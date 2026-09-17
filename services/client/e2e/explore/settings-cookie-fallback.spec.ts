@@ -5,12 +5,22 @@ const IMAGES_ENDPOINT = /\/api\/images(\?|$)/;
 
 const malformedCookieCases: Array<{ label: string; value: string }> = [
   { label: 'not-json', value: 'not-json' },
+  { label: 'empty object', value: '{}' },
+  { label: 'null literal', value: 'null' },
+  { label: 'array literal', value: '[]' },
+  { label: 'JSON string "list"', value: JSON.stringify('list') },
   {
     label: 'unsupported viewMode',
     value: JSON.stringify({ viewMode: 'table' }),
   },
   { label: 'bogus viewMode', value: JSON.stringify({ viewMode: 'bogus' }) },
 ];
+
+function ssrViewModeChecked(html: string, label: string): boolean {
+  const buttons = html.match(/<button\b[^>]*role="radio"[^>]*>/g) ?? [];
+  const target = buttons.find((tag) => tag.includes(`aria-label="${label}"`));
+  return target?.includes('aria-checked="true"') ?? false;
+}
 
 test.describe('Explore settings cookie fallback', () => {
   for (const { label, value } of malformedCookieCases) {
@@ -23,13 +33,14 @@ test.describe('Explore settings cookie fallback', () => {
       const owner = await actor('owner');
       const imageId = await owner.content.uploadImage({ isPublic: true });
 
-      await page.context().addCookies([
-        {
-          name: 'settings.explore',
-          value,
-          url: process.env.E2E_BASE_URL ?? 'http://localhost:3100',
-        },
-      ]);
+      await layoutControls.setSettingCookie('explore', value);
+
+      const html = await (await page.request.get(ExplorePage.URL)).text();
+      const stripped = html.replace(/<!--[\s\S]*?-->/g, '');
+      expect(stripped).not.toContain('aria-haspopup="listbox"');
+      expect(stripped).not.toContain('role="listbox"');
+      expect(ssrViewModeChecked(stripped, 'Grid')).toBe(true);
+      expect(ssrViewModeChecked(stripped, 'List')).toBe(false);
 
       let release: () => void = () => {};
       const held = new Promise<void>((resolve) => {
