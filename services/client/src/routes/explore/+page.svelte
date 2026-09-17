@@ -30,7 +30,7 @@
   import { usePostViewerState } from '@slink/lib/state/PostViewerState.svelte';
   import { usePublicImagesFeed } from '@slink/lib/state/PublicImagesFeed.svelte';
 
-  import { urlParamUtils } from '@slink/utils/url';
+  import { resolveSearchFilter, urlParamUtils } from '@slink/utils/url';
 
   import type { PageServerData } from './$types';
 
@@ -57,13 +57,9 @@
     return () => publicFeedState.unsubscribe();
   });
 
-  const urlSearch = $derived({
-    term: (page.url.searchParams.get('search') ?? '').trim(),
-    by: (page.url.searchParams.get('searchBy') ?? 'user') as
-      'user' | 'description' | 'hashtag',
-  });
+  const urlSearch = $derived(resolveSearchFilter(page.url.searchParams));
 
-  const hasSearchInUrl = (): boolean => urlSearch.term.length > 0;
+  const hasSearchInUrl = (): boolean => urlSearch.searchTerm !== undefined;
 
   const writeSearchToUrl = (searchTerm: string, searchBy: string) => {
     const term = searchTerm.trim();
@@ -91,19 +87,21 @@
   };
 
   $effect(() => {
-    const { term, by } = urlSearch;
+    const { searchTerm, searchBy } = urlSearch;
     const feed = untrack(() => ({
       term: publicFeedState.searchTerm,
       by: publicFeedState.searchBy,
       searching: publicFeedState.isSearching,
     }));
 
-    if (term) {
-      if (feed.term !== term || feed.by !== by) {
-        publicFeedState.search(term, by);
+    if (searchTerm) {
+      if (feed.term !== searchTerm || feed.by !== searchBy) {
+        publicFeedState.search(searchTerm, searchBy);
       }
       return;
     }
+
+    writeSearchToUrl('', '');
 
     if (feed.searching) {
       publicFeedState.resetSearch();
@@ -165,8 +163,8 @@
     <div class="mb-8 flex items-center gap-3">
       <h1 class="sr-only">Explore</h1>
       <SearchBar
-        searchTerm={urlSearch.term}
-        searchBy={urlSearch.by}
+        searchTerm={urlSearch.searchTerm}
+        searchBy={urlSearch.searchBy}
         onsearch={({ searchTerm, searchBy }) =>
           writeSearchToUrl(searchTerm, searchBy)}
         onclear={() => writeSearchToUrl('', '')}

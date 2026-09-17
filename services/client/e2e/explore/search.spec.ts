@@ -79,6 +79,39 @@ test.describe('Explore search', () => {
     expect(listings[0]).not.toContain('searchTerm=');
   });
 
+  test('a blank search in the url behaves like no search', async ({
+    page,
+    explorePage,
+    api,
+  }) => {
+    await api.content.uploadImage({ isPublic: true });
+
+    for (const blank of ['%20%20', '']) {
+      const listings = captureListingRequests(page);
+      await page.goto(`/explore?search=${blank}&searchBy=user`);
+
+      await explorePage.feedItems.first().waitFor({ state: 'visible' });
+      await page.waitForTimeout(ECHO_WINDOW_MS);
+
+      expect(
+        listings,
+        `search=${blank}: ${JSON.stringify(listings)}`,
+      ).toHaveLength(1);
+      expect(listings[0]).not.toContain('searchTerm=');
+      await expect(explorePage.searchInput).toHaveValue('');
+      await expect(
+        page.getByRole('heading', { name: 'No images found' }),
+      ).toHaveCount(0);
+      await expect(
+        page.getByRole('heading', { name: 'Nothing shared yet' }),
+      ).toHaveCount(0);
+
+      const params = new URL(page.url()).searchParams;
+      expect(params.get('search'), `search for search=${blank}`).toBeNull();
+      expect(params.get('searchBy'), `searchBy for search=${blank}`).toBeNull();
+    }
+  });
+
   test('a search without a scope in the url loads once and gains the default scope', async ({
     page,
     api,
