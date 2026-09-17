@@ -22,6 +22,7 @@
     GhostGrid,
     GhostList,
     HistorySkeleton,
+    PageHeader,
     ViewModeToggle,
   } from '@slink/feature/Layout';
   import {
@@ -30,7 +31,6 @@
     TagMatchModeToggle,
     TagPickerList,
   } from '@slink/feature/Tag';
-  import { Subtitle, Title } from '@slink/feature/Text';
   import { Button } from '@slink/ui/components/button';
   import { DataTable } from '@slink/ui/components/data-table';
   import { FilterSummary } from '@slink/ui/components/filter';
@@ -201,16 +201,11 @@
     )}
     use:skeleton={{ feed: historyFeedState }}
   >
-    <div class="mb-8 space-y-6" in:fade={{ duration: 300 }}>
-      <div
-        class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between w-full"
-      >
-        <div class="min-w-0">
-          <Title size="md">Upload History</Title>
-          <Subtitle>View and manage your uploaded images</Subtitle>
-        </div>
-
-        <div class="flex items-center gap-3 shrink-0">
+    <div in:fade={{ duration: 300 }}>
+      <PageHeader size="md">
+        {#snippet title()}Upload History{/snippet}
+        {#snippet subtitle()}View and manage your uploaded images{/snippet}
+        {#snippet actions()}
           <ViewModeToggle
             value={settings.history.viewMode}
             modes={['grid', 'list', 'table']}
@@ -220,41 +215,40 @@
               },
             }}
           />
+        {/snippet}
+        <div>
+          <TagFilter
+            selectedTags={historyFeedState.tagFilter.selectedTags}
+            requireAllTags={historyFeedState.tagFilter.requireAllTags}
+            onFilterChange={handleTagFilterChange}
+            disabled={historyFeedState.isLoading}
+            variant="neon"
+          />
+
+          <FilterSummary
+            count={historyFeedState.tagFilter.selectedTags.length}
+            countLabel={plural(historyFeedState.tagFilter.selectedTags.length, [
+              '# tag',
+              '# tags',
+            ])}
+            visible={historyFeedState.hasActiveFilter}
+            onClear={handleClearTagFilter}
+            disabled={historyFeedState.isLoading}
+            label="Filtering by"
+          >
+            {#snippet extras()}
+              {#if historyFeedState.tagFilter.selectedTags.length > 1}
+                <div class="w-px h-3.5 bg-border-strong hidden sm:block"></div>
+                <TagMatchModeToggle
+                  requireAllTags={historyFeedState.tagFilter.requireAllTags}
+                  onChange={handleMatchModeChange}
+                  disabled={historyFeedState.isLoading}
+                />
+              {/if}
+            {/snippet}
+          </FilterSummary>
         </div>
-      </div>
-
-      <div>
-        <TagFilter
-          selectedTags={historyFeedState.tagFilter.selectedTags}
-          requireAllTags={historyFeedState.tagFilter.requireAllTags}
-          onFilterChange={handleTagFilterChange}
-          disabled={historyFeedState.isLoading}
-          variant="neon"
-        />
-
-        <FilterSummary
-          count={historyFeedState.tagFilter.selectedTags.length}
-          countLabel={plural(historyFeedState.tagFilter.selectedTags.length, [
-            '# tag',
-            '# tags',
-          ])}
-          visible={historyFeedState.hasActiveFilter}
-          onClear={handleClearTagFilter}
-          disabled={historyFeedState.isLoading}
-          label="Filtering by"
-        >
-          {#snippet extras()}
-            {#if historyFeedState.tagFilter.selectedTags.length > 1}
-              <div class="w-px h-3.5 bg-border-strong hidden sm:block"></div>
-              <TagMatchModeToggle
-                requireAllTags={historyFeedState.tagFilter.requireAllTags}
-                onChange={handleMatchModeChange}
-                disabled={historyFeedState.isLoading}
-              />
-            {/if}
-          {/snippet}
-        </FilterSummary>
-      </div>
+      </PageHeader>
     </div>
 
     <ViewModeLayout

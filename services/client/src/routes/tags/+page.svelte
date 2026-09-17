@@ -2,12 +2,12 @@
   import {
     EmptyState,
     GhostChips,
+    PageHeader,
     ViewModeToggle,
   } from '@slink/feature/Layout';
   import { CreateTagDialog, TagTreeView } from '@slink/feature/Tag';
   import { TagsSkeleton } from '@slink/feature/Tag';
   import { createTagColumns } from '@slink/feature/Tag/TagDataTable/columns.svelte';
-  import { Subtitle, Title } from '@slink/feature/Text';
   import { Button } from '@slink/ui/components/button';
   import { DataTable } from '@slink/ui/components/data-table';
   import { EnhancedInput } from '@slink/ui/components/input';
@@ -110,13 +110,11 @@
 
 <section in:fade={{ duration: 300 }}>
   <div class="flex flex-col px-4 py-6 sm:px-6 w-full">
-    <div class="mb-8 space-y-6" in:fade={{ duration: 400, delay: 100 }}>
-      <div class="flex items-center justify-between w-full">
-        <div class="flex-1 min-w-0">
-          <Title>My Tags</Title>
-          <Subtitle>Create and organize tags for your images</Subtitle>
-        </div>
-        <div class="flex items-center gap-3 shrink-0">
+    <div in:fade={{ duration: 400, delay: 100 }}>
+      <PageHeader>
+        {#snippet title()}My Tags{/snippet}
+        {#snippet subtitle()}Create and organize tags for your images{/snippet}
+        {#snippet actions()}
           <ViewModeToggle
             value={mode}
             modes={['table', 'tree']}
@@ -133,8 +131,8 @@
               <Icon icon="lucide:plus" class="w-3.5 h-3.5" />
             {/snippet}
           </SplitButton>
-        </div>
-      </div>
+        {/snippet}
+      </PageHeader>
     </div>
 
     <ViewModeLayout

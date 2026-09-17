@@ -1,7 +1,10 @@
 <script lang="ts">
   import { LoadMoreButton } from '@slink/feature/Action';
-  import { EmptyState, ViewModeToggle } from '@slink/feature/Layout';
-  import { Subtitle, Title } from '@slink/feature/Text';
+  import {
+    EmptyState,
+    PageHeader,
+    ViewModeToggle,
+  } from '@slink/feature/Layout';
   import { UserGridView, UsersSkeleton } from '@slink/feature/User';
   import { createUserColumns } from '@slink/feature/User/UserDataTable/columns.svelte';
   import { DataTable } from '@slink/ui/components/data-table';
@@ -55,24 +58,22 @@
 
 <div class="min-h-full p-6 w-full" use:skeleton={{ feed: userFeedState }}>
   <div class="mx-auto w-full">
-    <div class="mb-8" in:fade={{ duration: 400, delay: 100 }}>
-      <div class="flex items-center justify-between w-full">
-        <div class="flex-1 min-w-0">
-          <Title>Users</Title>
-          <Subtitle>Manage user accounts and permissions</Subtitle>
-        </div>
-
-        <ViewModeToggle
-          value={settings.userAdmin.viewMode}
-          modes={['grid', 'list']}
-          on={{
-            change: (mode) => {
-              settings.userAdmin = { viewMode: mode };
-            },
-          }}
-          className="ml-4"
-        />
-      </div>
+    <div in:fade={{ duration: 400, delay: 100 }}>
+      <PageHeader>
+        {#snippet title()}Users{/snippet}
+        {#snippet subtitle()}Manage user accounts and permissions{/snippet}
+        {#snippet actions()}
+          <ViewModeToggle
+            value={settings.userAdmin.viewMode}
+            modes={['grid', 'list']}
+            on={{
+              change: (mode) => {
+                settings.userAdmin = { viewMode: mode };
+              },
+            }}
+          />
+        {/snippet}
+      </PageHeader>
     </div>
 
     <div in:fade={{ duration: 400, delay: 200 }}>
