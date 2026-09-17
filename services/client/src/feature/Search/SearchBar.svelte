@@ -92,9 +92,9 @@
   bind:searchTerm
   {disabled}
   placeholder={currentOption.placeholder}
-  variant="pill"
-  size="sm"
-  rounded="full"
+  variant="neon"
+  size="md"
+  rounded="lg"
   debounceMs={1000}
   onSearch={(term) => onsearch?.({ searchTerm: term, searchBy })}
   onClear={onclear}
@@ -107,7 +107,7 @@
   onEscape={clearTerm}
 >
   {#snippet trailing()}
-    <div class="w-px h-4 bg-border-strong shrink-0"></div>
+    <Filter.Divider class="bg-border-strong" />
 
     <DropdownSimple
       bind:open={dropdownOpen}
@@ -118,9 +118,9 @@
         <button
           {...triggerProps}
           class={cn(
-            'flex items-center gap-1 px-1.5 sm:px-2 py-0.5 text-xs font-medium',
+            'flex items-center gap-1 px-1.5 sm:px-2 py-1 text-xs font-medium',
             'text-foreground-muted hover:text-foreground',
-            'hover:bg-muted-soft dark:hover:bg-muted rounded-r-full transition-colors duration-150',
+            'hover:bg-hover rounded-md transition-colors duration-150',
             'whitespace-nowrap shrink-0',
           )}
           type="button"

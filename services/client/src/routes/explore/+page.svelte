@@ -174,6 +174,8 @@
       <ViewModeToggle
         value={settings.explore.viewMode}
         modes={supportedViewModes.explore}
+        size="xl"
+        label="active"
         on={{
           change: (mode) => {
             settings.explore = { viewMode: mode };

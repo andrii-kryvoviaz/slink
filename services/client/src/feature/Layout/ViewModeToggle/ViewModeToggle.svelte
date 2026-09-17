@@ -24,12 +24,13 @@
     modes,
     size = 'md',
     rounded = 'lg',
+    label = 'none',
     className: customClassName,
     disabled = false,
     on,
   }: Props = $props();
 
-  const styles = $derived(viewModeSliderTheme({ size, rounded }));
+  const styles = $derived(viewModeSliderTheme({ size, rounded, label }));
 
   const activeIndex = $derived(Math.max(0, modes.indexOf(value)));
   const stepCount = $derived(modes.length);
@@ -93,11 +94,9 @@
                 onclick={() => select(mode)}
                 class={styles.step()}
               >
-                {#if isActive}
-                  <Icon icon={config.icon} class={styles.icon()} />
-                {:else}
-                  <span class={styles.dot()} aria-hidden="true"></span>
-                {/if}
+                <Icon icon={config.icon} class={styles.icon()} />
+                <span class={styles.dot()} aria-hidden="true"></span>
+                <span class={styles.label()}>{config.label}</span>
               </button>
             {/snippet}
           </TooltipTrigger>
