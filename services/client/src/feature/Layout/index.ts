@@ -22,6 +22,7 @@ export { default as GhostChips } from './EmptyState/GhostChips/GhostChips.svelte
 export { default as GhostFolders } from './EmptyState/GhostFolders/GhostFolders.svelte';
 export { default as GhostGrid } from './EmptyState/GhostGrid/GhostGrid.svelte';
 export { default as GhostList } from './EmptyState/GhostList/GhostList.svelte';
+export { default as GhostPreview } from './EmptyState/GhostPreview/GhostPreview.svelte';
 export { default as GhostRows } from './EmptyState/GhostRows/GhostRows.svelte';
 export { default as AppFooter } from './Footer/AppFooter.svelte';
 export { default as Loader } from './Loader/Loader.svelte';

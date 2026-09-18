@@ -68,4 +68,20 @@ test.describe('Explore viewer modal', () => {
     await explorePage.page.keyboard.press('Escape');
     await expect(explorePage.viewer).toBeHidden();
   });
+
+  test('opens the clicked image, not the first', async ({
+    explorePage,
+    api,
+  }) => {
+    await api.content.uploadImage({ isPublic: true });
+    const secondId = await api.content.uploadImage({ isPublic: true });
+
+    await explorePage.goto();
+    await explorePage.cardFor(secondId).waitFor({ state: 'visible' });
+
+    await explorePage.cardFor(secondId).click();
+    await explorePage.viewer.waitFor({ state: 'visible' });
+
+    await expect.poll(() => explorePage.currentPost()).toBe(secondId);
+  });
 });

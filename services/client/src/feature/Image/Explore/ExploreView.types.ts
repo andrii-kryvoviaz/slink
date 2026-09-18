@@ -5,7 +5,7 @@ export interface ExploreViewProps {
   licensingEnabled: boolean;
   userIsAdmin: boolean;
   on: {
-    open: (index: number) => void;
+    open: (item: ImageListingItem) => void;
     bookmarkChange: (
       image: ImageListingItem,
       isBookmarked: boolean,

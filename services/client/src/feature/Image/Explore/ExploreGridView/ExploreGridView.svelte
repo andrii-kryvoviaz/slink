@@ -31,12 +31,11 @@
 
 <Masonry {items} class="gap-4" getItemWeight={calculateImageCardWeight}>
   {#snippet itemTemplate(image)}
-    {@const index = items.findIndex((i) => i.id === image.id)}
     <div
       in:fly={{ y: 20, duration: 300, delay: Math.random() * 100 }}
       class={theme.root()}
-      onclick={() => on.open(index)}
-      onkeydown={(e) => e.key === 'Enter' && on.open(index)}
+      onclick={() => on.open(image)}
+      onkeydown={(e) => e.key === 'Enter' && on.open(image)}
       role="button"
       tabindex="0"
     >

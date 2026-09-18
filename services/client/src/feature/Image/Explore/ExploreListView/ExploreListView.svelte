@@ -37,8 +37,8 @@
     >
       <div
         class={theme.root()}
-        onclick={() => on.open(index)}
-        onkeydown={(e) => e.key === 'Enter' && on.open(index)}
+        onclick={() => on.open(image)}
+        onkeydown={(e) => e.key === 'Enter' && on.open(image)}
         role="button"
         tabindex="0"
       >

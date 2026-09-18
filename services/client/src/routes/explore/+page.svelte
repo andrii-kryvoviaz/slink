@@ -8,8 +8,7 @@
   import {
     EmptyState,
     ExploreSkeleton,
-    GhostGrid,
-    GhostList,
+    GhostPreview,
     ViewModeToggle,
   } from '@slink/feature/Layout';
   import { SearchBar } from '@slink/feature/Search';
@@ -87,8 +86,10 @@
     }
   });
 
-  const openPostViewer = (index: number) => {
-    postViewerState.open(index);
+  const openPostViewer = (image: ImageListingItem) => {
+    postViewerState.open(
+      publicFeedState.items.findIndex((i) => i.id === image.id),
+    );
   };
 
   const handleBookmarkChange = (
@@ -193,11 +194,7 @@
               description="Public images from everyone on this instance show up here. Yours could be first."
             >
               {#snippet preview()}
-                {#if settings.explore.viewMode === 'list'}
-                  <GhostList />
-                {:else}
-                  <GhostGrid />
-                {/if}
+                <GhostPreview mode={settings.explore.viewMode} />
               {/snippet}
               {#snippet action()}
                 <Button variant="primary" size="md" rounded="lg" href="/upload">
@@ -231,17 +228,14 @@
         </div>
       {/snippet}
       {#snippet more()}
-        {#if publicFeedState.hasMore}
-          <div class="flex justify-center mt-8">
-            <LoadMoreButton
-              visible={publicFeedState.hasMore}
-              loading={publicFeedState.isLoading}
-              onclick={() => publicFeedState.nextPage({ debounce: 300 })}
-              variant="modern"
-              rounded="full"
-            />
-          </div>
-        {/if}
+        <LoadMoreButton
+          class="mt-8"
+          visible={publicFeedState.hasMore}
+          loading={publicFeedState.isLoading}
+          onclick={() => publicFeedState.nextPage({ debounce: 300 })}
+          variant="modern"
+          rounded="full"
+        />
       {/snippet}
     </ViewModeLayout>
   </div>

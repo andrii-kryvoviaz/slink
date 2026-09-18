@@ -46,9 +46,9 @@ export { default as HistorySelectHeader } from './History/HistoryDataTable/cells
 export { default as HistoryThumbnailCell } from './History/HistoryDataTable/cells/HistoryThumbnailCell.svelte';
 export { default as TagsCollectionsCell } from './History/HistoryDataTable/cells/TagsCollectionsCell.svelte';
 export * from './History/HistoryDataTable/columns.svelte';
-export { default as HistoryGridView } from './History/HistoryGridView.svelte';
+export { default as HistoryGridView } from './History/HistoryGridView/HistoryGridView.svelte';
 export { default as HistoryItemActions } from './History/HistoryItemActions.svelte';
-export { default as HistoryListView } from './History/HistoryListView.svelte';
+export { default as HistoryListView } from './History/HistoryListView/HistoryListView.svelte';
 export * from './History/HistoryView.types';
 export { default as SelectionActionBar } from './History/SelectionActionBar.svelte';
 export * from './History/batch-actions/delete';

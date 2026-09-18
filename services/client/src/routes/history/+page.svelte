@@ -19,8 +19,7 @@
   import { createHistoryColumns } from '@slink/feature/Image/History/HistoryDataTable/columns.svelte';
   import {
     EmptyState,
-    GhostGrid,
-    GhostList,
+    GhostPreview,
     HistorySkeleton,
     PageHeader,
     ViewModeToggle,
@@ -329,11 +328,7 @@
             description="Every image you upload lands here, with links ready to share and full control over visibility."
           >
             {#snippet preview()}
-              {#if settings.history.viewMode === 'grid'}
-                <GhostGrid />
-              {:else}
-                <GhostList />
-              {/if}
+              <GhostPreview mode={settings.history.viewMode} />
             {/snippet}
             {#snippet action()}
               <Button variant="primary" size="md" rounded="lg" href="/upload">
