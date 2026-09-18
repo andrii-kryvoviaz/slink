@@ -1,6 +1,8 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { TagFilterUrlManager } from '@slink/utils/tag/tagFilterUrl';
+
+vi.mock('@slink/api', () => ({ ApiClient: {} }));
 
 const managerFor = (search: string) =>
   TagFilterUrlManager.fromPageUrl(new URL(`http://localhost/history${search}`));
