@@ -1,3 +1,6 @@
+import { resolveSearchBy } from './searchFilter';
+import type { SearchFilter } from './searchFilter';
+
 export interface UrlParamConfig {
   replaceState?: boolean;
   noScroll?: boolean;
@@ -69,6 +72,19 @@ export class UrlParamManager {
 
   toSearchParams(): URLSearchParams {
     return new URLSearchParams(this.params);
+  }
+
+  searchFilter(): SearchFilter {
+    const searchTerm = (this.get('search') ?? '').trim();
+
+    if (!searchTerm) {
+      return {};
+    }
+
+    return {
+      searchTerm,
+      searchBy: resolveSearchBy(this.get('searchBy')),
+    };
   }
 }
 

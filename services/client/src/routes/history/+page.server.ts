@@ -1,6 +1,7 @@
 import { redirect } from '@sveltejs/kit';
 
 import { graceful } from '@slink/utils/async/graceful';
+import { urlParamUtils } from '@slink/utils/url';
 
 import type { PageServerLoad } from './$types';
 
@@ -11,8 +12,7 @@ export const load: PageServerLoad = async ({ parent, locals, url }) => {
     redirect(302, '/profile/login');
   }
 
-  const searchTerm = url.searchParams.get('search') ?? undefined;
-  const searchBy = url.searchParams.get('searchBy') ?? undefined;
+  const { searchTerm, searchBy } = urlParamUtils.fromPage(url).searchFilter();
   const tagIds = url.searchParams.getAll('tagIds');
   const requireAllTags =
     url.searchParams.get('requireAllTags') === 'true' || undefined;

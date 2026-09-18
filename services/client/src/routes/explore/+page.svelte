@@ -30,7 +30,7 @@
   import { usePostViewerState } from '@slink/lib/state/PostViewerState.svelte';
   import { usePublicImagesFeed } from '@slink/lib/state/PublicImagesFeed.svelte';
 
-  import { resolveSearchFilter, urlParamUtils } from '@slink/utils/url';
+  import { urlParamUtils } from '@slink/utils/url';
 
   import type { PageServerData } from './$types';
 
@@ -57,7 +57,7 @@
     return () => publicFeedState.unsubscribe();
   });
 
-  const urlSearch = $derived(resolveSearchFilter(page.url.searchParams));
+  const urlSearch = $derived(urlParamUtils.fromPage(page.url).searchFilter());
 
   const hasSearchInUrl = (): boolean => urlSearch.searchTerm !== undefined;
 
