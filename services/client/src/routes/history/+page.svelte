@@ -254,14 +254,7 @@
     <ViewModeLayout
       feed={historyFeedState}
       mode={settings.history.viewMode}
-      shouldSkipInitialLoad={() => {
-        if (tagFilterManager.hasFiltersInUrl()) {
-          loadTagFiltersFromUrl();
-          return true;
-        }
-
-        return false;
-      }}
+      shouldSkipInitialLoad={() => tagFilterManager.hasFiltersInUrl()}
       config={{
         grid: { pageSize: false },
         list: { pageSize: false },
