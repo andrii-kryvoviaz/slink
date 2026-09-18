@@ -53,7 +53,7 @@ export class TagFilterUrlManager {
   }
 
   hasTagFilter(): boolean {
-    return this.urlManager.has('tagIds');
+    return this.urlManager.getArray('tagIds').length > 0;
   }
 
   buildHistoryFilterUrl(tag: Tag, requireAllTags = false): string {

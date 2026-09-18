@@ -25,4 +25,23 @@ test.describe('History tag filter arrival', () => {
     expect(listings[0]).toContain(tagId);
     expect(listings, JSON.stringify(listings)).toHaveLength(1);
   });
+
+  test('a blank tag filter arrival loads the unfiltered history feed exactly once', async ({
+    page,
+    historyPage,
+    api,
+  }) => {
+    const imageId = await api.content.uploadImage();
+
+    await historyPage.useGridView();
+
+    const listings = captureListingRequests(page, '/api/images/history');
+    await page.goto('/history?tagIds=');
+
+    await expect.poll(() => listings.length).toBe(1);
+    await expect(historyPage.cardFor(imageId)).toBeVisible();
+
+    expect(listings[0]).not.toContain('tagIds');
+    expect(listings, JSON.stringify(listings)).toHaveLength(1);
+  });
 });
