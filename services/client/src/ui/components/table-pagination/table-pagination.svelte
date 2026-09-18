@@ -9,6 +9,8 @@
 
   import Icon from '@iconify/svelte';
 
+  import { Key } from '@slink/utils/ui';
+
   const containerTheme = tv({
     base: 'flex items-center gap-1 rounded-lg border',
     variants: {
@@ -238,7 +240,7 @@
   };
 
   const handleInputKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'Escape') {
+    if (e.key === Key.Escape) {
       handleCancelInput();
     }
   };
@@ -266,10 +268,10 @@
 <svelte:window
   onkeydown={(e) => {
     if (!loading) {
-      if (e.key === 'ArrowLeft') {
+      if (e.key === Key.ArrowLeft) {
         e.preventDefault();
         handlePreviousPage();
-      } else if (e.key === 'ArrowRight') {
+      } else if (e.key === Key.ArrowRight) {
         e.preventDefault();
         handleNextPage();
       }

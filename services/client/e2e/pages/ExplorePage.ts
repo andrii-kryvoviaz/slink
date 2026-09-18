@@ -113,7 +113,9 @@ export class ExplorePage extends BasePage {
     }).toPass({ timeout: 15000 });
   }
 
-  async pressArrow(direction: 'ArrowRight' | 'ArrowLeft') {
+  async pressArrow(
+    direction: 'ArrowRight' | 'ArrowLeft' | 'ArrowDown' | 'ArrowUp',
+  ) {
     const before = this.currentPost();
     await expect(async () => {
       await this.page.keyboard.press(direction);

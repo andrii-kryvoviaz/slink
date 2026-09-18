@@ -14,7 +14,7 @@
   import Icon from '@iconify/svelte';
   import { fade, fly } from 'svelte/transition';
 
-  import { cn } from '@slink/utils/ui';
+  import { Key, cn } from '@slink/utils/ui';
 
   import { exploreListRowTheme } from '../ExploreView.theme';
   import type { ExploreViewProps } from '../ExploreView.types';
@@ -38,7 +38,7 @@
       <div
         class={theme.root()}
         onclick={() => on.open(image)}
-        onkeydown={(e) => e.key === 'Enter' && on.open(image)}
+        onkeydown={(e) => e.key === Key.Enter && on.open(image)}
         role="button"
         tabindex="0"
       >

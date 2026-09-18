@@ -7,6 +7,8 @@
   import { randomId } from '$lib/utils/string/randomId';
   import type { HTMLAttributes } from 'svelte/elements';
 
+  import { Key } from '@slink/utils/ui';
+
   interface Props {
     key?: string;
     href?: string;
@@ -94,7 +96,7 @@
   <button
     bind:this={ref}
     {...defaultProps}
-    onkeydown={(event) => event.key === 'Enter' && handleClick(event)}
+    onkeydown={(event) => event.key === Key.Enter && handleClick(event)}
   >
     {@render children?.()}
   </button>

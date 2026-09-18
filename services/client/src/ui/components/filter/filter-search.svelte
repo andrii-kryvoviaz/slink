@@ -4,7 +4,7 @@
 
   import { debounce } from '$lib/utils/time/debounce';
 
-  import { cn } from '@slink/utils/ui/index.js';
+  import { Key, cn } from '@slink/utils/ui/index.js';
 
   import {
     FilterSearchState,
@@ -143,7 +143,7 @@
 
   const handleContainerKeydown = (event: KeyboardEvent) => {
     if (disabled) return;
-    if (event.key !== 'Enter' && event.key !== ' ') return;
+    if (event.key !== Key.Enter && event.key !== Key.Space) return;
     if (isInteractiveTarget(event)) return;
     event.preventDefault();
     state.focus();

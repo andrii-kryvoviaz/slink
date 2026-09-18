@@ -1,6 +1,8 @@
 // @wc-ignore-file
 import { getContext, setContext } from 'svelte';
 
+import { Key } from '@slink/utils/ui';
+
 import type { FilterSize, FilterVariant } from './filter.theme';
 
 const CONTAINER_KEY = Symbol('filter-container');
@@ -96,15 +98,15 @@ export class FilterSearchState {
   #resolveHandler(event: KeyboardEvent): KeyboardHandler | undefined {
     const a = this.#accessors;
     switch (event.key) {
-      case 'Enter':
+      case Key.Enter:
         return a.onEnter?.();
-      case 'Escape':
+      case Key.Escape:
         return a.onEscape?.();
-      case 'ArrowDown':
+      case Key.ArrowDown:
         return a.onArrowDown?.();
-      case 'ArrowUp':
+      case Key.ArrowUp:
         return a.onArrowUp?.();
-      case 'Backspace':
+      case Key.Backspace:
         return this.searchTerm ? undefined : a.onBackspaceEmpty?.();
       default:
         return undefined;

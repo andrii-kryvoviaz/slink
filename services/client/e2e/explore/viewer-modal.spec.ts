@@ -58,6 +58,31 @@ test.describe('Explore viewer modal', () => {
       .not.toBe(afterNext);
   });
 
+  test('navigates with down/up arrow keys, matching left/right', async ({
+    explorePage,
+  }) => {
+    await explorePage.goto();
+    await explorePage.feedItems.first().waitFor({ state: 'visible' });
+
+    await explorePage.openFirstItem();
+    const postN = explorePage.currentPost();
+
+    await explorePage.pressArrow('ArrowRight');
+    const postN1 = explorePage.currentPost();
+    expect(postN1).not.toBe(postN);
+
+    await explorePage.pressArrow('ArrowDown');
+    const postN2 = explorePage.currentPost();
+    expect(postN2).not.toBe(postN1);
+    expect(postN2).not.toBe(postN);
+
+    await explorePage.pressArrow('ArrowLeft');
+    await expect.poll(() => explorePage.currentPost()).toBe(postN1);
+
+    await explorePage.pressArrow('ArrowUp');
+    await expect.poll(() => explorePage.currentPost()).toBe(postN);
+  });
+
   test('closes with Escape key', async ({ explorePage }) => {
     await explorePage.goto();
     await explorePage.feedItems.first().waitFor({ state: 'visible' });

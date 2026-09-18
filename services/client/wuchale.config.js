@@ -24,29 +24,6 @@ const inClassAttribute = (text) =>
 
 const isRoutePath = (text) => String(text.body).startsWith('/');
 
-const keyboardKeyNames = new Set([
-  'Enter',
-  'Escape',
-  'Tab',
-  'ArrowUp',
-  'ArrowDown',
-  'ArrowLeft',
-  'ArrowRight',
-  'Home',
-  'End',
-  'Backspace',
-  'Delete',
-  'PageUp',
-  'PageDown',
-  ' ',
-]);
-
-const isKeyboardKeyName = (text) =>
-  keyboardKeyNames.has(String(text.body)) &&
-  text.path.some((scope) =>
-    ['function', 'funcexpr', 'method', 'attribute'].includes(scope.type),
-  );
-
 const asJsModule = (file) => file.replace(/\.svelte\.ts$/, '.svelte.js');
 
 export default defineConfig({
@@ -55,9 +32,7 @@ export default defineConfig({
     main: svelte({
       loader: 'sveltekit',
       heuristic: (text, file) =>
-        !inClassAttribute(text) &&
-        !isKeyboardKeyName(text) &&
-        svelteHeuristic(text, file),
+        !inClassAttribute(text) && svelteHeuristic(text, file),
       runtime: {
         initReactive: (path, file, ctx) =>
           defaultArgs.runtime.initReactive(path, asJsModule(file), ctx),
@@ -68,9 +43,7 @@ export default defineConfig({
     js: js({
       loader: 'vite',
       heuristic: (text, file) =>
-        !isRoutePath(text) &&
-        !isKeyboardKeyName(text) &&
-        defaultHeuristic(text, file),
+        !isRoutePath(text) && defaultHeuristic(text, file),
       files: [
         'src/**/+{page,layout}.{js,ts}',
         'src/**/+{page,layout}.server.{js,ts}',

@@ -6,6 +6,8 @@
   } from '$lib/utils/text/hashtag';
   import { className } from '$lib/utils/ui/className';
 
+  import { Key } from '@slink/utils/ui';
+
   import { type HashtagVariant, hashtagVariants } from './HashtagText.theme';
 
   interface Props extends HashtagVariant {
@@ -33,7 +35,7 @@
   };
 
   const handleKeyDown = (event: KeyboardEvent, hashtag: string): void => {
-    if (event.key === 'Enter' || event.key === ' ') {
+    if (event.key === Key.Enter || event.key === Key.Space) {
       event.preventDefault();
       handleHashtagClick(hashtag);
     }

@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { HTMLInputAttributes } from 'svelte/elements';
 
-  import { cn } from '@slink/utils/ui/index.js';
+  import { Key, cn } from '@slink/utils/ui/index.js';
 
   import { useDropzone } from './context.svelte.js';
   import { dropzoneInputTheme } from './dropzone.theme';
@@ -18,7 +18,7 @@
 
   function keydown(ev: KeyboardEvent) {
     if (ev.target !== ev.currentTarget) return;
-    if (![' ', 'Enter'].includes(ev.key)) return;
+    if (ev.key !== Key.Space && ev.key !== Key.Enter) return;
 
     ev.preventDefault();
     input?.click();

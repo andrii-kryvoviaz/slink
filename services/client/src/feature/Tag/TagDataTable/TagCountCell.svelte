@@ -6,6 +6,8 @@
 
   import { tagFilterUtils } from '@slink/lib/utils/tag/tagFilterUrl';
 
+  import { Key } from '@slink/utils/ui';
+
   interface Props {
     count: number;
     type: 'images' | 'children';
@@ -30,7 +32,7 @@
       return;
     }
 
-    if (event.key === 'Enter' || event.key === ' ') {
+    if (event.key === Key.Enter || event.key === Key.Space) {
       event.preventDefault();
       handleClick();
     }

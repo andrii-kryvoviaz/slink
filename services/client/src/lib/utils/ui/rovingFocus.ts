@@ -1,5 +1,7 @@
-const PREVIOUS_KEYS = new Set(['ArrowLeft', 'ArrowUp']);
-const NEXT_KEYS = new Set(['ArrowRight', 'ArrowDown']);
+import { Key } from './keyboard.js';
+
+const PREVIOUS_KEYS = new Set<string>([Key.ArrowLeft, Key.ArrowUp]);
+const NEXT_KEYS = new Set<string>([Key.ArrowRight, Key.ArrowDown]);
 
 export function getNextRovingIndex(
   key: string,
@@ -10,11 +12,11 @@ export function getNextRovingIndex(
     return null;
   }
 
-  if (key === 'Home') {
+  if (key === Key.Home) {
     return 0;
   }
 
-  if (key === 'End') {
+  if (key === Key.End) {
     return count - 1;
   }
 

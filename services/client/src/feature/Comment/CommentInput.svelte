@@ -5,6 +5,7 @@
 
   import type { CommentItem } from '@slink/api/Response';
 
+  import { Key } from '@slink/utils/ui';
   import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
 
   interface Props {
@@ -60,11 +61,11 @@
   }
 
   function handleKeyDown(event: KeyboardEvent) {
-    if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) {
+    if (event.key === Key.Enter && (event.metaKey || event.ctrlKey)) {
       event.preventDefault();
       handleSubmit();
     }
-    if (event.key === 'Escape' && (replyingTo || isEditing)) {
+    if (event.key === Key.Escape && (replyingTo || isEditing)) {
       handleCancel();
     }
   }

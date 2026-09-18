@@ -16,6 +16,8 @@
   import Icon from '@iconify/svelte';
   import { fly } from 'svelte/transition';
 
+  import { Key } from '@slink/utils/ui';
+
   import { exploreCardTheme } from '../ExploreView.theme';
   import type { ExploreViewProps } from '../ExploreView.types';
 
@@ -35,7 +37,7 @@
       in:fly={{ y: 20, duration: 300, delay: Math.random() * 100 }}
       class={theme.root()}
       onclick={() => on.open(image)}
-      onkeydown={(e) => e.key === 'Enter' && on.open(image)}
+      onkeydown={(e) => e.key === Key.Enter && on.open(image)}
       role="button"
       tabindex="0"
     >

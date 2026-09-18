@@ -40,6 +40,7 @@
   import { MediaFeedAdapter } from '@slink/lib/state/MediaFeedAdapter';
   import { usePostViewerState } from '@slink/lib/state/PostViewerState.svelte';
 
+  import { Key } from '@slink/utils/ui';
   import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
   import { PreviewUrl, routes } from '@slink/utils/url';
 
@@ -366,7 +367,7 @@
               in:fly={{ y: 20, duration: 300, delay: Math.random() * 100 }}
               class="group break-inside-avoid overflow-hidden rounded-lg border border-border bg-card/60 transition-all duration-200 hover:border-border-strong hover:shadow-md dark:hover:shadow-surface-inverse/50 cursor-pointer"
               onclick={() => openPostViewer(image.id)}
-              onkeydown={(e) => e.key === 'Enter' && openPostViewer(image.id)}
+              onkeydown={(e) => e.key === Key.Enter && openPostViewer(image.id)}
               role="button"
               tabindex="0"
             >
