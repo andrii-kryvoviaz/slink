@@ -54,4 +54,30 @@ describe('deepMerge', () => {
     expect(target.a).toEqual(snapshot.a);
     expect(result).not.toBe(target);
   });
+
+  it('accepts a deep-partial source and returns the target type', () => {
+    type Shape = { a: { b: number; c: number } };
+    const target: Shape = { a: { b: 1, c: 1 } };
+
+    const result: Shape = deepMerge<Shape>(target, { a: { c: 2 } });
+
+    expect(result).toEqual({ a: { b: 1, c: 2 } });
+  });
+
+  it('leaves keys absent from the source untouched', () => {
+    const target = { a: { b: 1, c: 1 }, d: 'keep', e: [1, 2] };
+
+    const result = deepMerge(target, { a: { c: 2 } });
+
+    expect(result).toEqual({ a: { b: 1, c: 2 }, d: 'keep', e: [1, 2] });
+  });
+
+  it('leaves target unchanged for an empty deep-partial source', () => {
+    const target: Obj = { a: { x: 1, y: 2 }, keep: true };
+
+    const result = deepMerge(target, {});
+
+    expect(result).toEqual(target);
+    expect(result).not.toBe(target);
+  });
 });

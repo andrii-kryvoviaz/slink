@@ -12,7 +12,7 @@ export interface ExtendedSearchParams extends SearchParams {
 }
 
 export abstract class AbstractSearchablePaginatedFeed<
-  T,
+  T extends object,
 > extends AbstractPaginatedFeed<T> {
   protected _searchTerm: string = $state('');
   protected _searchBy: string = $state('');
@@ -23,10 +23,6 @@ export abstract class AbstractSearchablePaginatedFeed<
   ) {
     super(config);
     this._searchBy = defaultSearchBy;
-  }
-
-  public override reset(): void {
-    super.reset();
   }
 
   public resetSearch(): void {

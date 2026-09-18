@@ -1,11 +1,17 @@
-type IndexableObject = Record<string, unknown>;
+export type IndexableObject = Record<string, unknown>;
 
-export function deepMerge<T extends IndexableObject>(target: T, source: T): T {
-  const output: IndexableObject = { ...target };
+export type DeepPartial<T> = {
+  [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
+};
 
-  for (const key of Object.keys(source) as (keyof T & string)[]) {
-    const sourceValue = source[key];
-    const targetValue = target[key];
+export function deepMerge<T extends object>(
+  target: T,
+  source: DeepPartial<T>,
+): T {
+  const output: IndexableObject = Object.fromEntries(Object.entries(target));
+
+  for (const [key, sourceValue] of Object.entries(source)) {
+    const targetValue: unknown = Reflect.get(target, key);
 
     if (!isObject(sourceValue) || !isObject(targetValue)) {
       output[key] = sourceValue;

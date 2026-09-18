@@ -17,7 +17,7 @@ import {
 } from '@slink/lib/settings/SettingsPolicy';
 
 import { cookie } from '@slink/utils/http/cookie';
-import { deepMerge } from '@slink/utils/object/deepMerge';
+import { type DeepPartial, deepMerge } from '@slink/utils/object/deepMerge';
 
 export type ShareFormat = 'direct' | 'markdown' | 'bbcode' | 'html' | 'image';
 
@@ -185,13 +185,8 @@ export class UserSettings {
     this._table.current = v;
   }
 
-  updateTable(
-    partial: Partial<Record<keyof TableState, Partial<TableKeySettings>>>,
-  ): void {
-    this._table.current = deepMerge<TableState>(
-      this._table.current,
-      partial as TableState,
-    );
+  updateTable(partial: DeepPartial<TableState>): void {
+    this._table.current = deepMerge(this._table.current, partial);
   }
 
   get history(): HistoryState {

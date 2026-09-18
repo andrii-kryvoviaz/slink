@@ -43,7 +43,7 @@ export function isTableMode(config: ModeConfig): config is TableModeConfig {
 export interface ListingContext {
   feed: AbstractPaginatedFeed<any>;
   handlePageSizeChange: (size: number) => Promise<void>;
-  tableSettings: TableSettingsState;
+  tableSettings?: TableSettingsState;
   table?: TanstackTable<DataTableFeatures, any>;
   pageSize?: number;
 }
