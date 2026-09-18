@@ -88,4 +88,31 @@ test.describe('Explore view mode', () => {
     );
     expect(explorePage.currentPost()).toBeTruthy();
   });
+
+  test('Enter opens the viewer from a focused grid card and list row', async ({
+    page,
+    explorePage,
+    actor,
+  }) => {
+    const owner = await actor('owner');
+    await owner.content.uploadImage({ isPublic: true });
+
+    await explorePage.goto();
+    await explorePage.feedItems.first().waitFor({ state: 'visible' });
+
+    await explorePage.feedItems.first().focus();
+    await page.keyboard.press('Enter');
+    await expect(explorePage.viewer).toBeVisible();
+    expect(explorePage.currentPost()).toBeTruthy();
+
+    await explorePage.closeViewer();
+
+    await explorePage.switchViewMode('List');
+    await expect(explorePage.listRows.first()).toBeVisible();
+
+    await explorePage.listRows.first().getByRole('button').first().focus();
+    await page.keyboard.press('Enter');
+    await expect(explorePage.viewer).toBeVisible();
+    expect(explorePage.currentPost()).toBeTruthy();
+  });
 });
