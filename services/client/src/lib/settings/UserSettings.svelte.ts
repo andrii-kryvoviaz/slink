@@ -10,6 +10,7 @@ import {
   resolveLocale,
   resolveMode,
   resolveTheme,
+  settingsKeys,
 } from '@slink/lib/settings/Settings.enums';
 import {
   resolveSettingsCookies,
@@ -145,9 +146,30 @@ export class UserSettings {
   );
   readonly _banners = new ObjectSetting<BannersState>('banners');
 
+  private readonly _settings: Record<
+    SettingsKey,
+    { hydrate(v: unknown): void }
+  > = {
+    mode: this.mode,
+    theme: this.theme,
+    locale: this.locale,
+    sidebar: this._sidebar,
+    navigation: this._navigation,
+    userAdmin: this._userAdmin,
+    table: this._table,
+    history: this._history,
+    explore: this._explore,
+    tags: this._tags,
+    share: this._share,
+    comment: this._comment,
+    uploadOptions: this._uploadOptions,
+    banners: this._banners,
+    collections: this._collections,
+  };
+
   constructor(initial?: CookieSettings) {
     if (initial) {
-      this._apply(initial as Record<string, unknown>);
+      this._apply(initial);
     } else if (browser) {
       this._apply(resolveSettingsCookies((name) => cookie.get(name)));
     }
@@ -253,21 +275,16 @@ export class UserSettings {
     this._banners.current = v;
   }
 
-  private _apply(data: Record<string, unknown>): void {
-    for (const [key, value] of Object.entries(data)) {
+  private _apply(data: CookieSettings): void {
+    for (const key of settingsKeys) {
+      const value = data[key];
       if (value == null) continue;
 
-      const record = this as Record<string, unknown>;
-      const field = record[`_${key}`] ?? record[key];
-      if (!field || typeof field !== 'object' || !('hydrate' in field)) {
-        continue;
-      }
-
-      (field as { hydrate: (v: unknown) => void }).hydrate(value);
+      this._settings[key].hydrate(value);
     }
   }
 
   reset(): void {
-    this._apply(defaultSettings as Record<string, unknown>);
+    this._apply(defaultSettings);
   }
 }

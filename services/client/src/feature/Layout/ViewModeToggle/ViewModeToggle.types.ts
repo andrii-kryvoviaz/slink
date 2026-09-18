@@ -7,7 +7,7 @@ export type ViewModeConfig = {
 
 export interface ViewModeToggleProps {
   value: ViewMode;
-  modes: ViewMode[];
+  modes: readonly ViewMode[];
   size?: 'sm' | 'md' | 'lg' | 'xl';
   rounded?: 'md' | 'lg' | 'pill';
   labelMode?: 'none' | 'active';

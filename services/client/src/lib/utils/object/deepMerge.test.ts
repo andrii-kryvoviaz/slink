@@ -72,6 +72,22 @@ describe('deepMerge', () => {
     expect(result).toEqual({ a: { b: 1, c: 2 }, d: 'keep', e: [1, 2] });
   });
 
+  it('a source of scalars, arrays and null equals a shallow spread', () => {
+    const target: Obj = { a: 1, b: [1] };
+    const source: Obj = { a: 2, b: [3], c: null };
+
+    expect(deepMerge(target, source)).toEqual({ ...target, ...source });
+    expect(deepMerge(target, source)).toEqual({ a: 2, b: [3], c: null });
+  });
+
+  it('a nested object source still deep-merges', () => {
+    const target = { attributes: { isPublic: false, views: 3 } };
+
+    expect(deepMerge(target, { attributes: { isPublic: true } })).toEqual({
+      attributes: { isPublic: true, views: 3 },
+    });
+  });
+
   it('leaves target unchanged for an empty deep-partial source', () => {
     const target: Obj = { a: { x: 1, y: 2 }, keep: true };
 

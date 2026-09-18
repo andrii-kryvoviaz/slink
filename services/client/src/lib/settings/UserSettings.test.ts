@@ -1,7 +1,16 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { defaultSettings } from '@slink/lib/settings/Settings.enums';
-import { UserSettings } from '@slink/lib/settings/UserSettings.svelte';
+import { SortOrder } from '@slink/lib/enum/SortOrder';
+import {
+  Locale,
+  Mode,
+  Theme,
+  defaultSettings,
+} from '@slink/lib/settings/Settings.enums';
+import {
+  type CookieSettings,
+  UserSettings,
+} from '@slink/lib/settings/UserSettings.svelte';
 
 import { cookie } from '@slink/utils/http/cookie';
 
@@ -28,9 +37,83 @@ const objectKeys = [
   'banners',
 ] as const;
 
+const nonDefaults = {
+  mode: Mode.DARK,
+  theme: Theme.NORD,
+  locale: Locale.DE,
+  sidebar: { expanded: false },
+  navigation: { expandedGroups: { admin: true } },
+  userAdmin: { viewMode: 'grid' },
+  table: {
+    ...(defaultSettings.table as object),
+    users: { pageSize: 5, columnVisibility: { username: false } },
+  },
+  history: { viewMode: 'list' },
+  explore: { viewMode: 'list' },
+  tags: { viewMode: 'tree' },
+  share: { format: 'markdown' },
+  comment: { sortOrder: SortOrder.Desc },
+  uploadOptions: { expanded: true },
+  banners: { hideExifKeptNotice: true },
+  collections: {
+    viewMode: 'table',
+    pageSize: 24,
+    loadStrategy: 'infinite_scroll',
+  },
+} satisfies CookieSettings;
+
+const read = (settings: UserSettings, key: string): unknown =>
+  (settings as unknown as Record<string, unknown>)[key];
+
 describe('UserSettings', () => {
   beforeEach(() => {
     vi.mocked(cookie.set).mockClear();
+  });
+
+  it('hydrates all fifteen keys from initial without persisting', () => {
+    const settings = new UserSettings(nonDefaults);
+
+    expect(settings.mode.current).toBe(Mode.DARK);
+    expect(settings.theme.current).toBe(Theme.NORD);
+    expect(settings.locale.current).toBe(Locale.DE);
+
+    for (const key of objectKeys) {
+      expect(read(settings, key)).toEqual(nonDefaults[key]);
+    }
+    expect(cookie.set).not.toHaveBeenCalled();
+  });
+
+  it('a null initial value leaves the key at its default', () => {
+    const settings = new UserSettings({ explore: null, mode: null });
+
+    expect(settings.explore).toEqual(defaultSettings.explore);
+    expect(settings.mode.current).toBe(defaultSettings.mode);
+  });
+
+  it('an unknown initial key is ignored', () => {
+    const initial = {
+      bogus: { viewMode: 'list' },
+      explore: { viewMode: 'list' },
+    } as CookieSettings;
+
+    const settings = new UserSettings(initial);
+
+    expect(settings.explore).toEqual({ viewMode: 'list' });
+    expect(read(settings, 'bogus')).toBeUndefined();
+  });
+
+  it('reset restores all fifteen keys', () => {
+    const settings = new UserSettings(nonDefaults);
+
+    settings.reset();
+
+    expect(settings.mode.current).toBe(defaultSettings.mode);
+    expect(settings.theme.current).toBe(defaultSettings.theme);
+    expect(settings.locale.current).toBe(defaultSettings.locale);
+
+    for (const key of objectKeys) {
+      expect(read(settings, key)).toEqual(defaultSettings[key]);
+    }
   });
 
   it('an object setting seeds from the default', () => {

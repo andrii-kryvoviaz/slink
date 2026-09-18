@@ -3,7 +3,6 @@ import type { UserPreferencesResponse } from '@slink/api/Response/User/UserPrefe
 import type { CookiePolicy } from '@slink/lib/auth/CookiePolicy';
 import {
   type SettingsKey,
-  type ViewMode,
   defaultSettings,
   defaultViewModes,
   isViewModeSettingsKey,
@@ -24,7 +23,7 @@ function withSupportedViewMode(
     return merged;
   }
 
-  if (supportedViewModes[key].includes(merged.viewMode as ViewMode)) {
+  if (supportedViewModes[key].some((mode) => mode === merged.viewMode)) {
     return merged;
   }
 

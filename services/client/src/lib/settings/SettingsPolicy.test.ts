@@ -1,6 +1,96 @@
 import { describe, expect, it } from 'vitest';
 
+import {
+  type ViewModeSettingsKey,
+  defaultSettings,
+} from '@slink/lib/settings/Settings.enums';
 import { settingsPolicy } from '@slink/lib/settings/SettingsPolicy';
+
+const viewModeKeys: ViewModeSettingsKey[] = [
+  'userAdmin',
+  'history',
+  'explore',
+  'tags',
+  'collections',
+];
+
+const unsupportedViewModes: Record<ViewModeSettingsKey, string> = {
+  userAdmin: 'table',
+  history: 'tree',
+  explore: 'table',
+  tags: 'grid',
+  collections: 'list',
+};
+
+const supportedViewModes: Record<ViewModeSettingsKey, string> = {
+  userAdmin: 'grid',
+  history: 'list',
+  explore: 'list',
+  tags: 'tree',
+  collections: 'table',
+};
+
+const expectedDefaultViewModes: Record<ViewModeSettingsKey, string> = {
+  userAdmin: 'list',
+  history: 'table',
+  explore: 'grid',
+  tags: 'table',
+  collections: 'grid',
+};
+
+const defaultViewMode = (key: ViewModeSettingsKey): unknown =>
+  (defaultSettings[key] as { viewMode: unknown }).viewMode;
+
+const decodedViewMode = (key: ViewModeSettingsKey, value: unknown): unknown =>
+  (settingsPolicy.decode(key, JSON.stringify(value)) as { viewMode: unknown })
+    .viewMode;
+
+describe('settingsPolicy view-mode fallback', () => {
+  it.each(viewModeKeys)(
+    '%s: an unsupported viewMode falls back to the default',
+    (key) => {
+      expect(
+        decodedViewMode(key, { viewMode: unsupportedViewModes[key] }),
+      ).toBe(defaultViewMode(key));
+    },
+  );
+
+  it.each(viewModeKeys)(
+    '%s: bogus, numeric, null and absent viewMode fall back to the default',
+    (key) => {
+      const inputs = [
+        { viewMode: 'bogus' },
+        { viewMode: 42 },
+        { viewMode: null },
+        {},
+      ];
+
+      for (const input of inputs) {
+        expect(decodedViewMode(key, input)).toBe(defaultViewMode(key));
+      }
+    },
+  );
+
+  it('collections keeps pageSize and loadStrategy on view-mode fallback', () => {
+    expect(settingsPolicy.decode('collections', '{"viewMode":"list"}')).toEqual(
+      {
+        viewMode: 'grid',
+        pageSize: 12,
+        loadStrategy: 'load_more',
+      },
+    );
+  });
+
+  it.each(viewModeKeys)('%s: a supported viewMode is kept', (key) => {
+    expect(decodedViewMode(key, { viewMode: supportedViewModes[key] })).toBe(
+      supportedViewModes[key],
+    );
+  });
+
+  it.each(viewModeKeys)('%s: the default view mode is unchanged', (key) => {
+    expect(defaultViewMode(key)).toBe(expectedDefaultViewModes[key]);
+  });
+});
 
 describe('settingsPolicy', () => {
   it('names the explore key', () => {

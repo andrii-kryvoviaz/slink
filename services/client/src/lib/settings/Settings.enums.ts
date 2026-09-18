@@ -90,7 +90,10 @@ export type ViewMode = 'grid' | 'list' | 'table' | 'tree';
 export type ViewModeSettingsKey =
   'userAdmin' | 'history' | 'explore' | 'tags' | 'collections';
 
-export const supportedViewModes: Record<ViewModeSettingsKey, ViewMode[]> = {
+export const supportedViewModes: Record<
+  ViewModeSettingsKey,
+  readonly ViewMode[]
+> = {
   userAdmin: ['grid', 'list'],
   history: ['grid', 'list', 'table'],
   explore: ['grid', 'list'],
@@ -116,7 +119,7 @@ export const defaultSettings: Record<SettingsKey, unknown> = {
   locale: Locale.EN,
   sidebar: { expanded: true },
   navigation: { expandedGroups: {} },
-  userAdmin: { viewMode: 'list' },
+  userAdmin: { viewMode: defaultViewModes.userAdmin },
   table: {
     users: {
       pageSize: 12,
@@ -167,12 +170,16 @@ export const defaultSettings: Record<SettingsKey, unknown> = {
       },
     },
   },
-  history: { viewMode: 'table' },
-  explore: { viewMode: 'grid' },
-  tags: { viewMode: 'table' },
+  history: { viewMode: defaultViewModes.history },
+  explore: { viewMode: defaultViewModes.explore },
+  tags: { viewMode: defaultViewModes.tags },
   share: { format: 'direct' },
   comment: { sortOrder: SortOrder.Asc },
   uploadOptions: { expanded: false },
   banners: { hideExifKeptNotice: false },
-  collections: { viewMode: 'grid', pageSize: 12, loadStrategy: 'load_more' },
+  collections: {
+    viewMode: defaultViewModes.collections,
+    pageSize: 12,
+    loadStrategy: 'load_more',
+  },
 };

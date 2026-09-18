@@ -304,17 +304,7 @@ export abstract class AbstractPaginatedFeed<
     const existing = this._itemMap.get(id);
     if (!existing) return false;
 
-    const needsDeepMerge = Object.values(updates).some(
-      (value) =>
-        value !== null && typeof value === 'object' && !Array.isArray(value),
-    );
-
-    this._itemMap.set(
-      id,
-      needsDeepMerge
-        ? deepMerge(existing, updates)
-        : { ...existing, ...(updates as Partial<T>) },
-    );
+    this._itemMap.set(id, deepMerge(existing, updates));
     return true;
   }
 
