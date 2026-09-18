@@ -79,9 +79,15 @@ test.describe('Explore search', () => {
       await expect(explorePage.emptyState('no-results')).toHaveCount(0);
       await expect(explorePage.emptyState('nothing-shared')).toHaveCount(0);
 
-      const params = new URL(page.url()).searchParams;
-      expect(params.get('search'), `search for search=${blank}`).toBeNull();
-      expect(params.get('searchBy'), `searchBy for search=${blank}`).toBeNull();
+      await expect
+        .poll(
+          () => {
+            const params = new URL(page.url()).searchParams;
+            return [params.get('search'), params.get('searchBy')];
+          },
+          { message: `search params for search=${blank}` },
+        )
+        .toEqual([null, null]);
 
       expect(
         listings,
@@ -132,9 +138,12 @@ test.describe('Explore search', () => {
     await expect(explorePage.searchInput).toHaveValue('');
     await expect(explorePage.emptyState('no-results')).toHaveCount(0);
 
-    const params = new URL(page.url()).searchParams;
-    expect(params.get('search')).toBeNull();
-    expect(params.get('searchBy')).toBeNull();
+    await expect
+      .poll(() => {
+        const params = new URL(page.url()).searchParams;
+        return [params.get('search'), params.get('searchBy')];
+      })
+      .toEqual([null, null]);
 
     const clearedAt = Date.now();
     await expect
