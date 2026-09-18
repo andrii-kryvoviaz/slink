@@ -94,3 +94,45 @@ export function relativeFromDays(days: number): string {
 export function formatDate(date: Date | string): string {
   return relativeFromDays(daysUntil(date));
 }
+
+export type DayKind = 'today' | 'yesterday' | 'earlier';
+
+export function startOfDay(date: Date): Date {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+}
+
+export function calendarDayKey(date: Date): string {
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${date.getFullYear()}-${month}-${day}`;
+}
+
+export function dayKind(date: Date, now: Date = new Date()): DayKind {
+  const diff = Math.round(
+    (startOfDay(now).getTime() - startOfDay(date).getTime()) / DAY_MS,
+  );
+
+  if (diff === 0) return 'today';
+  if (diff === 1) return 'yesterday';
+  return 'earlier';
+}
+
+export function formatClockTime(date: Date): string {
+  return new Intl.DateTimeFormat(getLocale(), {
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(date);
+}
+
+export function formatShortDate(date: Date): string {
+  const options: Intl.DateTimeFormatOptions = {
+    month: 'short',
+    day: 'numeric',
+  };
+
+  if (date.getFullYear() !== new Date().getFullYear()) {
+    options.year = 'numeric';
+  }
+
+  return new Intl.DateTimeFormat(getLocale(), options).format(date);
+}
