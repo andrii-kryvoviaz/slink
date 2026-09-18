@@ -17,7 +17,6 @@
   import { ViewModeLayout } from '@slink/ui/components/view-mode-layout';
   import { untrack } from 'svelte';
 
-  import { goto } from '$app/navigation';
   import { page } from '$app/state';
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
@@ -26,11 +25,10 @@
 
   import { skeleton } from '@slink/lib/actions/skeleton';
   import { isAdmin } from '@slink/lib/auth/utils';
+  import { createSearchFilterManager } from '@slink/lib/composables/useSearchFilterUrl';
   import { supportedViewModes } from '@slink/lib/settings';
   import { usePostViewerState } from '@slink/lib/state/PostViewerState.svelte';
   import { usePublicImagesFeed } from '@slink/lib/state/PublicImagesFeed.svelte';
-
-  import { urlParamUtils } from '@slink/utils/url';
 
   import type { PageServerData } from './$types';
 
@@ -57,34 +55,8 @@
     return () => publicFeedState.unsubscribe();
   });
 
-  const urlSearch = $derived(urlParamUtils.fromPage(page.url).searchFilter());
-
-  const hasSearchInUrl = (): boolean => urlSearch.searchTerm !== undefined;
-
-  const writeSearchToUrl = (searchTerm: string, searchBy: string) => {
-    const term = searchTerm.trim();
-    const params = urlParamUtils.create(window.location.href);
-    const current = params.toSearchParams();
-
-    if (term) {
-      params.set('search', term).set('searchBy', searchBy);
-    } else {
-      params.delete('search').delete('searchBy');
-    }
-
-    const next = params.toSearchParams();
-    const isUnchanged =
-      (next.get('search') ?? '') === (current.get('search') ?? '') &&
-      (next.get('searchBy') ?? '') === (current.get('searchBy') ?? '');
-
-    if (isUnchanged) return;
-
-    goto(params.buildUrl(), {
-      replaceState: true,
-      keepFocus: true,
-      noScroll: true,
-    });
-  };
+  const searchFilter = $derived(createSearchFilterManager(page.url));
+  const urlSearch = $derived(searchFilter.read());
 
   $effect(() => {
     const { searchTerm, searchBy } = urlSearch;
@@ -101,7 +73,7 @@
       return;
     }
 
-    writeSearchToUrl('', '');
+    searchFilter.clearUrl();
 
     if (feed.searching) {
       publicFeedState.resetSearch();
@@ -166,8 +138,8 @@
         searchTerm={urlSearch.searchTerm}
         searchBy={urlSearch.searchBy}
         onsearch={({ searchTerm, searchBy }) =>
-          writeSearchToUrl(searchTerm, searchBy)}
-        onclear={() => writeSearchToUrl('', '')}
+          searchFilter.updateUrl(searchTerm, searchBy)}
+        onclear={() => searchFilter.clearUrl()}
       />
       <ViewModeToggle
         value={settings.explore.viewMode}
@@ -185,7 +157,7 @@
     <ViewModeLayout
       feed={publicFeedState}
       mode={settings.explore.viewMode}
-      onBeforeLoad={hasSearchInUrl}
+      shouldSkipInitialLoad={() => searchFilter.hasFilterInUrl()}
       config={{
         grid: { toolbar: false, appendMode: 'auto' },
         list: { toolbar: false, appendMode: 'auto' },
@@ -249,7 +221,7 @@
                   variant="outline"
                   size="sm"
                   rounded="lg"
-                  onclick={() => writeSearchToUrl('', '')}
+                  onclick={() => searchFilter.clearUrl()}
                 >
                   Clear search
                 </Button>

@@ -4,6 +4,7 @@ export interface NavigationConfig {
   replaceState?: boolean;
   noScroll?: boolean;
   invalidateAll?: boolean;
+  keepFocus?: boolean;
 }
 
 /**

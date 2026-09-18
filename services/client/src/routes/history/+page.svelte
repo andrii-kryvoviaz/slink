@@ -255,11 +255,13 @@
     <ViewModeLayout
       feed={historyFeedState}
       mode={settings.history.viewMode}
-      onBeforeLoad={() => {
+      shouldSkipInitialLoad={() => {
         if (tagFilterManager.hasFiltersInUrl()) {
           loadTagFiltersFromUrl();
           return true;
         }
+
+        return false;
       }}
       config={{
         grid: { pageSize: false },

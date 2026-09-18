@@ -26,7 +26,7 @@
     config?: Partial<Record<ViewMode, ModeConfig>>;
     spacing?: ViewModeLayoutVariants['spacing'];
     pageSizeOptions?: number[];
-    onBeforeLoad?: () => boolean | void;
+    shouldSkipInitialLoad?: () => boolean;
     onPageSizeChange?: (size: number) => void | Promise<void>;
 
     grid?: Snippet<[ListingContext]>;
@@ -45,7 +45,7 @@
     config,
     spacing,
     pageSizeOptions = [12, 24, 48, 96],
-    onBeforeLoad,
+    shouldSkipInitialLoad,
     onPageSizeChange,
     grid,
     list,
@@ -135,8 +135,7 @@
         return;
       }
 
-      const skipLoad = onBeforeLoad?.();
-      if (!skipLoad && feed.needsLoad) {
+      if (!shouldSkipInitialLoad?.() && feed.needsLoad) {
         feed.load();
       }
     });
