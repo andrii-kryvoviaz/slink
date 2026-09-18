@@ -37,13 +37,10 @@ test.describe('Explore settings cookie fallback', () => {
     expect(ssrViewModeChecked(stripped, 'Grid')).toBe(true);
     expect(ssrViewModeChecked(stripped, 'List')).toBe(false);
 
-    let release: () => void = () => {};
-    const held = new Promise<void>((resolve) => {
-      release = resolve;
-    });
+    const held = Promise.withResolvers<void>();
 
     await page.route(IMAGES_ENDPOINT, async (route) => {
-      await held;
+      await held.promise;
       await route.continue();
     });
 
@@ -57,7 +54,7 @@ test.describe('Explore settings cookie fallback', () => {
     await expect(listRadio).toHaveAttribute('aria-checked', 'false');
     await expect(strayControl).toHaveCount(0);
 
-    release();
+    held.resolve();
 
     await expect(explorePage.cardFor(imageId)).toBeVisible();
     await expect(strayControl).toHaveCount(0);
