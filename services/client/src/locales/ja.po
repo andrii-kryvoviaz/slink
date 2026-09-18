@@ -3417,15 +3417,15 @@ msgstr "この値は{type}型である必要があります。"
 msgid "This collection should contain {limit} elements or less."
 msgstr "このコレクションの要素数は{limit}以下にしてください。"
 
-#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.language.ts
 msgid "Grid"
 msgstr "グリッド"
 
-#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.language.ts
 msgid "List"
 msgstr "リスト"
 
-#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.language.ts
 msgid "Table"
 msgstr "テーブル"
 
@@ -4376,7 +4376,7 @@ msgstr "適用中のフィルター"
 msgid "Failed to load child tags. Please try again."
 msgstr "子タグの読み込みに失敗しました。もう一度お試しください。"
 
-#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.language.ts
 msgid "Tree"
 msgstr "ツリー"
 

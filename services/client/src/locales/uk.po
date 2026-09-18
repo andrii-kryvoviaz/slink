@@ -3419,15 +3419,15 @@ msgstr "Це значення повинно бути типу {type}."
 msgid "This collection should contain {limit} elements or less."
 msgstr "Ця колекція повинна містити {limit} або менше елементів."
 
-#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.language.ts
 msgid "Grid"
 msgstr "Сітка"
 
-#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.language.ts
 msgid "List"
 msgstr "Список"
 
-#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.language.ts
 msgid "Table"
 msgstr "Таблиця"
 
@@ -4404,7 +4404,7 @@ msgstr "Застосований фільтр"
 msgid "Failed to load child tags. Please try again."
 msgstr "Не вдалося завантажити дочірні теги. Спробуйте ще раз."
 
-#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.language.ts
 msgid "Tree"
 msgstr "Дерево"
 

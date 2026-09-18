@@ -3417,15 +3417,15 @@ msgstr "该值的类型应为 {type}。"
 msgid "This collection should contain {limit} elements or less."
 msgstr "该集合包含的元素数量应不超过 {limit} 个。"
 
-#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.language.ts
 msgid "Grid"
 msgstr "网格"
 
-#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.language.ts
 msgid "List"
 msgstr "列表"
 
-#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.language.ts
 msgid "Table"
 msgstr "表格"
 
@@ -4376,7 +4376,7 @@ msgstr "已应用滤镜"
 msgid "Failed to load child tags. Please try again."
 msgstr "加载子标签失败，请重试。"
 
-#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.language.ts
 msgid "Tree"
 msgstr "树形"
 

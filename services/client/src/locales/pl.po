@@ -3420,15 +3420,15 @@ msgstr "Ta wartość powinna być typu {type}."
 msgid "This collection should contain {limit} elements or less."
 msgstr "Ta kolekcja powinna zawierać co najwyżej {limit} elementów."
 
-#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.language.ts
 msgid "Grid"
 msgstr "Siatka"
 
-#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.language.ts
 msgid "List"
 msgstr "Lista"
 
-#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.language.ts
 msgid "Table"
 msgstr "Tabela"
 
@@ -4418,7 +4418,7 @@ msgstr "Zastosowany filtr"
 msgid "Failed to load child tags. Please try again."
 msgstr "Nie udało się załadować tagów podrzędnych. Spróbuj ponownie."
 
-#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.language.ts
 msgid "Tree"
 msgstr "Drzewo"
 

@@ -58,24 +58,20 @@ export const viewModeSliderTheme = tv({
         step: 'rounded-full',
       },
     },
-    label: {
+    labelMode: {
       none: {
-        icon: 'text-foreground-soft dark:text-foreground hidden group-aria-checked:block',
-        dot: 'group-aria-checked:hidden',
-        label: 'hidden',
+        icon: 'text-foreground-soft dark:text-foreground',
       },
       active: {
-        thumb: 'hidden',
         step: 'w-auto px-3 gap-1.5 aria-checked:bg-surface-raised aria-checked:shadow-sm aria-checked:ring-1 aria-checked:ring-border/90',
         icon: 'text-foreground-muted group-aria-checked:text-foreground-soft dark:group-aria-checked:text-foreground',
-        dot: 'hidden',
-        label: 'hidden sm:group-aria-checked:inline',
+        label: 'hidden sm:inline',
       },
     },
   },
   defaultVariants: {
     size: 'md',
     rounded: 'lg',
-    label: 'none',
+    labelMode: 'none',
   },
 });

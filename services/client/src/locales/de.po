@@ -3418,15 +3418,15 @@ msgstr "Dieser Wert muss vom Typ {type} sein."
 msgid "This collection should contain {limit} elements or less."
 msgstr "Diese Sammlung darf höchstens {limit} Elemente enthalten."
 
-#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.language.ts
 msgid "Grid"
 msgstr "Raster"
 
-#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.language.ts
 msgid "List"
 msgstr "Liste"
 
-#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.language.ts
 msgid "Table"
 msgstr "Tabelle"
 
@@ -4390,7 +4390,7 @@ msgstr "Angewendeter Filter"
 msgid "Failed to load child tags. Please try again."
 msgstr "Untertags konnten nicht geladen werden. Bitte versuchen Sie es erneut."
 
-#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.language.ts
 msgid "Tree"
 msgstr "Baum"
 

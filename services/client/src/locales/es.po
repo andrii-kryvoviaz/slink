@@ -3418,15 +3418,15 @@ msgstr "Este valor debe ser de tipo {type}."
 msgid "This collection should contain {limit} elements or less."
 msgstr "Esta colección debe contener {limit} elementos o menos."
 
-#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.language.ts
 msgid "Grid"
 msgstr "Cuadrícula"
 
-#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.language.ts
 msgid "List"
 msgstr "Lista"
 
-#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.language.ts
 msgid "Table"
 msgstr "Tabla"
 
@@ -4390,7 +4390,7 @@ msgstr "Filtro aplicado"
 msgid "Failed to load child tags. Please try again."
 msgstr "Error al cargar las etiquetas secundarias. Por favor, inténtalo de nuevo."
 
-#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.language.ts
 msgid "Tree"
 msgstr "Árbol"
 

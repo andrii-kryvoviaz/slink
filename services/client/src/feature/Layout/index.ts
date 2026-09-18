@@ -42,5 +42,6 @@ export { default as Skeleton } from './Skeleton/Skeleton.svelte';
 export { default as ThemePicker } from './ThemePicker/ThemePicker.svelte';
 export { default as ThemePreview } from './ThemePicker/ThemePreview.svelte';
 export { default as ViewModeToggle } from './ViewModeToggle/ViewModeToggle.svelte';
+export * from './ViewModeToggle/ViewModeToggle.language';
 export * from './ViewModeToggle/ViewModeToggle.theme';
-export * from './ViewModeToggle/ViewModeToggle.types.svelte';
+export * from './ViewModeToggle/ViewModeToggle.types';
