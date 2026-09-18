@@ -47,9 +47,7 @@ test.describe('Explore settings cookie fallback', () => {
         await route.continue();
       });
 
-      const strayControl = page.locator(
-        'main [role="listbox"], main [aria-haspopup="listbox"]',
-      );
+      const strayControl = explorePage.strayViewModeListbox;
       const gridRadio = page.getByRole('radio', { name: 'Grid' });
       const listRadio = page.getByRole('radio', { name: 'List' });
 

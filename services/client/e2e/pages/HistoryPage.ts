@@ -218,6 +218,21 @@ export class HistoryPage extends BasePage {
     await confirm.click();
   }
 
+  get tablePagination() {
+    return this.page
+      .locator('main div', {
+        has: this.page.getByRole('button', { name: /^Limit \d+$/ }),
+      })
+      .last();
+  }
+
+  pageSizeButton(pageSize: number) {
+    return this.tablePagination.getByRole('button', {
+      name: `Limit ${pageSize}`,
+      exact: true,
+    });
+  }
+
   get nextTablePageButton() {
     return this.page.locator('button[title="Next page"]');
   }

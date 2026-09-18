@@ -5,19 +5,18 @@ import { HistoryPage } from '../pages/HistoryPage';
 const DEFAULT_PAGE_SIZE = 12;
 const COOKIE_PAGE_SIZE = 96;
 
-function pageSizeButton(pageSize: number) {
-  return { name: `Limit ${pageSize}` };
-}
-
 function ssrPageSize(html: string): string | null {
   const stripped = stripSsrComments(html);
-  const match = stripped.match(/Limit\s*(\d+)/);
+  const match = stripped.match(
+    /<button\b[^>]*>(?:(?!<\/button>)[\s\S])*?Limit\s*(\d+)/,
+  );
   return match ? match[1] : null;
 }
 
 test.describe('History table pageSize default is not shared across requests', () => {
   test('a settings.table cookie on one request does not change the next request default', async ({
     page,
+    historyPage,
     layoutControls,
   }) => {
     await layoutControls.setSettingCookie(
@@ -29,9 +28,7 @@ test.describe('History table pageSize default is not shared across requests', ()
     expect(ssrPageSize(cookieHtml)).toBe(String(COOKIE_PAGE_SIZE));
 
     await page.goto(HistoryPage.URL);
-    await expect(
-      page.getByRole('button', pageSizeButton(COOKIE_PAGE_SIZE)),
-    ).toBeVisible();
+    await expect(historyPage.pageSizeButton(COOKIE_PAGE_SIZE)).toBeVisible();
 
     await page.context().clearCookies({ name: 'settings.table' });
 
@@ -39,8 +36,6 @@ test.describe('History table pageSize default is not shared across requests', ()
     expect(ssrPageSize(defaultHtml)).toBe(String(DEFAULT_PAGE_SIZE));
 
     await page.goto(HistoryPage.URL);
-    await expect(
-      page.getByRole('button', pageSizeButton(DEFAULT_PAGE_SIZE)),
-    ).toBeVisible();
+    await expect(historyPage.pageSizeButton(DEFAULT_PAGE_SIZE)).toBeVisible();
   });
 });

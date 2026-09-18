@@ -14,11 +14,7 @@ test.describe('Explore view mode', () => {
 
     await explorePage.switchViewMode('List');
 
-    await expect(
-      explorePage.listRows.filter({
-        has: page.locator(`img[src*="${imageId}"]`),
-      }),
-    ).toHaveCount(1);
+    await expect(explorePage.rowFor(imageId)).toHaveCount(1);
 
     await page.reload();
     await expect(explorePage.viewModeOption('List')).toHaveAttribute(
@@ -33,7 +29,6 @@ test.describe('Explore view mode', () => {
   });
 
   test("list rows load thumbnails for another user's public images", async ({
-    page,
     explorePage,
     actor,
   }) => {
@@ -45,9 +40,7 @@ test.describe('Explore view mode', () => {
 
     await explorePage.switchViewMode('List');
 
-    const row = explorePage.listRows.filter({
-      has: page.locator(`img[src*="${imageId}"]`),
-    });
+    const row = explorePage.rowFor(imageId);
     const thumbnail = row.locator(`img[src*="${imageId}"]`);
 
     await expect(row).toHaveCount(1);

@@ -23,9 +23,7 @@ test.describe('Explore search', () => {
     await explorePage.search('zzznonexistentqueryzzz');
 
     await expect(explorePage.feedItems).toHaveCount(0);
-    await expect(
-      page.getByRole('heading', { name: 'No images found' }),
-    ).toBeVisible();
+    await expect(explorePage.emptyState('no-results')).toBeVisible();
   });
 
   test('a search arrival loads the feed exactly once', async ({
@@ -39,9 +37,7 @@ test.describe('Explore search', () => {
     await page.goto('/explore?search=zzznonexistentqueryzzz&searchBy=user');
 
     await expect.poll(() => listings.length).toBe(1);
-    await expect(
-      page.getByRole('heading', { name: 'No images found' }),
-    ).toBeVisible();
+    await expect(explorePage.emptyState('no-results')).toBeVisible();
     await expect(explorePage.searchInput).toHaveValue('zzznonexistentqueryzzz');
 
     expect(listings).toHaveLength(1);
@@ -80,12 +76,8 @@ test.describe('Explore search', () => {
       await expect.poll(() => listings.length).toBe(1);
       await explorePage.feedItems.first().waitFor({ state: 'visible' });
       await expect(explorePage.searchInput).toHaveValue('');
-      await expect(
-        page.getByRole('heading', { name: 'No images found' }),
-      ).toHaveCount(0);
-      await expect(
-        page.getByRole('heading', { name: 'Nothing shared yet' }),
-      ).toHaveCount(0);
+      await expect(explorePage.emptyState('no-results')).toHaveCount(0);
+      await expect(explorePage.emptyState('nothing-shared')).toHaveCount(0);
 
       const params = new URL(page.url()).searchParams;
       expect(params.get('search'), `search for search=${blank}`).toBeNull();
@@ -101,6 +93,7 @@ test.describe('Explore search', () => {
 
   test('a search without a scope in the url loads once and gains the default scope', async ({
     page,
+    explorePage,
     api,
   }) => {
     await api.content.uploadImage({ isPublic: true });
@@ -109,9 +102,7 @@ test.describe('Explore search', () => {
     await page.goto('/explore?search=zzznonexistentqueryzzz');
 
     await expect.poll(() => listings.length).toBe(1);
-    await expect(
-      page.getByRole('heading', { name: 'No images found' }),
-    ).toBeVisible();
+    await expect(explorePage.emptyState('no-results')).toBeVisible();
     await expect
       .poll(() => new URL(page.url()).searchParams.get('searchBy'))
       .toBe('user');
@@ -131,19 +122,15 @@ test.describe('Explore search', () => {
     await api.content.uploadImage({ isPublic: true });
 
     await page.goto('/explore?search=zzznonexistentqueryzzz&searchBy=user');
-    await expect(
-      page.getByRole('heading', { name: 'No images found' }),
-    ).toBeVisible();
+    await expect(explorePage.emptyState('no-results')).toBeVisible();
 
     const listings = captureListingRequests(page);
-    await page.getByRole('button', { name: 'Clear', exact: true }).click();
+    await explorePage.clearSearchButton.click();
 
     await expect.poll(() => listings.length).toBe(1);
     await expect(explorePage.feedItems.first()).toBeVisible();
     await expect(explorePage.searchInput).toHaveValue('');
-    await expect(
-      page.getByRole('heading', { name: 'No images found' }),
-    ).toHaveCount(0);
+    await expect(explorePage.emptyState('no-results')).toHaveCount(0);
 
     const params = new URL(page.url()).searchParams;
     expect(params.get('search')).toBeNull();
