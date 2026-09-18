@@ -1,7 +1,7 @@
 import { expect, test } from '../fixtures/auth.fixture';
 import { captureListingRequests } from '../helpers/listingRequests';
 
-const ECHO_WINDOW_MS = 2500;
+const HOLD_WINDOW_MS = 5000;
 
 test.describe('Explore search', () => {
   test('filters the feed by the search term', async ({ explorePage, api }) => {
@@ -38,15 +38,15 @@ test.describe('Explore search', () => {
     const listings = captureListingRequests(page);
     await page.goto('/explore?search=zzznonexistentqueryzzz&searchBy=user');
 
+    await expect.poll(() => listings.length).toBe(1);
     await expect(
       page.getByRole('heading', { name: 'No images found' }),
     ).toBeVisible();
-    await page.waitForTimeout(ECHO_WINDOW_MS);
+    await expect(explorePage.searchInput).toHaveValue('zzznonexistentqueryzzz');
 
     expect(listings).toHaveLength(1);
     expect(listings[0]).toContain('searchTerm=zzznonexistentqueryzzz');
     expect(listings[0]).toContain('searchBy=user');
-    await expect(explorePage.searchInput).toHaveValue('zzznonexistentqueryzzz');
   });
 
   test('a plain arrival loads the feed exactly once', async ({
@@ -59,8 +59,8 @@ test.describe('Explore search', () => {
     const listings = captureListingRequests(page);
     await page.goto('/explore');
 
+    await expect.poll(() => listings.length).toBe(1);
     await explorePage.feedItems.first().waitFor({ state: 'visible' });
-    await page.waitForTimeout(ECHO_WINDOW_MS);
 
     expect(listings).toHaveLength(1);
     expect(listings[0]).not.toContain('searchTerm=');
@@ -77,14 +77,8 @@ test.describe('Explore search', () => {
       const listings = captureListingRequests(page);
       await page.goto(`/explore?search=${blank}&searchBy=user`);
 
+      await expect.poll(() => listings.length).toBe(1);
       await explorePage.feedItems.first().waitFor({ state: 'visible' });
-      await page.waitForTimeout(ECHO_WINDOW_MS);
-
-      expect(
-        listings,
-        `search=${blank}: ${JSON.stringify(listings)}`,
-      ).toHaveLength(1);
-      expect(listings[0]).not.toContain('searchTerm=');
       await expect(explorePage.searchInput).toHaveValue('');
       await expect(
         page.getByRole('heading', { name: 'No images found' }),
@@ -96,6 +90,12 @@ test.describe('Explore search', () => {
       const params = new URL(page.url()).searchParams;
       expect(params.get('search'), `search for search=${blank}`).toBeNull();
       expect(params.get('searchBy'), `searchBy for search=${blank}`).toBeNull();
+
+      expect(
+        listings,
+        `search=${blank}: ${JSON.stringify(listings)}`,
+      ).toHaveLength(1);
+      expect(listings[0]).not.toContain('searchTerm=');
     }
   });
 
@@ -108,18 +108,22 @@ test.describe('Explore search', () => {
     const listings = captureListingRequests(page);
     await page.goto('/explore?search=zzznonexistentqueryzzz');
 
+    await expect.poll(() => listings.length).toBe(1);
     await expect(
       page.getByRole('heading', { name: 'No images found' }),
     ).toBeVisible();
-    await page.waitForTimeout(ECHO_WINDOW_MS);
+    await expect
+      .poll(() => new URL(page.url()).searchParams.get('searchBy'))
+      .toBe('user');
 
-    expect(listings).toHaveLength(1);
     const params = new URL(page.url()).searchParams;
     expect(params.get('search')).toBe('zzznonexistentqueryzzz');
     expect(params.get('searchBy')).toBe('user');
+
+    expect(listings).toHaveLength(1);
   });
 
-  test('clearing a search from the url empties the field and the params', async ({
+  test('clearing a search from the url empties the field and the params and does not refilter', async ({
     page,
     explorePage,
     api,
@@ -134,20 +138,33 @@ test.describe('Explore search', () => {
     const listings = captureListingRequests(page);
     await page.getByRole('button', { name: 'Clear', exact: true }).click();
 
+    await expect.poll(() => listings.length).toBe(1);
     await expect(explorePage.feedItems.first()).toBeVisible();
-    await page.waitForTimeout(ECHO_WINDOW_MS);
-
     await expect(explorePage.searchInput).toHaveValue('');
-    const params = new URL(page.url()).searchParams;
-    expect(params.get('search')).toBeNull();
-    expect(params.get('searchBy')).toBeNull();
-    expect(listings.filter((url) => url.includes('searchTerm='))).toHaveLength(
-      0,
-    );
-    expect(listings).toHaveLength(1);
     await expect(
       page.getByRole('heading', { name: 'No images found' }),
     ).toHaveCount(0);
+
+    const params = new URL(page.url()).searchParams;
+    expect(params.get('search')).toBeNull();
+    expect(params.get('searchBy')).toBeNull();
+
+    const clearedAt = Date.now();
+    await expect
+      .poll(
+        () =>
+          Date.now() - clearedAt >= HOLD_WINDOW_MS ? 'elapsed' : 'waiting',
+        { timeout: HOLD_WINDOW_MS + 2000 },
+      )
+      .toBe('elapsed');
+
+    await expect(explorePage.feedItems.first()).toBeVisible();
+    await expect(explorePage.searchInput).toHaveValue('');
+    expect(
+      listings.filter((url) => url.includes('searchTerm=')),
+      `late refiltering requests: ${JSON.stringify(listings)}`,
+    ).toHaveLength(0);
+    expect(listings, JSON.stringify(listings)).toHaveLength(1);
   });
 
   test('a typed term writes the search into the url', async ({
