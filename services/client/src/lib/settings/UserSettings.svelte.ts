@@ -102,6 +102,27 @@ class ModeSetting extends EnumSetting<Mode> {
   }
 }
 
+class ObjectSetting<T extends object> {
+  _value = $state.raw() as T;
+
+  constructor(private readonly _key: SettingsKey) {
+    this._value = defaultSettings[_key] as T;
+  }
+
+  get current(): T {
+    return this._value;
+  }
+
+  set current(v: T) {
+    this._value = v;
+    persist(this._key, v);
+  }
+
+  hydrate(v: unknown): void {
+    this._value = v as T;
+  }
+}
+
 export class UserSettings {
   [USER_SETTINGS_BRAND] = true;
 
@@ -109,26 +130,20 @@ export class UserSettings {
   readonly theme = new EnumSetting('theme', resolveTheme);
   readonly locale = new EnumSetting('locale', resolveLocale);
 
-  _sidebar = $state<SidebarState>(defaultSettings.sidebar as SidebarState);
-  _navigation = $state<NavigationState>(
-    defaultSettings.navigation as NavigationState,
+  readonly _sidebar = new ObjectSetting<SidebarState>('sidebar');
+  readonly _navigation = new ObjectSetting<NavigationState>('navigation');
+  readonly _userAdmin = new ObjectSetting<UserAdminState>('userAdmin');
+  readonly _table = new ObjectSetting<TableState>('table');
+  readonly _history = new ObjectSetting<HistoryState>('history');
+  readonly _explore = new ObjectSetting<ExploreState>('explore');
+  readonly _tags = new ObjectSetting<TagsState>('tags');
+  readonly _share = new ObjectSetting<ShareState>('share');
+  readonly _comment = new ObjectSetting<CommentState>('comment');
+  readonly _collections = new ObjectSetting<CollectionsState>('collections');
+  readonly _uploadOptions = new ObjectSetting<UploadOptionsState>(
+    'uploadOptions',
   );
-  _userAdmin = $state<UserAdminState>(
-    defaultSettings.userAdmin as UserAdminState,
-  );
-  _table = $state<TableState>(defaultSettings.table as TableState);
-  _history = $state<HistoryState>(defaultSettings.history as HistoryState);
-  _explore = $state<ExploreState>(defaultSettings.explore as ExploreState);
-  _tags = $state<TagsState>(defaultSettings.tags as TagsState);
-  _share = $state<ShareState>(defaultSettings.share as ShareState);
-  _comment = $state<CommentState>(defaultSettings.comment as CommentState);
-  _collections = $state<CollectionsState>(
-    defaultSettings.collections as CollectionsState,
-  );
-  _uploadOptions = $state<UploadOptionsState>(
-    defaultSettings.uploadOptions as UploadOptionsState,
-  );
-  _banners = $state<BannersState>(defaultSettings.banners as BannersState);
+  readonly _banners = new ObjectSetting<BannersState>('banners');
 
   constructor(initial?: CookieSettings) {
     if (initial) {
@@ -139,133 +154,121 @@ export class UserSettings {
   }
 
   get sidebar(): SidebarState {
-    return this._sidebar;
+    return this._sidebar.current;
   }
 
   set sidebar(v: SidebarState) {
-    this._sidebar = v;
-    persist('sidebar', v);
+    this._sidebar.current = v;
   }
 
   get navigation(): NavigationState {
-    return this._navigation;
+    return this._navigation.current;
   }
 
   set navigation(v: NavigationState) {
-    this._navigation = v;
-    persist('navigation', v);
+    this._navigation.current = v;
   }
 
   get userAdmin(): UserAdminState {
-    return this._userAdmin;
+    return this._userAdmin.current;
   }
 
   set userAdmin(v: UserAdminState) {
-    this._userAdmin = v;
-    persist('userAdmin', v);
+    this._userAdmin.current = v;
   }
 
   get table(): TableState {
-    return this._table;
+    return this._table.current;
   }
 
   set table(v: TableState) {
-    this._table = v;
-    persist('table', v);
+    this._table.current = v;
   }
 
   updateTable(
     partial: Partial<Record<keyof TableState, Partial<TableKeySettings>>>,
   ): void {
-    this._table = deepMerge(
-      this._table as Record<string, unknown>,
-      partial as Record<string, unknown>,
-    ) as TableState;
-    persist('table', this._table);
+    this._table.current = deepMerge<TableState>(
+      this._table.current,
+      partial as TableState,
+    );
   }
 
   get history(): HistoryState {
-    return this._history;
+    return this._history.current;
   }
 
   set history(v: HistoryState) {
-    this._history = v;
-    persist('history', v);
+    this._history.current = v;
   }
 
   get explore(): ExploreState {
-    return this._explore;
+    return this._explore.current;
   }
 
   set explore(v: ExploreState) {
-    this._explore = v;
-    persist('explore', v);
+    this._explore.current = v;
   }
 
   get tags(): TagsState {
-    return this._tags;
+    return this._tags.current;
   }
 
   set tags(v: TagsState) {
-    this._tags = v;
-    persist('tags', v);
+    this._tags.current = v;
   }
 
   get share(): ShareState {
-    return this._share;
+    return this._share.current;
   }
 
   set share(v: ShareState) {
-    this._share = v;
-    persist('share', v);
+    this._share.current = v;
   }
 
   get comment(): CommentState {
-    return this._comment;
+    return this._comment.current;
   }
 
   set comment(v: CommentState) {
-    this._comment = v;
-    persist('comment', v);
+    this._comment.current = v;
   }
 
   get collections(): CollectionsState {
-    return this._collections;
+    return this._collections.current;
   }
 
   set collections(v: CollectionsState) {
-    this._collections = v;
-    persist('collections', v);
+    this._collections.current = v;
   }
 
   get uploadOptions(): UploadOptionsState {
-    return this._uploadOptions;
+    return this._uploadOptions.current;
   }
 
   set uploadOptions(v: UploadOptionsState) {
-    this._uploadOptions = v;
-    persist('uploadOptions', v);
+    this._uploadOptions.current = v;
   }
 
   get banners(): BannersState {
-    return this._banners;
+    return this._banners.current;
   }
 
   set banners(v: BannersState) {
-    this._banners = v;
-    persist('banners', v);
+    this._banners.current = v;
   }
 
   private _apply(data: Record<string, unknown>): void {
     for (const [key, value] of Object.entries(data)) {
       if (value == null) continue;
 
-      const field = (this as Record<string, unknown>)[key];
-      if (field && typeof field === 'object' && 'hydrate' in field) {
-        (field as { hydrate: (v: unknown) => void }).hydrate(value);
-      } else {
-        (this as Record<string, unknown>)[`_${key}`] = value;
+      const record = this as Record<string, unknown>;
+      const field = record[`_${key}`] ?? record[key];
+      if (!field || typeof field !== 'object' || !('hydrate' in field)) {
+        continue;
       }
+
+      (field as { hydrate: (v: unknown) => void }).hydrate(value);
     }
   }
 
