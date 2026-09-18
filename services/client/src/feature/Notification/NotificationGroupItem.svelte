@@ -61,11 +61,6 @@
           icon="ph:arrow-bend-up-left-fill"
           class={notificationIconColorVariants({ type: group.type })}
         />
-      {:else if group.type === 'added_to_favorite'}
-        <Icon
-          icon="ph:heart-fill"
-          class={notificationIconColorVariants({ type: group.type })}
-        />
       {:else if group.type === 'added_to_bookmarks'}
         <Icon
           icon="ph:bookmark-simple-fill"
@@ -93,8 +88,6 @@
             commented
           {:else if group.type === 'comment_reply'}
             replied
-          {:else if group.type === 'added_to_favorite'}
-            favorited
           {:else if group.type === 'added_to_bookmarks'}
             bookmarked
           {:else}

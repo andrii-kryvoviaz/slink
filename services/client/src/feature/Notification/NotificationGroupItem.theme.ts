@@ -39,7 +39,6 @@ export const notificationIconVariants = cva(
       type: {
         comment: 'bg-info-solid/10 dark:bg-info-solid/20',
         comment_reply: 'bg-decor-violet/10 dark:bg-decor-violet/20',
-        added_to_favorite: 'bg-decor-rose/10 dark:bg-decor-rose/20',
         added_to_bookmarks: 'bg-accent/10 dark:bg-accent/20',
       },
     },
@@ -54,7 +53,6 @@ export const notificationIconColorVariants = cva('w-5 h-5', {
     type: {
       comment: 'text-info',
       comment_reply: 'text-decor-violet',
-      added_to_favorite: 'text-decor-rose',
       added_to_bookmarks: 'text-accent',
     },
   },
