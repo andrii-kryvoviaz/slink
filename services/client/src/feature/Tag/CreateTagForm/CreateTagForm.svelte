@@ -8,6 +8,8 @@
 
   import { TagListState } from '@slink/lib/state/TagListState.svelte';
 
+  import { Key } from '@slink/utils/ui';
+
   interface Props {
     isCreating: boolean;
     onSubmit: (data: { name: string; parentId?: string }) => void;
@@ -51,7 +53,7 @@
   }
 
   function handleKeydown(event: KeyboardEvent) {
-    if (event.key === 'Enter' && !isCreating) {
+    if (event.key === Key.Enter && !isCreating) {
       event.preventDefault();
       handleSubmit(event);
     }

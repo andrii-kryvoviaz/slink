@@ -1,15 +1,12 @@
 <script lang="ts">
   import { BrandLogo } from '@slink/feature/Layout';
-  import { SearchBar } from '@slink/feature/Search';
   import { Shortcut } from '@slink/ui/components';
   import { Button } from '@slink/ui/components/button';
   import * as HoverCard from '@slink/ui/components/hover-card';
   import type { Snippet } from 'svelte';
 
   import { goto } from '$app/navigation';
-  import { page } from '$app/state';
   import type { User } from '$lib/auth/Type/User';
-  import { usePublicImagesFeed } from '$lib/state/PublicImagesFeed.svelte.js';
   import Icon from '@iconify/svelte';
 
   import { customization } from '@slink/lib/settings';
@@ -33,19 +30,6 @@
   }: Props = $props();
 
   let innerWidth = $state(0);
-  let isExplorePage = $derived(page.route.id === '/explore');
-
-  const publicImagesFeed = usePublicImagesFeed();
-
-  function handleSearch(event: { searchTerm: string; searchBy: string }) {
-    const { searchTerm, searchBy } = event;
-    publicImagesFeed.search(searchTerm, searchBy);
-  }
-
-  function handleClearSearch() {
-    publicImagesFeed.resetSearch();
-    publicImagesFeed.load();
-  }
 
   function handleUploadShortcut() {
     goto('/upload');
@@ -80,16 +64,6 @@
   <div class="flex items-center gap-3 -ml-4">
     {@render children?.()}
 
-    {#if isExplorePage}
-      <SearchBar
-        searchTerm={publicImagesFeed.searchTerm}
-        searchBy={publicImagesFeed.searchBy as
-          'user' | 'description' | 'hashtag'}
-        placeholder="Search images..."
-        onsearch={handleSearch}
-        onclear={handleClearSearch}
-      />
-    {/if}
     {#if showUploadButton}
       <HoverCard.Root openDelay={1000} closeDelay={200}>
         <HoverCard.Trigger>

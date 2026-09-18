@@ -22,6 +22,7 @@ export { default as GhostChips } from './EmptyState/GhostChips/GhostChips.svelte
 export { default as GhostFolders } from './EmptyState/GhostFolders/GhostFolders.svelte';
 export { default as GhostGrid } from './EmptyState/GhostGrid/GhostGrid.svelte';
 export { default as GhostList } from './EmptyState/GhostList/GhostList.svelte';
+export { default as GhostPreview } from './EmptyState/GhostPreview/GhostPreview.svelte';
 export { default as GhostRows } from './EmptyState/GhostRows/GhostRows.svelte';
 export { default as AppFooter } from './Footer/AppFooter.svelte';
 export { default as Loader } from './Loader/Loader.svelte';
@@ -33,6 +34,7 @@ export { default as ModeSwitchHoverCard } from './ModeSwitch/ModeSwitchHoverCard
 export * from './ModeSwitch/ModeSwitch.theme';
 export * from './ModeSwitch/ModeSwitch.types';
 export { default as OverflowBadgeList } from './OverflowBadgeList/OverflowBadgeList.svelte';
+export { default as PageHeader } from './PageHeader/PageHeader.svelte';
 export { default as CollectionSkeleton } from './Skeleton/CollectionSkeleton.svelte';
 export { default as ExploreSkeleton } from './Skeleton/ExploreSkeleton.svelte';
 export { default as HistorySkeleton } from './Skeleton/HistorySkeleton.svelte';
@@ -41,5 +43,6 @@ export { default as Skeleton } from './Skeleton/Skeleton.svelte';
 export { default as ThemePicker } from './ThemePicker/ThemePicker.svelte';
 export { default as ThemePreview } from './ThemePicker/ThemePreview.svelte';
 export { default as ViewModeToggle } from './ViewModeToggle/ViewModeToggle.svelte';
+export * from './ViewModeToggle/ViewModeToggle.language';
 export * from './ViewModeToggle/ViewModeToggle.theme';
-export * from './ViewModeToggle/ViewModeToggle.types.svelte';
+export * from './ViewModeToggle/ViewModeToggle.types';

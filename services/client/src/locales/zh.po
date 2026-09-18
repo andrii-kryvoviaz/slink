@@ -98,42 +98,15 @@ msgid "No Data"
 msgstr "暂无数据"
 
 #: src/feature/Analytics/UserAnalytics.svelte
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/admin/user/+page.svelte
 msgid "Users"
 msgstr "用户"
 
-#: src/feature/Collection/CreateCollectionForm.svelte
-#: src/feature/Collection/CreateCollectionModal.svelte
-#: src/feature/Comment/CommentInput.svelte
-#: src/feature/Image/SizePicker/ImageSizePicker.svelte
-#: src/feature/Navigation/TabMenu/TabMenuItem.svelte
-#: src/feature/Notification/NotificationListItem.svelte
-#: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
-#: src/feature/Tag/TagDataTable/TagCountCell.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
-#: src/feature/Text/EditableText/EditableText.svelte
-#: src/feature/Text/EditableText/EditableText.svelte
-#: src/feature/Text/HashtagText/HashtagText.svelte
-#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
-#: src/routes/collection/[id]/+page.svelte
-#: src/routes/explore/+page.svelte
-#: src/ui/components/card/selectable-card.svelte
-#: src/ui/components/dropzone/dropzone-input.svelte
-#: src/ui/components/filter/filter-search.svelte
 #: src/ui/components/picker/picker-create-row.svelte
-#: src/ui/components/picker/picker-list.svelte
-#: src/ui/components/picker/picker-list.svelte
 msgid "Enter"
 msgstr "回车"
-
-#: src/feature/Comment/CommentInput.svelte
-#: src/feature/Image/PostViewer/PostViewer.svelte
-#: src/feature/Image/SizePicker/ImageSizePicker.svelte
-#: src/feature/Text/EditableText/EditableText.svelte
-#: src/ui/components/table-pagination/table-pagination.svelte
-msgid "Escape"
-msgstr "Esc"
 
 #: src/feature/Comment/CommentInput.svelte
 msgid "Editing reply to <0/>"
@@ -287,11 +260,6 @@ msgstr "标记为已读"
 msgid "Continue with {0}"
 msgstr "使用 {0} 继续"
 
-#: src/feature/Navigation/Navbar/Navbar.svelte
-#: src/feature/Search/SearchBar.svelte
-msgid "Search images..."
-msgstr "搜索图片..."
-
 #: src/feature/Search/SearchBar.svelte
 msgid "Search by User"
 msgstr "按用户搜索"
@@ -434,7 +402,7 @@ msgstr "<0/> 查看历史"
 msgid "Bookmarks | Slink"
 msgstr "书签 | Slink"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/bookmarks/+page.svelte
 msgid "Bookmarks"
 msgstr "书签"
@@ -485,7 +453,7 @@ msgstr "通过 API Key 将 Slink 连接到 ShareX 和其他工具"
 msgid "Notifications | Slink"
 msgstr "通知 | Slink"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/notifications/+page.svelte
 msgid "Notifications"
 msgstr "通知"
@@ -507,7 +475,7 @@ msgstr "你已查看全部通知"
 msgid "Collections | Slink"
 msgstr "合集 | Slink"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
 #: src/feature/Upload/Options/Collections.svelte
 #: src/routes/collections/+page.svelte
@@ -639,13 +607,14 @@ msgstr "公开"
 msgid "Private"
 msgstr "私密"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
+#: src/routes/explore/+page.svelte
 #: src/routes/preferences/+page.svelte
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Explore"
 msgstr "发现"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/preferences/+page.svelte
 msgid "Upload"
 msgstr "上传"
@@ -1166,28 +1135,6 @@ msgstr "在新标签页中打开"
 msgid "Close viewer"
 msgstr "关闭预览"
 
-#: src/feature/Image/PostViewer/PostViewer.svelte
-#: src/ui/components/input/number-input.svelte
-#: src/ui/components/picker/picker-list.svelte
-msgid "ArrowUp"
-msgstr "上"
-
-#: src/feature/Image/PostViewer/PostViewer.svelte
-#: src/ui/components/table-pagination/table-pagination.svelte
-msgid "ArrowLeft"
-msgstr "左"
-
-#: src/feature/Image/PostViewer/PostViewer.svelte
-#: src/ui/components/input/number-input.svelte
-#: src/ui/components/picker/picker-list.svelte
-msgid "ArrowDown"
-msgstr "下"
-
-#: src/feature/Image/PostViewer/PostViewer.svelte
-#: src/ui/components/table-pagination/table-pagination.svelte
-msgid "ArrowRight"
-msgstr "右"
-
 #: src/feature/Image/PostViewer/PostViewerNavigation.svelte
 msgid "Previous post"
 msgstr "上一条"
@@ -1270,7 +1217,7 @@ msgstr "<0/> 重置"
 msgid "New: {0} × {1}"
 msgstr "新尺寸：{0} × {1}"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/feature/Upload/Options/Tags.svelte
 msgid "Tags"
 msgstr "标签"
@@ -1452,7 +1399,7 @@ msgstr "暂无存储数据"
 msgid "WEBP (Recommended)"
 msgstr "WEBP（推荐）"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 #: src/routes/admin/settings/+page.svelte
 msgid "Image Settings"
@@ -1747,7 +1694,7 @@ msgstr "短链接"
 msgid "Generate short URLs when copying image links"
 msgstr "复制图片链接时生成短链接"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 #: src/routes/admin/settings/+page.svelte
 msgid "Storage Configuration"
@@ -2260,7 +2207,7 @@ msgstr "<0/> 你"
 msgid "Dashboard | Slink"
 msgstr "数据看板 | Slink"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/admin/dashboard/+page.svelte
 msgid "Dashboard"
 msgstr "数据看板"
@@ -2273,7 +2220,7 @@ msgstr "配置图片上传、处理选项与分享链接偏好"
 msgid "Configure storage providers, cache settings, and data management"
 msgstr "配置存储提供方、缓存设置与数据管理"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/admin/settings/+page.svelte
 msgid "Security Settings"
 msgstr "安全设置"
@@ -2282,7 +2229,7 @@ msgstr "安全设置"
 msgid "Manage user registration, access control, and authentication policies"
 msgstr "管理用户注册、访问控制与认证策略"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/admin/settings/+page.svelte
 #: src/routes/admin/settings/sso/+page.svelte
 msgid "Single Sign-On"
@@ -2296,7 +2243,7 @@ msgstr "管理用于外部认证的 SSO/OIDC 身份提供方"
 msgid "Settings | Slink"
 msgstr "设置 | Slink"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/admin/settings/+page.svelte
 msgid "Settings"
 msgstr "设置"
@@ -3029,23 +2976,23 @@ msgstr "强"
 msgid "Very Strong"
 msgstr "很强"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 msgid "History"
 msgstr "历史"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 msgid "Administration"
 msgstr "管理"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 msgid "System"
 msgstr "系统"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 msgid "Help & FAQ"
 msgstr "帮助与常见问题"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 msgid "GitHub"
 msgstr "GitHub"
 
@@ -3470,15 +3417,15 @@ msgstr "该值的类型应为 {type}。"
 msgid "This collection should contain {limit} elements or less."
 msgstr "该集合包含的元素数量应不超过 {limit} 个。"
 
-#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.language.ts
 msgid "Grid"
 msgstr "网格"
 
-#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.language.ts
 msgid "List"
 msgstr "列表"
 
-#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.language.ts
 msgid "Table"
 msgstr "表格"
 
@@ -3970,7 +3917,7 @@ msgstr "项目"
 msgid "Unpublish"
 msgstr "取消发布"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 msgid "Shares"
 msgstr "发布"
 
@@ -4281,15 +4228,9 @@ msgid "Copy the share link"
 msgstr "复制分享链接"
 
 #: src/feature/Collection/CollectionList/CollectionPickerList.svelte
-#: src/feature/Search/SearchBar.svelte
 #: src/feature/Tag/TagPicker/TagPickerList.svelte
 msgid "Search"
 msgstr "搜索"
-
-#: src/feature/Search/SearchBar.svelte
-#: src/feature/Search/SearchBar.svelte
-msgid "Close search"
-msgstr "关闭搜索"
 
 #: src/feature/Layout/ViewModeToggle/ViewModeToggle.svelte
 msgid "View mode"
@@ -4435,7 +4376,7 @@ msgstr "已应用滤镜"
 msgid "Failed to load child tags. Please try again."
 msgstr "加载子标签失败，请重试。"
 
-#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.language.ts
 msgid "Tree"
 msgstr "树形"
 
@@ -4893,7 +4834,7 @@ msgstr "<0/> 新建标签"
 msgid "Add images to fill this collection."
 msgstr "添加图片，丰富这个合集。"
 
-#: src/feature/Image/History/ImageMetadata.svelte
+#: src/feature/Image/ImageMetadata/ImageMetadata.svelte
 msgid "# bookmark"
 msgid_plural "# bookmarks"
 msgstr[0] "# 个收藏"
@@ -5010,7 +4951,7 @@ msgstr "快速、安全的图片分享服务"
 msgid "{0}: Image Sharing Service"
 msgstr "{0}：图片分享服务"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
 #: src/routes/admin/settings/+page.svelte
 #: src/routes/admin/settings/customization/+page.svelte
@@ -5182,3 +5123,7 @@ msgstr "过期时间"
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "This SVG could not be processed. It may be malformed or nested too deeply."
 msgstr "无法处理此 SVG。它可能格式错误或嵌套层级过深。"
+
+#: src/feature/Image/Explore/ExploreListView/ExploreListView.svelte
+msgid "No description"
+msgstr "暂无描述"

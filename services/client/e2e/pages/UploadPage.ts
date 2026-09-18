@@ -10,6 +10,7 @@ export class UploadPage extends BasePage {
   static readonly URL = '/upload';
 
   readonly fileInput = this.page.locator('input[type="file"]');
+  readonly dropzone = this.page.locator('[data-slot="dropzone-input"]');
   readonly publicVisibilityButton = this.page.getByRole('button', {
     name: 'Public',
   });

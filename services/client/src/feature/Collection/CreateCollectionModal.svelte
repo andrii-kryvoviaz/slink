@@ -5,6 +5,8 @@
 
   import Icon from '@iconify/svelte';
 
+  import { Key } from '@slink/utils/ui';
+
   interface Props {
     isSubmitting?: boolean;
     errors?: Record<string, string>;
@@ -33,7 +35,7 @@
   }
 
   function handleKeydown(event: KeyboardEvent) {
-    if (event.key === 'Enter' && !event.shiftKey && !isSubmitting) {
+    if (event.key === Key.Enter && !event.shiftKey && !isSubmitting) {
       event.preventDefault();
       handleSubmit(event);
     }

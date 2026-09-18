@@ -63,8 +63,7 @@
     search?.handleKeydown(e);
   };
 
-  const handleInput = (e: Event) => {
-    const next = (e.currentTarget as HTMLInputElement).value;
+  const applyValue = (next: string) => {
     if (search) {
       search.searchTerm = next;
     } else {
@@ -105,8 +104,7 @@
   {#if search?.autocomplete}
     <CommandPrimitive.Input
       bind:ref={inputEl}
-      value={currentValue}
-      oninput={handleInput}
+      bind:value={() => currentValue, applyValue}
       onkeydown={handleKeydown}
       onfocus={handleFocus}
       {placeholder}
@@ -118,8 +116,7 @@
   {:else}
     <input
       bind:this={inputEl}
-      value={currentValue}
-      oninput={handleInput}
+      bind:value={() => currentValue, applyValue}
       onkeydown={handleKeydown}
       onfocus={handleFocus}
       {placeholder}

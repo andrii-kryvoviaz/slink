@@ -98,42 +98,15 @@ msgid "No Data"
 msgstr "Nessun dato"
 
 #: src/feature/Analytics/UserAnalytics.svelte
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/admin/user/+page.svelte
 msgid "Users"
 msgstr "Utenti"
 
-#: src/feature/Collection/CreateCollectionForm.svelte
-#: src/feature/Collection/CreateCollectionModal.svelte
-#: src/feature/Comment/CommentInput.svelte
-#: src/feature/Image/SizePicker/ImageSizePicker.svelte
-#: src/feature/Navigation/TabMenu/TabMenuItem.svelte
-#: src/feature/Notification/NotificationListItem.svelte
-#: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
-#: src/feature/Tag/TagDataTable/TagCountCell.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
-#: src/feature/Text/EditableText/EditableText.svelte
-#: src/feature/Text/EditableText/EditableText.svelte
-#: src/feature/Text/HashtagText/HashtagText.svelte
-#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
-#: src/routes/collection/[id]/+page.svelte
-#: src/routes/explore/+page.svelte
-#: src/ui/components/card/selectable-card.svelte
-#: src/ui/components/dropzone/dropzone-input.svelte
-#: src/ui/components/filter/filter-search.svelte
 #: src/ui/components/picker/picker-create-row.svelte
-#: src/ui/components/picker/picker-list.svelte
-#: src/ui/components/picker/picker-list.svelte
 msgid "Enter"
 msgstr "Invio"
-
-#: src/feature/Comment/CommentInput.svelte
-#: src/feature/Image/PostViewer/PostViewer.svelte
-#: src/feature/Image/SizePicker/ImageSizePicker.svelte
-#: src/feature/Text/EditableText/EditableText.svelte
-#: src/ui/components/table-pagination/table-pagination.svelte
-msgid "Escape"
-msgstr "Esc"
 
 #: src/feature/Comment/CommentInput.svelte
 msgid "Editing reply to <0/>"
@@ -287,11 +260,6 @@ msgstr "Segna come letta"
 msgid "Continue with {0}"
 msgstr "Continua con {0}"
 
-#: src/feature/Navigation/Navbar/Navbar.svelte
-#: src/feature/Search/SearchBar.svelte
-msgid "Search images..."
-msgstr "Cerca immagini..."
-
 #: src/feature/Search/SearchBar.svelte
 msgid "Search by User"
 msgstr "Cerca per utente"
@@ -434,7 +402,7 @@ msgstr "<0/> Visualizza cronologia"
 msgid "Bookmarks | Slink"
 msgstr "Preferiti | Slink"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/bookmarks/+page.svelte
 msgid "Bookmarks"
 msgstr "Preferiti"
@@ -485,7 +453,7 @@ msgstr "Collega Slink a ShareX e altri strumenti tramite chiavi API"
 msgid "Notifications | Slink"
 msgstr "Notifiche | Slink"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/notifications/+page.svelte
 msgid "Notifications"
 msgstr "Notifiche"
@@ -507,7 +475,7 @@ msgstr "Sei in pari"
 msgid "Collections | Slink"
 msgstr "Raccolte | Slink"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
 #: src/feature/Upload/Options/Collections.svelte
 #: src/routes/collections/+page.svelte
@@ -639,13 +607,14 @@ msgstr "Pubblica"
 msgid "Private"
 msgstr "Privata"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
+#: src/routes/explore/+page.svelte
 #: src/routes/preferences/+page.svelte
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Explore"
 msgstr "Esplora"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/preferences/+page.svelte
 msgid "Upload"
 msgstr "Carica"
@@ -1166,28 +1135,6 @@ msgstr "Apri in una nuova scheda"
 msgid "Close viewer"
 msgstr "Chiudi visualizzatore"
 
-#: src/feature/Image/PostViewer/PostViewer.svelte
-#: src/ui/components/input/number-input.svelte
-#: src/ui/components/picker/picker-list.svelte
-msgid "ArrowUp"
-msgstr "ArrowUp"
-
-#: src/feature/Image/PostViewer/PostViewer.svelte
-#: src/ui/components/table-pagination/table-pagination.svelte
-msgid "ArrowLeft"
-msgstr "ArrowLeft"
-
-#: src/feature/Image/PostViewer/PostViewer.svelte
-#: src/ui/components/input/number-input.svelte
-#: src/ui/components/picker/picker-list.svelte
-msgid "ArrowDown"
-msgstr "ArrowDown"
-
-#: src/feature/Image/PostViewer/PostViewer.svelte
-#: src/ui/components/table-pagination/table-pagination.svelte
-msgid "ArrowRight"
-msgstr "ArrowRight"
-
 #: src/feature/Image/PostViewer/PostViewerNavigation.svelte
 msgid "Previous post"
 msgstr "Post precedente"
@@ -1270,7 +1217,7 @@ msgstr "<0/> Ripristina"
 msgid "New: {0} × {1}"
 msgstr "Nuovo: {0} × {1}"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/feature/Upload/Options/Tags.svelte
 msgid "Tags"
 msgstr "Tag"
@@ -1452,7 +1399,7 @@ msgstr "Nessun dato di archiviazione disponibile"
 msgid "WEBP (Recommended)"
 msgstr "WEBP (Consigliato)"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 #: src/routes/admin/settings/+page.svelte
 msgid "Image Settings"
@@ -1747,7 +1694,7 @@ msgstr "Abbreviazione URL"
 msgid "Generate short URLs when copying image links"
 msgstr "Genera URL brevi quando si copiano i link delle immagini"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 #: src/routes/admin/settings/+page.svelte
 msgid "Storage Configuration"
@@ -2260,7 +2207,7 @@ msgstr "<0/> Tu"
 msgid "Dashboard | Slink"
 msgstr "Dashboard | Slink"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/admin/dashboard/+page.svelte
 msgid "Dashboard"
 msgstr "Dashboard"
@@ -2273,7 +2220,7 @@ msgstr "Configura i caricamenti delle immagini, le opzioni di elaborazione e le 
 msgid "Configure storage providers, cache settings, and data management"
 msgstr "Configura i provider di archiviazione, le impostazioni della cache e la gestione dei dati"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/admin/settings/+page.svelte
 msgid "Security Settings"
 msgstr "Impostazioni di sicurezza"
@@ -2282,7 +2229,7 @@ msgstr "Impostazioni di sicurezza"
 msgid "Manage user registration, access control, and authentication policies"
 msgstr "Gestisci la registrazione degli utenti, il controllo degli accessi e le politiche di autenticazione"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/admin/settings/+page.svelte
 #: src/routes/admin/settings/sso/+page.svelte
 msgid "Single Sign-On"
@@ -2296,7 +2243,7 @@ msgstr "Gestisci i provider di identità SSO/OIDC per l'autenticazione esterna"
 msgid "Settings | Slink"
 msgstr "Impostazioni | Slink"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/admin/settings/+page.svelte
 msgid "Settings"
 msgstr "Impostazioni"
@@ -3029,23 +2976,23 @@ msgstr "Forte"
 msgid "Very Strong"
 msgstr "Molto forte"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 msgid "History"
 msgstr "Cronologia"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 msgid "Administration"
 msgstr "Amministrazione"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 msgid "System"
 msgstr "Sistema"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 msgid "Help & FAQ"
 msgstr "Guida e FAQ"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 msgid "GitHub"
 msgstr "GitHub"
 
@@ -3471,15 +3418,15 @@ msgstr "Questo valore deve essere di tipo {type}."
 msgid "This collection should contain {limit} elements or less."
 msgstr "Questa raccolta deve contenere al massimo {limit} elementi."
 
-#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.language.ts
 msgid "Grid"
 msgstr "Griglia"
 
-#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.language.ts
 msgid "List"
 msgstr "Lista"
 
-#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.language.ts
 msgid "Table"
 msgstr "Tabella"
 
@@ -3980,7 +3927,7 @@ msgstr "Elemento"
 msgid "Unpublish"
 msgstr "Annulla pubblicazione"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 msgid "Shares"
 msgstr "Pubblicazioni"
 
@@ -4295,15 +4242,9 @@ msgid "Copy the share link"
 msgstr "Copia link di condivisione"
 
 #: src/feature/Collection/CollectionList/CollectionPickerList.svelte
-#: src/feature/Search/SearchBar.svelte
 #: src/feature/Tag/TagPicker/TagPickerList.svelte
 msgid "Search"
 msgstr "Cerca"
-
-#: src/feature/Search/SearchBar.svelte
-#: src/feature/Search/SearchBar.svelte
-msgid "Close search"
-msgstr "Chiudi ricerca"
 
 #: src/feature/Layout/ViewModeToggle/ViewModeToggle.svelte
 msgid "View mode"
@@ -4449,7 +4390,7 @@ msgstr "Filtro applicato"
 msgid "Failed to load child tags. Please try again."
 msgstr "Caricamento dei tag figli non riuscito. Riprova."
 
-#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.language.ts
 msgid "Tree"
 msgstr "Albero"
 
@@ -4908,7 +4849,7 @@ msgstr "<0/> Nuovo tag"
 msgid "Add images to fill this collection."
 msgstr "Aggiungi immagini per riempire questa raccolta."
 
-#: src/feature/Image/History/ImageMetadata.svelte
+#: src/feature/Image/ImageMetadata/ImageMetadata.svelte
 msgid "# bookmark"
 msgid_plural "# bookmarks"
 msgstr[0] "# preferito"
@@ -5028,7 +4969,7 @@ msgstr "Servizio di condivisione immagini veloce e sicuro"
 msgid "{0}: Image Sharing Service"
 msgstr "{0}: Servizio di condivisione immagini"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
 #: src/routes/admin/settings/+page.svelte
 #: src/routes/admin/settings/customization/+page.svelte
@@ -5200,3 +5141,7 @@ msgstr "Scadenza"
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "This SVG could not be processed. It may be malformed or nested too deeply."
 msgstr "Impossibile elaborare questo SVG. Potrebbe essere malformato o annidato troppo in profondità."
+
+#: src/feature/Image/Explore/ExploreListView/ExploreListView.svelte
+msgid "No description"
+msgstr "Nessuna descrizione"

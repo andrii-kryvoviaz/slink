@@ -1,5 +1,6 @@
 import { type Page, expect } from '@playwright/test';
 
+import { resolveBaseURL } from '../helpers/session';
 import { BasePage } from './BasePage';
 
 export class LayoutControls extends BasePage {
@@ -83,11 +84,15 @@ export class LayoutControls extends BasePage {
   }
 
   async setThemeCookie(value: string) {
+    await this.setSettingCookie('theme', value);
+  }
+
+  async setSettingCookie(key: string, value: string) {
     await this.page.context().addCookies([
       {
-        name: 'settings.theme',
+        name: `settings.${key}`,
         value,
-        url: process.env.E2E_BASE_URL ?? 'http://localhost:3100',
+        url: resolveBaseURL(),
       },
     ]);
   }
@@ -95,6 +100,6 @@ export class LayoutControls extends BasePage {
   async readSettingCookie(key: string) {
     const cookies = await this.page.context().cookies();
     const match = cookies.find((cookie) => cookie.name === `settings.${key}`);
-    return match?.value ?? null;
+    return match ? decodeURIComponent(match.value) : null;
   }
 }

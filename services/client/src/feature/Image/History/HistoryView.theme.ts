@@ -13,41 +13,6 @@ export function createActionBarImage(item: ImageListingItem) {
   };
 }
 
-export const historyCardVariants = cva(
-  'group break-inside-avoid overflow-hidden rounded-lg border bg-card dark:bg-card/60 transition-all duration-200 hover:shadow-md dark:hover:shadow-surface-inverse/50',
-  {
-    variants: {
-      selected: {
-        true: 'ring-2 ring-primary-solid border-primary-solid',
-        false: 'border-foreground-subtle/25 hover:border-foreground-subtle/45',
-      },
-    },
-    defaultVariants: {
-      selected: false,
-    },
-  },
-);
-
-export const historyListRowVariants = cva(
-  'group relative flex flex-col @xl:flex-row w-full overflow-hidden rounded-lg border bg-card dark:bg-card/60 transition-all duration-200 hover:shadow-md dark:hover:shadow-surface-inverse/50',
-  {
-    variants: {
-      selected: {
-        true: 'bg-primary-solid/8 border-info-border dark:border-primary-solid ring-2 ring-primary-solid',
-        false: 'border-foreground-subtle/25 hover:border-foreground-subtle/50',
-      },
-      selectionMode: {
-        true: 'cursor-pointer',
-        false: '',
-      },
-    },
-    defaultVariants: {
-      selected: false,
-      selectionMode: false,
-    },
-  },
-);
-
 export const actionBarVisibilityVariants = cva('absolute top-2 right-2', {
   variants: {
     selectionMode: {

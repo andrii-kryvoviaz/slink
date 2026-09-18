@@ -1,31 +1,31 @@
 <script lang="ts">
-  import { LoadMoreButton, StopPropagation } from '@slink/feature/Action';
+  import { LoadMoreButton } from '@slink/feature/Action';
   import {
-    AdminImageDropdown,
-    CardActionsOverlay,
-    DimensionsBadge,
-    ImagePlaceholder,
-    LicenseInfo,
+    ExploreGridView,
+    ExploreListView,
     PostViewer,
-    ViewCountBadge,
   } from '@slink/feature/Image';
-  import { calculateImageCardWeight } from '@slink/feature/Image/utils/calculateImageCardWeight';
-  import { Masonry } from '@slink/feature/Layout';
-  import { EmptyState, GhostGrid } from '@slink/feature/Layout';
-  import { ExploreSkeleton } from '@slink/feature/Layout';
-  import { ExpandableText, FormattedDate } from '@slink/feature/Text';
-  import { UserAvatar } from '@slink/feature/User';
+  import {
+    EmptyState,
+    ExploreSkeleton,
+    GhostPreview,
+    ViewModeToggle,
+  } from '@slink/feature/Layout';
+  import { SearchBar } from '@slink/feature/Search';
   import { Button } from '@slink/ui/components/button';
+  import { ViewModeLayout } from '@slink/ui/components/view-mode-layout';
   import { untrack } from 'svelte';
 
   import { page } from '$app/state';
   import Icon from '@iconify/svelte';
-  import { fade, fly } from 'svelte/transition';
+  import { fade } from 'svelte/transition';
 
   import type { ImageListingItem } from '@slink/api/Response';
 
   import { skeleton } from '@slink/lib/actions/skeleton';
   import { isAdmin } from '@slink/lib/auth/utils';
+  import { createSearchFilterManager } from '@slink/lib/composables/useSearchFilterUrl';
+  import { supportedViewModes } from '@slink/lib/settings';
   import { usePostViewerState } from '@slink/lib/state/PostViewerState.svelte';
   import { usePublicImagesFeed } from '@slink/lib/state/PublicImagesFeed.svelte';
 
@@ -36,6 +36,8 @@
   }
 
   let { data }: Props = $props();
+
+  const { settings } = page.data;
 
   const userIsAdmin = $derived(isAdmin(data.user));
   const licensingEnabled = $derived(
@@ -52,19 +54,28 @@
     return () => publicFeedState.unsubscribe();
   });
 
-  $effect(() => {
-    const urlParams = new URLSearchParams(page.url.search);
-    const search = urlParams.get('search');
-    const searchBy = urlParams.get('searchBy');
+  const searchFilter = $derived(createSearchFilterManager(page.url));
+  const urlSearch = $derived(searchFilter.read());
 
-    if (search && searchBy) {
-      if (
-        publicFeedState.searchTerm !== search ||
-        publicFeedState.searchBy !== searchBy
-      ) {
-        publicFeedState.search(search, searchBy);
+  $effect(() => {
+    const { searchTerm, searchBy } = urlSearch;
+    const feed = untrack(() => ({
+      term: publicFeedState.searchTerm,
+      by: publicFeedState.searchBy,
+      searching: publicFeedState.isSearching,
+    }));
+
+    if (searchTerm) {
+      if (feed.term !== searchTerm || feed.by !== searchBy) {
+        publicFeedState.search(searchTerm, searchBy);
       }
-    } else if (untrack(() => publicFeedState.needsLoad)) {
+      return;
+    }
+
+    searchFilter.clearUrl();
+
+    if (feed.searching) {
+      publicFeedState.resetSearch();
       publicFeedState.load();
     }
   });
@@ -75,8 +86,21 @@
     }
   });
 
-  const openPostViewer = (index: number) => {
-    postViewerState.open(index);
+  const openPostViewer = (image: ImageListingItem) => {
+    postViewerState.open(
+      publicFeedState.items.findIndex((i) => i.id === image.id),
+    );
+  };
+
+  const handleBookmarkChange = (
+    image: ImageListingItem,
+    isBookmarked: boolean,
+    count: number,
+  ) => {
+    publicFeedState.updateItem(image, {
+      isBookmarked,
+      bookmarkCount: count,
+    });
   };
 
   const handleImageUpdate = async (updatedImage: ImageListingItem) => {
@@ -91,6 +115,13 @@
   const handleImageDelete = async (imageId: string) => {
     await publicFeedState.removeItems([imageId]);
   };
+
+  const viewHandlers = {
+    open: openPostViewer,
+    bookmarkChange: handleBookmarkChange,
+    imageUpdate: handleImageUpdate,
+    imageDelete: handleImageDelete,
+  };
 </script>
 
 <svelte:head>
@@ -102,191 +133,111 @@
     class="container mx-auto px-4 sm:px-6 lg:px-8 py-8"
     use:skeleton={{ feed: publicFeedState }}
   >
-    {#if publicFeedState.showSkeleton}
-      <div in:fade={{ duration: 200 }}>
-        <ExploreSkeleton count={12} />
-      </div>
-    {:else if publicFeedState.isEmpty}
-      <div in:fade={{ duration: 200 }}>
-        {#if !publicFeedState.isSearching}
-          <EmptyState
-            kind="first-use"
-            title="Nothing shared yet"
-            description="Public images from everyone on this instance show up here. Yours could be first."
-          >
-            {#snippet preview()}
-              <GhostGrid />
-            {/snippet}
-            {#snippet action()}
-              <Button variant="primary" size="md" rounded="lg" href="/upload">
-                <Icon icon="ph:upload-simple" class="h-4 w-4" />
-                Upload an image
-              </Button>
-            {/snippet}
-            {#snippet hint()}
-              Uploads are private until you make them public
-            {/snippet}
-          </EmptyState>
-        {:else}
-          <EmptyState
-            kind="no-results"
-            icon="ph:magnifying-glass"
-            title="No images found"
-            description={`Nothing matches "${publicFeedState.searchTerm}". Try a different search term.`}
-          >
-            {#snippet action()}
-              <Button
-                variant="outline"
-                size="sm"
-                rounded="lg"
-                onclick={() => publicFeedState.resetSearch()}
-              >
-                Clear search
-              </Button>
-            {/snippet}
-          </EmptyState>
-        {/if}
-      </div>
-    {:else if publicFeedState.items.length > 0}
-      <Masonry
-        items={publicFeedState.items}
-        class="gap-4"
-        getItemWeight={calculateImageCardWeight}
-      >
-        {#snippet itemTemplate(image)}
-          {@const index = publicFeedState.items.findIndex(
-            (i) => i.id === image.id,
-          )}
-          <div
-            in:fly={{ y: 20, duration: 300, delay: Math.random() * 100 }}
-            class="group break-inside-avoid overflow-hidden rounded-lg border border-border bg-card/60 transition-all duration-200 hover:border-border-strong hover:shadow-md dark:hover:shadow-surface-inverse/50 cursor-pointer"
-            onclick={() => openPostViewer(index)}
-            onkeydown={(e) => e.key === 'Enter' && openPostViewer(index)}
-            role="button"
-            tabindex="0"
-          >
-            <div class="relative">
-              <ImagePlaceholder
-                uniqueId={image.id}
-                src={image.url}
-                metadata={image.metadata}
-                showMetadata={false}
-                showOpenInNewTab={false}
-                rounded={false}
-              />
+    <div class="mb-8 flex items-center gap-3">
+      <h1 class="sr-only">Explore</h1>
+      <SearchBar
+        searchTerm={urlSearch.searchTerm}
+        searchBy={urlSearch.searchBy}
+        onsearch={({ searchTerm, searchBy }) =>
+          searchFilter.updateUrl(searchTerm, searchBy)}
+        onclear={() => searchFilter.clearUrl()}
+      />
+      <ViewModeToggle
+        value={settings.explore.viewMode}
+        modes={supportedViewModes.explore}
+        size="xl"
+        labelMode="active"
+        on={{
+          change: (mode) => {
+            settings.explore = { viewMode: mode };
+          },
+        }}
+      />
+    </div>
 
-              <div
-                class="absolute inset-0 bg-linear-to-t from-scrim/60 via-scrim/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-              ></div>
-
-              <div
-                class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
-              >
-                <div
-                  class="w-14 h-14 rounded-full bg-scrim/50 flex items-center justify-center"
-                >
-                  <Icon
-                    icon="ph:arrows-out"
-                    class="w-7 h-7 text-on-surface-inverse"
-                  />
-                </div>
-              </div>
-
-              <div class="absolute bottom-2 left-2 flex items-center gap-1.5">
-                <ViewCountBadge
-                  count={image.attributes.views}
-                  variant="overlay"
-                />
-                <DimensionsBadge
-                  width={image.metadata.width}
-                  height={image.metadata.height}
-                  variant="overlay"
-                />
-              </div>
-
-              {#if licensingEnabled && image.license}
-                <div class="absolute bottom-2 right-2">
-                  <LicenseInfo
-                    license={image.license}
-                    variant="overlay"
-                    size="sm"
-                  />
-                </div>
-              {/if}
-
-              <CardActionsOverlay
-                image={{
-                  id: image.id,
-                  fileName: image.attributes.fileName,
-                  url: image.url,
-                  ownerId: image.owner.id,
-                }}
-                bookmark={{
-                  isBookmarked: image.isBookmarked,
-                  count: image.bookmarkCount,
-                  onChange: (isBookmarked, count) => {
-                    publicFeedState.updateItem(image, {
-                      isBookmarked,
-                      bookmarkCount: count,
-                    });
-                  },
-                }}
-              />
-            </div>
-
-            <div class="p-3">
-              <div class="flex items-center gap-2.5">
-                <UserAvatar size="sm" user={image.owner} />
-                <div class="flex-1 min-w-0">
-                  <p
-                    class="font-medium text-foreground text-sm leading-tight truncate"
-                  >
-                    {image.owner.displayName}
-                  </p>
-                  <div class="text-xs text-foreground-muted mt-0.5">
-                    <FormattedDate
-                      date={image.attributes.createdAt.timestamp}
-                    />
-                  </div>
-                </div>
-                {#if userIsAdmin}
-                  <StopPropagation>
-                    <AdminImageDropdown
-                      {image}
-                      on={{
-                        imageUpdate: handleImageUpdate,
-                        imageDelete: handleImageDelete,
-                      }}
-                    />
-                  </StopPropagation>
-                {/if}
-              </div>
-
-              {#if image.attributes.description?.trim()}
-                <p class="mt-3 text-sm text-foreground-muted leading-relaxed">
-                  <ExpandableText
-                    maxLines={2}
-                    text={image.attributes.description}
-                  />
-                </p>
-              {/if}
-            </div>
-          </div>
-        {/snippet}
-      </Masonry>
-
-      {#if publicFeedState.hasMore}
-        <div class="flex justify-center mt-12">
-          <LoadMoreButton
-            visible={publicFeedState.hasMore}
-            loading={publicFeedState.isLoading}
-            onclick={() => publicFeedState.nextPage({ debounce: 300 })}
-            variant="modern"
-            rounded="full"
-          />
+    <ViewModeLayout
+      feed={publicFeedState}
+      mode={settings.explore.viewMode}
+      shouldSkipInitialLoad={() => searchFilter.hasFilterInUrl()}
+      config={{
+        grid: { toolbar: false, appendMode: 'auto' },
+        list: { toolbar: false, appendMode: 'auto' },
+      }}
+    >
+      {#snippet loading(mode)}
+        <div in:fade={{ duration: 200 }}>
+          <ExploreSkeleton count={12} viewMode={mode} />
         </div>
-      {/if}
-    {/if}
+      {/snippet}
+      {#snippet grid()}
+        <ExploreGridView
+          items={publicFeedState.items}
+          {licensingEnabled}
+          {userIsAdmin}
+          on={viewHandlers}
+        />
+      {/snippet}
+      {#snippet list()}
+        <ExploreListView
+          items={publicFeedState.items}
+          {licensingEnabled}
+          {userIsAdmin}
+          on={viewHandlers}
+        />
+      {/snippet}
+      {#snippet empty()}
+        <div in:fade={{ duration: 200 }}>
+          {#if !publicFeedState.isSearching}
+            <EmptyState
+              kind="first-use"
+              title="Nothing shared yet"
+              description="Public images from everyone on this instance show up here. Yours could be first."
+            >
+              {#snippet preview()}
+                <GhostPreview mode={settings.explore.viewMode} />
+              {/snippet}
+              {#snippet action()}
+                <Button variant="primary" size="md" rounded="lg" href="/upload">
+                  <Icon icon="ph:upload-simple" class="h-4 w-4" />
+                  Upload an image
+                </Button>
+              {/snippet}
+              {#snippet hint()}
+                Uploads are private until you make them public
+              {/snippet}
+            </EmptyState>
+          {:else}
+            <EmptyState
+              kind="no-results"
+              icon="ph:magnifying-glass"
+              title="No images found"
+              description={`Nothing matches "${publicFeedState.searchTerm}". Try a different search term.`}
+            >
+              {#snippet action()}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  rounded="lg"
+                  onclick={() => searchFilter.clearUrl()}
+                >
+                  Clear search
+                </Button>
+              {/snippet}
+            </EmptyState>
+          {/if}
+        </div>
+      {/snippet}
+      {#snippet more()}
+        <LoadMoreButton
+          class="mt-8"
+          visible={publicFeedState.hasMore}
+          loading={publicFeedState.isLoading}
+          onclick={() => publicFeedState.nextPage({ debounce: 300 })}
+          variant="modern"
+          rounded="full"
+        />
+      {/snippet}
+    </ViewModeLayout>
   </div>
 </main>
 

@@ -98,42 +98,15 @@ msgid "No Data"
 msgstr "データなし"
 
 #: src/feature/Analytics/UserAnalytics.svelte
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/admin/user/+page.svelte
 msgid "Users"
 msgstr "ユーザー"
 
-#: src/feature/Collection/CreateCollectionForm.svelte
-#: src/feature/Collection/CreateCollectionModal.svelte
-#: src/feature/Comment/CommentInput.svelte
-#: src/feature/Image/SizePicker/ImageSizePicker.svelte
-#: src/feature/Navigation/TabMenu/TabMenuItem.svelte
-#: src/feature/Notification/NotificationListItem.svelte
-#: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
-#: src/feature/Tag/TagDataTable/TagCountCell.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
-#: src/feature/Text/EditableText/EditableText.svelte
-#: src/feature/Text/EditableText/EditableText.svelte
-#: src/feature/Text/HashtagText/HashtagText.svelte
-#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
-#: src/routes/collection/[id]/+page.svelte
-#: src/routes/explore/+page.svelte
-#: src/ui/components/card/selectable-card.svelte
-#: src/ui/components/dropzone/dropzone-input.svelte
-#: src/ui/components/filter/filter-search.svelte
 #: src/ui/components/picker/picker-create-row.svelte
-#: src/ui/components/picker/picker-list.svelte
-#: src/ui/components/picker/picker-list.svelte
 msgid "Enter"
 msgstr "Enter"
-
-#: src/feature/Comment/CommentInput.svelte
-#: src/feature/Image/PostViewer/PostViewer.svelte
-#: src/feature/Image/SizePicker/ImageSizePicker.svelte
-#: src/feature/Text/EditableText/EditableText.svelte
-#: src/ui/components/table-pagination/table-pagination.svelte
-msgid "Escape"
-msgstr "Escape"
 
 #: src/feature/Comment/CommentInput.svelte
 msgid "Editing reply to <0/>"
@@ -287,11 +260,6 @@ msgstr "既読にする"
 msgid "Continue with {0}"
 msgstr "{0} で続行"
 
-#: src/feature/Navigation/Navbar/Navbar.svelte
-#: src/feature/Search/SearchBar.svelte
-msgid "Search images..."
-msgstr "画像を検索..."
-
 #: src/feature/Search/SearchBar.svelte
 msgid "Search by User"
 msgstr "ユーザーで検索"
@@ -434,7 +402,7 @@ msgstr "<0/> 履歴を表示"
 msgid "Bookmarks | Slink"
 msgstr "ブックマーク | Slink"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/bookmarks/+page.svelte
 msgid "Bookmarks"
 msgstr "ブックマーク"
@@ -485,7 +453,7 @@ msgstr "API キーを使って Slink を ShareX やその他のツールと連�
 msgid "Notifications | Slink"
 msgstr "通知 | Slink"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/notifications/+page.svelte
 msgid "Notifications"
 msgstr "通知"
@@ -507,7 +475,7 @@ msgstr "すべて確認済みです"
 msgid "Collections | Slink"
 msgstr "コレクション | Slink"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
 #: src/feature/Upload/Options/Collections.svelte
 #: src/routes/collections/+page.svelte
@@ -639,13 +607,14 @@ msgstr "公開"
 msgid "Private"
 msgstr "非公開"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
+#: src/routes/explore/+page.svelte
 #: src/routes/preferences/+page.svelte
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Explore"
 msgstr "探索"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/preferences/+page.svelte
 msgid "Upload"
 msgstr "アップロード"
@@ -1166,28 +1135,6 @@ msgstr "新しいタブで開く"
 msgid "Close viewer"
 msgstr "ビューアーを閉じる"
 
-#: src/feature/Image/PostViewer/PostViewer.svelte
-#: src/ui/components/input/number-input.svelte
-#: src/ui/components/picker/picker-list.svelte
-msgid "ArrowUp"
-msgstr "ArrowUp"
-
-#: src/feature/Image/PostViewer/PostViewer.svelte
-#: src/ui/components/table-pagination/table-pagination.svelte
-msgid "ArrowLeft"
-msgstr "ArrowLeft"
-
-#: src/feature/Image/PostViewer/PostViewer.svelte
-#: src/ui/components/input/number-input.svelte
-#: src/ui/components/picker/picker-list.svelte
-msgid "ArrowDown"
-msgstr "ArrowDown"
-
-#: src/feature/Image/PostViewer/PostViewer.svelte
-#: src/ui/components/table-pagination/table-pagination.svelte
-msgid "ArrowRight"
-msgstr "ArrowRight"
-
 #: src/feature/Image/PostViewer/PostViewerNavigation.svelte
 msgid "Previous post"
 msgstr "前の投稿"
@@ -1270,7 +1217,7 @@ msgstr "<0/> リセット"
 msgid "New: {0} × {1}"
 msgstr "新しいサイズ: {0} × {1}"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/feature/Upload/Options/Tags.svelte
 msgid "Tags"
 msgstr "タグ"
@@ -1452,7 +1399,7 @@ msgstr "ストレージデータがありません"
 msgid "WEBP (Recommended)"
 msgstr "WEBP（推奨）"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 #: src/routes/admin/settings/+page.svelte
 msgid "Image Settings"
@@ -1747,7 +1694,7 @@ msgstr "URL短縮"
 msgid "Generate short URLs when copying image links"
 msgstr "画像リンクのコピー時に短縮URLを生成する"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 #: src/routes/admin/settings/+page.svelte
 msgid "Storage Configuration"
@@ -2260,7 +2207,7 @@ msgstr "<0/> あなた"
 msgid "Dashboard | Slink"
 msgstr "ダッシュボード | Slink"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/admin/dashboard/+page.svelte
 msgid "Dashboard"
 msgstr "ダッシュボード"
@@ -2273,7 +2220,7 @@ msgstr "画像のアップロード、処理オプション、URL共有設定を
 msgid "Configure storage providers, cache settings, and data management"
 msgstr "ストレージプロバイダー、キャッシュ設定、データ管理を構成"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/admin/settings/+page.svelte
 msgid "Security Settings"
 msgstr "セキュリティ設定"
@@ -2282,7 +2229,7 @@ msgstr "セキュリティ設定"
 msgid "Manage user registration, access control, and authentication policies"
 msgstr "ユーザー登録、アクセス制御、認証ポリシーを管理"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/admin/settings/+page.svelte
 #: src/routes/admin/settings/sso/+page.svelte
 msgid "Single Sign-On"
@@ -2296,7 +2243,7 @@ msgstr "外部認証用のSSO/OIDCアイデンティティプロバイダーを�
 msgid "Settings | Slink"
 msgstr "設定 | Slink"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/admin/settings/+page.svelte
 msgid "Settings"
 msgstr "設定"
@@ -3029,23 +2976,23 @@ msgstr "強い"
 msgid "Very Strong"
 msgstr "非常に強い"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 msgid "History"
 msgstr "履歴"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 msgid "Administration"
 msgstr "管理"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 msgid "System"
 msgstr "システム"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 msgid "Help & FAQ"
 msgstr "ヘルプ・よくある質問"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 msgid "GitHub"
 msgstr "GitHub"
 
@@ -3470,15 +3417,15 @@ msgstr "この値は{type}型である必要があります。"
 msgid "This collection should contain {limit} elements or less."
 msgstr "このコレクションの要素数は{limit}以下にしてください。"
 
-#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.language.ts
 msgid "Grid"
 msgstr "グリッド"
 
-#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.language.ts
 msgid "List"
 msgstr "リスト"
 
-#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.language.ts
 msgid "Table"
 msgstr "テーブル"
 
@@ -3970,7 +3917,7 @@ msgstr "項目"
 msgid "Unpublish"
 msgstr "公開を取り消す"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 msgid "Shares"
 msgstr "公開"
 
@@ -4281,15 +4228,9 @@ msgid "Copy the share link"
 msgstr "共有リンクをコピー"
 
 #: src/feature/Collection/CollectionList/CollectionPickerList.svelte
-#: src/feature/Search/SearchBar.svelte
 #: src/feature/Tag/TagPicker/TagPickerList.svelte
 msgid "Search"
 msgstr "検索"
-
-#: src/feature/Search/SearchBar.svelte
-#: src/feature/Search/SearchBar.svelte
-msgid "Close search"
-msgstr "検索を閉じる"
 
 #: src/feature/Layout/ViewModeToggle/ViewModeToggle.svelte
 msgid "View mode"
@@ -4435,7 +4376,7 @@ msgstr "適用中のフィルター"
 msgid "Failed to load child tags. Please try again."
 msgstr "子タグの読み込みに失敗しました。もう一度お試しください。"
 
-#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.language.ts
 msgid "Tree"
 msgstr "ツリー"
 
@@ -4893,7 +4834,7 @@ msgstr "<0/> 新しいタグ"
 msgid "Add images to fill this collection."
 msgstr "画像を追加して、このコレクションを充実させましょう。"
 
-#: src/feature/Image/History/ImageMetadata.svelte
+#: src/feature/Image/ImageMetadata/ImageMetadata.svelte
 msgid "# bookmark"
 msgid_plural "# bookmarks"
 msgstr[0] "# 件のブックマーク"
@@ -5010,7 +4951,7 @@ msgstr "高速で安全な画像共有サービス"
 msgid "{0}: Image Sharing Service"
 msgstr "{0}: 画像共有サービス"
 
-#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Navigation/Sidebar/config.ts
 #: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
 #: src/routes/admin/settings/+page.svelte
 #: src/routes/admin/settings/customization/+page.svelte
@@ -5182,3 +5123,7 @@ msgstr "有効期限"
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "This SVG could not be processed. It may be malformed or nested too deeply."
 msgstr "このSVGを処理できませんでした。形式が正しくないか、入れ子が深すぎる可能性があります。"
+
+#: src/feature/Image/Explore/ExploreListView/ExploreListView.svelte
+msgid "No description"
+msgstr "説明なし"

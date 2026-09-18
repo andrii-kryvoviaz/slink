@@ -9,9 +9,9 @@
     CollectionSkeleton,
     EmptyState,
     GhostFolders,
+    PageHeader,
     ViewModeToggle,
   } from '@slink/feature/Layout';
-  import { Subtitle, Title } from '@slink/feature/Text';
   import { Button } from '@slink/ui/components/button';
   import { DataTable } from '@slink/ui/components/data-table';
   import { EnhancedInput } from '@slink/ui/components/input';
@@ -23,6 +23,7 @@
   import { fade } from 'svelte/transition';
 
   import { skeleton } from '@slink/lib/actions/skeleton';
+  import { supportedViewModes } from '@slink/lib/settings';
   import { useCollectionListFeed } from '@slink/lib/state/CollectionListFeed.svelte';
   import { createCreateCollectionModalState } from '@slink/lib/state/CreateCollectionModalState.svelte';
 
@@ -58,17 +59,14 @@
     class="flex flex-col px-4 py-6 sm:px-6 w-full"
     use:skeleton={{ feed: collectionsFeed }}
   >
-    <div class="mb-8 space-y-6" in:fade={{ duration: 400, delay: 100 }}>
-      <div class="flex items-center justify-between w-full">
-        <div class="flex-1 min-w-0">
-          <Title>Collections</Title>
-          <Subtitle>Organize your images into albums</Subtitle>
-        </div>
-
-        <div class="flex items-center gap-3 shrink-0">
+    <div in:fade={{ duration: 400, delay: 100 }}>
+      <PageHeader>
+        {#snippet title()}Collections{/snippet}
+        {#snippet subtitle()}Organize your images into albums{/snippet}
+        {#snippet actions()}
           <ViewModeToggle
             value={settings.collections.viewMode}
-            modes={['grid', 'table']}
+            modes={supportedViewModes.collections}
             on={{
               change: (mode) => {
                 settings.collections = {
@@ -84,8 +82,8 @@
               <Icon icon="lucide:plus" class="w-3.5 h-3.5" />
             {/snippet}
           </SplitButton>
-        </div>
-      </div>
+        {/snippet}
+      </PageHeader>
     </div>
 
     <ViewModeLayout

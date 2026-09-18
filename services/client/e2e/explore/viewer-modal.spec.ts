@@ -58,6 +58,31 @@ test.describe('Explore viewer modal', () => {
       .not.toBe(afterNext);
   });
 
+  test('navigates with down/up arrow keys, matching left/right', async ({
+    explorePage,
+  }) => {
+    await explorePage.goto();
+    await explorePage.feedItems.first().waitFor({ state: 'visible' });
+
+    await explorePage.openFirstItem();
+    const postN = explorePage.currentPost();
+
+    await explorePage.pressArrow('ArrowRight');
+    const postN1 = explorePage.currentPost();
+    expect(postN1).not.toBe(postN);
+
+    await explorePage.pressArrow('ArrowDown');
+    const postN2 = explorePage.currentPost();
+    expect(postN2).not.toBe(postN1);
+    expect(postN2).not.toBe(postN);
+
+    await explorePage.pressArrow('ArrowLeft');
+    await expect.poll(() => explorePage.currentPost()).toBe(postN1);
+
+    await explorePage.pressArrow('ArrowUp');
+    await expect.poll(() => explorePage.currentPost()).toBe(postN);
+  });
+
   test('closes with Escape key', async ({ explorePage }) => {
     await explorePage.goto();
     await explorePage.feedItems.first().waitFor({ state: 'visible' });
@@ -67,5 +92,21 @@ test.describe('Explore viewer modal', () => {
 
     await explorePage.page.keyboard.press('Escape');
     await expect(explorePage.viewer).toBeHidden();
+  });
+
+  test('opens the clicked image, not the first', async ({
+    explorePage,
+    api,
+  }) => {
+    await api.content.uploadImage({ isPublic: true });
+    const secondId = await api.content.uploadImage({ isPublic: true });
+
+    await explorePage.goto();
+    await explorePage.cardFor(secondId).waitFor({ state: 'visible' });
+
+    await explorePage.cardFor(secondId).click();
+    await explorePage.viewer.waitFor({ state: 'visible' });
+
+    await expect.poll(() => explorePage.currentPost()).toBe(secondId);
   });
 });

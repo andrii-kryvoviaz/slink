@@ -9,6 +9,7 @@ test.describe('Post viewer copy link', () => {
     api,
     page,
     explorePage,
+    layoutControls,
   }) => {
     const imageId = await api.content.uploadImage({ isPublic: true });
 
@@ -36,11 +37,9 @@ test.describe('Post viewer copy link', () => {
     );
     expect(clipboardText.length).toBeGreaterThan(0);
 
-    const shareCookie = (await page.context().cookies()).find(
-      (cookie) => cookie.name === 'settings.share',
-    );
-    expect(shareCookie).toBeDefined();
-    expect(JSON.parse(shareCookie!.value)).toEqual({ format: 'markdown' });
+    const shareCookie = await layoutControls.readSettingCookie('share');
+    expect(shareCookie).not.toBeNull();
+    expect(JSON.parse(shareCookie!)).toEqual({ format: 'markdown' });
   });
 
   test('copies the BBCode format wrapping the share link', async ({

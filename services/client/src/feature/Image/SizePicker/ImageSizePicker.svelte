@@ -7,6 +7,8 @@
 
   import Icon from '@iconify/svelte';
 
+  import { Key } from '@slink/utils/ui';
+
   interface Props {
     width: number;
     height: number;
@@ -89,7 +91,7 @@
   };
 
   const handleKeyDown = (event: KeyboardEvent, type: 'width' | 'height') => {
-    if (event.key === 'Enter') {
+    if (event.key === Key.Enter) {
       event.preventDefault();
       handleChange(type);
       if (type === 'width') {
@@ -98,7 +100,7 @@
         widthInput?.focus();
       }
     }
-    if (event.key === 'Escape') {
+    if (event.key === Key.Escape) {
       event.preventDefault();
       resetValues();
     }

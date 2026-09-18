@@ -4,6 +4,8 @@
 
   import Icon from '@iconify/svelte';
 
+  import { Key } from '@slink/utils/ui';
+
   type InputType = 'input' | 'textarea';
 
   interface Props {
@@ -62,16 +64,16 @@
   }
 
   const handleKeyDown = (event: KeyboardEvent) => {
-    if (event.key === 'Escape') {
+    if (event.key === Key.Escape) {
       cancel();
     }
-    if (type === 'input' && event.key === 'Enter') {
+    if (type === 'input' && event.key === Key.Enter) {
       event.preventDefault();
       save();
     }
     if (
       type === 'textarea' &&
-      event.key === 'Enter' &&
+      event.key === Key.Enter &&
       (event.metaKey || event.ctrlKey)
     ) {
       event.preventDefault();

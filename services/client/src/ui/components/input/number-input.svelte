@@ -3,7 +3,7 @@
   import type { HTMLInputAttributes } from 'svelte/elements';
   import { slide } from 'svelte/transition';
 
-  import { cn } from '@slink/utils/ui/index.js';
+  import { Key, cn } from '@slink/utils/ui/index.js';
 
   import {
     type NumberInputSize,
@@ -103,10 +103,10 @@
   };
 
   const handleKeyDown = (event: KeyboardEvent) => {
-    if (event.key === 'ArrowUp') {
+    if (event.key === Key.ArrowUp) {
       event.preventDefault();
       increment();
-    } else if (event.key === 'ArrowDown') {
+    } else if (event.key === Key.ArrowDown) {
       event.preventDefault();
       decrement();
     }

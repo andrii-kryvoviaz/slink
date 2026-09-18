@@ -4,6 +4,8 @@
 
   import type { NotificationItem } from '@slink/api/Response';
 
+  import { Key } from '@slink/utils/ui';
+
   import {
     notificationItemIconVariants,
     notificationItemIconWrapperVariants,
@@ -43,7 +45,7 @@
   role="button"
   tabindex="0"
   onclick={handleClick}
-  onkeydown={(e) => e.key === 'Enter' && handleClick()}
+  onkeydown={(e) => e.key === Key.Enter && handleClick()}
   class={notificationItemVariants({ read: notification.isRead })}
 >
   <div class={notificationItemIconWrapperVariants({ type: notification.type })}>

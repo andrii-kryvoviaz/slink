@@ -6,6 +6,7 @@ import { LatestCall } from '@slink/lib/state/core/LatestCall';
 import { SkeletonManager } from '@slink/lib/state/core/SkeletonConfig.svelte';
 
 import { deepMerge } from '@slink/utils/object/deepMerge';
+import type { DeepPartial } from '@slink/utils/object/deepMerge';
 
 export interface PaginationMetadata {
   page?: number;
@@ -47,13 +48,9 @@ export interface PaginationConfig {
   appendMode: AppendMode;
 }
 
-type DeepPartial<T> = {
-  [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
-};
-
-export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
-  PaginatedResponse<T>
-> {
+export abstract class AbstractPaginatedFeed<
+  T extends object,
+> extends AbstractHttpState<PaginatedResponse<T>> {
   private _itemMap: SvelteMap<string, T> = new SvelteMap();
   private _order: string[] = $state([]);
   protected _meta: PaginationMetadata = $state({} as PaginationMetadata);
@@ -307,17 +304,7 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
     const existing = this._itemMap.get(id);
     if (!existing) return false;
 
-    const needsDeepMerge = Object.values(updates).some(
-      (value) =>
-        value !== null && typeof value === 'object' && !Array.isArray(value),
-    );
-
-    this._itemMap.set(
-      id,
-      needsDeepMerge
-        ? (deepMerge(existing, updates) as T)
-        : { ...existing, ...(updates as Partial<T>) },
-    );
+    this._itemMap.set(id, deepMerge(existing, updates));
     return true;
   }
 

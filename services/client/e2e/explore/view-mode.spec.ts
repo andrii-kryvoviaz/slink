@@ -1,0 +1,111 @@
+import { expect, test } from '../fixtures/auth.fixture';
+
+test.describe('Explore view mode', () => {
+  test('switching to list renders rows, survives reload, and switches back', async ({
+    page,
+    explorePage,
+    actor,
+  }) => {
+    const owner = await actor('owner');
+    const imageId = await owner.content.uploadImage({ isPublic: true });
+
+    await explorePage.goto();
+    await expect(explorePage.cardFor(imageId)).toBeVisible();
+
+    await explorePage.switchViewMode('List');
+
+    await expect(explorePage.rowFor(imageId)).toHaveCount(1);
+
+    await page.reload();
+    await expect(explorePage.viewModeOption('List')).toHaveAttribute(
+      'aria-checked',
+      'true',
+    );
+    await expect(explorePage.listRows.first()).toBeVisible();
+
+    await explorePage.switchViewMode('Grid');
+    await expect(explorePage.listRows).toHaveCount(0);
+    await expect(explorePage.cardFor(imageId)).toBeVisible();
+  });
+
+  test("list rows load thumbnails for another user's public images", async ({
+    explorePage,
+    actor,
+  }) => {
+    const owner = await actor('owner');
+    const imageId = await owner.content.uploadImage({ isPublic: true });
+
+    await explorePage.goto();
+    await expect(explorePage.cardFor(imageId)).toBeVisible();
+
+    await explorePage.switchViewMode('List');
+
+    const row = explorePage.rowFor(imageId);
+    const thumbnail = row.locator(`img[src*="${imageId}"]`);
+
+    await expect(row).toHaveCount(1);
+    await expect
+      .poll(() =>
+        thumbnail.evaluate(
+          (img: HTMLImageElement) => img.complete && img.naturalWidth > 0,
+        ),
+      )
+      .toBe(true);
+    await expect(row.getByText('Image unavailable')).toHaveCount(0);
+  });
+
+  test('a list cookie paints rows without a click and a row opens the viewer', async ({
+    page,
+    explorePage,
+    layoutControls,
+    actor,
+  }) => {
+    const owner = await actor('owner');
+    await owner.content.uploadImage({ isPublic: true });
+
+    await layoutControls.setSettingCookie(
+      'explore',
+      JSON.stringify({ viewMode: 'list' }),
+    );
+
+    await explorePage.goto();
+    await expect(explorePage.viewModeOption('List')).toHaveAttribute(
+      'aria-checked',
+      'true',
+    );
+    await expect(explorePage.listRows.first()).toBeVisible();
+
+    await explorePage.clickUntil(
+      explorePage.listRows.first(),
+      explorePage.viewer,
+    );
+    expect(explorePage.currentPost()).toBeTruthy();
+  });
+
+  test('Enter opens the viewer from a focused grid card and list row', async ({
+    page,
+    explorePage,
+    actor,
+  }) => {
+    const owner = await actor('owner');
+    await owner.content.uploadImage({ isPublic: true });
+
+    await explorePage.goto();
+    await explorePage.feedItems.first().waitFor({ state: 'visible' });
+
+    await explorePage.feedItems.first().focus();
+    await page.keyboard.press('Enter');
+    await expect(explorePage.viewer).toBeVisible();
+    expect(explorePage.currentPost()).toBeTruthy();
+
+    await explorePage.closeViewer();
+
+    await explorePage.switchViewMode('List');
+    await expect(explorePage.listRows.first()).toBeVisible();
+
+    await explorePage.listRows.first().getByRole('button').first().focus();
+    await page.keyboard.press('Enter');
+    await expect(explorePage.viewer).toBeVisible();
+    expect(explorePage.currentPost()).toBeTruthy();
+  });
+});

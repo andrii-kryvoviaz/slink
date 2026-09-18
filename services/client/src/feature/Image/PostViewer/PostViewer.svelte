@@ -11,6 +11,8 @@
 
   import { usePostViewerState } from '@slink/lib/state/PostViewerState.svelte';
 
+  import { Key } from '@slink/utils/ui';
+
   import PostViewerItem from './PostViewerItem.svelte';
   import PostViewerNavigation from './PostViewerNavigation.svelte';
 
@@ -159,31 +161,31 @@
     </div>
 
     <Shortcut
-      key="Escape"
+      key={Key.Escape}
       onHit={handleClose}
       enabled={viewerState.isOpen}
       hidden
     />
     <Shortcut
-      key="ArrowUp"
+      key={Key.ArrowUp}
       onHit={navigatePrev}
       enabled={viewerState.isOpen}
       hidden
     />
     <Shortcut
-      key="ArrowLeft"
+      key={Key.ArrowLeft}
       onHit={navigatePrev}
       enabled={viewerState.isOpen}
       hidden
     />
     <Shortcut
-      key="ArrowDown"
+      key={Key.ArrowDown}
       onHit={navigateNext}
       enabled={viewerState.isOpen}
       hidden
     />
     <Shortcut
-      key="ArrowRight"
+      key={Key.ArrowRight}
       onHit={navigateNext}
       enabled={viewerState.isOpen}
       hidden

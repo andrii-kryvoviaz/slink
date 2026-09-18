@@ -1,5 +1,6 @@
 import { type Locator, type Page, expect } from '@playwright/test';
 
+import { resolveBaseURL } from '../helpers/session';
 import { BasePage } from './BasePage';
 
 const MAX_PAGES_TO_WALK = 25;
@@ -65,7 +66,7 @@ export class AdminUsersPage extends BasePage {
         value: JSON.stringify({
           users: { pageSize: AdminUsersPage.PAGE_SIZE },
         }),
-        url: process.env.E2E_BASE_URL ?? 'http://localhost:3100',
+        url: resolveBaseURL(),
       },
     ]);
 

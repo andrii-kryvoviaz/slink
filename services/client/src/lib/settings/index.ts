@@ -6,6 +6,5 @@ export * from './UploadPolicy';
 export {
   UserSettings,
   type CookieSettings,
-  type ViewMode,
   type ShareFormat,
 } from './UserSettings.svelte';

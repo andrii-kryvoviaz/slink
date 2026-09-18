@@ -1,6 +1,7 @@
 import { type Locator, type Page, expect } from '@playwright/test';
 
 import { BasePage } from './BasePage';
+import { LayoutControls } from './LayoutControls';
 
 export class HistoryPage extends BasePage {
   static readonly URL = '/history';
@@ -54,13 +55,10 @@ export class HistoryPage extends BasePage {
   }
 
   private async useView(viewMode: 'grid' | 'list' | 'table') {
-    await this.page.context().addCookies([
-      {
-        name: 'settings.history',
-        value: JSON.stringify({ viewMode }),
-        url: process.env.E2E_BASE_URL ?? 'http://localhost:3100',
-      },
-    ]);
+    await new LayoutControls(this.page).setSettingCookie(
+      'history',
+      JSON.stringify({ viewMode }),
+    );
   }
 
   async selectImages(count: number) {
@@ -220,18 +218,19 @@ export class HistoryPage extends BasePage {
     await confirm.click();
   }
 
-  viewModeOption(name: 'Grid' | 'List' | 'Table') {
-    return this.page.getByRole('radio', { name });
+  get tablePagination() {
+    return this.page
+      .locator('main div', {
+        has: this.page.getByRole('button', { name: /^Limit \d+$/ }),
+      })
+      .last();
   }
 
-  async switchViewMode(name: 'Grid' | 'List' | 'Table') {
-    const option = this.viewModeOption(name);
-    await expect(async () => {
-      await option.click();
-      await expect(option).toHaveAttribute('aria-checked', 'true', {
-        timeout: 1000,
-      });
-    }).toPass({ timeout: 15000 });
+  pageSizeButton(pageSize: number) {
+    return this.tablePagination.getByRole('button', {
+      name: `Limit ${pageSize}`,
+      exact: true,
+    });
   }
 
   get nextTablePageButton() {

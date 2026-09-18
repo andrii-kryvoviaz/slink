@@ -16,6 +16,8 @@
   import { cubicOut } from 'svelte/easing';
   import { fade, fly } from 'svelte/transition';
 
+  import { Key } from '@slink/utils/ui';
+
   interface CreatedCollection {
     id: string;
     name: string;
@@ -71,7 +73,7 @@
   );
 
   const handleKeydown = (e: KeyboardEvent) => {
-    if (e.key === 'Enter' && !pending) {
+    if (e.key === Key.Enter && !pending) {
       onCreate?.(name);
     }
   };

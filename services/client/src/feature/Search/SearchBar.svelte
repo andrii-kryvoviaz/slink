@@ -1,14 +1,5 @@
 <script lang="ts">
   import {
-    searchBarBack,
-    searchBarBackdrop,
-    searchBarContainer,
-    searchBarDropdownChevron,
-    searchBarField,
-    searchBarTrigger,
-  } from '@slink/feature/Search/SearchBar.theme';
-  import { Button } from '@slink/ui/components/button';
-  import {
     DropdownSimple,
     DropdownSimpleItem,
   } from '@slink/ui/components/dropdown-simple';
@@ -18,8 +9,10 @@
   import Icon from '@iconify/svelte';
 
   import { cn } from '@slink/utils/ui/index.js';
+  import type { SearchBy } from '@slink/utils/url';
+  import { searchByValues } from '@slink/utils/url';
 
-  type SearchBy = 'user' | 'description' | 'hashtag';
+  import { searchBarDropdownChevron, searchBarField } from './SearchBar.theme';
 
   interface SearchOption {
     label: string;
@@ -31,20 +24,11 @@
   interface Props {
     searchTerm?: string;
     searchBy?: SearchBy;
-    placeholder?: string;
-    disabled?: boolean;
     onsearch?: (event: { searchTerm: string; searchBy: SearchBy }) => void;
     onclear?: () => void;
   }
 
-  let {
-    searchTerm = $bindable(''),
-    searchBy = $bindable('user'),
-    placeholder = 'Search images...',
-    disabled = false,
-    onsearch,
-    onclear,
-  }: Props = $props();
+  let { searchTerm, searchBy, onsearch, onclear }: Props = $props();
 
   const searchOptions: Record<SearchBy, SearchOption> = {
     user: {
@@ -67,156 +51,90 @@
     },
   };
 
+  let term = $derived(searchTerm ?? '');
+  let scope = $derived(searchBy ?? 'user');
   let dropdownOpen = $state(false);
-  let expanded = $state(false);
-  let searchRef:
-    { focus: () => void; blur: () => void; clear: () => void } | undefined;
 
   $effect(() => {
-    if (hasHashtags(searchTerm) && searchBy !== 'hashtag') {
-      searchBy = 'hashtag';
-    }
-  });
-
-  $effect(() => {
-    if (expanded) {
-      requestAnimationFrame(() => searchRef?.focus());
+    if (hasHashtags(term) && scope !== 'hashtag') {
+      scope = 'hashtag';
     }
   });
 
   const fireSearch = () => {
-    const term = searchTerm.trim();
-    if (term) onsearch?.({ searchTerm: term, searchBy });
+    const trimmed = term.trim();
+    if (trimmed) onsearch?.({ searchTerm: trimmed, searchBy: scope });
   };
 
   const selectSearchBy = (value: SearchBy) => {
-    searchBy = value;
+    scope = value;
     dropdownOpen = false;
     fireSearch();
   };
 
-  const openMobile = () => {
-    expanded = true;
-  };
-
-  const closeMobile = () => {
-    expanded = false;
-    searchRef?.blur();
-  };
-
-  const handleEscape = (event: KeyboardEvent) => {
-    if (searchTerm) {
-      searchTerm = '';
-      return;
-    }
-    if (expanded) {
-      event.preventDefault();
-      closeMobile();
+  const clearTerm = () => {
+    if (term) {
+      term = '';
     }
   };
 
-  const currentOption = $derived(searchOptions[searchBy]);
-  const dynamicPlaceholder = $derived(currentOption.placeholder ?? placeholder);
+  const currentOption = $derived(searchOptions[scope]);
 </script>
 
-{#if !expanded}
-  <Button
-    variant="glass"
-    size="sm"
-    rounded="full"
-    class={searchBarTrigger()}
-    onclick={openMobile}
-  >
-    {#snippet children()}
-      <Icon icon="ph:magnifying-glass" class="h-3 w-3 sm:h-4 sm:w-4" />
-      <span>Search</span>
-    {/snippet}
-  </Button>
-{/if}
+<Filter.Search
+  bind:searchTerm={term}
+  placeholder={currentOption.placeholder}
+  variant="neon"
+  size="md"
+  rounded="lg"
+  debounceMs={1000}
+  onSearch={(value) => onsearch?.({ searchTerm: value, searchBy: scope })}
+  onClear={onclear}
+  class={searchBarField({ focused: dropdownOpen })}
+  inputClass="px-2"
+  onEnter={(event) => {
+    event.preventDefault();
+    fireSearch();
+  }}
+  onEscape={clearTerm}
+>
+  {#snippet trailing()}
+    <Filter.Divider class="bg-border-strong" />
 
-{#if expanded}
-  <button
-    type="button"
-    aria-label="Close search"
-    tabindex="-1"
-    class={searchBarBackdrop()}
-    onclick={closeMobile}
-  ></button>
-{/if}
-
-<div class={searchBarContainer({ expanded })}>
-  {#if expanded}
-    <Button
-      variant="glass"
-      size="sm"
-      rounded="full"
-      aria-label="Close search"
-      class={searchBarBack()}
-      onclick={closeMobile}
+    <DropdownSimple
+      bind:open={dropdownOpen}
+      triggerClass="w-fit"
+      contentProps={{ align: 'end', sideOffset: 12 }}
     >
-      <Icon icon="ph:arrow-left" class="h-4 w-4" />
-    </Button>
-  {/if}
+      {#snippet trigger(triggerProps)}
+        <button
+          {...triggerProps}
+          class={cn(
+            'flex items-center gap-1 px-1.5 sm:px-2 py-1 text-xs font-medium',
+            'text-foreground-muted hover:text-foreground',
+            'hover:bg-hover rounded-md transition-colors duration-150',
+            'whitespace-nowrap shrink-0',
+          )}
+          type="button"
+          aria-label="Search options"
+        >
+          <span class="hidden sm:block">{currentOption.short}</span>
+          <Icon
+            icon="ph:caret-down"
+            class={searchBarDropdownChevron({ open: dropdownOpen })}
+          />
+        </button>
+      {/snippet}
 
-  <Filter.Search
-    bind:this={searchRef}
-    bind:searchTerm
-    {disabled}
-    placeholder={dynamicPlaceholder}
-    variant="pill"
-    size="sm"
-    rounded="full"
-    debounceMs={1000}
-    onSearch={(term) => onsearch?.({ searchTerm: term, searchBy })}
-    onClear={onclear}
-    class={searchBarField({ focused: dropdownOpen })}
-    inputClass="px-2"
-    onEnter={(event) => {
-      event.preventDefault();
-      fireSearch();
-    }}
-    onEscape={handleEscape}
-  >
-    {#snippet trailing()}
-      <div class="w-px h-4 bg-border-strong shrink-0"></div>
-
-      <DropdownSimple
-        bind:open={dropdownOpen}
-        triggerClass="w-fit"
-        contentProps={{ align: 'end', sideOffset: 12 }}
-      >
-        {#snippet trigger(triggerProps)}
-          <button
-            {...triggerProps}
-            class={cn(
-              'flex items-center gap-1 px-1.5 sm:px-2 py-0.5 text-xs font-medium',
-              'text-foreground-muted hover:text-foreground',
-              'hover:bg-muted-soft dark:hover:bg-muted rounded-r-full transition-colors duration-150',
-              'whitespace-nowrap shrink-0',
-            )}
-            type="button"
-            aria-label="Search options"
-            {disabled}
-          >
-            <span class="hidden sm:block">{currentOption.short}</span>
-            <Icon
-              icon="ph:caret-down"
-              class={searchBarDropdownChevron({ open: dropdownOpen })}
-            />
-          </button>
-        {/snippet}
-
-        {#each Object.entries(searchOptions) as [value, option] (value)}
-          <DropdownSimpleItem
-            on={{ click: () => selectSearchBy(value as SearchBy) }}
-          >
-            {#snippet icon()}
-              <Icon icon={option.icon} class="h-4 w-4" />
-            {/snippet}
-            {option.label}
-          </DropdownSimpleItem>
-        {/each}
-      </DropdownSimple>
-    {/snippet}
-  </Filter.Search>
-</div>
+      {#each searchByValues as value (value)}
+        {@const option = searchOptions[value]}
+        <DropdownSimpleItem on={{ click: () => selectSearchBy(value) }}>
+          {#snippet icon()}
+            <Icon icon={option.icon} class="h-4 w-4" />
+          {/snippet}
+          {option.label}
+        </DropdownSimpleItem>
+      {/each}
+    </DropdownSimple>
+  {/snippet}
+</Filter.Search>

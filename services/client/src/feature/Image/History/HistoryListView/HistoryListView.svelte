@@ -16,21 +16,21 @@
   import { cn } from '@slink/utils/ui';
   import { PreviewUrl } from '@slink/utils/url';
 
-  import HistoryItemActions from './HistoryItemActions.svelte';
-  import { HistoryItemLabels } from './HistoryItemLabels';
-  import { historyListRowVariants } from './HistoryView.theme';
-  import type { HistoryViewProps } from './HistoryView.types';
-  import ImageMetadata from './ImageMetadata.svelte';
+  import ImageMetadata from '../../ImageMetadata/ImageMetadata.svelte';
+  import { imageListRowVariants } from '../../ImageView.theme';
+  import HistoryItemActions from '../HistoryItemActions.svelte';
+  import { HistoryItemLabels } from '../HistoryItemLabels';
+  import type { HistoryViewProps } from '../HistoryView.types';
 
   let { items = [], selectionState, on }: HistoryViewProps = $props();
 
   const isSelectionMode = $derived(selectionState?.isSelectionMode ?? false);
 
   const actionHandlers = {
-    imageDelete: (id: string) => on?.delete(id),
+    imageDelete: (id: string) => on.delete(id),
     collectionChange: (imageId: string, collections: CollectionReference[]) =>
-      on?.collectionChange(imageId, collections),
-    tagChange: (imageId: string, tags: Tag[]) => on?.tagChange?.(imageId, tags),
+      on.collectionChange(imageId, collections),
+    tagChange: (imageId: string, tags: Tag[]) => on.tagChange?.(imageId, tags),
   };
 </script>
 
@@ -43,10 +43,10 @@
       <SelectableCard
         id={item.id}
         {selectionState}
-        onSelectionChange={on?.selectionChange}
+        onSelectionChange={on.selectionChange}
         cardClass={(selected) =>
           cn(
-            historyListRowVariants({
+            imageListRowVariants({
               selected,
               selectionMode: isSelectionMode,
             }),
@@ -59,7 +59,7 @@
           <SelectionCheckbox
             id={item.id}
             {selectionState}
-            onSelectionChange={on?.selectionChange}
+            onSelectionChange={on.selectionChange}
             class="pointer-events-auto"
           />
           <div class="aspect-4/3 @xl:aspect-square w-full h-full">

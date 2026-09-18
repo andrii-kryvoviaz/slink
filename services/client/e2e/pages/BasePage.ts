@@ -49,4 +49,18 @@ export class BasePage {
   async clickUntilOnPausedClock(trigger: Locator, target: Locator) {
     await this.clickUntil(trigger, target, () => this.page.clock.runFor(100));
   }
+
+  viewModeOption(name: 'Grid' | 'List' | 'Table') {
+    return this.page.getByRole('radio', { name });
+  }
+
+  async switchViewMode(name: 'Grid' | 'List' | 'Table') {
+    const option = this.viewModeOption(name);
+    await expect(async () => {
+      await option.click();
+      await expect(option).toHaveAttribute('aria-checked', 'true', {
+        timeout: 1000,
+      });
+    }).toPass({ timeout: 15000 });
+  }
 }

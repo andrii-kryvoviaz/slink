@@ -5,6 +5,8 @@
 
   import Icon from '@iconify/svelte';
 
+  import { Key } from '@slink/utils/ui';
+
   import PickerCreateFooter from './picker-create-footer.svelte';
   import PickerCreateRow from './picker-create-row.svelte';
   import PickerEmptyState from './picker-empty-state.svelte';
@@ -89,7 +91,7 @@
   const handleKeydown = (e: KeyboardEvent) => {
     const canCreate = hasInstant && !!searchTerm.trim() && !isCreating;
 
-    if (e.key === 'Enter' && highlightedIndex < 0 && canCreate) {
+    if (e.key === Key.Enter && highlightedIndex < 0 && canCreate) {
       e.preventDefault();
       runCreate();
       return;
@@ -97,15 +99,15 @@
 
     if (filteredItems.length === 0) return;
 
-    if (e.key === 'ArrowDown') {
+    if (e.key === Key.ArrowDown) {
       e.preventDefault();
       highlightedIndex =
         highlightedIndex < filteredItems.length - 1 ? highlightedIndex + 1 : 0;
-    } else if (e.key === 'ArrowUp') {
+    } else if (e.key === Key.ArrowUp) {
       e.preventDefault();
       highlightedIndex =
         highlightedIndex > 0 ? highlightedIndex - 1 : filteredItems.length - 1;
-    } else if (e.key === 'Enter' && highlightedIndex >= 0) {
+    } else if (e.key === Key.Enter && highlightedIndex >= 0) {
       e.preventDefault();
     }
   };

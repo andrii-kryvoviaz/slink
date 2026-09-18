@@ -26,7 +26,7 @@
     config?: Partial<Record<ViewMode, ModeConfig>>;
     spacing?: ViewModeLayoutVariants['spacing'];
     pageSizeOptions?: number[];
-    onBeforeLoad?: () => boolean | void;
+    shouldSkipInitialLoad?: () => boolean;
     onPageSizeChange?: (size: number) => void | Promise<void>;
 
     grid?: Snippet<[ListingContext]>;
@@ -45,7 +45,7 @@
     config,
     spacing,
     pageSizeOptions = [12, 24, 48, 96],
-    onBeforeLoad,
+    shouldSkipInitialLoad,
     onPageSizeChange,
     grid,
     list,
@@ -57,7 +57,8 @@
     more,
   }: Props = $props();
 
-  const tableSettings = useTableSettings(feed.key!);
+  const tableSettings = feed.key ? useTableSettings(feed.key) : undefined;
+  const pageSize = $derived(tableSettings?.pageSize ?? feed.pageSize);
 
   function resolveTableConfig(modeKey: ViewMode): TableModeConfig | undefined {
     const c = config?.[modeKey];
@@ -124,7 +125,9 @@
     }
 
     untrack(() => {
-      feed.setPageSize(tableSettings.pageSize);
+      if (tableSettings) {
+        feed.setPageSize(tableSettings.pageSize);
+      }
 
       const switchedMode =
         previousMode !== undefined && previousMode !== activeMode;
@@ -135,16 +138,15 @@
         return;
       }
 
-      const skipLoad = onBeforeLoad?.();
-      if (!skipLoad && feed.needsLoad) {
+      if (!shouldSkipInitialLoad?.() && feed.needsLoad) {
         feed.load();
       }
     });
   });
 
   const handlePageSizeChange = async (size: number) => {
-    if (size === tableSettings.pageSize) return;
-    tableSettings.pageSize = size;
+    if (size === pageSize) return;
+    if (tableSettings) tableSettings.pageSize = size;
 
     if (onPageSizeChange) {
       await onPageSizeChange(size);
@@ -215,7 +217,7 @@
     <ViewModeToolbar
       pagination={feed.pagination}
       isLoading={feed.isLoading}
-      pageSize={tableSettings.pageSize}
+      {pageSize}
       {pageSizeOptions}
       showPageSize={resolvedConfig.pageSize}
       activeTable={activeTableResult?.table}

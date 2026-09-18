@@ -8,12 +8,12 @@ import {
 import { LoginPage } from '../pages/LoginPage';
 import type { Account } from './accounts';
 
-function resolveBaseURL(): string {
-  return (
-    test.info().project.use.baseURL ??
-    process.env.E2E_BASE_URL ??
-    'http://localhost:3100'
-  );
+export function resolveBaseURLFromEnv(): string {
+  return process.env.E2E_BASE_URL ?? 'http://localhost:3100';
+}
+
+export function resolveBaseURL(): string {
+  return test.info().project.use.baseURL ?? resolveBaseURLFromEnv();
 }
 
 export async function signInContext(

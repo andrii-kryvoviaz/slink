@@ -1,5 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
+import { resolveBaseURLFromEnv } from './e2e/helpers/session';
+
 export default defineConfig({
   testDir: './e2e',
   fullyParallel: true,
@@ -7,7 +9,7 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   reporter: process.env.CI ? [['html'], ['github']] : 'html',
   use: {
-    baseURL: process.env.E2E_BASE_URL ?? 'http://localhost:3100',
+    baseURL: resolveBaseURLFromEnv(),
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
   },

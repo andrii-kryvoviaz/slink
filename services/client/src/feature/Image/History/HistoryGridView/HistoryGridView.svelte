@@ -17,24 +17,24 @@
 
   import { PreviewUrl } from '@slink/utils/url';
 
-  import { HistoryItemLabels } from './HistoryItemLabels';
+  import ImageMetadata from '../../ImageMetadata/ImageMetadata.svelte';
+  import { imageCardVariants } from '../../ImageView.theme';
+  import { HistoryItemLabels } from '../HistoryItemLabels';
   import {
     actionBarVisibilityVariants,
     createActionBarImage,
-    historyCardVariants,
-  } from './HistoryView.theme';
-  import type { HistoryViewProps } from './HistoryView.types';
-  import ImageMetadata from './ImageMetadata.svelte';
+  } from '../HistoryView.theme';
+  import type { HistoryViewProps } from '../HistoryView.types';
 
   let { items = [], selectionState, on }: HistoryViewProps = $props();
 
   const isSelectionMode = $derived(selectionState?.isSelectionMode ?? false);
 
   const actionHandlers = {
-    imageDelete: (id: string) => on?.delete(id),
+    imageDelete: (id: string) => on.delete(id),
     collectionChange: (imageId: string, collections: CollectionReference[]) =>
-      on?.collectionChange(imageId, collections),
-    tagChange: (imageId: string, tags: Tag[]) => on?.tagChange?.(imageId, tags),
+      on.collectionChange(imageId, collections),
+    tagChange: (imageId: string, tags: Tag[]) => on.tagChange?.(imageId, tags),
   };
 </script>
 
@@ -54,15 +54,15 @@
     <SelectableCard
       id={item.id}
       {selectionState}
-      onSelectionChange={on?.selectionChange}
+      onSelectionChange={on.selectionChange}
       flyDelay={Math.random() * 100}
-      cardClass={(selected) => historyCardVariants({ selected })}
+      cardClass={(selected) => imageCardVariants({ selected })}
     >
       <div class="relative @container">
         <SelectionCheckbox
           id={item.id}
           {selectionState}
-          onSelectionChange={on?.selectionChange}
+          onSelectionChange={on.selectionChange}
         />
         <div class="block overflow-hidden">
           <ImagePlaceholder

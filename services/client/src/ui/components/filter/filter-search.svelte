@@ -4,7 +4,7 @@
 
   import { debounce } from '$lib/utils/time/debounce';
 
-  import { cn } from '@slink/utils/ui/index.js';
+  import { Key, cn } from '@slink/utils/ui/index.js';
 
   import {
     FilterSearchState,
@@ -132,18 +132,19 @@
     if (disabled) state.open = false;
   });
 
+  const isInteractiveTarget = (event: Event) =>
+    !!(event.target as HTMLElement).closest('button, [role="button"], input');
+
   const handleContainerClick = (event: MouseEvent) => {
     if (disabled) return;
-    const target = event.target as HTMLElement;
-    if (target.closest('button, [role="button"], input')) return;
+    if (isInteractiveTarget(event)) return;
     state.focus();
   };
 
   const handleContainerKeydown = (event: KeyboardEvent) => {
     if (disabled) return;
-    if (event.key !== 'Enter' && event.key !== ' ') return;
-    const target = event.target as HTMLElement;
-    if (target.tagName === 'INPUT') return;
+    if (event.key !== Key.Enter && event.key !== Key.Space) return;
+    if (isInteractiveTarget(event)) return;
     event.preventDefault();
     state.focus();
   };
@@ -163,10 +164,10 @@
     {disabled}
     {wrap}
     open={state.open}
-    role="combobox"
+    role={autocomplete ? 'combobox' : undefined}
     aria-expanded={autocomplete ? !disabled && state.open : undefined}
     aria-disabled={disabled}
-    tabindex={disabled ? -1 : 0}
+    tabindex={autocomplete ? (disabled ? -1 : 0) : undefined}
     onclick={handleContainerClick}
     onkeydown={handleContainerKeydown}
     class={cn(shellClass, className)}

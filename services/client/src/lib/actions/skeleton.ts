@@ -4,7 +4,7 @@ import type { AbstractPaginatedFeed } from '@slink/lib/state/core/AbstractPagina
 import type { SkeletonConfig as SkeletonTimingConfig } from '@slink/lib/state/core/SkeletonConfig.svelte';
 
 interface SkeletonConfig extends Partial<SkeletonTimingConfig> {
-  feed: AbstractPaginatedFeed<unknown>;
+  feed: AbstractPaginatedFeed<object>;
 }
 
 export const skeleton: Action<HTMLElement, SkeletonConfig> = (

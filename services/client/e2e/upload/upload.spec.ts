@@ -25,4 +25,18 @@ test.describe('Upload', () => {
     ).toBeVisible();
     await expect(page.locator('a[href^="/info/"]').first()).toBeVisible();
   });
+
+  test('Space opens the file chooser on the dropzone', async ({
+    uploadPage,
+    page,
+  }) => {
+    await uploadPage.goto();
+    await expect(uploadPage.heading).toBeVisible();
+    await page.waitForLoadState('networkidle');
+
+    const chooserPromise = page.waitForEvent('filechooser');
+    await uploadPage.dropzone.focus();
+    await page.keyboard.press('Space');
+    await chooserPromise;
+  });
 });

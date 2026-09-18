@@ -5,7 +5,7 @@
 
   import type { SelectionState } from '@slink/lib/state/SelectionState.svelte';
 
-  import { cn } from '@slink/utils/ui';
+  import { Key, cn } from '@slink/utils/ui';
 
   interface Props {
     id: string;
@@ -36,7 +36,7 @@
   };
 
   const handleKeydown = (e: KeyboardEvent) => {
-    if (e.key !== 'Enter') return;
+    if (e.key !== Key.Enter) return;
     select(e);
   };
 

@@ -1,13 +1,12 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import { page } from '$app/state';
-  import { usePublicImagesFeed } from '$lib/state/PublicImagesFeed.svelte.js';
   import {
-    createHashtagSearchQuery,
     createHashtagSearchUrl,
     splitTextIntoSegments,
   } from '$lib/utils/text/hashtag';
   import { className } from '$lib/utils/ui/className';
+
+  import { Key } from '@slink/utils/ui';
 
   import { type HashtagVariant, hashtagVariants } from './HashtagText.theme';
 
@@ -29,21 +28,14 @@
 
   const segments = $derived(splitTextIntoSegments(text));
   const hashtagClasses = $derived(hashtagVariants({ variant, size, rounded }));
-  const publicFeedState = usePublicImagesFeed();
 
   const handleHashtagClick = (hashtag: string): void => {
     onBeforeNavigate?.();
-    const searchQuery = createHashtagSearchQuery(hashtag);
-
-    if (page.route.id === '/explore') {
-      publicFeedState.search(searchQuery, 'hashtag');
-    } else {
-      goto(createHashtagSearchUrl(hashtag));
-    }
+    goto(createHashtagSearchUrl(hashtag));
   };
 
   const handleKeyDown = (event: KeyboardEvent, hashtag: string): void => {
-    if (event.key === 'Enter' || event.key === ' ') {
+    if (event.key === Key.Enter || event.key === Key.Space) {
       event.preventDefault();
       handleHashtagClick(hashtag);
     }

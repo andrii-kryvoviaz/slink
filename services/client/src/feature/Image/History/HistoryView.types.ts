@@ -7,7 +7,7 @@ import type { SelectionState } from '@slink/lib/state/SelectionState.svelte';
 export interface HistoryViewProps {
   items?: ImageListingItem[];
   selectionState?: SelectionState;
-  on?: {
+  on: {
     delete: (id: string) => void;
     collectionChange: (
       imageId: string,

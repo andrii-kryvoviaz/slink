@@ -2,15 +2,31 @@ import { type Locator, type Page, expect } from '@playwright/test';
 
 import { BasePage } from './BasePage';
 
+const EMPTY_STATE_HEADINGS = {
+  'no-results': 'No images found',
+  'nothing-shared': 'Nothing shared yet',
+} as const;
+
 export class ExplorePage extends BasePage {
   static readonly URL = '/explore';
 
-  readonly searchTrigger = this.page.getByRole('button', { name: 'Search' });
   readonly searchInput = this.page.getByPlaceholder(/Search/);
   readonly searchOptionsTrigger = this.page.getByRole('button', {
     name: 'Search options',
   });
+  readonly clearSearchButton = this.page.getByRole('button', {
+    name: 'Clear',
+    exact: true,
+  });
+  readonly emptyStateClearButton = this.page.getByRole('button', {
+    name: 'Clear search',
+    exact: true,
+  });
+  readonly strayViewModeListbox = this.page.locator(
+    'main [role="listbox"], main [aria-haspopup="listbox"]',
+  );
   readonly feedItems = this.page.locator('main [role="button"][tabindex="0"]');
+  readonly listRows = this.page.locator('main ul[role="list"] > li');
   readonly viewer = this.page.getByRole('dialog');
   readonly viewerClose = this.page.getByRole('button', {
     name: 'Close viewer',
@@ -32,18 +48,16 @@ export class ExplorePage extends BasePage {
     const input = this.searchInput.first();
     await input.waitFor({ state: 'visible' });
 
-    await expect(async () => {
-      const responsePromise = this.page.waitForResponse(
-        (response) =>
-          response.url().includes('/api/image') &&
-          response.url().includes(encodeURIComponent(term)),
-        { timeout: 1000 },
-      );
-      await input.click();
-      await input.fill(term);
-      await input.press('Enter');
-      await responsePromise;
-    }).toPass({ timeout: 15000 });
+    const responsePromise = this.page.waitForResponse(
+      (response) =>
+        response.url().includes('/api/image') &&
+        response.url().includes(encodeURIComponent(term)),
+      { timeout: 15000 },
+    );
+    await input.click();
+    await input.fill(term);
+    await input.press('Enter');
+    await responsePromise;
   }
 
   async selectSearchBy(option: 'User' | 'Description' | 'Hashtag') {
@@ -55,8 +69,20 @@ export class ExplorePage extends BasePage {
     await item.click();
   }
 
+  emptyState(kind: keyof typeof EMPTY_STATE_HEADINGS) {
+    return this.page.getByRole('heading', {
+      name: EMPTY_STATE_HEADINGS[kind],
+    });
+  }
+
   cardFor(imageId: string) {
     return this.feedItems.filter({
+      has: this.page.locator(`img[src*="${imageId}"]`),
+    });
+  }
+
+  rowFor(imageId: string) {
+    return this.listRows.filter({
       has: this.page.locator(`img[src*="${imageId}"]`),
     });
   }
@@ -91,7 +117,9 @@ export class ExplorePage extends BasePage {
     }).toPass({ timeout: 15000 });
   }
 
-  async pressArrow(direction: 'ArrowRight' | 'ArrowLeft') {
+  async pressArrow(
+    direction: 'ArrowRight' | 'ArrowLeft' | 'ArrowDown' | 'ArrowUp',
+  ) {
     const before = this.currentPost();
     await expect(async () => {
       await this.page.keyboard.press(direction);

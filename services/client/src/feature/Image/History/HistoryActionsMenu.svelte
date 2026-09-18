@@ -33,7 +33,7 @@
       collectionIds?: string[];
       tagIds?: string[];
     };
-    on?: {
+    on: {
       imageDelete?: (imageId: string) => void;
       collectionChange?: (
         imageId: string,
@@ -52,10 +52,10 @@
   const actions = createImageActionsState({
     getImage: () => image,
     onImageUpdate: (updated) => (image = updated),
-    onImageDelete: (id) => on?.imageDelete?.(id),
+    onImageDelete: (id) => on.imageDelete?.(id),
     onCollectionChange: (id, collections) =>
-      on?.collectionChange?.(id, collections),
-    onTagChange: (id, tags) => on?.tagChange?.(id, tags),
+      on.collectionChange?.(id, collections),
+    onTagChange: (id, tags) => on.tagChange?.(id, tags),
   });
 
   const openCollectionPicker = () => {
