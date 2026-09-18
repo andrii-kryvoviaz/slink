@@ -5,10 +5,9 @@
   import Icon from '@iconify/svelte';
   import { slide } from 'svelte/transition';
 
-  import type {
-    GroupedNotification,
-    NotificationItem,
-  } from '@slink/api/Response';
+  import type { NotificationItem } from '@slink/api/Response';
+
+  import type { NotificationGroup } from '@slink/utils/notification';
 
   import {
     caretVariants,
@@ -19,7 +18,7 @@
   } from './NotificationGroupItem.theme';
 
   interface Props {
-    group: GroupedNotification;
+    group: NotificationGroup;
     onItemClick: (item: NotificationItem) => void;
   }
 
@@ -77,8 +76,8 @@
     <div class="flex-1 min-w-0 space-y-1">
       <div class="flex items-baseline gap-2 flex-wrap">
         <span class="font-semibold text-foreground text-[15px] leading-tight">
-          {#if group.actor}
-            {group.actor.displayName}
+          {#if group.actors[0]}
+            {group.actors[0].displayName}
           {:else}
             Someone
           {/if}

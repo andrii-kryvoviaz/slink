@@ -1,9 +1,6 @@
 import { ApiClient } from '@slink/api';
 
-import type {
-  GroupedNotification,
-  NotificationItem,
-} from '@slink/api/Response';
+import type { NotificationItem } from '@slink/api/Response';
 
 import { AbstractPaginatedFeed } from '@slink/lib/state/core/AbstractPaginatedFeed.svelte';
 import type {
@@ -13,44 +10,14 @@ import type {
 } from '@slink/lib/state/core/AbstractPaginatedFeed.svelte';
 import { useState } from '@slink/lib/state/core/ContextAwareState';
 
+import {
+  type NotificationDayBucket,
+  NotificationDayBuckets,
+  type NotificationGroup,
+  NotificationGrouping,
+} from '@slink/utils/notification';
+
 const NOTIFICATION_FEED_KEY = Symbol('notificationFeed');
-
-function groupNotifications(items: NotificationItem[]): GroupedNotification[] {
-  const groups = new Map<string, GroupedNotification>();
-
-  for (const item of items) {
-    const key = `${item.type}:${item.reference.id}:${item.actor?.id ?? 'unknown'}`;
-
-    if (groups.has(key)) {
-      const group = groups.get(key)!;
-      group.items.push(item);
-      if (item.createdAt.timestamp > group.latestTimestamp) {
-        group.latestTimestamp = item.createdAt.timestamp;
-        group.latestComment = item.relatedComment;
-      }
-      if (!item.isRead) {
-        group.unreadCount++;
-        group.isRead = false;
-      }
-    } else {
-      groups.set(key, {
-        key,
-        type: item.type,
-        reference: item.reference,
-        actor: item.actor,
-        items: [item],
-        latestComment: item.relatedComment,
-        latestTimestamp: item.createdAt.timestamp,
-        unreadCount: item.isRead ? 0 : 1,
-        isRead: item.isRead,
-      });
-    }
-  }
-
-  return Array.from(groups.values()).sort(
-    (a, b) => b.latestTimestamp - a.latestTimestamp,
-  );
-}
 
 class NotificationFeed extends AbstractPaginatedFeed<NotificationItem> {
   private _unreadCount: number = $state(0);
@@ -87,8 +54,12 @@ class NotificationFeed extends AbstractPaginatedFeed<NotificationItem> {
     return this._unreadCount;
   }
 
-  public get groupedItems(): GroupedNotification[] {
-    return groupNotifications(this._items);
+  public get groupedItems(): NotificationGroup[] {
+    return NotificationGrouping.group(this._items);
+  }
+
+  public get dayBuckets(): NotificationDayBucket[] {
+    return NotificationDayBuckets.fromGroups(this.groupedItems);
   }
 
   public async loadUnreadCount(): Promise<void> {
@@ -98,11 +69,29 @@ class NotificationFeed extends AbstractPaginatedFeed<NotificationItem> {
 
   public async markAsRead(notificationId: string): Promise<void> {
     await ApiClient.notification.markAsRead(notificationId);
-    const index = this._items.findIndex((item) => item.id === notificationId);
-    if (index !== -1 && !this._items[index].isRead) {
-      this._items[index] = { ...this._items[index], isRead: true };
-      this._unreadCount = Math.max(0, this._unreadCount - 1);
+
+    const item = this.get(notificationId);
+    if (!item || item.isRead) {
+      return;
     }
+
+    this.update(notificationId, { isRead: true });
+    this._unreadCount = Math.max(0, this._unreadCount - 1);
+  }
+
+  public async markGroupAsRead(group: NotificationGroup): Promise<void> {
+    const ids = group.items
+      .filter((item) => !item.isRead)
+      .map((item) => item.id);
+
+    if (ids.length === 0) return;
+
+    await Promise.all(ids.map((id) => ApiClient.notification.markAsRead(id)));
+
+    for (const id of ids) {
+      this.update(id, { isRead: true });
+    }
+    this._unreadCount = Math.max(0, this._unreadCount - ids.length);
   }
 
   public async markAllAsRead(): Promise<void> {

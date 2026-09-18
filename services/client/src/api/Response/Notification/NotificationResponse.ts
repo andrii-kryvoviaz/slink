@@ -33,18 +33,6 @@ export interface NotificationItem {
   };
 }
 
-export interface GroupedNotification {
-  key: string;
-  type: NotificationType;
-  reference: NotificationReference;
-  actor: NotificationActor | null;
-  items: NotificationItem[];
-  latestComment: NotificationRelatedComment | null;
-  latestTimestamp: number;
-  unreadCount: number;
-  isRead: boolean;
-}
-
 export interface NotificationListingResponse {
   meta: ListingMetadata;
   data: NotificationItem[];
