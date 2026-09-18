@@ -5,8 +5,6 @@ export { themes, type ThemeDescriptor } from './themes.svelte';
 export * from './UploadPolicy';
 export {
   UserSettings,
-  supportedViewModes,
   type CookieSettings,
-  type ViewMode,
   type ShareFormat,
 } from './UserSettings.svelte';

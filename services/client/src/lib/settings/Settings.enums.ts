@@ -82,3 +82,28 @@ export const resolveMode = (value: unknown): Mode =>
 
 export const resolveLocale = (value: unknown): Locale =>
   resolveEnum(Locale, value, Locale.EN);
+
+export type ViewMode = 'grid' | 'list' | 'table' | 'tree';
+
+export type ViewModeSettingsKey =
+  'userAdmin' | 'history' | 'explore' | 'tags' | 'collections';
+
+export const supportedViewModes: Record<ViewModeSettingsKey, ViewMode[]> = {
+  userAdmin: ['grid', 'list'],
+  history: ['grid', 'list', 'table'],
+  explore: ['grid', 'list'],
+  tags: ['table', 'tree'],
+  collections: ['grid', 'table'],
+};
+
+export const defaultViewModes: Record<ViewModeSettingsKey, ViewMode> = {
+  userAdmin: 'list',
+  history: 'table',
+  explore: 'grid',
+  tags: 'table',
+  collections: 'grid',
+};
+
+export const isViewModeSettingsKey = (
+  key: SettingsKey,
+): key is ViewModeSettingsKey => key in supportedViewModes;

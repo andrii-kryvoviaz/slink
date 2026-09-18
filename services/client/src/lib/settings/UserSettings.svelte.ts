@@ -7,10 +7,14 @@ import {
   Mode,
   type SettingsKey,
   Theme,
+  type ViewMode,
+  defaultViewModes,
+  isViewModeSettingsKey,
   resolveLocale,
   resolveMode,
   resolveTheme,
   settingsKeys,
+  supportedViewModes,
 } from '@slink/lib/settings/Settings.enums';
 import { settingsPolicy } from '@slink/lib/settings/SettingsPolicy';
 
@@ -18,7 +22,6 @@ import { cookie } from '@slink/utils/http/cookie';
 import { deepMerge, isObject } from '@slink/utils/object/deepMerge';
 import { tryJson } from '@slink/utils/string/json';
 
-export type ViewMode = 'grid' | 'list' | 'table' | 'tree';
 export type ShareFormat = 'direct' | 'markdown' | 'bbcode' | 'html' | 'image';
 
 export type SidebarState = { expanded: boolean };
@@ -117,14 +120,6 @@ export const defaultSettings: Record<SettingsKey, unknown> = {
   banners: { hideExifKeptNotice: false },
   collections: { viewMode: 'grid', pageSize: 12, loadStrategy: 'load_more' },
 };
-
-export const supportedViewModes = {
-  userAdmin: ['grid', 'list'],
-  history: ['grid', 'list', 'table'],
-  explore: ['grid', 'list'],
-  tags: ['table', 'tree'],
-  collections: ['grid', 'table'],
-} satisfies Partial<Record<SettingsKey, ViewMode[]>>;
 
 export const USER_SETTINGS_BRAND = Symbol.for('slink:user-settings');
 
@@ -255,17 +250,17 @@ export class UserSettings {
     key: SettingsKey,
     merged: Record<string, unknown>,
   ): Record<string, unknown> {
-    const modes: ViewMode[] | undefined = (
-      supportedViewModes as Partial<Record<SettingsKey, ViewMode[]>>
-    )[key];
+    if (!isViewModeSettingsKey(key)) {
+      return merged;
+    }
 
-    if (!modes || modes.includes(merged.viewMode as ViewMode)) {
+    if (supportedViewModes[key].includes(merged.viewMode as ViewMode)) {
       return merged;
     }
 
     return {
       ...merged,
-      viewMode: (defaultSettings[key] as { viewMode: ViewMode }).viewMode,
+      viewMode: defaultViewModes[key],
     };
   }
 
