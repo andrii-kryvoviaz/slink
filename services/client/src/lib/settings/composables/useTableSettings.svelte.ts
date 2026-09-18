@@ -1,10 +1,10 @@
 import { page } from '$app/state';
 
+import { defaultSettings } from '@slink/lib/settings/Settings.enums';
 import type {
   TableKeySettings,
   TableState,
 } from '@slink/lib/settings/UserSettings.svelte';
-import { defaultSettings } from '@slink/lib/settings/UserSettings.svelte';
 
 type TableKey = 'users' | 'tags' | 'history' | 'collections' | 'shares';
 

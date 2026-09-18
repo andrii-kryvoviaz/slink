@@ -7,6 +7,7 @@ export type CookiePolicy<K extends string = string> = {
   keys: readonly K[];
   name(key: K): string;
   encode(value: unknown): string;
+  decode(key: K, raw: string | undefined): unknown;
   options: CookieOptions;
 };
 

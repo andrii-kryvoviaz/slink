@@ -13,20 +13,30 @@ class BrowserCookieProvider implements CookieProvider {
 
   get(key: string, defaultValue: string = ''): string {
     const match = document.cookie.match(new RegExp('(^| )' + key + '=([^;]+)'));
-    return match ? match[2] : defaultValue;
+
+    if (!match) {
+      return defaultValue;
+    }
+
+    try {
+      return decodeURIComponent(match[2]);
+    } catch {
+      return match[2];
+    }
   }
 
   async set(key: string, value: string, ttl?: number): Promise<void> {
     const secureFlag = this.requireSsl ? ';Secure' : '';
+    const encodedValue = encodeURIComponent(value);
 
     if (!ttl) {
-      document.cookie = `${key}=${value};path=/${secureFlag};SameSite=Strict`;
+      document.cookie = `${key}=${encodedValue};path=/${secureFlag};SameSite=Strict`;
       return;
     }
 
     const date = new Date();
     date.setTime(date.getTime() + ttl * 1000);
-    document.cookie = `${key}=${value};expires=${date.toUTCString()};path=/${secureFlag};SameSite=Strict`;
+    document.cookie = `${key}=${encodedValue};expires=${date.toUTCString()};path=/${secureFlag};SameSite=Strict`;
   }
 
   remove(key: string): void {

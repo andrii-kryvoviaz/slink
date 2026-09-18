@@ -3,24 +3,21 @@ import { MediaQuery } from 'svelte/reactivity';
 
 import { SortOrder } from '@slink/lib/enum/SortOrder';
 import {
-  Locale,
   Mode,
   type SettingsKey,
-  Theme,
   type ViewMode,
-  defaultViewModes,
-  isViewModeSettingsKey,
+  defaultSettings,
   resolveLocale,
   resolveMode,
   resolveTheme,
-  settingsKeys,
-  supportedViewModes,
 } from '@slink/lib/settings/Settings.enums';
-import { settingsPolicy } from '@slink/lib/settings/SettingsPolicy';
+import {
+  resolveSettingsCookies,
+  settingsPolicy,
+} from '@slink/lib/settings/SettingsPolicy';
 
 import { cookie } from '@slink/utils/http/cookie';
-import { deepMerge, isObject } from '@slink/utils/object/deepMerge';
-import { tryJson } from '@slink/utils/string/json';
+import { deepMerge } from '@slink/utils/object/deepMerge';
 
 export type ShareFormat = 'direct' | 'markdown' | 'bbcode' | 'html' | 'image';
 
@@ -53,73 +50,6 @@ export type UploadOptionsState = { expanded: boolean };
 export type BannersState = { hideExifKeptNotice: boolean };
 
 export type CookieSettings = { [K in SettingsKey]?: unknown };
-
-export const defaultSettings: Record<SettingsKey, unknown> = {
-  mode: Mode.SYSTEM,
-  theme: Theme.DEFAULT,
-  locale: Locale.EN,
-  sidebar: { expanded: true },
-  navigation: { expandedGroups: {} },
-  userAdmin: { viewMode: 'list' },
-  table: {
-    users: {
-      pageSize: 12,
-      columnVisibility: {
-        displayName: true,
-        username: true,
-        status: true,
-        roles: true,
-      },
-    },
-    tags: {
-      pageSize: 10,
-      columnVisibility: {
-        name: true,
-        imageCount: true,
-        children: true,
-      },
-    },
-    history: {
-      pageSize: 12,
-      columnVisibility: {
-        fileName: true,
-        mimeType: true,
-        dimensions: true,
-        size: true,
-        isPublic: true,
-        views: true,
-        createdAt: true,
-        tagsCollections: true,
-      },
-    },
-    collections: {
-      pageSize: 12,
-      columnVisibility: {
-        name: true,
-        itemCount: true,
-        description: true,
-        createdAt: true,
-      },
-    },
-    shares: {
-      pageSize: 10,
-      columnVisibility: {
-        shareable: true,
-        attributes: true,
-        expires: true,
-        createdAt: true,
-      },
-    },
-  },
-  history: { viewMode: 'table' },
-  explore: { viewMode: 'grid' },
-  tags: { viewMode: 'table' },
-  share: { format: 'direct' },
-  comment: { sortOrder: SortOrder.Asc },
-  uploadOptions: { expanded: false },
-  banners: { hideExifKeptNotice: false },
-  collections: { viewMode: 'grid', pageSize: 12, loadStrategy: 'load_more' },
-};
 
 export const USER_SETTINGS_BRAND = Symbol.for('slink:user-settings');
 
@@ -204,83 +134,7 @@ export class UserSettings {
     if (initial) {
       this._apply(initial as Record<string, unknown>);
     } else if (browser) {
-      this._apply(this._readCookies());
-    }
-  }
-
-  static resolveCookies(
-    reader: (name: string) => string | undefined,
-  ): CookieSettings {
-    return settingsKeys.reduce((acc, key) => {
-      acc[key] = UserSettings._resolveSetting(
-        key,
-        reader(settingsPolicy.name(key)),
-      );
-      return acc;
-    }, {} as CookieSettings);
-  }
-
-  private static _resolveSetting(
-    key: SettingsKey,
-    raw: string | undefined,
-  ): unknown {
-    const fallback = defaultSettings[key];
-
-    if (raw === undefined || raw === '') {
-      return fallback;
-    }
-
-    const parsed = tryJson(raw);
-
-    if (isObject(fallback) && isObject(parsed)) {
-      return UserSettings._withSupportedViewMode(
-        key,
-        deepMerge(fallback, parsed),
-      );
-    }
-
-    if (isObject(fallback)) {
-      return fallback;
-    }
-
-    return parsed;
-  }
-
-  private static _withSupportedViewMode(
-    key: SettingsKey,
-    merged: Record<string, unknown>,
-  ): Record<string, unknown> {
-    if (!isViewModeSettingsKey(key)) {
-      return merged;
-    }
-
-    if (supportedViewModes[key].includes(merged.viewMode as ViewMode)) {
-      return merged;
-    }
-
-    return {
-      ...merged,
-      viewMode: defaultViewModes[key],
-    };
-  }
-
-  private _readCookies(): Record<string, unknown> {
-    return UserSettings.resolveCookies((name) =>
-      this._readCookie(name),
-    ) as Record<string, unknown>;
-  }
-
-  private _readCookie(name: string): string | undefined {
-    const raw = cookie.get(name);
-
-    if (raw === undefined) {
-      return undefined;
-    }
-
-    try {
-      return decodeURIComponent(raw);
-    } catch {
-      return raw;
+      this._apply(resolveSettingsCookies((name) => cookie.get(name)));
     }
   }
 

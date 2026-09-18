@@ -1,3 +1,5 @@
+import { SortOrder } from '@slink/lib/enum/SortOrder';
+
 export enum Mode {
   LIGHT = 'light',
   DARK = 'dark',
@@ -107,3 +109,70 @@ export const defaultViewModes: Record<ViewModeSettingsKey, ViewMode> = {
 export const isViewModeSettingsKey = (
   key: SettingsKey,
 ): key is ViewModeSettingsKey => key in supportedViewModes;
+
+export const defaultSettings: Record<SettingsKey, unknown> = {
+  mode: Mode.SYSTEM,
+  theme: Theme.DEFAULT,
+  locale: Locale.EN,
+  sidebar: { expanded: true },
+  navigation: { expandedGroups: {} },
+  userAdmin: { viewMode: 'list' },
+  table: {
+    users: {
+      pageSize: 12,
+      columnVisibility: {
+        displayName: true,
+        username: true,
+        status: true,
+        roles: true,
+      },
+    },
+    tags: {
+      pageSize: 10,
+      columnVisibility: {
+        name: true,
+        imageCount: true,
+        children: true,
+      },
+    },
+    history: {
+      pageSize: 12,
+      columnVisibility: {
+        fileName: true,
+        mimeType: true,
+        dimensions: true,
+        size: true,
+        isPublic: true,
+        views: true,
+        createdAt: true,
+        tagsCollections: true,
+      },
+    },
+    collections: {
+      pageSize: 12,
+      columnVisibility: {
+        name: true,
+        itemCount: true,
+        description: true,
+        createdAt: true,
+      },
+    },
+    shares: {
+      pageSize: 10,
+      columnVisibility: {
+        shareable: true,
+        attributes: true,
+        expires: true,
+        createdAt: true,
+      },
+    },
+  },
+  history: { viewMode: 'table' },
+  explore: { viewMode: 'grid' },
+  tags: { viewMode: 'table' },
+  share: { format: 'direct' },
+  comment: { sortOrder: SortOrder.Asc },
+  uploadOptions: { expanded: false },
+  banners: { hideExifKeptNotice: false },
+  collections: { viewMode: 'grid', pageSize: 12, loadStrategy: 'load_more' },
+};

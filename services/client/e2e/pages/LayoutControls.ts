@@ -100,6 +100,6 @@ export class LayoutControls extends BasePage {
   async readSettingCookie(key: string) {
     const cookies = await this.page.context().cookies();
     const match = cookies.find((cookie) => cookie.name === `settings.${key}`);
-    return match?.value ?? null;
+    return match ? decodeURIComponent(match.value) : null;
   }
 }
