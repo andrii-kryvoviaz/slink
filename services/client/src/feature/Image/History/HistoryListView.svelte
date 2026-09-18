@@ -17,9 +17,9 @@
   import { PreviewUrl } from '@slink/utils/url';
 
   import ImageMetadata from '../ImageMetadata/ImageMetadata.svelte';
+  import { imageListRowVariants } from '../ImageView.theme';
   import HistoryItemActions from './HistoryItemActions.svelte';
   import { HistoryItemLabels } from './HistoryItemLabels';
-  import { historyListRowVariants } from './HistoryView.theme';
   import type { HistoryViewProps } from './HistoryView.types';
 
   let { items = [], selectionState, on }: HistoryViewProps = $props();
@@ -46,7 +46,7 @@
         onSelectionChange={on?.selectionChange}
         cardClass={(selected) =>
           cn(
-            historyListRowVariants({
+            imageListRowVariants({
               selected,
               selectionMode: isSelectionMode,
             }),

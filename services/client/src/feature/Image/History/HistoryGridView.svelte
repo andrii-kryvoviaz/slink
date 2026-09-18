@@ -18,11 +18,11 @@
   import { PreviewUrl } from '@slink/utils/url';
 
   import ImageMetadata from '../ImageMetadata/ImageMetadata.svelte';
+  import { imageCardVariants } from '../ImageView.theme';
   import { HistoryItemLabels } from './HistoryItemLabels';
   import {
     actionBarVisibilityVariants,
     createActionBarImage,
-    historyCardVariants,
   } from './HistoryView.theme';
   import type { HistoryViewProps } from './HistoryView.types';
 
@@ -56,7 +56,7 @@
       {selectionState}
       onSelectionChange={on?.selectionChange}
       flyDelay={Math.random() * 100}
-      cardClass={(selected) => historyCardVariants({ selected })}
+      cardClass={(selected) => imageCardVariants({ selected })}
     >
       <div class="relative @container">
         <SelectionCheckbox
