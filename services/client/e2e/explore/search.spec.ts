@@ -1,9 +1,28 @@
 import { expect, test } from '../fixtures/auth.fixture';
 import { captureListingRequests } from '../helpers/listingRequests';
+import type { ExplorePage } from '../pages/ExplorePage';
 
 const HOLD_WINDOW_MS = 5000;
 const ICONIFY_API =
   /^https:\/\/api\.(iconify\.design|simplesvg\.com|unisvg\.com)\//;
+
+async function expectClearHolds(explorePage: ExplorePage, listings: string[]) {
+  const clearedAt = Date.now();
+  await expect
+    .poll(
+      () => (Date.now() - clearedAt >= HOLD_WINDOW_MS ? 'elapsed' : 'waiting'),
+      { timeout: HOLD_WINDOW_MS + 2000 },
+    )
+    .toBe('elapsed');
+
+  await expect(explorePage.feedItems.first()).toBeVisible();
+  await expect(explorePage.searchInput).toHaveValue('');
+  expect(
+    listings.filter((url) => url.includes('searchTerm=')),
+    `late refiltering requests: ${JSON.stringify(listings)}`,
+  ).toHaveLength(0);
+  expect(listings, JSON.stringify(listings)).toHaveLength(1);
+}
 
 test.describe('Explore search', () => {
   test('filters the feed by the search term', async ({ explorePage, api }) => {
@@ -147,22 +166,70 @@ test.describe('Explore search', () => {
       })
       .toEqual([null, null]);
 
-    const clearedAt = Date.now();
-    await expect
-      .poll(
-        () =>
-          Date.now() - clearedAt >= HOLD_WINDOW_MS ? 'elapsed' : 'waiting',
-        { timeout: HOLD_WINDOW_MS + 2000 },
-      )
-      .toBe('elapsed');
+    await expectClearHolds(explorePage, listings);
+  });
 
+  test('the empty state clear button empties the field and the params and does not refilter', async ({
+    page,
+    explorePage,
+    api,
+  }) => {
+    await api.content.uploadImage({ isPublic: true });
+
+    await page.goto('/explore?search=zzznonexistentqueryzzz&searchBy=user');
+    await expect(explorePage.emptyState('no-results')).toBeVisible();
+
+    const listings = captureListingRequests(page);
+    await explorePage.emptyStateClearButton.click();
+
+    await expect.poll(() => listings.length).toBe(1);
     await expect(explorePage.feedItems.first()).toBeVisible();
     await expect(explorePage.searchInput).toHaveValue('');
-    expect(
-      listings.filter((url) => url.includes('searchTerm=')),
-      `late refiltering requests: ${JSON.stringify(listings)}`,
-    ).toHaveLength(0);
-    expect(listings, JSON.stringify(listings)).toHaveLength(1);
+    await expect(explorePage.emptyState('no-results')).toHaveCount(0);
+
+    await expect
+      .poll(() => {
+        const params = new URL(page.url()).searchParams;
+        return [params.get('search'), params.get('searchBy')];
+      })
+      .toEqual([null, null]);
+
+    await expectClearHolds(explorePage, listings);
+  });
+
+  test('clearing a typed search restores the feed and drops the params', async ({
+    page,
+    explorePage,
+    api,
+  }) => {
+    await api.content.uploadImage({ isPublic: true });
+
+    await explorePage.goto();
+    await explorePage.feedItems.first().waitFor({ state: 'visible' });
+
+    await explorePage.searchInput.fill('zzznonexistentqueryzzz');
+
+    await expect(async () => {
+      const params = new URL(page.url()).searchParams;
+      expect(params.get('search')).toBe('zzznonexistentqueryzzz');
+      expect(params.get('searchBy')).toBe('user');
+      await expect(explorePage.feedItems).toHaveCount(0, { timeout: 1000 });
+    }).toPass({ timeout: 15000 });
+
+    const listings = captureListingRequests(page);
+    await explorePage.clearSearchButton.click();
+
+    await expect.poll(() => listings.length).toBe(1);
+    expect(listings[0]).not.toContain('searchTerm=');
+    await expect(explorePage.feedItems.first()).toBeVisible();
+    await expect(explorePage.searchInput).toHaveValue('');
+
+    await expect
+      .poll(() => {
+        const params = new URL(page.url()).searchParams;
+        return [params.get('search'), params.get('searchBy')];
+      })
+      .toEqual([null, null]);
   });
 
   test('a typed term writes the search into the url', async ({

@@ -18,6 +18,10 @@ export class ExplorePage extends BasePage {
     name: 'Clear',
     exact: true,
   });
+  readonly emptyStateClearButton = this.page.getByRole('button', {
+    name: 'Clear search',
+    exact: true,
+  });
   readonly strayViewModeListbox = this.page.locator(
     'main [role="listbox"], main [aria-haspopup="listbox"]',
   );
