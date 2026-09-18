@@ -1,21 +1,45 @@
+import type { BrowserContext, Page } from '@playwright/test';
+
 import { expect, test } from '../fixtures/auth.fixture';
+import { unique } from '../helpers/accounts';
+import type { ApiClient } from '../helpers/api';
+import { provisionUser } from '../helpers/provisioning';
+import { signInContext } from '../helpers/session';
+import { LayoutControls } from '../pages/LayoutControls';
+import { PreferencesPage } from '../pages/PreferencesPage';
 
 const BOGUS_THEMES = ['solarized', '"><script>alert(1)</script>'];
 
 test.describe('Theme preference', () => {
-  test.beforeEach(async ({ api }) => {
+  let context: BrowserContext;
+  let page: Page;
+  let api: ApiClient;
+  let preferencesPage: PreferencesPage;
+  let layoutControls: LayoutControls;
+
+  test.beforeAll(async ({ browser }) => {
+    const account = unique('theme');
+    api = await provisionUser(account);
+
+    context = await signInContext(browser, account);
+    page = await context.newPage();
+    preferencesPage = new PreferencesPage(page);
+    layoutControls = new LayoutControls(page);
+  });
+
+  test.afterAll(async () => {
+    await context?.close();
+  });
+
+  test.beforeEach(async () => {
     await api.preferences.updatePreferences({ 'display.theme': 'default' });
   });
 
-  test.afterEach(async ({ api }) => {
+  test.afterEach(async () => {
     await api.preferences.updatePreferences({ 'display.theme': 'default' });
   });
 
-  test('picking a theme repaints the surface and persists across reload', async ({
-    page,
-    preferencesPage,
-    layoutControls,
-  }) => {
+  test('picking a theme repaints the surface and persists across reload', async () => {
     await preferencesPage.goto();
     await expect(preferencesPage.heading).toBeVisible();
 
@@ -43,10 +67,7 @@ test.describe('Theme preference', () => {
     );
   });
 
-  test('picking a theme repaints the surface in dark mode', async ({
-    preferencesPage,
-    layoutControls,
-  }) => {
+  test('picking a theme repaints the surface in dark mode', async () => {
     await preferencesPage.goto();
     await expect(preferencesPage.heading).toBeVisible();
 
@@ -67,10 +88,7 @@ test.describe('Theme preference', () => {
     expect(await layoutControls.isDark()).toBe(true);
   });
 
-  test('an unrecognised theme cookie falls back to the default theme', async ({
-    page,
-    layoutControls,
-  }) => {
+  test('an unrecognised theme cookie falls back to the default theme', async () => {
     for (const bogusTheme of BOGUS_THEMES) {
       await layoutControls.setThemeCookie(bogusTheme);
       expect(await layoutControls.readSettingCookie('theme')).toBe(bogusTheme);
