@@ -1,5 +1,6 @@
 import { type Page, expect } from '@playwright/test';
 
+import { resolveBaseURL } from '../helpers/session';
 import { BasePage } from './BasePage';
 
 export class LayoutControls extends BasePage {
@@ -91,7 +92,7 @@ export class LayoutControls extends BasePage {
       {
         name: `settings.${key}`,
         value,
-        url: process.env.E2E_BASE_URL ?? 'http://localhost:3100',
+        url: resolveBaseURL(),
       },
     ]);
   }

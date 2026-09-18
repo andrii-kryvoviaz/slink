@@ -1,6 +1,7 @@
 import type { Page } from '@playwright/test';
 
 import type { ApiClient } from './api';
+import { resolveBaseURL } from './session';
 
 const LOCALE_COOKIE = 'settings.locale';
 
@@ -18,8 +19,7 @@ export class Locale {
       {
         name: LOCALE_COOKIE,
         value: language,
-        domain: 'localhost',
-        path: '/',
+        url: resolveBaseURL(),
       },
     ]);
   }

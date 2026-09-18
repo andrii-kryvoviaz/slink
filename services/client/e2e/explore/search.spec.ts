@@ -1,20 +1,7 @@
-import type { Page } from '@playwright/test';
-
 import { expect, test } from '../fixtures/auth.fixture';
+import { captureListingRequests } from '../helpers/listingRequests';
 
 const ECHO_WINDOW_MS = 2500;
-
-function captureListingRequests(page: Page): string[] {
-  const urls: string[] = [];
-
-  page.on('request', (request) => {
-    if (request.method() !== 'GET') return;
-    if (new URL(request.url()).pathname !== '/api/images') return;
-    urls.push(request.url());
-  });
-
-  return urls;
-}
 
 test.describe('Explore search', () => {
   test('filters the feed by the search term', async ({ explorePage, api }) => {

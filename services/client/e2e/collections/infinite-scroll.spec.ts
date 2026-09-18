@@ -1,8 +1,8 @@
 import { expect, test } from '../fixtures/auth.fixture';
+import { resolveBaseURL } from '../helpers/session';
 
 const PAGE_SIZE = 2;
 const TOTAL_IMAGES = 5;
-const BASE_URL = process.env.E2E_BASE_URL ?? 'http://localhost:3100';
 
 test.describe('Collection paginated loading', () => {
   test.beforeEach(async ({ page }) => {
@@ -14,7 +14,7 @@ test.describe('Collection paginated loading', () => {
           pageSize: PAGE_SIZE,
           loadStrategy: 'load_more',
         }),
-        url: BASE_URL,
+        url: resolveBaseURL(),
       },
     ]);
   });

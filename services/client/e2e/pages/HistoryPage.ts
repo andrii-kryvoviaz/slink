@@ -1,6 +1,7 @@
 import { type Locator, type Page, expect } from '@playwright/test';
 
 import { BasePage } from './BasePage';
+import { LayoutControls } from './LayoutControls';
 
 export class HistoryPage extends BasePage {
   static readonly URL = '/history';
@@ -54,13 +55,10 @@ export class HistoryPage extends BasePage {
   }
 
   private async useView(viewMode: 'grid' | 'list' | 'table') {
-    await this.page.context().addCookies([
-      {
-        name: 'settings.history',
-        value: JSON.stringify({ viewMode }),
-        url: process.env.E2E_BASE_URL ?? 'http://localhost:3100',
-      },
-    ]);
+    await new LayoutControls(this.page).setSettingCookie(
+      'history',
+      JSON.stringify({ viewMode }),
+    );
   }
 
   async selectImages(count: number) {

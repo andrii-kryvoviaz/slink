@@ -1,4 +1,5 @@
 import { expect, test } from '../fixtures/auth.fixture';
+import { stripSsrComments } from '../helpers/ssr';
 import { HistoryPage } from '../pages/HistoryPage';
 
 const DEFAULT_PAGE_SIZE = 12;
@@ -9,7 +10,7 @@ function pageSizeButton(pageSize: number) {
 }
 
 function ssrPageSize(html: string): string | null {
-  const stripped = html.replace(/<!--[\s\S]*?-->/g, '');
+  const stripped = stripSsrComments(html);
   const match = stripped.match(/Limit\s*(\d+)/);
   return match ? match[1] : null;
 }
