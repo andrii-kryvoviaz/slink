@@ -14,7 +14,7 @@
   import Icon from '@iconify/svelte';
   import { fade, fly } from 'svelte/transition';
 
-  import { Key, cn } from '@slink/utils/ui';
+  import { Key } from '@slink/utils/ui';
 
   import { exploreListRowTheme } from '../ExploreView.theme';
   import type { ExploreViewProps } from '../ExploreView.types';
@@ -42,7 +42,7 @@
         role="button"
         tabindex="0"
       >
-        <div class={cn(theme.rail(), 'block overflow-hidden')}>
+        <div class={theme.listRail()}>
           <div class={theme.frame()}>
             <ImagePlaceholder
               src={image.url}

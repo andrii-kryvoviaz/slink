@@ -52,27 +52,16 @@ export const imageListRowVariants = cva(
         true: 'cursor-pointer',
         false: '',
       },
-      border: {
-        subtle: '',
-        token: '',
-      },
     },
     compoundVariants: [
       {
         selected: false,
-        border: 'subtle',
         class: 'border-foreground-subtle/25 hover:border-foreground-subtle/50',
-      },
-      {
-        selected: false,
-        border: 'token',
-        class: 'border-border hover:border-border-strong',
       },
     ],
     defaultVariants: {
       selected: false,
       selectionMode: false,
-      border: 'subtle',
     },
   },
 );

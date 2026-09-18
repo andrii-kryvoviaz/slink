@@ -21,7 +21,7 @@
 </script>
 
 {#if viewMode === 'list'}
-  <ul class="@container flex flex-col gap-3 {customClass}">
+  <ul class={rowTheme.list({ class: customClass })}>
     {#each Array(count) as _, index}
       <li
         class={rowTheme.skeletonRow()}
@@ -31,7 +31,7 @@
           <div class={rowTheme.frame()}>
             <Skeleton width="100%" height="100%" rounded="none" />
           </div>
-          <div class="absolute bottom-2 left-2">
+          <div class={rowTheme.skeletonBadge()}>
             <Skeleton
               width="70px"
               height="24px"
@@ -42,7 +42,7 @@
         </div>
 
         <div class={rowTheme.body()}>
-          <div class="flex items-center gap-2.5">
+          <div class={rowTheme.skeletonAvatar()}>
             <Skeleton width="24px" height="24px" rounded="full" />
             <Skeleton width="100px" height="14px" />
           </div>
@@ -51,7 +51,7 @@
 
           <Skeleton width="180px" height="12px" />
 
-          <div class="flex gap-2">
+          <div class={rowTheme.skeletonChips()}>
             <Skeleton width="50px" height="22px" rounded="full" />
             <Skeleton width="40px" height="22px" rounded="full" />
           </div>
