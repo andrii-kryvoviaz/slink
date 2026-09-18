@@ -72,6 +72,7 @@ test.describe('Explore search scope', () => {
     await api.content.uploadImage({ isPublic: true });
 
     await explorePage.goto();
+    await expect(explorePage.searchOptionsTrigger).toContainText('User');
 
     const requestPromise = page.waitForRequest(
       (request) =>
@@ -85,5 +86,34 @@ test.describe('Explore search scope', () => {
       .poll(() => new URL(page.url()).searchParams.get('searchBy'))
       .toBe('hashtag');
     expect(new URL(page.url()).searchParams.get('search')).toBe(HASHTAG_TERM);
+
+    await expect(explorePage.searchOptionsTrigger).toContainText('Hashtag');
+    await expect(page.getByRole('menuitem')).toHaveCount(0);
+    await expect(page.getByPlaceholder(/Search hashtags/)).toHaveValue(
+      HASHTAG_TERM,
+    );
+  });
+
+  test('the scope menu lists User, Description and Hashtag in that order', async ({
+    page,
+    explorePage,
+  }) => {
+    await explorePage.goto();
+
+    await expect(async () => {
+      await explorePage.searchOptionsTrigger.click();
+      await expect(page.getByRole('menuitem').first()).toBeVisible({
+        timeout: 1000,
+      });
+    }).toPass();
+
+    await expect(page.getByRole('menuitem')).toHaveText([
+      'Search by User',
+      'Search by Description',
+      'Search by Hashtag',
+    ]);
+
+    await page.keyboard.press('Escape');
+    await expect(page.getByRole('menuitem')).toHaveCount(0);
   });
 });

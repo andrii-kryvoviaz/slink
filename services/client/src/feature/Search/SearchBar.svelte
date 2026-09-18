@@ -1,9 +1,5 @@
 <script lang="ts">
   import {
-    searchBarDropdownChevron,
-    searchBarField,
-  } from '@slink/feature/Search/SearchBar.theme';
-  import {
     DropdownSimple,
     DropdownSimpleItem,
   } from '@slink/ui/components/dropdown-simple';
@@ -13,8 +9,10 @@
   import Icon from '@iconify/svelte';
 
   import { cn } from '@slink/utils/ui/index.js';
+  import type { SearchBy } from '@slink/utils/url';
+  import { searchByValues } from '@slink/utils/url';
 
-  type SearchBy = 'user' | 'description' | 'hashtag';
+  import { searchBarDropdownChevron, searchBarField } from './SearchBar.theme';
 
   interface SearchOption {
     label: string;
@@ -26,18 +24,11 @@
   interface Props {
     searchTerm?: string;
     searchBy?: SearchBy;
-    disabled?: boolean;
     onsearch?: (event: { searchTerm: string; searchBy: SearchBy }) => void;
     onclear?: () => void;
   }
 
-  let {
-    searchTerm = $bindable(''),
-    searchBy = $bindable('user'),
-    disabled = false,
-    onsearch,
-    onclear,
-  }: Props = $props();
+  let { searchTerm, searchBy, onsearch, onclear }: Props = $props();
 
   const searchOptions: Record<SearchBy, SearchOption> = {
     user: {
@@ -60,43 +51,44 @@
     },
   };
 
+  let term = $derived(searchTerm ?? '');
+  let scope = $derived(searchBy ?? 'user');
   let dropdownOpen = $state(false);
 
   $effect(() => {
-    if (hasHashtags(searchTerm) && searchBy !== 'hashtag') {
-      searchBy = 'hashtag';
+    if (hasHashtags(term) && scope !== 'hashtag') {
+      scope = 'hashtag';
     }
   });
 
   const fireSearch = () => {
-    const term = searchTerm.trim();
-    if (term) onsearch?.({ searchTerm: term, searchBy });
+    const trimmed = term.trim();
+    if (trimmed) onsearch?.({ searchTerm: trimmed, searchBy: scope });
   };
 
   const selectSearchBy = (value: SearchBy) => {
-    searchBy = value;
+    scope = value;
     dropdownOpen = false;
     fireSearch();
   };
 
   const clearTerm = () => {
-    if (searchTerm) {
-      searchTerm = '';
+    if (term) {
+      term = '';
     }
   };
 
-  const currentOption = $derived(searchOptions[searchBy]);
+  const currentOption = $derived(searchOptions[scope]);
 </script>
 
 <Filter.Search
-  bind:searchTerm
-  {disabled}
+  bind:searchTerm={term}
   placeholder={currentOption.placeholder}
   variant="neon"
   size="md"
   rounded="lg"
   debounceMs={1000}
-  onSearch={(term) => onsearch?.({ searchTerm: term, searchBy })}
+  onSearch={(value) => onsearch?.({ searchTerm: value, searchBy: scope })}
   onClear={onclear}
   class={searchBarField({ focused: dropdownOpen })}
   inputClass="px-2"
@@ -125,7 +117,6 @@
           )}
           type="button"
           aria-label="Search options"
-          {disabled}
         >
           <span class="hidden sm:block">{currentOption.short}</span>
           <Icon
@@ -135,10 +126,9 @@
         </button>
       {/snippet}
 
-      {#each Object.entries(searchOptions) as [value, option] (value)}
-        <DropdownSimpleItem
-          on={{ click: () => selectSearchBy(value as SearchBy) }}
-        >
+      {#each searchByValues as value (value)}
+        {@const option = searchOptions[value]}
+        <DropdownSimpleItem on={{ click: () => selectSearchBy(value) }}>
           {#snippet icon()}
             <Icon icon={option.icon} class="h-4 w-4" />
           {/snippet}
