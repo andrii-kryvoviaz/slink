@@ -1,5 +1,5 @@
-variable "NODE_VERSION"                  { default = "24.18.1" }
-variable "PHP_VERSION"                   { default = "8.5.9" }
+variable "NODE_VERSION"                  { default = "24.21.0" }
+variable "PHP_VERSION"                   { default = "8.5.10" }
 variable "FRANKENPHP_VERSION"            { default = "1.12.7" }
 variable "MERCURE_VERSION"               { default = "0.24.2" }
 variable "GRPC_VERSION"                  { default = "1.82.1" }
