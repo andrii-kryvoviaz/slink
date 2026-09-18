@@ -44,18 +44,16 @@ export class ExplorePage extends BasePage {
     const input = this.searchInput.first();
     await input.waitFor({ state: 'visible' });
 
-    await expect(async () => {
-      const responsePromise = this.page.waitForResponse(
-        (response) =>
-          response.url().includes('/api/image') &&
-          response.url().includes(encodeURIComponent(term)),
-        { timeout: 1000 },
-      );
-      await input.click();
-      await input.fill(term);
-      await input.press('Enter');
-      await responsePromise;
-    }).toPass({ timeout: 15000 });
+    const responsePromise = this.page.waitForResponse(
+      (response) =>
+        response.url().includes('/api/image') &&
+        response.url().includes(encodeURIComponent(term)),
+      { timeout: 15000 },
+    );
+    await input.click();
+    await input.fill(term);
+    await input.press('Enter');
+    await responsePromise;
   }
 
   async selectSearchBy(option: 'User' | 'Description' | 'Hashtag') {
