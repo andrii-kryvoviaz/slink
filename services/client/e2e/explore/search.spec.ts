@@ -2,6 +2,8 @@ import { expect, test } from '../fixtures/auth.fixture';
 import { captureListingRequests } from '../helpers/listingRequests';
 
 const HOLD_WINDOW_MS = 5000;
+const ICONIFY_API =
+  /^https:\/\/api\.(iconify\.design|simplesvg\.com|unisvg\.com)\//;
 
 test.describe('Explore search', () => {
   test('filters the feed by the search term', async ({ explorePage, api }) => {
@@ -183,5 +185,40 @@ test.describe('Explore search', () => {
 
     await expect(explorePage.feedItems).toHaveCount(0);
     await expect(explorePage.searchInput).toBeFocused();
+  });
+
+  test('a term typed before the page hydrates survives and submits', async ({
+    page,
+    explorePage,
+  }) => {
+    const term = 'zzznonexistentqueryzzz';
+    const hydration = Promise.withResolvers<void>();
+    let held = 0;
+    await page.route(ICONIFY_API, async (route) => {
+      held += 1;
+      await hydration.promise;
+      await route.continue();
+    });
+
+    const listings = captureListingRequests(page);
+    await explorePage.goto();
+    await expect.poll(() => held).toBeGreaterThan(0);
+
+    await explorePage.searchInput.fill(term);
+    await explorePage.searchInput.press('Enter');
+
+    hydration.resolve();
+
+    await expect
+      .poll(() => listings.some((url) => url.includes(`searchTerm=${term}`)))
+      .toBe(true);
+    await expect(explorePage.searchInput).toHaveValue(term);
+
+    await expect
+      .poll(() => {
+        const params = new URL(page.url()).searchParams;
+        return [params.get('search'), params.get('searchBy')];
+      })
+      .toEqual([term, 'user']);
   });
 });
