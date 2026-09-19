@@ -60,6 +60,41 @@ final class GetNotificationsParentCommentTest extends HttpTestCase {
   }
 
   #[Test]
+  public function quotedParentMatchesTheCommentsApiDisplayContent(): void {
+    $this->seedActors();
+    $parentId = $this->postComment($this->ownerToken, $this->imageId, 'owner original words');
+    $replyId = $this->postComment($this->nonOwnerToken, $this->imageId, 'reply text', $parentId);
+
+    $item = $this->fetchItem('comment_reply', $replyId);
+
+    self::assertSame(
+      $this->fetchCommentsApiParentContent($replyId),
+      $item['relatedComment']['referencedComment']['content'],
+    );
+  }
+
+  private function fetchCommentsApiParentContent(string $replyId): string {
+    $status = $this->apiRequest('GET', \sprintf('/api/image/%s/comments?limit=100', $this->imageId), $this->ownerToken);
+    self::assertSame(200, $status, 'Fetch comments failed: ' . (string) $this->client->getResponse()->getContent());
+
+    /** @var array{data: list<array<string, mixed>>} $payload */
+    $payload = $this->responsePayload();
+
+    foreach ($payload['data'] as $comment) {
+      if (($comment['id'] ?? null) !== $replyId) {
+        continue;
+      }
+
+      /** @var array{displayContent: string} $parent */
+      $parent = $comment['referencedComment'];
+
+      return $parent['displayContent'];
+    }
+
+    self::fail(\sprintf('No comment %s in the comments API.', $replyId));
+  }
+
+  #[Test]
   public function plainCommentNotificationHasNoParent(): void {
     $this->seedActors();
     $commentId = $this->postComment($this->nonOwnerToken, $this->imageId, 'plain words');

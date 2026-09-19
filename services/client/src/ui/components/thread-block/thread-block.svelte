@@ -10,6 +10,7 @@
   import { ThreadReveal } from './thread-reveal.svelte';
 
   interface Props {
+    header?: Snippet;
     latest?: T;
     earlier: T[];
     row: Snippet<[T, { latest: boolean }]>;
@@ -20,6 +21,7 @@
   }
 
   let {
+    header,
     latest,
     earlier,
     row,
@@ -68,6 +70,9 @@
   onOpenChangeComplete={handleOpenChangeComplete}
   class={cn(theme.root(), className)}
 >
+  {#if header}
+    {@render header()}
+  {/if}
   {#if latest !== undefined}
     <div class={theme.row()}>
       {@render row(latest, { latest: true })}

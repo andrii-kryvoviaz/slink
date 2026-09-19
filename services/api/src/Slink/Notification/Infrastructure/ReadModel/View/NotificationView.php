@@ -167,7 +167,7 @@ class NotificationView extends AbstractView {
       return null;
     }
 
-    return ['id' => $parent->getId(), 'content' => $parent->getContent()];
+    return ['id' => $parent->getId(), 'content' => $parent->getDisplayContent()];
   }
 
   public function getActor(): ?UserView {

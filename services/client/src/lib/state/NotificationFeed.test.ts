@@ -13,6 +13,10 @@ vi.mock('@slink/lib/state/core/ContextAwareState', () => ({
 vi.mock('@slink/api', () => ({
   ApiClient: {
     notification: {
+      getNotifications: vi.fn(async (page: number) => ({
+        data: [],
+        meta: { page, size: 50, total: 120 },
+      })),
       markAsRead: vi.fn(async () => undefined),
       markAllAsRead: vi.fn(async () => undefined),
       getUnreadCount: vi.fn(async () => ({ count: 7 })),
@@ -20,6 +24,7 @@ vi.mock('@slink/api', () => ({
   },
 }));
 
+const getNotifications = vi.mocked(ApiClient.notification.getNotifications);
 const markAsRead = vi.mocked(ApiClient.notification.markAsRead);
 const markAllAsRead = vi.mocked(ApiClient.notification.markAllAsRead);
 const getUnreadCount = vi.mocked(ApiClient.notification.getUnreadCount);
@@ -394,5 +399,65 @@ describe('NotificationFeed.markAllAsRead', () => {
 
     expect(feed.items).toEqual(before);
     expect(feed.unreadCount).toBe(3);
+  });
+});
+
+describe('NotificationFeed filters', () => {
+  beforeEach(() => {
+    getNotifications.mockClear();
+    markAllAsRead.mockReset();
+    markAllAsRead.mockResolvedValue(undefined);
+  });
+
+  it('defaults to All and fetches with an empty query', async () => {
+    const feed = useNotificationFeed();
+
+    await feed.load({ page: 1 });
+
+    expect(feed.activeFilter).toBe('all');
+    expect(feed.isFiltered).toBe(false);
+    expect(getNotifications).toHaveBeenCalledWith(1, 50, {});
+  });
+
+  it('resets the items and fetches page 1 with the filter query', async () => {
+    const feed = await seedFeed();
+
+    await feed.applyFilter('comment');
+
+    expect(feed.activeFilter).toBe('comment');
+    expect(feed.isFiltered).toBe(true);
+    expect(feed.items).toEqual([]);
+    expect(getNotifications).toHaveBeenCalledTimes(1);
+    expect(getNotifications).toHaveBeenCalledWith(1, 50, { type: 'comment' });
+  });
+
+  it('fetches once when the same filter is applied twice', async () => {
+    const feed = useNotificationFeed();
+
+    await feed.applyFilter('comment');
+    await feed.applyFilter('comment');
+
+    expect(getNotifications).toHaveBeenCalledTimes(1);
+  });
+
+  it('keeps the filter query when loading the next page', async () => {
+    const feed = useNotificationFeed();
+    await feed.applyFilter('unread');
+
+    await feed.nextPage();
+
+    expect(getNotifications).toHaveBeenLastCalledWith(2, 50, { unread: true });
+  });
+
+  it('marks everything read through the unfiltered endpoint', async () => {
+    const feed = await seedMarkAsReadFeed();
+    await feed.applyFilter('unread');
+    feed.addItem(item('n-filtered', 'img-4', 400));
+
+    await feed.markAllAsRead();
+
+    expect(markAllAsRead).toHaveBeenCalledWith();
+    expect(feed.unreadCount).toBe(0);
+    expect(feed.items.map((entry) => entry.isRead)).toEqual([true]);
   });
 });

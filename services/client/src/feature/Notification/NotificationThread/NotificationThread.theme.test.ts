@@ -66,4 +66,19 @@ describe('notificationThread', () => {
   it('hides a repeated author name visually only', () => {
     expect(tokens(notificationThread().hiddenAuthor())).toEqual(['sr-only']);
   });
+
+  it('renders the quoted parent as one muted, unweighted line', () => {
+    const quote = tokens(notificationThread().quote());
+
+    expect(quote).toEqual(
+      expect.arrayContaining(['truncate', 'text-xs', 'text-foreground-muted']),
+    );
+    expect(quote).not.toContain('font-medium');
+  });
+
+  it('leaves the quote inset to the thread rail', () => {
+    const quote = tokens(notificationThread().quote());
+
+    expect(quote.filter((token) => /(^|:)p[ltrbxy]?-/.test(token))).toEqual([]);
+  });
 });

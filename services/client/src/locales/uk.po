@@ -5234,3 +5234,27 @@ msgstr[0] "Показати ще #"
 msgstr[1] "Показати ще #"
 msgstr[2] "Показати ще #"
 msgstr[3] "Показати ще #"
+
+#: src/lib/utils/notification/NotificationFilters.language.ts
+msgid "All"
+msgstr "Усі"
+
+#: src/lib/utils/notification/NotificationFilters.language.ts
+msgid "Unread"
+msgstr "Непрочитані"
+
+#: src/lib/utils/notification/NotificationFilters.language.ts
+msgid "Replies"
+msgstr "Відповіді"
+
+#: src/routes/notifications/+page.svelte
+msgid "Nothing here"
+msgstr "Тут нічого немає"
+
+#: src/feature/Notification/NotificationFilterBar/NotificationFilterBar.svelte
+msgid "Filter notifications"
+msgstr "Фільтрувати сповіщення"
+
+#: src/feature/Notification/NotificationThread/NotificationThread.svelte
+msgid "your comment:"
+msgstr "ваш коментар:"

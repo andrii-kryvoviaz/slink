@@ -3,6 +3,11 @@ import type { ListingMetadata } from '@slink/api/Response/Common/ListingMetadata
 export type NotificationType =
   'comment' | 'comment_reply' | 'added_to_bookmarks';
 
+export interface NotificationListQuery {
+  type?: NotificationType;
+  unread?: boolean;
+}
+
 export interface NotificationActor {
   id: string;
   displayName: string;
@@ -13,10 +18,16 @@ export interface NotificationReference {
   fileName: string;
 }
 
+export interface NotificationReferencedComment {
+  id: string;
+  content: string;
+}
+
 export interface NotificationRelatedComment {
   id: string;
   content: string;
   isDeleted: boolean;
+  referencedComment: NotificationReferencedComment | null;
 }
 
 export interface NotificationItem {

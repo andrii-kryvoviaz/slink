@@ -2,6 +2,7 @@ import type {
   NotificationActor,
   NotificationItem,
   NotificationReference,
+  NotificationReferencedComment,
   NotificationRelatedComment,
   NotificationType,
 } from '@slink/api/Response';
@@ -23,6 +24,7 @@ export interface NotificationGroup {
   items: NotificationItem[];
   latestTimestamp: number;
   latestComment: NotificationRelatedComment | null;
+  quotedComment: NotificationReferencedComment | null;
   unreadCount: number;
   isRead: boolean;
 }
@@ -71,9 +73,27 @@ export class NotificationGrouping {
       items,
       latestTimestamp: newest.createdAt.timestamp,
       latestComment: newest.relatedComment,
+      quotedComment: this._quotedComment(newest.type, items),
       unreadCount,
       isRead: unreadCount === 0,
     };
+  }
+
+  private static _quotedComment(
+    type: NotificationType,
+    items: NotificationItem[],
+  ): NotificationReferencedComment | null {
+    if (type !== 'comment_reply') return null;
+
+    const parent = items[0].relatedComment?.referencedComment ?? null;
+    if (parent === null) return null;
+
+    const shared = items.every(
+      (item) => item.relatedComment?.referencedComment?.id === parent.id,
+    );
+    if (!shared) return null;
+
+    return parent;
   }
 
   private static _actorItems(

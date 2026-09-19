@@ -5256,3 +5256,27 @@ msgstr[0] "Pokaż jeszcze #"
 msgstr[1] "Pokaż jeszcze #"
 msgstr[2] "Pokaż jeszcze #"
 msgstr[3] "Pokaż jeszcze #"
+
+#: src/lib/utils/notification/NotificationFilters.language.ts
+msgid "All"
+msgstr "Wszystkie"
+
+#: src/lib/utils/notification/NotificationFilters.language.ts
+msgid "Unread"
+msgstr "Nieprzeczytane"
+
+#: src/lib/utils/notification/NotificationFilters.language.ts
+msgid "Replies"
+msgstr "Odpowiedzi"
+
+#: src/routes/notifications/+page.svelte
+msgid "Nothing here"
+msgstr "Nic tu nie ma"
+
+#: src/feature/Notification/NotificationFilterBar/NotificationFilterBar.svelte
+msgid "Filter notifications"
+msgstr "Filtruj powiadomienia"
+
+#: src/feature/Notification/NotificationThread/NotificationThread.svelte
+msgid "your comment:"
+msgstr "Twój komentarz:"

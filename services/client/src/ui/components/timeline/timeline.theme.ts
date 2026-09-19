@@ -1,4 +1,4 @@
-import { type VariantProps, tv } from 'tailwind-variants';
+import { tv } from 'tailwind-variants';
 
 export const timeline = tv({
   slots: {
@@ -7,5 +7,3 @@ export const timeline = tv({
     label: 'pb-2 text-xs text-foreground-muted',
   },
 });
-
-export type TimelineVariants = VariantProps<typeof timeline>;

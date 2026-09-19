@@ -5172,3 +5172,27 @@ msgstr "显示全部 {0} 个"
 msgid "Show # more"
 msgid_plural "Show # more"
 msgstr[0] "再显示 # 条"
+
+#: src/lib/utils/notification/NotificationFilters.language.ts
+msgid "All"
+msgstr "全部"
+
+#: src/lib/utils/notification/NotificationFilters.language.ts
+msgid "Unread"
+msgstr "未读"
+
+#: src/lib/utils/notification/NotificationFilters.language.ts
+msgid "Replies"
+msgstr "回复"
+
+#: src/routes/notifications/+page.svelte
+msgid "Nothing here"
+msgstr "这里什么都没有"
+
+#: src/feature/Notification/NotificationFilterBar/NotificationFilterBar.svelte
+msgid "Filter notifications"
+msgstr "筛选通知"
+
+#: src/feature/Notification/NotificationThread/NotificationThread.svelte
+msgid "your comment:"
+msgstr "你的评论："

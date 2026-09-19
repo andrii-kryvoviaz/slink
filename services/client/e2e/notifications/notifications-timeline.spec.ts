@@ -1,7 +1,9 @@
 import type { Browser, BrowserContext, Locator, Page } from '@playwright/test';
 
 import { expect, test } from '../fixtures/auth.fixture';
+import { Locale } from '../helpers/Locale';
 import { type Account, unique } from '../helpers/accounts';
+import { ApiClient } from '../helpers/api';
 import { provisionUser } from '../helpers/provisioning';
 import { signInContext } from '../helpers/session';
 import { ExplorePage } from '../pages/ExplorePage';
@@ -397,6 +399,9 @@ test.describe('Notifications timeline', () => {
         reader.username,
       );
       await expect(row).toHaveCount(1);
+      await expect
+        .poll(() => row.textContent())
+        .toMatch(new RegExp(`${reader.username}\\s`));
 
       const latestText = row.getByText(/^(first|second) single$/);
       await expect(latestText).toBeVisible();
@@ -631,6 +636,365 @@ test.describe('Notifications timeline', () => {
         .boundingBox();
       expect(nameBox).not.toBeNull();
       expect(nameBox!.width).toBeGreaterThan(1);
+    });
+  });
+});
+
+const NOW = /^now$/;
+const MINUTES = /^\d{1,2}m$/;
+const HOURS = /^\d{1,2}h$/;
+const CLOCK = /^\d{1,2}:\d{2}/;
+const FULL_DATE_TIME = /\d{4}.*\d:\d{2}/;
+const MINUTE_MS = 60_000;
+const DAY_MS = 24 * 60 * MINUTE_MS;
+const MORNING_HOUR = 6;
+
+async function latestCreatedAt(page: Page): Promise<Date> {
+  const times = page.getByRole('main').locator('time');
+  await expect(times.first()).toBeAttached();
+  const stamps = await times.evaluateAll((elements) =>
+    elements.map((element) => Date.parse(element.getAttribute('datetime')!)),
+  );
+
+  return new Date(Math.max(...stamps));
+}
+
+async function pinClock(
+  notificationsPage: NotificationsPage,
+  page: Page,
+  pin: (createdAt: Date) => Date,
+) {
+  const createdAt = await latestCreatedAt(page);
+  const cdp = await page.context().newCDPSession(page);
+  await cdp.send('Emulation.setTimezoneOverride', {
+    timezoneId: morningTimeZone(createdAt),
+  });
+  await page.clock.install({ time: pin(createdAt) });
+  await notificationsPage.goto();
+  await page.mouse.move(0, 0);
+}
+
+function sameMoment(createdAt: Date): Date {
+  return createdAt;
+}
+
+function morningTimeZone(createdAt: Date): string {
+  const offset = (MORNING_HOUR - createdAt.getUTCHours() + 24) % 24;
+
+  if (offset > 14) {
+    return `Etc/GMT+${24 - offset}`;
+  }
+
+  return `Etc/GMT-${offset}`;
+}
+
+function daysLater(days: number): (createdAt: Date) => Date {
+  return (createdAt) => new Date(createdAt.getTime() + days * DAY_MS);
+}
+
+test.describe('Notifications relative times', () => {
+  test('shows today times relative to now and advances them every minute', async ({
+    browser,
+  }) => {
+    const { owner } = await seedTimeline();
+
+    await withTimelinePage(browser, owner, async (notificationsPage, page) => {
+      await pinClock(notificationsPage, page, sameMoment);
+
+      let navigations = 0;
+      page.on('framenavigated', () => navigations++);
+
+      const time = notificationsPage.visibleTimes(
+        notificationsPage.entryByText(/\bcommented\b/),
+      );
+
+      await expect(time).toHaveText(NOW);
+      await expect(time).toHaveAttribute('datetime', /^\d{4}-\d{2}-\d{2}T/);
+      await expect(time).toHaveAttribute('title', FULL_DATE_TIME);
+
+      await page.clock.runFor(MINUTE_MS);
+      await expect(time).toHaveText('1m');
+
+      await page.clock.runFor(34 * MINUTE_MS);
+      await expect(time).toHaveText('35m');
+
+      await page.clock.runFor(95 * MINUTE_MS);
+      await expect(time).toHaveText('2h');
+      await expect(time).toHaveAttribute('title', FULL_DATE_TIME);
+
+      expect(navigations).toBe(0);
+    });
+  });
+
+  test('advances thread row times with the entry time', async ({ browser }) => {
+    const { owner } = await seedTimeline();
+
+    await withTimelinePage(browser, owner, async (notificationsPage, page) => {
+      await pinClock(notificationsPage, page, sameMoment);
+
+      const replyEntry = notificationsPage.entryByText(
+        'replied to your comment',
+      );
+      await notificationsPage.threadToggle(replyEntry).click();
+      await page.mouse.move(0, 0);
+
+      const times = notificationsPage.visibleTimes(replyEntry);
+      await expect(times).toHaveText([NOW, NOW]);
+
+      await page.clock.runFor(35 * MINUTE_MS);
+      await expect(times).toHaveText([MINUTES, MINUTES]);
+
+      for (const time of await times.all()) {
+        await expect(time).toHaveAttribute('title', FULL_DATE_TIME);
+      }
+    });
+  });
+
+  test('keeps the clock time for yesterday', async ({ browser }) => {
+    const { owner } = await seedTimeline();
+
+    await withTimelinePage(browser, owner, async (notificationsPage, page) => {
+      await pinClock(notificationsPage, page, daysLater(1));
+
+      const time = notificationsPage.visibleTimes(
+        notificationsPage.entryByText(/\bcommented\b/),
+      );
+
+      await expect(time).toHaveText(CLOCK);
+      await expect(time).toHaveAttribute('title', FULL_DATE_TIME);
+    });
+  });
+
+  test('keeps the short date for older days', async ({ browser }) => {
+    const { owner } = await seedTimeline();
+
+    await withTimelinePage(browser, owner, async (notificationsPage, page) => {
+      await pinClock(notificationsPage, page, daysLater(8));
+
+      const time = notificationsPage.visibleTimes(
+        notificationsPage.entryByText(/\bcommented\b/),
+      );
+
+      await expect(time).toHaveText(/\S/);
+      for (const format of [NOW, MINUTES, HOURS, CLOCK]) {
+        await expect(time).not.toHaveText(format);
+      }
+      await expect(time).toHaveAttribute('title', FULL_DATE_TIME);
+    });
+  });
+
+  test('localises today times for uk', async ({ browser }) => {
+    const { owner } = await seedTimeline();
+    const ownerApi = await ApiClient.createForUser(
+      owner.username,
+      owner.password,
+    );
+
+    await withTimelinePage(browser, owner, async (notificationsPage, page) => {
+      await new Locale(page, ownerApi).set('uk');
+      await pinClock(notificationsPage, page, sameMoment);
+
+      const time = page.getByRole('main').locator('time:visible').first();
+
+      await expect(time).toHaveText(/\S/);
+      await expect(time).not.toHaveText(NOW);
+      await expect(time).not.toHaveText(CLOCK);
+
+      await page.clock.runFor(35 * MINUTE_MS);
+      await expect(time).toHaveText(/35/);
+      await expect(time).not.toHaveText('35m');
+      await expect(time).toHaveAttribute('title', FULL_DATE_TIME);
+    });
+  });
+
+  test('advances bookmark actor row times with the entry time', async ({
+    browser,
+  }) => {
+    const { owner } = await seedTimeline();
+
+    await withTimelinePage(browser, owner, async (notificationsPage, page) => {
+      await pinClock(notificationsPage, page, sameMoment);
+
+      let navigations = 0;
+      page.on('framenavigated', () => navigations++);
+
+      const bookmarkEntry = notificationsPage.entryByText(/bookmarked/);
+      await notificationsPage.showAllButton(bookmarkEntry).click();
+      await page.mouse.move(0, 0);
+
+      const times = notificationsPage.visibleTimes(bookmarkEntry);
+      await expect(times).toHaveText([NOW, NOW, NOW, NOW]);
+      await expect(times).not.toHaveText([CLOCK, CLOCK, CLOCK, CLOCK]);
+
+      await page.clock.runFor(35 * MINUTE_MS);
+      await expect(times).toHaveText(['35m', '35m', '35m', '35m']);
+
+      for (const time of await times.all()) {
+        await expect(time).toHaveText(MINUTES);
+        await expect(time).toHaveAttribute('title', FULL_DATE_TIME);
+        await expect(time).toHaveAttribute('datetime', /^\d{4}-\d{2}-\d{2}T/);
+      }
+
+      expect(navigations).toBe(0);
+    });
+  });
+});
+
+const QUOTE_LABEL = /your comment:/;
+
+interface QuoteSeed {
+  owner: Account;
+  ownerApi: ApiClient;
+  imageId: string;
+  parentId: string;
+  parent: string;
+}
+
+async function seedQuotedReply(): Promise<QuoteSeed> {
+  const owner = unique('notif-owner');
+  const reader = unique('notif-reader');
+  const ownerApi = await provisionUser(owner);
+  const readerApi = await provisionUser(reader);
+
+  const imageId = await ownerApi.content.uploadImage({ isPublic: true });
+  const parent = `owner parent ${Date.now()} with enough words to need truncation at phone width`;
+  const parentId = await ownerApi.content.createComment(imageId, parent);
+  await readerApi.content.createReply(imageId, parentId, 'reader reply');
+
+  return { owner, ownerApi, imageId, parentId, parent };
+}
+
+function quoteLine(entry: Locator): Locator {
+  return entry.getByText(QUOTE_LABEL).locator('..');
+}
+
+test.describe('Notifications parent comment quote', () => {
+  test('quotes the parent comment above a reply thread', async ({
+    browser,
+  }) => {
+    const { owner, imageId, parentId, parent } = await seedQuotedReply();
+    const secondReader = unique('notif-second');
+    const commenter = unique('notif-commenter');
+    const secondReaderApi = await provisionUser(secondReader);
+    const commenterApi = await provisionUser(commenter);
+    await secondReaderApi.content.createReply(
+      imageId,
+      parentId,
+      'second reply',
+    );
+    await commenterApi.content.createComment(imageId, 'a plain comment');
+
+    await withTimelinePage(browser, owner, async (notificationsPage, page) => {
+      const replyEntry = notificationsPage.entryByText(
+        'replied to your comment',
+      );
+      const quote = quoteLine(replyEntry);
+
+      await expect(replyEntry).toHaveCount(1);
+      await expect(notificationsPage.entrySentence(replyEntry)).toHaveCount(1);
+      await expect(replyEntry.getByText(QUOTE_LABEL)).toHaveCount(1);
+      await expect(quote).toBeVisible();
+      await expect(quote).toContainText('↳');
+      await expect(quote).toContainText(parent);
+      await expect(quote).toHaveAttribute('title', parent);
+      await expect(quote.locator('[data-hashtag], button, a')).toHaveCount(0);
+
+      const quoteBox = await quote.boundingBox();
+      const rowBox = await notificationsPage
+        .threadRow(replyEntry, secondReader.username)
+        .boundingBox();
+      expect(quoteBox).not.toBeNull();
+      expect(rowBox).not.toBeNull();
+      expect(Math.abs(quoteBox!.x - rowBox!.x)).toBeLessThanOrEqual(1);
+
+      await notificationsPage.threadToggle(replyEntry).click();
+      await expect(replyEntry.getByText(QUOTE_LABEL)).toHaveCount(1);
+
+      const commentEntry = notificationsPage.entryByText(/\bcommented\b/);
+      await expect(commentEntry).toHaveCount(1);
+      await expect(commentEntry.getByText(QUOTE_LABEL)).toHaveCount(0);
+
+      await page.setViewportSize({ width: 390, height: 844 });
+      const metrics = await quote.evaluate((element) => ({
+        scrollWidth: element.scrollWidth,
+        clientWidth: element.clientWidth,
+        height: element.getBoundingClientRect().height,
+        lineHeight: parseFloat(getComputedStyle(element).lineHeight),
+      }));
+      expect(metrics.scrollWidth).toBeGreaterThan(metrics.clientWidth);
+      expect(metrics.height).toBeLessThanOrEqual(metrics.lineHeight * 1.5);
+    });
+  });
+
+  test('drops the quote once the parent comment is deleted', async ({
+    browser,
+  }) => {
+    const { owner, ownerApi, parentId } = await seedQuotedReply();
+    await ownerApi.content.deleteComment(parentId);
+
+    await withTimelinePage(browser, owner, async (notificationsPage) => {
+      const replyEntry = notificationsPage.entryByText(
+        'replied to your comment',
+      );
+
+      await expect(notificationsPage.entrySentence(replyEntry)).toBeVisible();
+      await expect(
+        replyEntry.getByText('reader reply', { exact: true }),
+      ).toBeVisible();
+      await expect(replyEntry.getByText(QUOTE_LABEL)).toHaveCount(0);
+      await expect(replyEntry).not.toContainText(
+        /deleted|removed|unavailable/i,
+      );
+    });
+  });
+
+  test('quotes nothing when replies answer different parents', async ({
+    browser,
+  }) => {
+    const owner = unique('notif-owner');
+    const firstReader = unique('notif-first');
+    const secondReader = unique('notif-second');
+    const ownerApi = await provisionUser(owner);
+    const firstReaderApi = await provisionUser(firstReader);
+    const secondReaderApi = await provisionUser(secondReader);
+
+    const imageId = await ownerApi.content.uploadImage({ isPublic: true });
+    const parentA = `parent a ${Date.now()}`;
+    const parentB = `parent b ${Date.now()}`;
+    const parentAId = await ownerApi.content.createComment(imageId, parentA);
+    const parentBId = await ownerApi.content.createComment(imageId, parentB);
+    await firstReaderApi.content.createReply(imageId, parentAId, 'reply a');
+    await secondReaderApi.content.createReply(imageId, parentBId, 'reply b');
+
+    await withTimelinePage(browser, owner, async (notificationsPage) => {
+      const replyEntry = notificationsPage.entryByText(
+        'replied to your comment',
+      );
+
+      await expect(replyEntry).toHaveCount(1);
+      await expect(replyEntry.getByText(QUOTE_LABEL)).toHaveCount(0);
+      await expect(replyEntry).not.toContainText(parentA);
+      await expect(replyEntry).not.toContainText(parentB);
+    });
+  });
+
+  test('translates the quote label for uk', async ({ browser }) => {
+    const { owner, ownerApi, parent } = await seedQuotedReply();
+
+    await withTimelinePage(browser, owner, async (notificationsPage, page) => {
+      await new Locale(page, ownerApi).set('uk');
+      await notificationsPage.goto();
+
+      const quote = page.getByRole('main').locator('[title]', {
+        hasText: parent,
+      });
+
+      await expect(quote).toBeVisible();
+      await expect(quote).toContainText('↳');
+      await expect(quote).toContainText('ваш коментар:');
+      await expect(page.getByRole('main').getByText(QUOTE_LABEL)).toHaveCount(
+        0,
+      );
     });
   });
 });

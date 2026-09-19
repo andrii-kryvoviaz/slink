@@ -3,7 +3,11 @@
   import { CommentText } from '@slink/feature/Text';
   import { ThreadBlock } from '@slink/ui/components/thread-block';
 
-  import { formatDateTime, formatDayTime } from '$lib/utils/date.svelte';
+  import {
+    formatDateTime,
+    formatRecentTime,
+    minuteClock,
+  } from '$lib/utils/date.svelte';
   import { plural } from '$lib/utils/i18n';
 
   import type { NotificationItem } from '@slink/api/Response';
@@ -58,7 +62,7 @@
             {@render authorName(item)}
           </NotificationActorName>
         {/if}
-      </span>{#if item.relatedComment}{#if !group.hasSingleAuthor}{' '}{/if}<span
+      </span>{#if item.relatedComment}{' '}<span
           id={`${uid}-${item.id}`}
           class={theme.text()}
         >
@@ -74,7 +78,7 @@
         title={formatDateTime(createdAt)}
         class={theme.time()}
       >
-        {formatDayTime(createdAt)}
+        {formatRecentTime(createdAt, minuteClock.now)}
       </time>
     {/if}
   </div>
@@ -100,6 +104,16 @@
   {/if}
 {/snippet}
 
+{#snippet quote()}
+  {#if group.quotedComment}
+    <div class={theme.quote()} title={group.quotedComment.content}>
+      <span aria-hidden="true">↳</span>
+      <span>your comment:</span>
+      {group.quotedComment.content}
+    </div>
+  {/if}
+{/snippet}
+
 {#if latest}
-  <ThreadBlock {latest} {earlier} {row} {toggle} />
+  <ThreadBlock header={quote} {latest} {earlier} {row} {toggle} />
 {/if}

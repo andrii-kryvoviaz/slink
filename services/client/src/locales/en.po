@@ -5200,3 +5200,27 @@ msgid "Show # more"
 msgid_plural "Show # more"
 msgstr[0] "Show # more"
 msgstr[1] "Show # more"
+
+#: src/lib/utils/notification/NotificationFilters.language.ts
+msgid "All"
+msgstr "All"
+
+#: src/lib/utils/notification/NotificationFilters.language.ts
+msgid "Unread"
+msgstr "Unread"
+
+#: src/lib/utils/notification/NotificationFilters.language.ts
+msgid "Replies"
+msgstr "Replies"
+
+#: src/routes/notifications/+page.svelte
+msgid "Nothing here"
+msgstr "Nothing here"
+
+#: src/feature/Notification/NotificationFilterBar/NotificationFilterBar.svelte
+msgid "Filter notifications"
+msgstr "Filter notifications"
+
+#: src/feature/Notification/NotificationThread/NotificationThread.svelte
+msgid "your comment:"
+msgstr "your comment:"

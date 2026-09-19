@@ -3,7 +3,11 @@
   import { UserAvatar } from '@slink/feature/User';
   import { ThreadBlock } from '@slink/ui/components/thread-block';
 
-  import { formatDateTime, formatShortDateTime } from '$lib/utils/date.svelte';
+  import {
+    formatDateTime,
+    formatRecentTime,
+    minuteClock,
+  } from '$lib/utils/date.svelte';
   import { plural } from '$lib/utils/i18n';
 
   import type { NotificationItem } from '@slink/api/Response';
@@ -44,7 +48,7 @@
       title={formatDateTime(createdAt)}
       class={theme.time()}
     >
-      {formatShortDateTime(createdAt)}
+      {formatRecentTime(createdAt, minuteClock.now)}
     </time>
   </div>
 {/snippet}

@@ -226,11 +226,28 @@ final class GetNotificationsFilterTest extends HttpTestCase {
   }
 
   #[Test]
-  public function emptyTypeDoesNotFail(): void {
-    $this->createUser('filter-owner@local.test', 'filterowner', self::PASSWORD);
-    $ownerToken = $this->login('filterowner', self::PASSWORD);
+  public function emptyTypeReadsAsNoFilter(): void {
+    $this->seedOwnerNotifications();
 
-    self::assertLessThan(500, $this->apiRequest('GET', '/api/notifications?type=', $ownerToken));
+    $page = $this->fetchPage('?type=');
+
+    self::assertSame(['page' => 1, 'size' => 20, 'total' => self::NOTIFICATION_COUNT], $this->pagination($page['meta']));
+    self::assertCount(self::NOTIFICATION_COUNT, $page['data']);
+    self::assertSame(\array_column($this->fetchPage('')['data'], 'id'), \array_column($page['data'], 'id'));
+  }
+
+  #[Test]
+  public function emptyTypeStillCombinesWithUnread(): void {
+    $this->seedOwnerNotifications();
+    $this->markOneCommentRead();
+
+    $emptyType = $this->fetchPage('?limit=100&type=&unread=true');
+
+    self::assertSame(self::NOTIFICATION_COUNT - 1, $emptyType['meta']['total']);
+    self::assertSame(
+      \array_column($this->fetchPage('?limit=100&unread=true')['data'], 'id'),
+      \array_column($emptyType['data'], 'id'),
+    );
   }
 
   #[Test]
@@ -252,6 +269,7 @@ final class GetNotificationsFilterTest extends HttpTestCase {
   public function anonymousIsDeniedBeforeValidation(): void {
     self::assertSame(401, $this->apiRequest('GET', '/api/notifications?type=comment&unread=true'));
     self::assertSame(401, $this->apiRequest('GET', '/api/notifications?type=nope'));
+    self::assertSame(401, $this->apiRequest('GET', '/api/notifications?type='));
   }
 
   #[Test]

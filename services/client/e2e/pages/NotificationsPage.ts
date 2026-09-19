@@ -16,6 +16,15 @@ export class NotificationsPage extends BasePage {
   readonly emptyHeading = this.page.getByRole('heading', {
     name: 'All caught up',
   });
+  readonly filteredEmptyHeading = this.page.getByRole('heading', {
+    name: 'Nothing here',
+  });
+  readonly filterGroup = this.page.getByRole('radiogroup', {
+    name: 'Filter notifications',
+  });
+  readonly loadMoreButton = this.page.getByRole('button', {
+    name: 'Load More',
+  });
 
   constructor(page: Page) {
     super(page);
@@ -34,6 +43,27 @@ export class NotificationsPage extends BasePage {
     );
     await this.page.reload();
     await counted;
+  }
+
+  filterChip(label: string) {
+    return this.filterGroup.getByRole('radio', {
+      name: new RegExp(`${label}$`),
+    });
+  }
+
+  waitForList() {
+    return this.page.waitForResponse(
+      (response) =>
+        new URL(response.url()).pathname.endsWith('/notifications') &&
+        response.request().method() === 'GET',
+    );
+  }
+
+  async selectFilter(label: string): Promise<URLSearchParams> {
+    const listed = this.waitForList();
+    await this.filterChip(label).click();
+
+    return new URL((await listed).url()).searchParams;
   }
 
   entryByText(text: string | RegExp) {

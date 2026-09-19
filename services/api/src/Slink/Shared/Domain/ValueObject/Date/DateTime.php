@@ -28,9 +28,6 @@ final class DateTime extends DateTimeImmutable {
     return $this->getTimeStamp();
   }
 
-  /**
-   * @throws DateTimeException
-   */
   public static function now(): self {
     return self::createFromInterface(Clock::get()->now());
   }

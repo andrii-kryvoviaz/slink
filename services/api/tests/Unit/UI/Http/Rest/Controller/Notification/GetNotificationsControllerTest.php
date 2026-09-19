@@ -190,7 +190,7 @@ final class GetNotificationsControllerTest extends TestCase {
     $controller = new GetNotificationsController();
     $controller->setQueryBus($queryBus);
 
-    $controller($user, type: NotificationType::COMMENT, unread: true);
+    $controller($user, type: NotificationType::COMMENT->value, unread: true);
   }
 
   #[Test]

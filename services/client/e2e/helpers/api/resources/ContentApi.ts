@@ -153,6 +153,10 @@ export class ContentApi {
     });
   }
 
+  async deleteComment(commentId: string): Promise<void> {
+    await this.http.request('DELETE', `/api/comment/${commentId}`);
+  }
+
   async bookmarkImage(imageId: string): Promise<void> {
     await this.http.request('POST', `/api/image/${imageId}/bookmark`);
   }

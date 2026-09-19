@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
+  MinuteClock,
   calendarDayKey,
   datesEqual,
   dayKind,
@@ -9,6 +10,7 @@ import {
   formatDate,
   formatDateTime,
   formatDayTime,
+  formatRecentTime,
   formatShortDate,
   formatShortDateTime,
   getLocale,
@@ -286,6 +288,150 @@ describe('formatDayTime', () => {
     translator.locale = 'en-US';
 
     expect(formatDayTime(new Date(2026, 7, 14), now)).toBe('Aug 14');
+  });
+});
+
+describe('formatRecentTime', () => {
+  const now = new Date(2026, 8, 18, 10);
+  const ago = (ms: number) => new Date(now.getTime() - ms);
+  const SECOND = 1000;
+  const MINUTE = SECOND * 60;
+  const HOUR = MINUTE * 60;
+
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime(now);
+  });
+
+  it('shows now for the last minute', () => {
+    expect(formatRecentTime(ago(0), now)).toBe('now');
+    expect(formatRecentTime(ago(20 * SECOND), now)).toBe('now');
+    expect(formatRecentTime(ago(59 * SECOND), now)).toBe('now');
+  });
+
+  it('shows whole minutes under an hour', () => {
+    expect(formatRecentTime(ago(MINUTE), now)).toBe('1m');
+    expect(formatRecentTime(ago(35 * MINUTE), now)).toBe('35m');
+    expect(formatRecentTime(ago(59 * MINUTE + 59 * SECOND), now)).toBe('59m');
+  });
+
+  it('shows whole hours for the rest of today', () => {
+    expect(formatRecentTime(ago(HOUR), now)).toBe('1h');
+    expect(formatRecentTime(ago(2 * HOUR + 10 * MINUTE), now)).toBe('2h');
+    expect(formatRecentTime(ago(2 * HOUR + 59 * MINUTE), now)).toBe('2h');
+    expect(formatRecentTime(new Date(2026, 8, 18, 0, 0, 30), now)).toBe('9h');
+  });
+
+  it('keeps the day time for yesterday', () => {
+    const date = new Date(2026, 8, 17, 23, 40);
+
+    expect(formatRecentTime(date, now)).toBe(formatDayTime(date, now));
+    expect(formatRecentTime(date, now)).toBe('23:40');
+  });
+
+  it('lets the yesterday rule win across midnight', () => {
+    const midnight = new Date(2026, 8, 18, 0, 10);
+    const date = new Date(2026, 8, 17, 23, 50);
+
+    expect(formatRecentTime(date, midnight)).toBe(
+      formatDayTime(date, midnight),
+    );
+  });
+
+  it('keeps the short date for earlier days', () => {
+    const date = new Date(2026, 8, 11, 9, 5);
+
+    expect(formatRecentTime(date, now)).toBe(formatDayTime(date, now));
+    expect(formatRecentTime(date, now)).not.toMatch(/^(now|\d+[mh])$/);
+  });
+
+  it('clamps future timestamps to now', () => {
+    expect(formatRecentTime(ago(-30 * SECOND), now)).toBe('now');
+    expect(formatRecentTime(ago(-2 * HOUR), now)).toBe('now');
+  });
+
+  it('defaults now to the current time', () => {
+    const date = ago(35 * MINUTE);
+
+    expect(formatRecentTime(date)).toBe(formatRecentTime(date, now));
+  });
+
+  it('localises every supported locale', () => {
+    for (const locale of [
+      'en',
+      'de',
+      'es',
+      'fr',
+      'it',
+      'pl',
+      'uk',
+      'ja',
+      'zh',
+    ]) {
+      translator.locale = locale;
+
+      const recent = formatRecentTime(ago(20 * SECOND), now);
+      const minutes = formatRecentTime(ago(5 * MINUTE), now);
+      const later = formatRecentTime(ago(50 * MINUTE), now);
+
+      expect(recent).not.toBe('');
+      expect(minutes).not.toBe('');
+      expect(minutes).not.toBe(later);
+      expect(recent).not.toBe(minutes);
+    }
+  });
+
+  it('keeps the digits in a localised minute count', () => {
+    translator.locale = 'uk';
+
+    expect(formatRecentTime(ago(20 * SECOND), now)).not.toBe('now');
+    expect(formatRecentTime(ago(35 * MINUTE), now)).toContain('35');
+  });
+});
+
+describe('narrowUnit', () => {
+  it('formats minutes narrowly', () => {
+    translator.locale = 'en';
+
+    expect(narrowUnit(35, 'minute')).toBe('35m');
+  });
+});
+
+describe('MinuteClock', () => {
+  const start = new Date(2026, 8, 18, 12);
+  const SECOND = 1000;
+  const MINUTE = SECOND * 60;
+
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime(start);
+  });
+
+  it('reads a fresh time when nothing is subscribed', () => {
+    const clock = new MinuteClock();
+
+    expect(clock.now.getTime()).toBe(start.getTime());
+
+    vi.advanceTimersByTime(5 * MINUTE);
+
+    expect(clock.now.getTime()).toBe(start.getTime() + 5 * MINUTE);
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it('hands out a distinct time on every untracked read', () => {
+    const clock = new MinuteClock();
+
+    const first = clock.now;
+    vi.advanceTimersByTime(90 * SECOND);
+    const second = clock.now;
+    vi.advanceTimersByTime(90 * SECOND);
+    const third = clock.now;
+
+    expect(second.getTime()).toBeGreaterThan(first.getTime());
+    expect(third.getTime()).toBeGreaterThan(second.getTime());
+    expect(second).not.toBe(first);
+    expect(third).not.toBe(second);
+    expect(vi.getTimerCount()).toBe(0);
   });
 });
 

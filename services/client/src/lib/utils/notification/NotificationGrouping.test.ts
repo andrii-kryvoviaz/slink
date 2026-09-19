@@ -38,7 +38,24 @@ const comment = (id: string): NotificationRelatedComment => ({
   id,
   content: `comment ${id}`,
   isDeleted: false,
+  referencedComment: null,
 });
+
+const reply = (
+  id: string,
+  parentId: string | null,
+  parentContent = `parent ${parentId}`,
+): NotificationRelatedComment => ({
+  ...comment(id),
+  referencedComment:
+    parentId === null ? null : { id: parentId, content: parentContent },
+});
+
+const replyItem = (
+  relatedComment: NotificationRelatedComment | null,
+  timestamp?: number,
+): NotificationItem =>
+  item({ type: 'comment_reply', relatedComment, timestamp });
 
 describe('NotificationGrouping.group', () => {
   it('collapses the same action on one image by several actors into one group', () => {
@@ -347,5 +364,90 @@ describe('NotificationGrouping.group', () => {
     ]);
 
     expect(groups[0].hasSingleAuthor).toBe(false);
+  });
+
+  describe('quotedComment', () => {
+    it('quotes the parent shared by every reply in the group', () => {
+      const groups = NotificationGrouping.group([
+        replyItem(reply('r1', 'p1')),
+        replyItem(reply('r2', 'p1')),
+      ]);
+
+      expect(groups[0].quotedComment).toEqual({
+        id: 'p1',
+        content: 'parent p1',
+      });
+    });
+
+    it('quotes the parent of a single reply', () => {
+      const groups = NotificationGrouping.group([replyItem(reply('r1', 'p1'))]);
+
+      expect(groups[0].quotedComment?.id).toBe('p1');
+    });
+
+    it('quotes nothing when replies answer different parents', () => {
+      const groups = NotificationGrouping.group([
+        replyItem(reply('r1', 'p1')),
+        replyItem(reply('r2', 'p2')),
+      ]);
+
+      expect(groups[0].quotedComment).toBeNull();
+    });
+
+    it('quotes nothing when one reply has no parent', () => {
+      const groups = NotificationGrouping.group([
+        replyItem(reply('r1', 'p1'), 200),
+        replyItem(reply('r2', null), 100),
+      ]);
+
+      expect(groups[0].quotedComment).toBeNull();
+    });
+
+    it('quotes nothing for a single reply without a parent', () => {
+      const groups = NotificationGrouping.group([replyItem(reply('r1', null))]);
+
+      expect(groups[0].quotedComment).toBeNull();
+    });
+
+    it('quotes nothing when a reply carries no related comment', () => {
+      const groups = NotificationGrouping.group([
+        replyItem(reply('r1', 'p1'), 200),
+        replyItem(null, 100),
+      ]);
+
+      expect(groups[0].quotedComment).toBeNull();
+    });
+
+    it('quotes nothing for a comment group even when items carry a parent', () => {
+      const groups = NotificationGrouping.group([
+        item({ type: 'comment', relatedComment: reply('c1', 'p1') }),
+        item({ type: 'comment', relatedComment: reply('c2', 'p1') }),
+      ]);
+
+      expect(groups[0].quotedComment).toBeNull();
+    });
+
+    it('quotes nothing for a bookmark group', () => {
+      const groups = NotificationGrouping.group([item()]);
+
+      expect(groups[0].quotedComment).toBeNull();
+    });
+
+    it('quotes the newest copy of an edited parent regardless of input order', () => {
+      const items = [
+        replyItem(reply('r1', 'p1', 'old text'), 100),
+        replyItem(reply('r3', 'p1', 'new text'), 300),
+        replyItem(reply('r2', 'p1', 'old text'), 200),
+      ];
+
+      const forward = NotificationGrouping.group(items);
+      const backward = NotificationGrouping.group(items.toReversed());
+
+      expect(forward[0].quotedComment).toEqual({
+        id: 'p1',
+        content: 'new text',
+      });
+      expect(backward[0].quotedComment).toEqual(forward[0].quotedComment);
+    });
   });
 });

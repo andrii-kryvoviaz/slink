@@ -13,6 +13,8 @@ import { useState } from '@slink/lib/state/core/ContextAwareState';
 import {
   type NotificationDayBucket,
   NotificationDayBuckets,
+  type NotificationFilterId,
+  NotificationFilters,
   type NotificationGroup,
   NotificationGrouping,
 } from '@slink/utils/notification';
@@ -21,6 +23,7 @@ const NOTIFICATION_FEED_KEY = Symbol('notificationFeed');
 
 class NotificationFeed extends AbstractPaginatedFeed<NotificationItem> {
   private _unreadCount: number = $state(0);
+  private _activeFilter: NotificationFilterId = $state('all');
 
   public constructor() {
     super({
@@ -34,7 +37,11 @@ class NotificationFeed extends AbstractPaginatedFeed<NotificationItem> {
     params: LoadParams & SearchParams,
   ): Promise<PaginatedResponse<NotificationItem>> {
     const { page = 1, limit = 50 } = params;
-    const response = await ApiClient.notification.getNotifications(page, limit);
+    const response = await ApiClient.notification.getNotifications(
+      page,
+      limit,
+      NotificationFilters.queryOf(this._activeFilter),
+    );
 
     return {
       data: response.data,
@@ -52,6 +59,22 @@ class NotificationFeed extends AbstractPaginatedFeed<NotificationItem> {
 
   public get unreadCount(): number {
     return this._unreadCount;
+  }
+
+  public get activeFilter(): NotificationFilterId {
+    return this._activeFilter;
+  }
+
+  public get isFiltered(): boolean {
+    return this._activeFilter !== 'all';
+  }
+
+  public async applyFilter(id: NotificationFilterId): Promise<void> {
+    if (id === this._activeFilter) return;
+
+    this._activeFilter = id;
+    this.reset();
+    await this.load({ page: 1 });
   }
 
   public get groupedItems(): NotificationGroup[] {

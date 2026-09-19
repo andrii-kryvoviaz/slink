@@ -1,6 +1,8 @@
 import { runtimeTranslator } from '$lib/utils/i18n/RuntimeTranslator.svelte';
+import { createSubscriber } from 'svelte/reactivity';
 
-const HOUR_MS = 1000 * 60 * 60;
+const MINUTE_MS = 1000 * 60;
+const HOUR_MS = MINUTE_MS * 60;
 const DAY_MS = HOUR_MS * 24;
 
 export function getLocale(): string {
@@ -48,7 +50,7 @@ export function hoursUntil(date: Date | string): number {
   return Math.floor((toDate(date).getTime() - Date.now()) / HOUR_MS);
 }
 
-type TimeUnit = 'hour' | 'day' | 'week' | 'month' | 'year';
+type TimeUnit = 'minute' | 'hour' | 'day' | 'week' | 'month' | 'year';
 
 export function narrowUnit(value: number, unit: TimeUnit): string {
   return new Intl.NumberFormat(getLocale(), {
@@ -73,9 +75,13 @@ export function narrowFromDays(days: number): string {
   return narrowUnit(Math.floor(days / 365), 'year');
 }
 
+function relativeTimeFormat(): Intl.RelativeTimeFormat {
+  return new Intl.RelativeTimeFormat(getLocale(), { numeric: 'auto' });
+}
+
 export function relativeFromDays(days: number): string {
   const locale = getLocale();
-  const rtf = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' });
+  const rtf = relativeTimeFormat();
   const absDays = Math.abs(days);
 
   if (absDays === 0) return rtf.format(0, 'day');
@@ -145,6 +151,24 @@ export function formatDayTime(date: Date, now: Date = new Date()): string {
   return formatClockTime(date);
 }
 
+export function formatRecentTime(date: Date, now: Date = new Date()): string {
+  if (dayKind(date, now) !== 'today') {
+    return formatDayTime(date, now);
+  }
+
+  const elapsed = Math.max(0, now.getTime() - date.getTime());
+
+  if (elapsed < MINUTE_MS) {
+    return relativeTimeFormat().format(0, 'second');
+  }
+
+  if (elapsed < HOUR_MS) {
+    return narrowUnit(Math.floor(elapsed / MINUTE_MS), 'minute');
+  }
+
+  return narrowUnit(Math.floor(elapsed / HOUR_MS), 'hour');
+}
+
 export function formatShortDateTime(date: Date): string {
   return `${formatShortDate(date)}, ${formatClockTime(date)}`;
 }
@@ -155,3 +179,37 @@ export function formatDateTime(date: Date): string {
     timeStyle: 'short',
   }).format(date);
 }
+
+export class MinuteClock {
+  private _now = new Date();
+  private _active = false;
+  private readonly _subscribe: () => void;
+
+  constructor() {
+    this._subscribe = createSubscriber((update) => {
+      this._now = new Date();
+      this._active = true;
+      const interval = setInterval(() => {
+        this._now = new Date();
+        update();
+      }, MINUTE_MS);
+
+      return () => {
+        this._active = false;
+        clearInterval(interval);
+      };
+    });
+  }
+
+  get now(): Date {
+    this._subscribe();
+
+    if (!this._active) {
+      return new Date();
+    }
+
+    return this._now;
+  }
+}
+
+export const minuteClock = new MinuteClock();

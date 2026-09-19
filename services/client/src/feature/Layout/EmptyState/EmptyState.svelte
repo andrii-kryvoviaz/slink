@@ -20,7 +20,7 @@
   interface Props {
     kind: 'first-use' | 'no-results';
     title: string;
-    description: string;
+    description?: string;
     icon?: string;
     tone?: 'default' | 'danger';
     preview?: Snippet;
@@ -56,7 +56,9 @@
     {/if}
     <div class={contentVariants({ withPreview: !!preview })}>
       <h2 class={titleVariants({ kind })}>{title}</h2>
-      <p class={descriptionVariants({ kind })}>{description}</p>
+      {#if description}
+        <p class={descriptionVariants({ kind })}>{description}</p>
+      {/if}
       {#if action}
         <div class={actionVariants({ kind })}>
           {@render action()}
@@ -76,7 +78,9 @@
     </span>
     <div class="min-w-0 flex-1 text-left">
       <h3 class={titleVariants({ kind })}>{title}</h3>
-      <p class={descriptionVariants({ kind })}>{description}</p>
+      {#if description}
+        <p class={descriptionVariants({ kind })}>{description}</p>
+      {/if}
     </div>
     {#if action}
       <div class={actionVariants({ kind })}>

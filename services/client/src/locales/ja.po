@@ -5172,3 +5172,27 @@ msgstr "{0}件すべて表示"
 msgid "Show # more"
 msgid_plural "Show # more"
 msgstr[0] "さらに # 件表示"
+
+#: src/lib/utils/notification/NotificationFilters.language.ts
+msgid "All"
+msgstr "すべて"
+
+#: src/lib/utils/notification/NotificationFilters.language.ts
+msgid "Unread"
+msgstr "未読"
+
+#: src/lib/utils/notification/NotificationFilters.language.ts
+msgid "Replies"
+msgstr "返信"
+
+#: src/routes/notifications/+page.svelte
+msgid "Nothing here"
+msgstr "何もありません"
+
+#: src/feature/Notification/NotificationFilterBar/NotificationFilterBar.svelte
+msgid "Filter notifications"
+msgstr "通知を絞り込む"
+
+#: src/feature/Notification/NotificationThread/NotificationThread.svelte
+msgid "your comment:"
+msgstr "あなたのコメント:"

@@ -3,7 +3,11 @@
   import { LazyImage } from '@slink/ui/components/lazy-image';
   import type { Snippet } from 'svelte';
 
-  import { formatDateTime, formatDayTime } from '$lib/utils/date.svelte';
+  import {
+    formatDateTime,
+    formatRecentTime,
+    minuteClock,
+  } from '$lib/utils/date.svelte';
   import { plural } from '$lib/utils/i18n';
   import Icon from '@iconify/svelte';
 
@@ -110,7 +114,7 @@
       title={formatDateTime(latest)}
       class={theme.time()}
     >
-      {formatDayTime(latest)}
+      {formatRecentTime(latest, minuteClock.now)}
     </time>
     {#if !group.isRead}
       <button

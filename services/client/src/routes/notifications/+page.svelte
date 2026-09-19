@@ -4,6 +4,7 @@
   import {
     NotificationActorList,
     NotificationEntry,
+    NotificationFilterBar,
     NotificationSkeleton,
     NotificationThread,
   } from '@slink/feature/Notification';
@@ -100,9 +101,24 @@
       </div>
     </header>
 
+    {#if notificationFeed.isFiltered || !notificationFeed.isEmpty}
+      <NotificationFilterBar
+        value={notificationFeed.activeFilter}
+        onChange={(id) => notificationFeed.applyFilter(id)}
+      />
+    {/if}
+
     {#if notificationFeed.showSkeleton}
       <div in:fade={{ duration: 200 }}>
         <NotificationSkeleton count={12} />
+      </div>
+    {:else if notificationFeed.isEmpty && notificationFeed.isFiltered}
+      <div in:fade={{ duration: 200 }}>
+        <EmptyState
+          kind="no-results"
+          title="Nothing here"
+          icon="ph:funnel-simple"
+        />
       </div>
     {:else if notificationFeed.isEmpty}
       <div in:fade={{ duration: 200 }}>
