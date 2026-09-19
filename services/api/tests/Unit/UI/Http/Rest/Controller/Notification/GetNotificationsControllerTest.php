@@ -8,6 +8,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Notification\Application\Query\GetNotifications\GetNotificationsQuery;
+use Slink\Notification\Domain\Enum\NotificationType;
 use Slink\Shared\Application\Http\Collection;
 use Slink\Shared\Application\Http\Item;
 use Slink\Shared\Application\Query\QueryBusInterface;
@@ -102,7 +103,7 @@ final class GetNotificationsControllerTest extends TestCase {
     $controller = new GetNotificationsController();
     $controller->setQueryBus($queryBus);
 
-    $controller($user, $page, $limit);
+    $controller($user, page: $page, limit: $limit);
   }
 
   /**
@@ -137,7 +138,7 @@ final class GetNotificationsControllerTest extends TestCase {
     $controller = new GetNotificationsController();
     $controller->setQueryBus($queryBus);
 
-    $controller($user, $page, $limit);
+    $controller($user, page: $page, limit: $limit);
   }
 
   #[Test]
@@ -155,7 +156,10 @@ final class GetNotificationsControllerTest extends TestCase {
         if (!$message instanceof GetNotificationsQuery) {
           return false;
         }
-        return $message->getPage() === 1 && $message->getLimit() === 20;
+        return $message->getPage() === 1
+          && $message->getLimit() === 20
+          && $message->getFilter()->getType() === null
+          && $message->getFilter()->isUnreadOnly() === false;
       }))
       ->willReturn($collection);
 
@@ -163,6 +167,30 @@ final class GetNotificationsControllerTest extends TestCase {
     $controller->setQueryBus($queryBus);
 
     $controller($user);
+  }
+
+  #[Test]
+  public function itPassesTypeAndUnreadFilterToQuery(): void {
+    $queryBus = $this->createMock(QueryBusInterface::class);
+    $user = $this->createStub(JwtUser::class);
+
+    $user->method('getIdentifier')->willReturn('user-123');
+
+    $queryBus->expects($this->once())
+      ->method('ask')
+      ->with($this->callback(function (Envelope $envelope) {
+        $message = $envelope->getMessage();
+
+        return $message instanceof GetNotificationsQuery
+          && $message->getFilter()->getType() === NotificationType::COMMENT
+          && $message->getFilter()->isUnreadOnly();
+      }))
+      ->willReturn(new Collection(1, 20, 0, []));
+
+    $controller = new GetNotificationsController();
+    $controller->setQueryBus($queryBus);
+
+    $controller($user, type: NotificationType::COMMENT, unread: true);
   }
 
   #[Test]

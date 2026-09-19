@@ -5199,3 +5199,10 @@ msgstr "Ouvrir la publication"
 #: src/feature/Notification/NotificationActorList/NotificationActorList.svelte
 msgid "Show all {0}"
 msgstr "Afficher les {0}"
+
+#: src/ui/components/thread-block/thread-block.svelte
+msgid "Show # more"
+msgid_plural "Show # more"
+msgstr[0] "Afficher # de plus"
+msgstr[1] "Afficher # de plus"
+msgstr[2] "Afficher # de plus"

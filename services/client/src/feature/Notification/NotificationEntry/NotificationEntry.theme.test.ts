@@ -68,6 +68,24 @@ describe('notificationEntry', () => {
     );
   });
 
+  it('marks unread entries with a ringed accent dot on the thumbnail corner', () => {
+    const theme = notificationEntry({ read: false });
+
+    expect(tokens(theme.unreadDot())).toEqual(
+      expect.arrayContaining([
+        'absolute',
+        '-top-[3px]',
+        '-left-[3px]',
+        'size-2.5',
+        'rounded-full',
+        'bg-accent',
+        'ring-2',
+        'ring-background',
+      ]),
+    );
+    expect(tokens(theme.row())).toContain('py-2');
+  });
+
   it('keeps the row inert', () => {
     const row = tokens(notificationEntry().row());
 
@@ -106,6 +124,7 @@ describe('notificationEntry', () => {
       theme.badge(),
       theme.badgeIcon(),
       theme.image(),
+      theme.unreadDot(),
     ];
 
     expect(slots.flatMap(tokens)).not.toContain('opacity-60');

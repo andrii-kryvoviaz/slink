@@ -18,6 +18,7 @@ final readonly class GetNotificationsHandler implements QueryHandlerInterface {
   public function __invoke(GetNotificationsQuery $query, string $userId): Collection {
     $paginator = $this->notificationRepository->findByUserId(
       $userId,
+      $query->getFilter(),
       $query->getPage(),
       $query->getLimit(),
     );

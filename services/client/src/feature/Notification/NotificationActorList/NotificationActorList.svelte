@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { NotificationActorName } from '@slink/feature/Notification/NotificationActorName';
   import { UserAvatar } from '@slink/feature/User';
   import { ThreadBlock } from '@slink/ui/components/thread-block';
 
@@ -30,11 +31,13 @@
   <div class={theme.row()}>
     {#if item.actor}
       <UserAvatar user={item.actor} size="xs" class={theme.avatar()} />
-      <span class={theme.name()}>{item.actor.displayName}</span>
+      <NotificationActorName read={group.isRead} class={theme.name()}>
+        {item.actor.displayName}
+      </NotificationActorName>
     {:else}
-      <span class={theme.name()}>
+      <NotificationActorName read={group.isRead} class={theme.name()}>
         {plural(group.visitorCount, ['A visitor', '# visitors'])}
-      </span>
+      </NotificationActorName>
     {/if}
     <time
       datetime={createdAt.toISOString()}

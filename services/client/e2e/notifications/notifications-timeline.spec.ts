@@ -317,6 +317,13 @@ test.describe('Notifications timeline', () => {
       ).toHaveCount(0);
       await expect(notificationsPage.visibleTimes(replyEntry)).toHaveCount(1);
 
+      const latestAuthorBox = await notificationsPage
+        .threadRow(replyEntry, replyAuthors[latestReply].username)
+        .getByText(replyAuthors[latestReply].username, { exact: true })
+        .boundingBox();
+      expect(latestAuthorBox).not.toBeNull();
+      expect(latestAuthorBox!.width).toBeGreaterThan(1);
+
       await notificationsPage.threadToggle(replyEntry).click();
 
       const earlierTime = notificationsPage
@@ -362,6 +369,56 @@ test.describe('Notifications timeline', () => {
     });
   });
 
+  test('hides the repeated author name in a single-author thread', async ({
+    browser,
+  }) => {
+    const owner = unique('notif-owner');
+    const reader = unique('notif-reader');
+    const ownerApi = await provisionUser(owner);
+    const readerApi = await provisionUser(reader);
+
+    const imageId = await ownerApi.content.uploadImage({ isPublic: true });
+    const commentIds: Record<string, string> = {
+      'first single': await readerApi.content.createComment(
+        imageId,
+        'first single',
+      ),
+      'second single': await readerApi.content.createComment(
+        imageId,
+        'second single',
+      ),
+    };
+
+    await withTimelinePage(browser, owner, async (notificationsPage, page) => {
+      const entry = notificationsPage.entryByText(/\bcommented\b/);
+      const row = notificationsPage.threadRow(entry, reader.username);
+
+      await expect(notificationsPage.entrySentence(entry)).toContainText(
+        reader.username,
+      );
+      await expect(row).toHaveCount(1);
+
+      const latestText = row.getByText(/^(first|second) single$/);
+      await expect(latestText).toBeVisible();
+      const latestCommentId = commentIds[(await latestText.innerText()).trim()];
+
+      const nameBox = await row
+        .getByText(reader.username, { exact: true })
+        .boundingBox();
+      expect(nameBox).not.toBeNull();
+      expect(nameBox!.width).toBeLessThanOrEqual(1);
+
+      const textBox = await latestText.boundingBox();
+      expect(textBox).not.toBeNull();
+      await page.mouse.click(textBox!.x + 4, textBox!.y + textBox!.height / 2);
+
+      await expect(page).toHaveURL(
+        new RegExp(`/explore\\?post=${imageId}&comment=${latestCommentId}$`),
+      );
+      await expect(new ExplorePage(page).viewer).toBeVisible();
+    });
+  });
+
   test('marks a single entry read without leaving the page', async ({
     browser,
   }) => {
@@ -383,6 +440,9 @@ test.describe('Notifications timeline', () => {
 
       await notificationsPage.reload();
       await expect(notificationsPage.unreadSubtitle).toHaveText('3 unread');
+      await expect(notificationsPage.markReadButton(bookmarkEntry)).toHaveCount(
+        0,
+      );
     });
   });
 
@@ -519,6 +579,58 @@ test.describe('Notifications timeline', () => {
       await expect(page).toHaveURL(
         new RegExp(`/explore\\?search=%23${hashtag}&searchBy=hashtag$`),
       );
+    });
+  });
+
+  test('wraps long author names at phone width without overflow', async ({
+    browser,
+  }) => {
+    const owner = unique('notif-owner');
+    const otherCommenter = unique('notif-other');
+    const commenter = unique('notif-long-commenter');
+    expect(commenter.username.length).toBeGreaterThanOrEqual(20);
+
+    const ownerApi = await provisionUser(owner);
+    const otherCommenterApi = await provisionUser(otherCommenter);
+    const commenterApi = await provisionUser(commenter);
+
+    const imageId = await ownerApi.content.uploadImage({ isPublic: true });
+    await otherCommenterApi.content.createComment(imageId, 'an earlier word');
+    await commenterApi.content.createComment(
+      imageId,
+      'this comment keeps going long enough to wrap across several lines on a phone #e2ewrap and then ends',
+    );
+
+    await withTimelinePage(browser, owner, async (notificationsPage, page) => {
+      await page.setViewportSize({ width: 390, height: 844 });
+
+      const entry = notificationsPage.entryByText(/\bcommented\b/);
+      await notificationsPage.commentThreadToggle(entry).click();
+
+      const row = notificationsPage.threadRow(entry, commenter.username);
+      const text = row.getByText('this comment keeps going', { exact: false });
+      const chip = row.getByRole('button', { name: '#e2ewrap' });
+
+      await expect(text).toBeVisible();
+      await expect(chip).toBeVisible();
+
+      const rowBox = await row.boundingBox();
+      const textBox = await text.boundingBox();
+      const chipBox = await chip.boundingBox();
+      expect(rowBox).not.toBeNull();
+      expect(textBox).not.toBeNull();
+      expect(chipBox).not.toBeNull();
+
+      expect(textBox!.width).toBeGreaterThanOrEqual(rowBox!.width / 2);
+      expect(chipBox!.x + chipBox!.width).toBeLessThanOrEqual(
+        rowBox!.x + rowBox!.width + 0.5,
+      );
+
+      const nameBox = await row
+        .getByText(commenter.username, { exact: true })
+        .boundingBox();
+      expect(nameBox).not.toBeNull();
+      expect(nameBox!.width).toBeGreaterThan(1);
     });
   });
 });

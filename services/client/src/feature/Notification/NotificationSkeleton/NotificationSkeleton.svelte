@@ -20,15 +20,13 @@
       <Skeleton width="48px" height="12px" rounded="md" />
     {/snippet}
     {#each { length: count }}
-      <Timeline.Entry active={false}>
-        <div class={theme.row()}>
-          <Skeleton width="40px" height="40px" rounded="lg" />
-          <Skeleton width="75%" height="14px" rounded="md" />
-          <div class={theme.aside()}>
-            <Skeleton width="40px" height="12px" rounded="md" />
-          </div>
+      <div class={theme.row()}>
+        <Skeleton width="40px" height="40px" rounded="lg" />
+        <Skeleton width="75%" height="14px" rounded="md" />
+        <div class={theme.aside()}>
+          <Skeleton width="40px" height="12px" rounded="md" />
         </div>
-      </Timeline.Entry>
+      </div>
     {/each}
   </Timeline.Group>
 </Timeline.Root>

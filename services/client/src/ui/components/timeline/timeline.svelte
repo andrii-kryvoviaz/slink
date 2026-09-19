@@ -16,6 +16,5 @@
 </script>
 
 <div class={cn(theme.root(), className)}>
-  <div aria-hidden="true" class={theme.rail()}></div>
   {@render children()}
 </div>

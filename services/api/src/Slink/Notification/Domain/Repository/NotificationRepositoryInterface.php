@@ -6,6 +6,7 @@ namespace Slink\Notification\Domain\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Slink\Notification\Domain\Filter\NotificationListFilter;
 use Slink\Notification\Infrastructure\ReadModel\View\NotificationView;
 
 interface NotificationRepositoryInterface extends ServiceEntityRepositoryInterface {
@@ -13,7 +14,7 @@ interface NotificationRepositoryInterface extends ServiceEntityRepositoryInterfa
 
   public function oneById(string $id): NotificationView;
 
-  public function findByUserId(string $userId, int $page = 1, int $limit = 20): Paginator;
+  public function findByUserId(string $userId, NotificationListFilter $filter, int $page = 1, int $limit = 20): Paginator;
 
   public function countUnreadByUserId(string $userId): int;
 

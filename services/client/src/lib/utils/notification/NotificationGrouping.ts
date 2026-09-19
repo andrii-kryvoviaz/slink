@@ -19,6 +19,7 @@ export interface NotificationGroup {
   visitorCount: number;
   latestVisitorItem: NotificationItem | null;
   actorTotal: number;
+  hasSingleAuthor: boolean;
   items: NotificationItem[];
   latestTimestamp: number;
   latestComment: NotificationRelatedComment | null;
@@ -66,6 +67,7 @@ export class NotificationGrouping {
       visitorCount,
       latestVisitorItem: items.find((item) => item.actor === null) ?? null,
       actorTotal: actorItems.length + visitorCount,
+      hasSingleAuthor: actorItems.length === 1 && visitorCount === 0,
       items,
       latestTimestamp: newest.createdAt.timestamp,
       latestComment: newest.relatedComment,

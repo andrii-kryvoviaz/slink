@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { NotificationActorName } from '@slink/feature/Notification/NotificationActorName';
   import { CommentText } from '@slink/feature/Text';
   import { ThreadBlock } from '@slink/ui/components/thread-block';
 
@@ -30,33 +31,43 @@
   }
 </script>
 
+{#snippet authorName(item: NotificationItem)}
+  {#if item.actor}
+    {item.actor.displayName}
+  {:else}
+    {plural(1, ['A visitor', '# visitors'])}
+  {/if}
+{/snippet}
+
 {#snippet row(item: NotificationItem, { latest }: { latest: boolean })}
   {@const createdAt = new Date(item.createdAt.timestamp * 1000)}
   <div class={theme.row()}>
-    <span
-      role="button"
-      tabindex="0"
-      class={theme.target()}
-      aria-describedby={item.relatedComment ? `${uid}-${item.id}` : undefined}
-      onclick={() => onOpenItem(item)}
-      onkeydown={(event) => handleKeydown(event, item)}
-    >
-      {#if item.actor}
-        <span class={theme.author()}>{item.actor.displayName}</span>
-      {:else}
-        <span class={theme.author()}>
-          {plural(1, ['A visitor', '# visitors'])}
-        </span>
-      {/if}
-    </span>
-    {#if item.relatedComment}
-      <span id={`${uid}-${item.id}`} class={theme.text()}>
-        <CommentText
-          content={item.relatedComment.content}
-          isDeleted={item.relatedComment.isDeleted}
-        />
-      </span>
-    {/if}
+    <div class={theme.flow()}>
+      <span
+        role="button"
+        tabindex="0"
+        class={theme.target()}
+        aria-describedby={item.relatedComment ? `${uid}-${item.id}` : undefined}
+        onclick={() => onOpenItem(item)}
+        onkeydown={(event) => handleKeydown(event, item)}
+      >
+        {#if group.hasSingleAuthor}
+          <span class={theme.hiddenAuthor()}>{@render authorName(item)}</span>
+        {:else}
+          <NotificationActorName read={group.isRead}>
+            {@render authorName(item)}
+          </NotificationActorName>
+        {/if}
+      </span>{#if item.relatedComment}{#if !group.hasSingleAuthor}{' '}{/if}<span
+          id={`${uid}-${item.id}`}
+          class={theme.text()}
+        >
+          <CommentText
+            content={item.relatedComment.content}
+            isDeleted={item.relatedComment.isDeleted}
+          />
+        </span>{/if}
+    </div>
     {#if !latest}
       <time
         datetime={createdAt.toISOString()}

@@ -299,4 +299,53 @@ describe('NotificationGrouping.group', () => {
     expect(groups[0].latestVisitorItem).toBeNull();
     expect(groups[0].actorTotal).toBe(2);
   });
+
+  it('marks a group with one actor and no visitors as single-author', () => {
+    const groups = NotificationGrouping.group([
+      item({ type: 'comment', actor: A, relatedComment: comment('c1') }),
+      item({ type: 'comment', actor: A, relatedComment: comment('c2') }),
+    ]);
+
+    expect(groups[0].hasSingleAuthor).toBe(true);
+  });
+
+  it('keeps a single-author group when the actor renames between items', () => {
+    const groups = NotificationGrouping.group([
+      item({ type: 'comment_reply', actor: A, timestamp: 100 }),
+      item({
+        type: 'comment_reply',
+        actor: { id: 'u-a', displayName: 'A2' },
+        timestamp: 200,
+      }),
+    ]);
+
+    expect(groups[0].hasSingleAuthor).toBe(true);
+  });
+
+  it('does not mark a group with two actors as single-author', () => {
+    const groups = NotificationGrouping.group([
+      item({ type: 'comment', actor: A, relatedComment: comment('c1') }),
+      item({ type: 'comment', actor: B, relatedComment: comment('c2') }),
+    ]);
+
+    expect(groups[0].hasSingleAuthor).toBe(false);
+  });
+
+  it('does not mark a group with one actor and a visitor as single-author', () => {
+    const groups = NotificationGrouping.group([
+      item({ actor: A, timestamp: 200 }),
+      item({ actor: null, timestamp: 100 }),
+    ]);
+
+    expect(groups[0].hasSingleAuthor).toBe(false);
+  });
+
+  it('does not mark a visitor-only group as single-author', () => {
+    const groups = NotificationGrouping.group([
+      item({ actor: null }),
+      item({ actor: null }),
+    ]);
+
+    expect(groups[0].hasSingleAuthor).toBe(false);
+  });
 });

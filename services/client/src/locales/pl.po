@@ -5248,3 +5248,11 @@ msgstr "Otwórz post"
 #: src/feature/Notification/NotificationActorList/NotificationActorList.svelte
 msgid "Show all {0}"
 msgstr "Pokaż wszystkie {0}"
+
+#: src/ui/components/thread-block/thread-block.svelte
+msgid "Show # more"
+msgid_plural "Show # more"
+msgstr[0] "Pokaż jeszcze #"
+msgstr[1] "Pokaż jeszcze #"
+msgstr[2] "Pokaż jeszcze #"
+msgstr[3] "Pokaż jeszcze #"

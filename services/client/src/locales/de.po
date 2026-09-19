@@ -5194,3 +5194,9 @@ msgstr "Beitrag öffnen"
 #: src/feature/Notification/NotificationActorList/NotificationActorList.svelte
 msgid "Show all {0}"
 msgstr "Alle {0} anzeigen"
+
+#: src/ui/components/thread-block/thread-block.svelte
+msgid "Show # more"
+msgid_plural "Show # more"
+msgstr[0] "# weitere anzeigen"
+msgstr[1] "# weitere anzeigen"

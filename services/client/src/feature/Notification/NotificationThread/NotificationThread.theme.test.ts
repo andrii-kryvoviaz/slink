@@ -10,4 +10,60 @@ describe('notificationThread', () => {
 
     expect(text).toEqual(expect.arrayContaining(['[&_[data-hashtag]]:py-0']));
   });
+
+  it('wraps the inline flow without breaking ordinary words', () => {
+    const theme = notificationThread();
+    const slots = [
+      theme.row(),
+      theme.flow(),
+      theme.target(),
+      theme.text(),
+      theme.time(),
+    ].flatMap(tokens);
+
+    expect(tokens(theme.flow())).toEqual(
+      expect.arrayContaining(['wrap-break-word', 'min-w-0']),
+    );
+    expect(slots).not.toContain('wrap-anywhere');
+    expect(tokens(theme.target())).not.toContain('shrink-0');
+  });
+
+  it('keeps hashtag chips whole and truncates them within the line', () => {
+    expect(tokens(notificationThread().text())).toEqual(
+      expect.arrayContaining([
+        '[&_[data-hashtag]]:inline-block',
+        '[&_[data-hashtag]]:whitespace-nowrap',
+        '[&_[data-hashtag]]:max-w-full',
+        '[&_[data-hashtag]]:truncate',
+      ]),
+    );
+  });
+
+  it('aligns the row time to the first text line', () => {
+    expect(tokens(notificationThread().row())).toEqual(
+      expect.arrayContaining(['grid', 'items-baseline']),
+    );
+  });
+
+  it('leaves name tones to the shared actor name', () => {
+    const theme = notificationThread();
+    const nameSlots = [
+      theme.row(),
+      theme.flow(),
+      theme.target(),
+      theme.hiddenAuthor(),
+      theme.text(),
+      theme.toggleLabel(),
+    ].flatMap(tokens);
+
+    expect(nameSlots).not.toContain('text-foreground');
+    expect(nameSlots).not.toContain('text-foreground-soft');
+    expect(nameSlots).not.toContain('text-foreground-muted');
+    expect(nameSlots).not.toContain('font-medium');
+    expect(tokens(theme.time())).not.toContain('font-medium');
+  });
+
+  it('hides a repeated author name visually only', () => {
+    expect(tokens(notificationThread().hiddenAuthor())).toEqual(['sr-only']);
+  });
 });

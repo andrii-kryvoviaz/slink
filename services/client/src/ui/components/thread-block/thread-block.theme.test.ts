@@ -8,17 +8,47 @@ const tokens = (classes: string) =>
 describe('threadBlock', () => {
   const theme = threadBlock();
 
-  it('keeps the borderless soft surface on the root', () => {
+  it('draws the quote rail on the root around a latest row', () => {
     expect(tokens(theme.root())).toEqual(
-      tokens('flex flex-col gap-2.5 rounded-lg bg-muted-soft px-3 py-2'),
+      tokens('flex flex-col gap-2.5 border-l-2 border-border pl-3 pr-3'),
     );
   });
 
-  it('drops the surface on the bare root', () => {
-    expect(tokens(threadBlock({ surface: 'bare' }).root())).toEqual(
-      tokens('flex flex-col gap-2.5'),
+  it('renders rows in muted text', () => {
+    expect(tokens(theme.row())).toEqual(
+      tokens('min-w-0 text-[13px] text-foreground-muted'),
     );
   });
+
+  it('keeps the panel bare inside the rail root', () => {
+    expect(tokens(theme.panel())).toEqual(tokens('flex flex-col gap-2.5'));
+  });
+
+  it('moves the rail from the root to the panel without a latest row', () => {
+    const list = threadBlock({ latest: false });
+
+    expect(tokens(list.root())).toEqual(tokens('flex flex-col gap-2.5'));
+    expect(tokens(list.panel())).toEqual(
+      tokens('flex flex-col gap-2.5 border-l-2 border-border pl-3 pr-3'),
+    );
+  });
+
+  it.each([
+    { latest: true, surface: threadBlock({ latest: true }).root() },
+    { latest: false, surface: threadBlock({ latest: false }).panel() },
+  ])(
+    'renders the rail as a bare hairline when latest is $latest',
+    ({ surface }) => {
+      const rail = tokens(surface);
+
+      expect(rail).toEqual(
+        expect.arrayContaining(['border-l-2', 'border-border', 'pl-3']),
+      );
+      expect(
+        rail.filter((token) => /(^|:)(bg-|rounded-|py-)/.test(token)),
+      ).toEqual([]);
+    },
+  );
 
   it('keeps the hit area and focus ring on the trigger', () => {
     expect(tokens(theme.trigger())).toEqual(
@@ -26,6 +56,10 @@ describe('threadBlock', () => {
         'group relative inline-flex w-fit items-center gap-1 self-start rounded-sm text-xs font-medium text-foreground-muted outline-none hover:text-foreground before:absolute before:inset-x-0 before:-inset-y-3.5 before:content-[""] focus-visible:ring-2 focus-visible:ring-ring/50',
       ),
     );
+  });
+
+  it('styles the show-more control exactly like the trigger', () => {
+    expect(tokens(theme.more())).toEqual(tokens(theme.trigger()));
   });
 
   it('renders the trigger as quiet muted text', () => {
@@ -48,7 +82,7 @@ describe('threadBlock', () => {
   it('keeps the collapsible animations with reduced motion on the content', () => {
     expect(tokens(theme.content())).toEqual(
       tokens(
-        'flex flex-col gap-2.5 overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down motion-reduce:animate-none',
+        'overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down motion-reduce:animate-none',
       ),
     );
   });

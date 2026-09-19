@@ -13,9 +13,13 @@ describe('notificationActorList', () => {
     );
   });
 
-  it('sets the name slot in medium weight', () => {
+  it('keeps the name slot to layout and leaves its tone to the actor name', () => {
     const name = tokens(notificationActorList().name());
 
-    expect(name).toEqual(expect.arrayContaining(['font-medium']));
+    expect(name).toEqual(expect.arrayContaining(['min-w-0', 'truncate']));
+    expect(name).not.toContain('font-medium');
+    expect(name).not.toContain('text-foreground');
+    expect(name).not.toContain('text-foreground-soft');
+    expect(name).not.toContain('text-foreground-muted');
   });
 });

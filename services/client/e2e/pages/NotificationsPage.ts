@@ -81,7 +81,7 @@ export class NotificationsPage extends BasePage {
   threadRow(entry: Locator, author: string) {
     return entry
       .getByRole('button', { name: author, exact: true })
-      .locator('..');
+      .locator('xpath=../..');
   }
 
   visibleTimes(entry: Locator) {
