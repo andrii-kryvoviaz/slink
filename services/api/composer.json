@@ -24,6 +24,7 @@
         "ramsey/uuid": "^4.7",
         "ramsey/uuid-doctrine": "^2.0",
         "symfony/cache": "^8.1",
+        "symfony/clock": "^8.1",
         "symfony/console": "^8.1",
         "symfony/doctrine-messenger": "^8.1",
         "symfony/dotenv": "^8.1",

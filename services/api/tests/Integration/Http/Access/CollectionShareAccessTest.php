@@ -112,6 +112,7 @@ final class CollectionShareAccessTest extends HttpTestCase {
 
   #[Test]
   public function anonymousGetsGoneForExpiredCollection(): void {
+    $clock = self::mockTime();
     $this->setAccessSettings(['requireAuthForCollectionShares' => false]);
     $this->bootActors();
 
@@ -122,7 +123,7 @@ final class CollectionShareAccessTest extends HttpTestCase {
     $this->publishShare($this->ownerToken, $share);
     $this->setShareExpiration($this->ownerToken, $share, $this->futureIso(1));
 
-    \sleep(2);
+    $clock->sleep(2);
 
     self::assertSame(410, $this->apiRequest('GET', $this->url($collection)));
   }

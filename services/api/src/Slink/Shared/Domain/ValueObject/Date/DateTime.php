@@ -10,6 +10,7 @@ use Exception;
 use Slink\Shared\Domain\Exception\Date\DateTimeException;
 use Slink\Shared\Infrastructure\Attribute\Groups;
 use Slink\Shared\Infrastructure\Attribute\SerializedName;
+use Symfony\Component\Clock\Clock;
 use Throwable;
 
 final class DateTime extends DateTimeImmutable {
@@ -31,7 +32,7 @@ final class DateTime extends DateTimeImmutable {
    * @throws DateTimeException
    */
   public static function now(): self {
-    return self::create();
+    return self::createFromInterface(Clock::get()->now());
   }
 
   /**
