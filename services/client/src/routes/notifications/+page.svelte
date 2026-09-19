@@ -2,14 +2,18 @@
   import { LoadMoreButton } from '@slink/feature/Action';
   import { EmptyState, GhostRows } from '@slink/feature/Layout';
   import {
-    NotificationGroupItem,
+    NotificationActorList,
+    NotificationEntry,
     NotificationSkeleton,
+    NotificationThread,
   } from '@slink/feature/Notification';
-  import { Title } from '@slink/feature/Text';
+  import { Subtitle, Title } from '@slink/feature/Text';
   import { Button } from '@slink/ui/components/button';
+  import * as Timeline from '@slink/ui/components/timeline';
   import { untrack } from 'svelte';
 
   import { goto } from '$app/navigation';
+  import { formatShortDate } from '$lib/utils/date.svelte';
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
@@ -17,6 +21,9 @@
 
   import { skeleton } from '@slink/lib/actions/skeleton';
   import { useNotificationFeed } from '@slink/lib/state/NotificationFeed.svelte';
+
+  import type { NotificationGroup } from '@slink/utils/notification';
+  import { routes } from '@slink/utils/url';
 
   import type { PageServerData } from './$types';
 
@@ -39,17 +46,25 @@
     notificationFeed.markAllAsRead();
   }
 
-  function handleItemClick(item: NotificationItem) {
+  function markGroupRead(group: NotificationGroup) {
+    notificationFeed.markGroupAsRead(group);
+  }
+
+  function openGroup(group: NotificationGroup) {
+    notificationFeed.markGroupAsRead(group);
+    goto(
+      routes.general.explorePost(group.reference.id, group.latestComment?.id),
+    );
+  }
+
+  function openItem(item: NotificationItem) {
     if (!item.isRead) {
       notificationFeed.markAsRead(item.id);
     }
 
-    const baseUrl = `/explore?post=${item.reference.id}`;
-    if (item.relatedComment) {
-      goto(`${baseUrl}&comment=${item.relatedComment.id}`);
-    } else {
-      goto(baseUrl);
-    }
+    goto(
+      routes.general.explorePost(item.reference.id, item.relatedComment?.id),
+    );
   }
 </script>
 
@@ -62,25 +77,28 @@
     class="flex flex-col px-4 py-6 sm:px-6 w-full max-w-xl"
     use:skeleton={{ feed: notificationFeed, showDelay: 30 }}
   >
-    <div class="mb-8" in:fade={{ duration: 300 }}>
+    <header class="mb-8" in:fade={{ duration: 300 }}>
       <div class="flex items-start justify-between gap-4">
         <div>
-          <Title size="md">Notifications</Title>
+          <Title>Notifications</Title>
           {#if notificationFeed.unreadCount > 0}
-            <p class="mt-1 text-sm text-foreground-muted">
-              {notificationFeed.unreadCount} unread
-            </p>
+            <Subtitle>{notificationFeed.unreadCount} unread</Subtitle>
           {/if}
         </div>
 
         {#if notificationFeed.unreadCount > 0}
-          <Button variant="soft-violet" size="sm" onclick={handleMarkAllAsRead}>
+          <Button
+            variant="glass"
+            size="sm"
+            rounded="full"
+            onclick={handleMarkAllAsRead}
+          >
             <Icon icon="ph:checks" class="w-4 h-4" />
             Mark all read
           </Button>
         {/if}
       </div>
-    </div>
+    </header>
 
     {#if notificationFeed.showSkeleton}
       <div in:fade={{ duration: 200 }}>
@@ -99,10 +117,35 @@
         </EmptyState>
       </div>
     {:else}
-      <div class="flex flex-col gap-2" in:fade={{ duration: 400 }}>
-        {#each notificationFeed.groupedItems as group (group.key)}
-          <NotificationGroupItem {group} onItemClick={handleItemClick} />
-        {/each}
+      <div in:fade={{ duration: 400 }}>
+        <Timeline.Root>
+          {#each notificationFeed.dayBuckets as bucket (bucket.key)}
+            <Timeline.Group>
+              {#snippet label()}
+                {#if bucket.kind === 'today'}
+                  <span>Today</span>
+                {:else if bucket.kind === 'yesterday'}
+                  <span>Yesterday</span>
+                {:else}
+                  <span>{formatShortDate(bucket.day)}</span>
+                {/if}
+              {/snippet}
+              {#each bucket.groups as group (group.key)}
+                <NotificationEntry
+                  {group}
+                  onOpen={openGroup}
+                  onMarkRead={markGroupRead}
+                >
+                  {#if group.type === 'comment' || group.type === 'comment_reply'}
+                    <NotificationThread {group} onOpenItem={openItem} />
+                  {:else if group.type === 'added_to_bookmarks'}
+                    <NotificationActorList {group} />
+                  {/if}
+                </NotificationEntry>
+              {/each}
+            </Timeline.Group>
+          {/each}
+        </Timeline.Root>
       </div>
     {/if}
 

@@ -246,11 +246,6 @@ msgstr "Guardar cambios"
 msgid "Create Collection"
 msgstr "Crear colección"
 
-#: src/feature/Notification/NotificationGroupItem.svelte
-#: src/feature/Notification/NotificationListItem.svelte
-msgid "Someone"
-msgstr "Alguien"
-
 #: src/feature/Notification/NotificationListItem.svelte
 msgid "Mark as read"
 msgstr "Marcar como leído"
@@ -4213,26 +4208,6 @@ msgstr[1] "# etiquetas"
 msgid "Tag name cannot contain a slash"
 msgstr "El nombre de la etiqueta no puede contener una barra"
 
-#: src/feature/Notification/NotificationGroupItem.svelte
-msgid "commented"
-msgstr "ha comentado"
-
-#: src/feature/Notification/NotificationGroupItem.svelte
-msgid "replied"
-msgstr "ha respondido"
-
-#: src/feature/Notification/NotificationGroupItem.svelte
-msgid "favorited"
-msgstr "añadió a favoritos"
-
-#: src/feature/Notification/NotificationGroupItem.svelte
-msgid "bookmarked"
-msgstr "añadió a marcadores"
-
-#: src/feature/Notification/NotificationGroupItem.svelte
-msgid "interacted"
-msgstr "ha interactuado"
-
 #: src/feature/Image/Actions/CopyZoneAction/CopyZoneAction.svelte
 msgid "Copy image link"
 msgstr "Copiar enlace de la imagen"
@@ -4744,6 +4719,7 @@ msgstr "Formatos de carga permitidos"
 msgid "Supported formats"
 msgstr "Formatos compatibles"
 
+#: src/feature/Notification/NotificationActorList/NotificationActorList.svelte
 #: src/feature/Upload/Uploader/UploaderConstraints.svelte
 msgid "Show less"
 msgstr "Mostrar menos"
@@ -5145,3 +5121,81 @@ msgstr "No se pudo procesar este SVG. Puede estar mal formado o anidado demasiad
 #: src/feature/Image/Explore/ExploreListView/ExploreListView.svelte
 msgid "No description"
 msgstr "Sin descripción"
+
+#: src/feature/Notification/NotificationActorList/NotificationActorList.svelte
+#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
+#: src/feature/Notification/NotificationThread/NotificationThread.svelte
+msgid "A visitor"
+msgid_plural "# visitors"
+msgstr[0] "Un visitante"
+msgstr[1] "# visitantes"
+
+#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
+msgid "and # other"
+msgid_plural "and # others"
+msgstr[0] "y # persona más"
+msgstr[1] "y # personas más"
+
+#: src/feature/Notification/NotificationThread/NotificationThread.svelte
+msgid "# earlier reply"
+msgid_plural "# earlier replies"
+msgstr[0] "# respuesta anterior"
+msgstr[1] "# respuestas anteriores"
+
+#: src/feature/Notification/NotificationThread/NotificationThread.svelte
+msgid "# earlier comment"
+msgid_plural "# earlier comments"
+msgstr[0] "# comentario anterior"
+msgstr[1] "# comentarios anteriores"
+
+#: src/routes/notifications/+page.svelte
+msgid "Yesterday"
+msgstr "Ayer"
+
+#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
+msgid "and"
+msgstr "y"
+
+#: src/feature/Notification/NotificationThread/NotificationThread.svelte
+msgid "Hide earlier reply"
+msgid_plural "Hide earlier replies"
+msgstr[0] "Ocultar respuesta anterior"
+msgstr[1] "Ocultar respuestas anteriores"
+msgstr[2] "Ocultar respuestas anteriores"
+
+#: src/feature/Notification/NotificationThread/NotificationThread.svelte
+msgid "Hide earlier comment"
+msgid_plural "Hide earlier comments"
+msgstr[0] "Ocultar comentario anterior"
+msgstr[1] "Ocultar comentarios anteriores"
+msgstr[2] "Ocultar comentarios anteriores"
+
+#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
+msgid "commented"
+msgid_plural "commented"
+msgstr[0] "ha comentado"
+msgstr[1] "han comentado"
+msgstr[2] "han comentado"
+
+#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
+msgid "replied to your comment"
+msgid_plural "replied to your comment"
+msgstr[0] "respondió a tu comentario"
+msgstr[1] "respondieron a tu comentario"
+msgstr[2] "respondieron a tu comentario"
+
+#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
+msgid "bookmarked"
+msgid_plural "bookmarked"
+msgstr[0] "añadió a marcadores"
+msgstr[1] "añadieron a marcadores"
+msgstr[2] "añadieron a marcadores"
+
+#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
+msgid "Open post"
+msgstr "Abrir publicación"
+
+#. 0: total
+#: src/feature/Notification/NotificationActorList/NotificationActorList.svelte
+msgid "Show all {0}"
+msgstr "Mostrar los {0}"

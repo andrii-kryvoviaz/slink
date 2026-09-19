@@ -138,10 +138,36 @@ export class ContentApi {
     await this.http.request('POST', `/api/images/${imageId}/tags/${tagId}`);
   }
 
-  async createComment(imageId: string, content: string): Promise<void> {
-    await this.http.request('POST', `/api/image/${imageId}/comments`, {
+  async createComment(imageId: string, content: string): Promise<string> {
+    return this.postComment(imageId, { content });
+  }
+
+  async createReply(
+    imageId: string,
+    parentCommentId: string,
+    content: string,
+  ): Promise<string> {
+    return this.postComment(imageId, {
       content,
+      referencedCommentId: parentCommentId,
     });
+  }
+
+  async bookmarkImage(imageId: string): Promise<void> {
+    await this.http.request('POST', `/api/image/${imageId}/bookmark`);
+  }
+
+  private async postComment(
+    imageId: string,
+    body: { content: string; referencedCommentId?: string },
+  ): Promise<string> {
+    const data = await this.http.request(
+      'POST',
+      `/api/image/${imageId}/comments`,
+      body,
+    );
+
+    return data?.id ?? data?.data?.id ?? data;
   }
 
   async addImageToCollection(

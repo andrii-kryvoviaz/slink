@@ -15,4 +15,4 @@ export * from './progress';
 export * from './button-group';
 export * as Picker from './picker';
 export * as Filter from './filter';
-export { Timeline, TimelineGroup, TimelineEntry } from './timeline';
+export * as Timeline from './timeline';

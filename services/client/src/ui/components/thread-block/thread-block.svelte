@@ -5,12 +5,12 @@
   import { cn } from '$lib/utils/ui';
   import Icon from '@iconify/svelte';
 
-  import { threadBlock } from './thread-block.theme';
+  import { type ThreadBlockSurface, threadBlock } from './thread-block.theme';
 
   interface Props {
-    latest: T;
+    latest?: T;
     earlier: T[];
-    row: Snippet<[T]>;
+    row: Snippet<[T, { latest: boolean }]>;
     toggle: Snippet<[{ count: number; open: boolean }]>;
     open?: boolean;
     class?: string;
@@ -25,18 +25,25 @@
     class: className,
   }: Props = $props();
 
-  const theme = threadBlock();
+  const surface: ThreadBlockSurface = $derived.by(() => {
+    if (latest === undefined && !open) return 'bare';
+
+    return 'card';
+  });
+  const theme = $derived(threadBlock({ surface }));
 </script>
 
 <Collapsible.Root bind:open class={cn(theme.root(), className)}>
-  <div class={theme.row()}>
-    {@render row(latest)}
-  </div>
+  {#if latest !== undefined}
+    <div class={theme.row()}>
+      {@render row(latest, { latest: true })}
+    </div>
+  {/if}
   {#if earlier.length > 0}
     <Collapsible.Content class={theme.content()}>
       {#each earlier as item}
         <div class={theme.row()}>
-          {@render row(item)}
+          {@render row(item, { latest: false })}
         </div>
       {/each}
     </Collapsible.Content>

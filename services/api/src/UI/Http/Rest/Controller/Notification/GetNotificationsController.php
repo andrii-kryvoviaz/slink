@@ -8,6 +8,7 @@ use Slink\Notification\Application\Query\GetNotifications\GetNotificationsQuery;
 use Slink\Shared\Application\Query\QueryTrait;
 use Slink\User\Infrastructure\Auth\JwtUser;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -21,10 +22,10 @@ final class GetNotificationsController {
 
   public function __invoke(
     #[CurrentUser] JWTUser $user,
-    int $page = 1,
-    int $limit = 20,
+    #[MapQueryParameter] int $page = 1,
+    #[MapQueryParameter] int $limit = 20,
   ): ApiResponse {
-    $query = new GetNotificationsQuery($page, $limit);
+    $query = new GetNotificationsQuery(max(1, $page), min(100, max(1, $limit)));
     $result = $this->ask($query->withContext([
       'userId' => $user->getIdentifier(),
     ]));

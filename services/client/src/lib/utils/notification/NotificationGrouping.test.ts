@@ -233,4 +233,70 @@ describe('NotificationGrouping.group', () => {
 
     expect(items).toEqual(snapshot);
   });
+
+  it('keeps one actor item per actor carrying their newest time', () => {
+    const groups = NotificationGrouping.group([
+      item({ actor: A, timestamp: 100 }),
+      item({ actor: B, timestamp: 200 }),
+      item({ actor: A, timestamp: 300 }),
+    ]);
+
+    expect(
+      groups[0].actorItems.map((i) => [i.actor.id, i.createdAt.timestamp]),
+    ).toEqual([
+      ['u-a', 300],
+      ['u-b', 200],
+    ]);
+  });
+
+  it("orders actor items by each actor's newest item", () => {
+    const groups = NotificationGrouping.group([
+      item({ actor: A, timestamp: 100 }),
+      item({ actor: B, timestamp: 200 }),
+      item({ actor: C, timestamp: 300 }),
+      item({ actor: A, timestamp: 400 }),
+    ]);
+
+    expect(groups[0].actorItems.map((i) => i.actor.id)).toEqual([
+      'u-a',
+      'u-c',
+      'u-b',
+    ]);
+  });
+
+  it('totals distinct actors and visitors and keeps the newest visitor item', () => {
+    const groups = NotificationGrouping.group([
+      item({ actor: A, timestamp: 500 }),
+      item({ actor: B, timestamp: 400 }),
+      item({ actor: null, timestamp: 300 }),
+      item({ actor: A, timestamp: 200 }),
+      item({ actor: null, timestamp: 100 }),
+    ]);
+
+    expect(groups[0].actorTotal).toBe(4);
+    expect(groups[0].latestVisitorItem?.createdAt.timestamp).toBe(300);
+    expect(groups[0].latestVisitorItem?.actor).toBeNull();
+  });
+
+  it('gives a visitor-only group no actor items', () => {
+    const groups = NotificationGrouping.group([
+      item({ actor: null, timestamp: 300 }),
+      item({ actor: null, timestamp: 200 }),
+      item({ actor: null, timestamp: 100 }),
+    ]);
+
+    expect(groups[0].actorItems).toEqual([]);
+    expect(groups[0].latestVisitorItem?.createdAt.timestamp).toBe(300);
+    expect(groups[0].actorTotal).toBe(3);
+  });
+
+  it('leaves latestVisitorItem null without visitors', () => {
+    const groups = NotificationGrouping.group([
+      item({ actor: A, timestamp: 200 }),
+      item({ actor: B, timestamp: 100 }),
+    ]);
+
+    expect(groups[0].latestVisitorItem).toBeNull();
+    expect(groups[0].actorTotal).toBe(2);
+  });
 });

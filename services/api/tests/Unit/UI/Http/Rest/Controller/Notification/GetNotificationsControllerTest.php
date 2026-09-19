@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\UI\Http\Rest\Controller\Notification;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Notification\Application\Query\GetNotifications\GetNotificationsQuery;
@@ -97,6 +98,41 @@ final class GetNotificationsControllerTest extends TestCase {
         return $message->getPage() === $page && $message->getLimit() === $limit;
       }))
       ->willReturn($collection);
+
+    $controller = new GetNotificationsController();
+    $controller->setQueryBus($queryBus);
+
+    $controller($user, $page, $limit);
+  }
+
+  /**
+   * @return iterable<string, array{int, int, int, int}>
+   */
+  public static function outOfRangePagination(): iterable {
+    yield 'page clamps to minimum one' => [0, 20, 1, 20];
+    yield 'limit clamps to maximum one hundred' => [1, 500, 1, 100];
+    yield 'limit clamps to minimum one' => [1, 0, 1, 1];
+    yield 'negative page and limit clamp to one' => [-1, -5, 1, 1];
+  }
+
+  #[Test]
+  #[DataProvider('outOfRangePagination')]
+  public function itClampsPaginationBeforeDispatch(int $page, int $limit, int $expectedPage, int $expectedLimit): void {
+    $queryBus = $this->createMock(QueryBusInterface::class);
+    $user = $this->createStub(JwtUser::class);
+
+    $user->method('getIdentifier')->willReturn('user-123');
+
+    $queryBus->expects($this->once())
+      ->method('ask')
+      ->with($this->callback(function (Envelope $envelope) use ($expectedPage, $expectedLimit) {
+        $message = $envelope->getMessage();
+
+        return $message instanceof GetNotificationsQuery
+          && $message->getPage() === $expectedPage
+          && $message->getLimit() === $expectedLimit;
+      }))
+      ->willReturn(new Collection(0, $expectedLimit, 0, []));
 
     $controller = new GetNotificationsController();
     $controller->setQueryBus($queryBus);

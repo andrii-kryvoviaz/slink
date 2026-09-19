@@ -6,12 +6,19 @@ import type {
   NotificationType,
 } from '@slink/api/Response';
 
+export type NotificationActorItem = NotificationItem & {
+  actor: NotificationActor;
+};
+
 export interface NotificationGroup {
   key: string;
   type: NotificationType;
   reference: NotificationReference;
   actors: NotificationActor[];
+  actorItems: NotificationActorItem[];
   visitorCount: number;
+  latestVisitorItem: NotificationItem | null;
+  actorTotal: number;
   items: NotificationItem[];
   latestTimestamp: number;
   latestComment: NotificationRelatedComment | null;
@@ -25,7 +32,12 @@ export class NotificationGrouping {
 
     for (const item of items) {
       const key = `${item.type}:${item.reference.id}`;
-      buckets.set(key, [...(buckets.get(key) ?? []), item]);
+      const bucket = buckets.get(key);
+      if (bucket) {
+        bucket.push(item);
+      } else {
+        buckets.set(key, [item]);
+      }
     }
 
     return Array.from(buckets, ([key, bucket]) =>
@@ -42,13 +54,18 @@ export class NotificationGrouping {
     );
     const newest = items[0];
     const unreadCount = items.filter((item) => !item.isRead).length;
+    const actorItems = this._actorItems(items);
+    const visitorCount = items.filter((item) => item.actor === null).length;
 
     return {
       key,
       type: newest.type,
       reference: newest.reference,
-      actors: this._distinctActors(items),
-      visitorCount: items.filter((item) => item.actor === null).length,
+      actors: actorItems.map((item) => item.actor),
+      actorItems,
+      visitorCount,
+      latestVisitorItem: items.find((item) => item.actor === null) ?? null,
+      actorTotal: actorItems.length + visitorCount,
       items,
       latestTimestamp: newest.createdAt.timestamp,
       latestComment: newest.relatedComment,
@@ -57,17 +74,25 @@ export class NotificationGrouping {
     };
   }
 
-  private static _distinctActors(
+  private static _actorItems(
     items: NotificationItem[],
-  ): NotificationActor[] {
-    const seen = new Map<string, NotificationActor>();
+  ): NotificationActorItem[] {
+    const seen = new Set<string>();
+    const actorItems: NotificationActorItem[] = [];
 
-    for (const { actor } of items) {
-      if (actor && !seen.has(actor.id)) {
-        seen.set(actor.id, actor);
-      }
+    for (const item of items) {
+      if (!this._hasActor(item) || seen.has(item.actor.id)) continue;
+
+      seen.add(item.actor.id);
+      actorItems.push(item);
     }
 
-    return Array.from(seen.values());
+    return actorItems;
+  }
+
+  private static _hasActor(
+    item: NotificationItem,
+  ): item is NotificationActorItem {
+    return item.actor !== null;
   }
 }

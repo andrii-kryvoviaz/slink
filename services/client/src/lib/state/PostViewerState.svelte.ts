@@ -137,6 +137,7 @@ class PostViewerState {
   clearUrlParam(): void {
     const url = new URL(window.location.href);
     url.searchParams.delete('post');
+    url.searchParams.delete('comment');
     replaceState(url, {});
   }
 
@@ -182,7 +183,7 @@ class PostViewerState {
 
     this._lastFetchedPostId = postId;
 
-    const response = await ApiClient.image.getPublicImageById(postId);
+    const response = await this._fetchStandalone(postId);
     if (response && response.id) {
       this._standaloneItem = response;
       this._isOpen = true;
@@ -191,6 +192,14 @@ class PostViewerState {
 
     this.clearUrlParam();
     return false;
+  }
+
+  private async _fetchStandalone(postId: string): Promise<MediaItem | null> {
+    try {
+      return await ApiClient.image.getPublicImageById(postId);
+    } catch {
+      return null;
+    }
   }
 
   private prefetchAdjacent(): void {

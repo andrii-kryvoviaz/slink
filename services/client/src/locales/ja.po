@@ -246,11 +246,6 @@ msgstr "変更を保存"
 msgid "Create Collection"
 msgstr "コレクションを作成"
 
-#: src/feature/Notification/NotificationGroupItem.svelte
-#: src/feature/Notification/NotificationListItem.svelte
-msgid "Someone"
-msgstr "誰か"
-
 #: src/feature/Notification/NotificationListItem.svelte
 msgid "Mark as read"
 msgstr "既読にする"
@@ -4199,26 +4194,6 @@ msgstr[0] "# 件のタグ"
 msgid "Tag name cannot contain a slash"
 msgstr "タグ名にスラッシュは使えません"
 
-#: src/feature/Notification/NotificationGroupItem.svelte
-msgid "commented"
-msgstr "がコメントしました"
-
-#: src/feature/Notification/NotificationGroupItem.svelte
-msgid "replied"
-msgstr "が返信しました"
-
-#: src/feature/Notification/NotificationGroupItem.svelte
-msgid "favorited"
-msgstr "がお気に入りに追加しました"
-
-#: src/feature/Notification/NotificationGroupItem.svelte
-msgid "bookmarked"
-msgstr "がブックマークに追加しました"
-
-#: src/feature/Notification/NotificationGroupItem.svelte
-msgid "interacted"
-msgstr "が反応しました"
-
 #: src/feature/Image/Actions/CopyZoneAction/CopyZoneAction.svelte
 msgid "Copy image link"
 msgstr "画像リンクをコピー"
@@ -4729,6 +4704,7 @@ msgstr "許可されたアップロード形式"
 msgid "Supported formats"
 msgstr "対応形式"
 
+#: src/feature/Notification/NotificationActorList/NotificationActorList.svelte
 #: src/feature/Upload/Uploader/UploaderConstraints.svelte
 msgid "Show less"
 msgstr "折りたたむ"
@@ -5127,3 +5103,67 @@ msgstr "このSVGを処理できませんでした。形式が正しくないか
 #: src/feature/Image/Explore/ExploreListView/ExploreListView.svelte
 msgid "No description"
 msgstr "説明なし"
+
+#: src/feature/Notification/NotificationActorList/NotificationActorList.svelte
+#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
+#: src/feature/Notification/NotificationThread/NotificationThread.svelte
+msgid "A visitor"
+msgid_plural "# visitors"
+msgstr[0] "#人の訪問者"
+
+#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
+msgid "and # other"
+msgid_plural "and # others"
+msgstr[0] "ほか#人"
+
+#: src/feature/Notification/NotificationThread/NotificationThread.svelte
+msgid "# earlier reply"
+msgid_plural "# earlier replies"
+msgstr[0] "以前の返信#件"
+
+#: src/feature/Notification/NotificationThread/NotificationThread.svelte
+msgid "# earlier comment"
+msgid_plural "# earlier comments"
+msgstr[0] "以前のコメント#件"
+
+#: src/routes/notifications/+page.svelte
+msgid "Yesterday"
+msgstr "昨日"
+
+#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
+msgid "and"
+msgstr "と"
+
+#: src/feature/Notification/NotificationThread/NotificationThread.svelte
+msgid "Hide earlier reply"
+msgid_plural "Hide earlier replies"
+msgstr[0] "以前の返信を隠す"
+
+#: src/feature/Notification/NotificationThread/NotificationThread.svelte
+msgid "Hide earlier comment"
+msgid_plural "Hide earlier comments"
+msgstr[0] "以前のコメントを隠す"
+
+#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
+msgid "commented"
+msgid_plural "commented"
+msgstr[0] "がコメントしました"
+
+#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
+msgid "replied to your comment"
+msgid_plural "replied to your comment"
+msgstr[0] "があなたのコメントに返信しました"
+
+#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
+msgid "bookmarked"
+msgid_plural "bookmarked"
+msgstr[0] "がブックマークに追加しました"
+
+#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
+msgid "Open post"
+msgstr "投稿を開く"
+
+#. 0: total
+#: src/feature/Notification/NotificationActorList/NotificationActorList.svelte
+msgid "Show all {0}"
+msgstr "{0}件すべて表示"

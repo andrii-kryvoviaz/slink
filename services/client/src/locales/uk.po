@@ -246,11 +246,6 @@ msgstr "Зберегти зміни"
 msgid "Create Collection"
 msgstr "Створити колекцію"
 
-#: src/feature/Notification/NotificationGroupItem.svelte
-#: src/feature/Notification/NotificationListItem.svelte
-msgid "Someone"
-msgstr "Хтось"
-
 #: src/feature/Notification/NotificationListItem.svelte
 msgid "Mark as read"
 msgstr "Позначити як прочитане"
@@ -4227,26 +4222,6 @@ msgstr[2] "# тегами"
 msgid "Tag name cannot contain a slash"
 msgstr "Назва тегу не може містити слеш"
 
-#: src/feature/Notification/NotificationGroupItem.svelte
-msgid "commented"
-msgstr "прокоментував(-ла)"
-
-#: src/feature/Notification/NotificationGroupItem.svelte
-msgid "replied"
-msgstr "відповів(-ла)"
-
-#: src/feature/Notification/NotificationGroupItem.svelte
-msgid "favorited"
-msgstr "додав(-ла) до улюбленого"
-
-#: src/feature/Notification/NotificationGroupItem.svelte
-msgid "bookmarked"
-msgstr "додав(-ла) до закладок"
-
-#: src/feature/Notification/NotificationGroupItem.svelte
-msgid "interacted"
-msgstr "взаємодіяв(-ла)"
-
 #: src/feature/Image/Actions/CopyZoneAction/CopyZoneAction.svelte
 msgid "Copy image link"
 msgstr "Копіювати посилання на зображення"
@@ -4759,6 +4734,7 @@ msgstr "Дозволені формати завантаження"
 msgid "Supported formats"
 msgstr "Підтримувані формати"
 
+#: src/feature/Notification/NotificationActorList/NotificationActorList.svelte
 #: src/feature/Upload/Uploader/UploaderConstraints.svelte
 msgid "Show less"
 msgstr "Показати менше"
@@ -5163,3 +5139,90 @@ msgstr "Не вдалося обробити цей SVG. Можливо, він 
 #: src/feature/Image/Explore/ExploreListView/ExploreListView.svelte
 msgid "No description"
 msgstr "Немає опису"
+
+#: src/feature/Notification/NotificationActorList/NotificationActorList.svelte
+#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
+#: src/feature/Notification/NotificationThread/NotificationThread.svelte
+msgid "A visitor"
+msgid_plural "# visitors"
+msgstr[0] "Відвідувач"
+msgstr[1] "# відвідувачі"
+msgstr[2] "# відвідувачів"
+
+#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
+msgid "and # other"
+msgid_plural "and # others"
+msgstr[0] "та ще # особа"
+msgstr[1] "та ще # особи"
+msgstr[2] "та ще # осіб"
+
+#: src/feature/Notification/NotificationThread/NotificationThread.svelte
+msgid "# earlier reply"
+msgid_plural "# earlier replies"
+msgstr[0] "# попередня відповідь"
+msgstr[1] "# попередні відповіді"
+msgstr[2] "# попередніх відповідей"
+
+#: src/feature/Notification/NotificationThread/NotificationThread.svelte
+msgid "# earlier comment"
+msgid_plural "# earlier comments"
+msgstr[0] "# попередній коментар"
+msgstr[1] "# попередні коментарі"
+msgstr[2] "# попередніх коментарів"
+
+#: src/routes/notifications/+page.svelte
+msgid "Yesterday"
+msgstr "Вчора"
+
+#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
+msgid "and"
+msgstr "і"
+
+#: src/feature/Notification/NotificationThread/NotificationThread.svelte
+msgid "Hide earlier reply"
+msgid_plural "Hide earlier replies"
+msgstr[0] "Сховати попередню відповідь"
+msgstr[1] "Сховати попередні відповіді"
+msgstr[2] "Сховати попередні відповіді"
+msgstr[3] "Сховати попередні відповіді"
+
+#: src/feature/Notification/NotificationThread/NotificationThread.svelte
+msgid "Hide earlier comment"
+msgid_plural "Hide earlier comments"
+msgstr[0] "Сховати попередній коментар"
+msgstr[1] "Сховати попередні коментарі"
+msgstr[2] "Сховати попередні коментарі"
+msgstr[3] "Сховати попередні коментарі"
+
+#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
+msgid "commented"
+msgid_plural "commented"
+msgstr[0] "прокоментував(-ла)"
+msgstr[1] "прокоментували"
+msgstr[2] "прокоментували"
+msgstr[3] "прокоментували"
+
+#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
+msgid "replied to your comment"
+msgid_plural "replied to your comment"
+msgstr[0] "відповів(-ла) на ваш коментар"
+msgstr[1] "відповіли на ваш коментар"
+msgstr[2] "відповіли на ваш коментар"
+msgstr[3] "відповіли на ваш коментар"
+
+#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
+msgid "bookmarked"
+msgid_plural "bookmarked"
+msgstr[0] "додав(-ла) до закладок"
+msgstr[1] "додали до закладок"
+msgstr[2] "додали до закладок"
+msgstr[3] "додали до закладок"
+
+#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
+msgid "Open post"
+msgstr "Відкрити допис"
+
+#. 0: total
+#: src/feature/Notification/NotificationActorList/NotificationActorList.svelte
+msgid "Show all {0}"
+msgstr "Показати всі {0}"

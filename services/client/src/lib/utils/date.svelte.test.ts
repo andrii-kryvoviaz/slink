@@ -7,7 +7,10 @@ import {
   daysUntil,
   formatClockTime,
   formatDate,
+  formatDateTime,
+  formatDayTime,
   formatShortDate,
+  formatShortDateTime,
   getLocale,
   hoursUntil,
   narrowFromDays,
@@ -242,6 +245,68 @@ describe('formatShortDate', () => {
   });
 });
 
+describe('formatShortDateTime', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date(2026, 8, 18, 10));
+  });
+
+  it('joins the short date and the clock time with a comma', () => {
+    expect(formatShortDateTime(new Date(2026, 6, 11, 18, 2))).toBe(
+      '11 Jul, 18:02',
+    );
+  });
+});
+
+describe('formatDayTime', () => {
+  const now = new Date(2026, 8, 18, 10);
+
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime(now);
+  });
+
+  it('shows the clock time for today', () => {
+    expect(formatDayTime(new Date(2026, 8, 18, 9, 5), now)).toBe('09:05');
+  });
+
+  it('shows the clock time for yesterday', () => {
+    expect(formatDayTime(new Date(2026, 8, 17, 23, 40), now)).toBe('23:40');
+  });
+
+  it('shows a short date for earlier days', () => {
+    expect(formatDayTime(new Date(2026, 7, 14, 9, 5), now)).toBe('14 Aug');
+  });
+
+  it('appends the year for a previous year', () => {
+    expect(formatDayTime(new Date(2025, 7, 14, 9, 5), now)).toBe('14 Aug 2025');
+  });
+
+  it('follows the app locale', () => {
+    translator.locale = 'en-US';
+
+    expect(formatDayTime(new Date(2026, 7, 14), now)).toBe('Aug 14');
+  });
+});
+
+describe('formatDateTime', () => {
+  it('includes the year and the time', () => {
+    const result = formatDateTime(new Date(2026, 7, 14, 9, 5));
+
+    expect(result).toContain('2026');
+    expect(result).toContain('09:05');
+  });
+
+  it('follows the app locale', () => {
+    const date = new Date(2026, 7, 14, 9, 5);
+    const british = formatDateTime(date);
+
+    translator.locale = 'en-US';
+
+    expect(formatDateTime(date)).not.toBe(british);
+  });
+});
+
 describe('date helper contract', () => {
   it('never mutates the date argument', () => {
     const helpers = [
@@ -250,6 +315,8 @@ describe('date helper contract', () => {
       (date: Date) => dayKind(date, new Date(2026, 8, 18)),
       formatClockTime,
       formatShortDate,
+      (date: Date) => formatDayTime(date, new Date(2026, 8, 18)),
+      formatDateTime,
     ];
 
     for (const helper of helpers) {

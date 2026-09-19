@@ -14,12 +14,14 @@ vi.mock('@slink/api', () => ({
   ApiClient: {
     notification: {
       markAsRead: vi.fn(async () => undefined),
+      markAllAsRead: vi.fn(async () => undefined),
       getUnreadCount: vi.fn(async () => ({ count: 7 })),
     },
   },
 }));
 
 const markAsRead = vi.mocked(ApiClient.notification.markAsRead);
+const markAllAsRead = vi.mocked(ApiClient.notification.markAllAsRead);
 const getUnreadCount = vi.mocked(ApiClient.notification.getUnreadCount);
 
 const item = (
@@ -133,16 +135,63 @@ describe('NotificationFeed.markGroupAsRead', () => {
     expect(feed.unreadCount).toBe(4);
   });
 
-  it('leaves state untouched when a request fails', async () => {
+  it('patches the fulfilled items and leaves the rejected one unread', async () => {
     const feed = await seedFeed(7);
-    markAsRead.mockRejectedValueOnce(new Error('offline'));
+    markAsRead.mockImplementation(async (id: string) => {
+      if (id === 'unread-2') {
+        throw new Error('offline');
+      }
+    });
 
-    await expect(feed.markGroupAsRead(groupOf(feed, 'img-1'))).rejects.toThrow(
-      'offline',
+    await expect(
+      feed.markGroupAsRead(groupOf(feed, 'img-1')),
+    ).resolves.toBeUndefined();
+
+    const group = groupOf(feed, 'img-1');
+    expect(
+      group.items
+        .filter((entry) => entry.isRead)
+        .map((entry) => entry.id)
+        .toSorted(),
+    ).toEqual(['read', 'unread-1', 'unread-3']);
+    expect(group.items.find((entry) => entry.id === 'unread-2')?.isRead).toBe(
+      false,
+    );
+    expect(feed.unreadCount).toBe(5);
+  });
+
+  it('lowers the counter by the real flips when two group marks race', async () => {
+    const feed = await seedFeed(7);
+    const group = groupOf(feed, 'img-1');
+    const pending: Array<() => void> = [];
+    markAsRead.mockImplementation(
+      () => new Promise<void>((resolve) => pending.push(resolve)),
     );
 
-    expect(feed.items.filter((entry) => entry.isRead)).toHaveLength(1);
-    expect(feed.unreadCount).toBe(7);
+    const first = feed.markGroupAsRead(group);
+    const second = feed.markGroupAsRead(group);
+
+    pending.forEach((resolve) => resolve());
+    await Promise.all([first, second]);
+
+    expect(feed.unreadCount).toBe(4);
+  });
+
+  it('lowers the counter by the real flips when a single mark races the group mark', async () => {
+    const feed = await seedFeed(7);
+    const group = groupOf(feed, 'img-1');
+    const pending: Array<() => void> = [];
+    markAsRead.mockImplementation(
+      () => new Promise<void>((resolve) => pending.push(resolve)),
+    );
+
+    const single = feed.markAsRead('unread-1');
+    const grouped = feed.markGroupAsRead(group);
+
+    pending.forEach((resolve) => resolve());
+    await Promise.all([single, grouped]);
+
+    expect(feed.unreadCount).toBe(4);
   });
 
   it('leaves other groups unread', async () => {
@@ -263,7 +312,7 @@ describe('NotificationFeed.markAsRead', () => {
     const feed = await seedMarkAsReadFeed();
     markAsRead.mockRejectedValueOnce(new Error('boom'));
 
-    await expect(feed.markAsRead('n-unread')).rejects.toThrow('boom');
+    await expect(feed.markAsRead('n-unread')).resolves.toBeUndefined();
 
     expect(feed.items.find((entry) => entry.id === 'n-unread')?.isRead).toBe(
       false,
@@ -318,5 +367,32 @@ describe('NotificationFeed.markAsRead', () => {
       true,
     );
     expect(feed.unreadCount).toBe(2);
+  });
+});
+
+describe('NotificationFeed.markAllAsRead', () => {
+  beforeEach(() => {
+    markAllAsRead.mockReset();
+    markAllAsRead.mockResolvedValue(undefined);
+  });
+
+  it('marks every item read and zeroes the counter', async () => {
+    const feed = await seedMarkAsReadFeed();
+
+    await feed.markAllAsRead();
+
+    expect(feed.items.every((entry) => entry.isRead)).toBe(true);
+    expect(feed.unreadCount).toBe(0);
+  });
+
+  it('leaves items and the counter untouched when the request rejects', async () => {
+    const feed = await seedMarkAsReadFeed();
+    markAllAsRead.mockRejectedValueOnce(new Error('offline'));
+    const before = feed.items;
+
+    await expect(feed.markAllAsRead()).resolves.toBeUndefined();
+
+    expect(feed.items).toEqual(before);
+    expect(feed.unreadCount).toBe(3);
   });
 });

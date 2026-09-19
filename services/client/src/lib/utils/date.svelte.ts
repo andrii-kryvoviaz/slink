@@ -136,3 +136,22 @@ export function formatShortDate(date: Date): string {
 
   return new Intl.DateTimeFormat(getLocale(), options).format(date);
 }
+
+export function formatDayTime(date: Date, now: Date = new Date()): string {
+  if (dayKind(date, now) === 'earlier') {
+    return formatShortDate(date);
+  }
+
+  return formatClockTime(date);
+}
+
+export function formatShortDateTime(date: Date): string {
+  return `${formatShortDate(date)}, ${formatClockTime(date)}`;
+}
+
+export function formatDateTime(date: Date): string {
+  return new Intl.DateTimeFormat(getLocale(), {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  }).format(date);
+}

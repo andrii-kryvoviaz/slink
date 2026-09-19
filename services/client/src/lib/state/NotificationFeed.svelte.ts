@@ -68,7 +68,11 @@ class NotificationFeed extends AbstractPaginatedFeed<NotificationItem> {
   }
 
   public async markAsRead(notificationId: string): Promise<void> {
-    await ApiClient.notification.markAsRead(notificationId);
+    try {
+      await ApiClient.notification.markAsRead(notificationId);
+    } catch {
+      return;
+    }
 
     const item = this.get(notificationId);
     if (!item || item.isRead) {
@@ -86,16 +90,31 @@ class NotificationFeed extends AbstractPaginatedFeed<NotificationItem> {
 
     if (ids.length === 0) return;
 
-    await Promise.all(ids.map((id) => ApiClient.notification.markAsRead(id)));
+    const results = await Promise.allSettled(
+      ids.map((id) => ApiClient.notification.markAsRead(id)),
+    );
 
-    for (const id of ids) {
-      this.update(id, { isRead: true });
-    }
-    this._unreadCount = Math.max(0, this._unreadCount - ids.length);
+    let fulfilledCount = 0;
+    results.forEach((result, index) => {
+      if (result.status !== 'fulfilled') return;
+
+      const item = this.get(ids[index]);
+      if (!item || item.isRead) return;
+
+      this.update(ids[index], { isRead: true });
+      fulfilledCount += 1;
+    });
+
+    this._unreadCount = Math.max(0, this._unreadCount - fulfilledCount);
   }
 
   public async markAllAsRead(): Promise<void> {
-    await ApiClient.notification.markAllAsRead();
+    try {
+      await ApiClient.notification.markAllAsRead();
+    } catch {
+      return;
+    }
+
     this._items = this._items.map((item) => ({ ...item, isRead: true }));
     this._unreadCount = 0;
   }
