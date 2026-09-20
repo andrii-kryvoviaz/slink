@@ -46,7 +46,7 @@ describe('notificationThread', () => {
     );
   });
 
-  it('keeps comment text at the muted row tone while the unread name lifts above it', () => {
+  it('keeps comment text at the muted row tone while the name lifts above it in both states', () => {
     const theme = notificationThread();
     const ownSlots = [
       theme.row(),
@@ -64,9 +64,10 @@ describe('notificationThread', () => {
     ).toEqual([]);
     expect(tokens(threadBlock().row())).toContain('text-foreground-muted');
     expect(tokens(notificationActorName())).toContain('text-foreground');
-    expect(tokens(notificationActorName({ read: true }))).toContain(
+    expect(tokens(notificationActorName())).not.toContain(
       'text-foreground-muted',
     );
+    expect(notificationActorName.variantKeys).toEqual([]);
   });
 
   it('owns no time class of its own', () => {
@@ -77,13 +78,20 @@ describe('notificationThread', () => {
     expect(tokens(notificationThread().hiddenAuthor())).toEqual(['sr-only']);
   });
 
-  it('renders the quoted parent as one muted, unweighted line', () => {
+  it('renders the quoted parent as one dim, unweighted line', () => {
     const quote = tokens(notificationThread().quote());
 
     expect(quote).toEqual(
-      expect.arrayContaining(['truncate', 'text-xs', 'text-foreground-muted']),
+      expect.arrayContaining(['truncate', 'text-xs', 'text-foreground-subtle']),
     );
     expect(quote).not.toContain('font-medium');
+  });
+
+  it('sits one step dimmer than the comment text tone', () => {
+    const quote = tokens(notificationThread().quote());
+
+    expect(quote).not.toContain('text-foreground-muted');
+    expect(tokens(threadBlock().row())).toContain('text-foreground-muted');
   });
 
   it('leaves the quote inset to the thread rail', () => {

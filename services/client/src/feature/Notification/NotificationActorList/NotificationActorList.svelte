@@ -30,11 +30,11 @@
   <div class={theme.row()}>
     {#if item.actor}
       <UserAvatar user={item.actor} size="xs" class={theme.avatar()} />
-      <NotificationActorName read={group.isRead} class={theme.name()}>
+      <NotificationActorName class={theme.name()}>
         {item.actor.displayName}
       </NotificationActorName>
     {:else}
-      <NotificationActorName read={group.isRead} class={theme.name()}>
+      <NotificationActorName class={theme.name()}>
         {plural(group.visitorCount, ['A visitor', '# visitors'])}
       </NotificationActorName>
     {/if}

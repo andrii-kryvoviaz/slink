@@ -1,6 +1,6 @@
 <script lang="ts">
   import { LoadMoreButton } from '@slink/feature/Action';
-  import { EmptyState, GhostList, GhostRows } from '@slink/feature/Layout';
+  import { EmptyState, GhostRows } from '@slink/feature/Layout';
   import {
     NotificationActorList,
     NotificationEntry,
@@ -120,7 +120,7 @@
           description="No notifications match this filter."
         >
           {#snippet preview()}
-            <GhostList />
+            <GhostRows />
           {/snippet}
         </EmptyState>
       </div>

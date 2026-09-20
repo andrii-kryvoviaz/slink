@@ -4,14 +4,13 @@
   import { notificationActorName } from './NotificationActorName.theme';
 
   interface Props {
-    read: boolean;
     class?: string;
     children: Snippet;
   }
 
-  let { read, class: className, children }: Props = $props();
+  let { class: className, children }: Props = $props();
 </script>
 
-<span class={notificationActorName({ read, class: className })}>
+<span class={notificationActorName({ class: className })}>
   {@render children()}
 </span>

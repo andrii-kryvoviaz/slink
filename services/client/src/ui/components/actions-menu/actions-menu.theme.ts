@@ -1,12 +1,12 @@
 import { type VariantProps, tv } from 'tailwind-variants';
 
 export const actionsMenuTriggerTheme = tv({
-  base: 'inline-flex items-center justify-center rounded-md transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ring/30',
+  base: 'inline-flex items-center justify-center rounded-md transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30',
   variants: {
     tone: {
       ghost:
         'p-1.5 text-foreground-subtle hover:text-foreground-soft hover:bg-muted',
-      dark: 'p-1 text-on-surface-inverse/40 hover:text-on-surface-inverse/70 hover:bg-on-surface-inverse/5 focus-visible:ring-on-surface-inverse/30 focus-visible:ring-offset-transparent',
+      dark: 'p-1 text-on-surface-inverse/40 hover:text-on-surface-inverse/70 hover:bg-on-surface-inverse/5 focus-visible:ring-on-surface-inverse/30',
     },
   },
   defaultVariants: {

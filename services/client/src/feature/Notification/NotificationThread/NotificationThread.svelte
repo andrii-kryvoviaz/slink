@@ -53,7 +53,7 @@
         {#if group.hasSingleAuthor}
           <span class={theme.hiddenAuthor()}>{@render authorName(item)}</span>
         {:else}
-          <NotificationActorName read={group.isRead}>
+          <NotificationActorName>
             {@render authorName(item)}
           </NotificationActorName>
         {/if}

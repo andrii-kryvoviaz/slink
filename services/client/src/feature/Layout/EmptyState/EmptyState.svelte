@@ -47,6 +47,7 @@
 {#if kind === 'first-use'}
   <div
     class={cn(containerVariants({ kind }), className)}
+    role="status"
     in:fade={{ duration: reducedMotion.current ? 0 : 200 }}
   >
     {#if preview}

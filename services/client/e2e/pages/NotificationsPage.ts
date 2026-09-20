@@ -19,6 +19,9 @@ export class NotificationsPage extends BasePage {
   readonly filteredEmptyHeading = this.page.getByRole('heading', {
     name: 'Nothing here',
   });
+  readonly filteredEmptyStatus = this.page
+    .getByRole('status')
+    .filter({ has: this.filteredEmptyHeading });
   readonly filterGroup = this.page.getByRole('radiogroup', {
     name: 'Filter notifications',
   });

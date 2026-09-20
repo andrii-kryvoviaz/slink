@@ -10,7 +10,7 @@
   import { type WithElementRef } from '@slink/utils/ui/index.js';
 
   export const buttonVariants = tv({
-    base: 'inline-flex items-center justify-center select-none cursor-pointer focus:outline-hidden focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50',
+    base: 'inline-flex items-center justify-center select-none cursor-pointer focus:outline-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50',
     variants: {
       variant: {
         default: 'border border-border',
@@ -27,7 +27,7 @@
         modern:
           'bg-card border border-border rounded-full shadow-sm hover:shadow-md transition-all duration-200',
         glass:
-          'bg-card/80 border border-border/60 hover:bg-card dark:hover:bg-muted hover:border-border-strong hover:shadow-lg hover:shadow-border/40 dark:hover:shadow-card/40 focus-visible:ring-ring/20 transition-all duration-200',
+          'bg-card/80 border border-border/60 hover:bg-card dark:hover:bg-muted hover:border-border-strong hover:shadow-lg hover:shadow-border/40 dark:hover:shadow-card/40 transition-all duration-200',
         'glass-dark':
           'bg-on-surface-inverse/10 backdrop-blur-sm border border-on-surface-inverse/20 hover:bg-on-surface-inverse/20 transition-all duration-200',
         'primary-dark':

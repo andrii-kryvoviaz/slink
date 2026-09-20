@@ -311,6 +311,7 @@ test.describe('Notification filters', () => {
       for (const label of ['Replies', 'Comments'] as const) {
         await notificationsPage.selectFilter(label);
         await expect(notificationsPage.filteredEmptyHeading).toBeVisible();
+        await expect(notificationsPage.filteredEmptyStatus).toHaveCount(1);
         await expect(notificationsPage.emptyHeading).toHaveCount(0);
         await expect(bookmark).toHaveCount(0);
         await expect(notificationsPage.loadMoreButton).toHaveCount(0);

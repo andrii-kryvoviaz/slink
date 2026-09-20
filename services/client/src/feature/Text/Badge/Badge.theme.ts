@@ -1,7 +1,7 @@
 import { cva } from 'class-variance-authority';
 
 export const BadgeTheme = cva(
-  'inline-flex items-center justify-center rounded-full border font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
+  'inline-flex items-center justify-center rounded-full border font-medium transition-colors focus-visible:outline-none focus-visible:ring-2',
   {
     variants: {
       variant: {
@@ -37,7 +37,7 @@ export const BadgeTheme = cva(
           'bg-info-solid/20 text-info dark:text-info-text',
           'border border-info/20 dark:border-info/30',
           'hover:bg-info-solid/30',
-          'focus-within:ring-2 focus-within:ring-info/30 focus-within:ring-offset-2',
+          'focus-within:ring-2 focus-within:ring-info/30',
           'transition-all duration-200 cursor-pointer',
         ],
         minimal:

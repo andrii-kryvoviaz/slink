@@ -24,18 +24,15 @@ describe('notificationActorList', () => {
     expect(name).not.toContain('text-foreground-muted');
   });
 
-  it('renders an unread actor at full contrast and a read one muted', () => {
-    const name = notificationActorList().name();
+  it('renders an actor at full contrast whether the group is read or not', () => {
+    const name = tokens(
+      notificationActorName({ class: notificationActorList().name() }),
+    );
 
-    expect(tokens(notificationActorName({ class: name }))).toEqual(
+    expect(name).toEqual(
       expect.arrayContaining(['truncate', 'font-medium', 'text-foreground']),
     );
-    expect(tokens(notificationActorName({ read: true, class: name }))).toEqual(
-      expect.arrayContaining([
-        'truncate',
-        'font-medium',
-        'text-foreground-muted',
-      ]),
-    );
+    expect(name).not.toContain('text-foreground-muted');
+    expect(notificationActorName.variantKeys).toEqual([]);
   });
 });

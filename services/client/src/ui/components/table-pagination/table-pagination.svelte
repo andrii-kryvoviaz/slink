@@ -5,83 +5,17 @@
     HoverCardContent,
     HoverCardTrigger,
   } from '@slink/ui/components/hover-card';
-  import { tv } from 'tailwind-variants';
 
   import Icon from '@iconify/svelte';
 
   import { Key } from '@slink/utils/ui';
 
-  const containerTheme = tv({
-    base: 'flex items-center gap-1 rounded-lg border',
-    variants: {
-      variant: {
-        default: 'bg-card/80 border-border/60',
-        neutral: 'bg-card/50 dark:bg-card/20 border-border/70',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-    },
-  });
-
-  const pageInputTheme = tv({
-    base: 'h-7 w-8 text-xs font-medium text-center rounded-md border outline-none transition-all duration-200 focus:outline-none hover:border-border-strong',
-    variants: {
-      variant: {
-        default: 'bg-muted/80',
-        neutral: 'bg-muted/70 dark:bg-muted/50',
-      },
-      status: {
-        default:
-          'border-border/60 text-foreground placeholder:text-foreground-subtle',
-        error: 'border-danger text-danger placeholder:text-danger/70',
-      },
-    },
-    compoundVariants: [
-      {
-        variant: 'neutral',
-        status: 'default',
-        class: 'border-border/70',
-      },
-    ],
-    defaultVariants: {
-      variant: 'default',
-      status: 'default',
-    },
-  });
-
-  const pageButtonTheme = tv({
-    base: 'text-xs sm:text-sm font-medium transition-all duration-200 w-8 h-7 flex items-center justify-center rounded-md tabular-nums',
-    variants: {
-      variant: {
-        default: '',
-        neutral: '',
-      },
-      status: {
-        interactive:
-          'cursor-pointer hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 active:scale-95 transform',
-        static: 'cursor-default text-foreground-subtle',
-      },
-    },
-    compoundVariants: [
-      {
-        variant: 'neutral',
-        status: 'interactive',
-        class: 'hover:bg-muted-soft/80 focus:ring-ring/40',
-      },
-      {
-        variant: 'neutral',
-        status: 'static',
-        class: 'text-foreground-muted',
-      },
-    ],
-    defaultVariants: {
-      variant: 'default',
-      status: 'static',
-    },
-  });
-
-  type TablePaginationVariant = 'default' | 'neutral';
+  import {
+    type TablePaginationVariant,
+    tablePaginationContainerTheme,
+    tablePaginationPageButtonTheme,
+    tablePaginationPageInputTheme,
+  } from './table-pagination.theme';
 
   interface Props {
     variant?: TablePaginationVariant;
@@ -149,11 +83,13 @@
     return 'static';
   });
 
-  const inputClass = $derived(pageInputTheme({ variant, status: inputStatus }));
-  const pageButtonClass = $derived(
-    pageButtonTheme({ variant, status: pageButtonStatus }),
+  const inputClass = $derived(
+    tablePaginationPageInputTheme({ variant, status: inputStatus }),
   );
-  const containerClass = $derived(containerTheme({ variant }));
+  const pageButtonClass = $derived(
+    tablePaginationPageButtonTheme({ variant, status: pageButtonStatus }),
+  );
+  const containerClass = $derived(tablePaginationContainerTheme({ variant }));
 
   const navButtonVariant = $derived.by<'transparent' | 'ghost'>(() => {
     if (variant === 'neutral') return 'ghost';

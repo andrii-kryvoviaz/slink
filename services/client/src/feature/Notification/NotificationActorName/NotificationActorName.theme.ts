@@ -1,18 +1,5 @@
-import { type VariantProps, tv } from 'tailwind-variants';
+import { tv } from 'tailwind-variants';
 
 export const notificationActorName = tv({
-  base: 'font-medium',
-  variants: {
-    read: {
-      true: 'text-foreground-muted',
-      false: 'text-foreground',
-    },
-  },
-  defaultVariants: {
-    read: false,
-  },
+  base: 'font-medium text-foreground',
 });
-
-export type NotificationActorNameVariants = VariantProps<
-  typeof notificationActorName
->;
