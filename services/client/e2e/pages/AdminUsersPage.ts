@@ -113,13 +113,23 @@ export class AdminUsersPage extends BasePage {
     await expect(this.rows).toHaveCount(data.length, { timeout: 15000 });
   }
 
-  async waitForFullList() {
-    await this.waitForLoadedList();
-    await expect(this.rows.first()).toBeVisible({ timeout: 20000 });
-    await expect(this.nextPageButton).toBeDisabled();
+  async rowByUsername(username: string): Promise<Locator> {
+    const row = await this.findRowAcrossPages(username);
+
+    if (!row) {
+      throw new Error(
+        `user ${username} is not listed on any page of /admin/user`,
+      );
+    }
+
+    return row;
   }
 
-  async rowByUsername(username: string): Promise<Locator> {
+  async expectUserAbsent(username: string): Promise<void> {
+    expect(await this.findRowAcrossPages(username)).toBeNull();
+  }
+
+  private async findRowAcrossPages(username: string): Promise<Locator | null> {
     await this.useMaxPageSize();
     await this.goToFirstPage();
 
@@ -134,16 +144,14 @@ export class AdminUsersPage extends BasePage {
 
       const [current, total] = await this.pageIndicator();
       if (current >= total) {
-        throw new Error(
-          `user ${username} is not listed on any of the ${total} pages of /admin/user`,
-        );
+        return null;
       }
 
       await this.goToNextPage();
     }
 
     throw new Error(
-      `user ${username} is not listed within the first ${MAX_PAGES_TO_WALK} pages of /admin/user`,
+      `/admin/user has more than ${MAX_PAGES_TO_WALK} pages to walk for ${username}`,
     );
   }
 

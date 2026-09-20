@@ -50,8 +50,7 @@ test.describe('Admin user deletion', { tag: '@serial' }, () => {
     await expect(row).toHaveCount(0);
 
     await page.reload();
-    await adminUsersPage.waitForFullList();
-    await expect(adminUsersPage.rowFor(target.account.username)).toHaveCount(0);
+    await adminUsersPage.expectUserAbsent(target.account.username);
   });
 
   test('purges from the row actions and removes the row immediately', async ({
