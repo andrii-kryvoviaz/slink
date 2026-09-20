@@ -4719,7 +4719,6 @@ msgstr "Formatos de carga permitidos"
 msgid "Supported formats"
 msgstr "Formatos compatibles"
 
-#: src/feature/Notification/NotificationActorList/NotificationActorList.svelte
 #: src/feature/Upload/Uploader/UploaderConstraints.svelte
 msgid "Show less"
 msgstr "Mostrar menos"
@@ -5122,7 +5121,6 @@ msgstr "No se pudo procesar este SVG. Puede estar mal formado o anidado demasiad
 msgid "No description"
 msgstr "Sin descripción"
 
-#: src/feature/Notification/NotificationActorList/NotificationActorList.svelte
 #: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
 #: src/feature/Notification/NotificationThread/NotificationThread.svelte
 msgid "A visitor"
@@ -5195,9 +5193,9 @@ msgstr[2] "añadieron a marcadores"
 msgid "Open post"
 msgstr "Abrir publicación"
 
-#. 0: total
-#: src/feature/Notification/NotificationActorList/NotificationActorList.svelte
-msgid "Show all {0}"
+#. 0: group.actorTotal
+#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
+msgid "See all {0}"
 msgstr "Mostrar los {0}"
 
 #: src/ui/components/thread-block/thread-block.svelte
@@ -5234,3 +5232,10 @@ msgstr "tu comentario:"
 #: src/routes/notifications/+page.svelte
 msgid "No notifications match this filter."
 msgstr "Ninguna notificación coincide con este filtro."
+
+#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
+msgid "and a visitor"
+msgid_plural "and # visitors"
+msgstr[0] "y un visitante"
+msgstr[1] "y # visitantes"
+msgstr[2] "y # visitantes"

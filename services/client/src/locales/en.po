@@ -4719,7 +4719,6 @@ msgstr "Allowed upload formats"
 msgid "Supported formats"
 msgstr "Supported formats"
 
-#: src/feature/Notification/NotificationActorList/NotificationActorList.svelte
 #: src/feature/Upload/Uploader/UploaderConstraints.svelte
 msgid "Show less"
 msgstr "Show less"
@@ -5122,7 +5121,6 @@ msgstr "This SVG could not be processed. It may be malformed or nested too deepl
 msgid "No description"
 msgstr "No description"
 
-#: src/feature/Notification/NotificationActorList/NotificationActorList.svelte
 #: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
 #: src/feature/Notification/NotificationThread/NotificationThread.svelte
 msgid "A visitor"
@@ -5190,10 +5188,10 @@ msgstr[1] "bookmarked"
 msgid "Open post"
 msgstr "Open post"
 
-#. 0: total
-#: src/feature/Notification/NotificationActorList/NotificationActorList.svelte
-msgid "Show all {0}"
-msgstr "Show all {0}"
+#. 0: group.actorTotal
+#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
+msgid "See all {0}"
+msgstr "See all {0}"
 
 #: src/ui/components/thread-block/thread-block.svelte
 msgid "Show # more"
@@ -5228,3 +5226,9 @@ msgstr "your comment:"
 #: src/routes/notifications/+page.svelte
 msgid "No notifications match this filter."
 msgstr "No notifications match this filter."
+
+#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
+msgid "and a visitor"
+msgid_plural "and # visitors"
+msgstr[0] "and a visitor"
+msgstr[1] "and # visitors"

@@ -24,6 +24,9 @@
   const theme = $derived(notificationEntry({ read: group.isRead }));
   const shown = $derived(group.actors.slice(0, 2));
   const remaining = $derived(group.actorTotal - shown.length);
+  const remainingAreVisitors = $derived(
+    remaining > 0 && shown.length === group.actors.length,
+  );
 
   let target: HTMLButtonElement | undefined = $state();
 
@@ -60,7 +63,7 @@
       {#if group.type === 'comment'}
         <Icon icon="lucide:message-circle" class={theme.badgeIcon()} />
       {:else if group.type === 'comment_reply'}
-        <Icon icon="lucide:reply" class={theme.badgeIcon()} />
+        <Icon icon="ph:arrow-bend-up-left-bold" class={theme.badgeIcon()} />
       {:else if group.type === 'added_to_bookmarks'}
         <Icon icon="lucide:bookmark" class={theme.badgeIcon()} />
       {/if}
@@ -81,7 +84,9 @@
           >{' '}{:else if index > 0}{', '}{/if}<span class={theme.name()}
           >{actor.displayName}</span
         >
-      {/each}{#if remaining > 0}{' '}<span
+      {/each}{#if remainingAreVisitors}{' '}<span
+          >{plural(remaining, ['and a visitor', 'and # visitors'])}</span
+        >{:else if remaining > 0}{' '}<span
           >{plural(remaining, ['and # other', 'and # others'])}</span
         >{/if}
     {/if}

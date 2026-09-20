@@ -5,6 +5,7 @@
   import { ThreadBlock } from '@slink/ui/components/thread-block';
 
   import { plural } from '$lib/utils/i18n';
+  import Icon from '@iconify/svelte';
 
   import type { NotificationItem } from '@slink/api/Response';
 
@@ -95,8 +96,14 @@
 
 {#snippet quote()}
   {#if group.quotedComment}
-    <div class={theme.quote()} title={group.quotedComment.content}>
-      <span aria-hidden="true">↳</span>
+    <div class={theme.quote()}>
+      <span aria-hidden="true">
+        <Icon
+          icon="ph:arrow-bend-up-left-bold"
+          inline
+          class={theme.quoteIcon()}
+        />
+      </span>
       <span>your comment:</span>
       {group.quotedComment.content}
     </div>

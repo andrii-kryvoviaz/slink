@@ -4704,7 +4704,6 @@ msgstr "許可されたアップロード形式"
 msgid "Supported formats"
 msgstr "対応形式"
 
-#: src/feature/Notification/NotificationActorList/NotificationActorList.svelte
 #: src/feature/Upload/Uploader/UploaderConstraints.svelte
 msgid "Show less"
 msgstr "折りたたむ"
@@ -5104,7 +5103,6 @@ msgstr "このSVGを処理できませんでした。形式が正しくないか
 msgid "No description"
 msgstr "説明なし"
 
-#: src/feature/Notification/NotificationActorList/NotificationActorList.svelte
 #: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
 #: src/feature/Notification/NotificationThread/NotificationThread.svelte
 msgid "A visitor"
@@ -5163,9 +5161,9 @@ msgstr[0] "がブックマークに追加しました"
 msgid "Open post"
 msgstr "投稿を開く"
 
-#. 0: total
-#: src/feature/Notification/NotificationActorList/NotificationActorList.svelte
-msgid "Show all {0}"
+#. 0: group.actorTotal
+#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
+msgid "See all {0}"
 msgstr "{0}件すべて表示"
 
 #: src/ui/components/thread-block/thread-block.svelte
@@ -5200,3 +5198,8 @@ msgstr "あなたのコメント:"
 #: src/routes/notifications/+page.svelte
 msgid "No notifications match this filter."
 msgstr "このフィルタに一致する通知がありません。"
+
+#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
+msgid "and a visitor"
+msgid_plural "and # visitors"
+msgstr[0] "ほか訪問者#人"

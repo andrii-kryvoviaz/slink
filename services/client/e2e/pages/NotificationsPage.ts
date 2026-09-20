@@ -28,6 +28,8 @@ export class NotificationsPage extends BasePage {
   readonly loadMoreButton = this.page.getByRole('button', {
     name: 'Load More',
   });
+  readonly actorCard = this.page.locator('[data-slot="popover-content"]');
+  readonly actorCardRows = this.actorCard.getByRole('listitem');
 
   constructor(page: Page) {
     super(page);
@@ -103,12 +105,8 @@ export class NotificationsPage extends BasePage {
     });
   }
 
-  showAllButton(entry: Locator) {
-    return entry.getByRole('button', { name: /^Show all \d+$/ });
-  }
-
-  showLessButton(entry: Locator) {
-    return entry.getByRole('button', { name: 'Show less' });
+  seeAllButton(entry: Locator) {
+    return entry.getByRole('button', { name: /^See all \d+$/ });
   }
 
   threadRow(entry: Locator, author: string) {

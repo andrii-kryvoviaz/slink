@@ -93,6 +93,7 @@
         {#if reveal.remaining > 0}
           <button type="button" class={theme.more()} onclick={handleShowMore}>
             {plural(reveal.next, ['Show # more', 'Show # more'])}
+            <Icon icon="lucide:chevron-down" class={theme.moreChevron()} />
           </button>
         {/if}
       </div>

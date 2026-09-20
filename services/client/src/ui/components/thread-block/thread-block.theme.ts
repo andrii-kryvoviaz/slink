@@ -16,6 +16,7 @@ export const threadBlock = tv({
     more: control,
     chevron:
       'size-3.5 transition-transform group-data-[state=open]:rotate-180 motion-reduce:transition-none',
+    moreChevron: 'size-3.5',
   },
   variants: {
     latest: {

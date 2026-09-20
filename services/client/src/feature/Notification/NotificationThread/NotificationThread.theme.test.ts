@@ -99,4 +99,17 @@ describe('notificationThread', () => {
 
     expect(quote.filter((token) => /(^|:)p[ltrbxy]?-/.test(token))).toEqual([]);
   });
+
+  it('sizes the quote reply icon to the quote text and keeps it monochrome', () => {
+    const quoteIcon = tokens(notificationThread().quoteIcon());
+
+    expect(quoteIcon).toEqual(
+      expect.arrayContaining(['size-3', 'text-foreground-subtle']),
+    );
+    expect(
+      quoteIcon.filter((token) =>
+        /text-(accent|primary|success|warning|danger|info)/.test(token),
+      ),
+    ).toEqual([]);
+  });
 });

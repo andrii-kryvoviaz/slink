@@ -93,6 +93,31 @@ describe('notificationEntry', () => {
     expect(tokens(theme.row())).toContain('py-2');
   });
 
+  it('clamps the sentence to one line', () => {
+    const sentence = tokens(notificationEntry().sentence());
+
+    expect(sentence).toEqual(
+      expect.arrayContaining(['truncate', 'min-w-0', 'text-sm']),
+    );
+  });
+
+  it('pins the row to its top edge and keeps the first line centred on the thumbnail', () => {
+    const theme = notificationEntry();
+    const row = tokens(theme.row());
+
+    expect(row).toContain('items-start');
+    expect(row).not.toContain('items-center');
+    expect(tokens(theme.sentence())).toEqual(
+      expect.arrayContaining(['min-h-10', 'content-center']),
+    );
+    expect(
+      tokens(theme.sentence()).filter((token) => token.startsWith('mt-')),
+    ).toEqual([]);
+    expect(tokens(theme.aside())).toEqual(
+      expect.arrayContaining(['min-h-10', 'items-center']),
+    );
+  });
+
   it('keeps the row inert', () => {
     const row = tokens(notificationEntry().row());
 

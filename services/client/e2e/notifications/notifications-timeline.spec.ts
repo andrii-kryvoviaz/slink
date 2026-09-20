@@ -159,9 +159,7 @@ test.describe('Notifications timeline', () => {
       await expect(
         notificationsPage.hideEarlierButton(replyEntry),
       ).toBeVisible();
-      await expect(
-        replyEntry.getByRole('button', { name: 'Show less' }),
-      ).toHaveCount(0);
+      await expect(notificationsPage.seeAllButton(replyEntry)).toHaveCount(0);
 
       await toggle.click();
       await expect(earlierReply).toBeHidden();
@@ -183,7 +181,7 @@ test.describe('Notifications timeline', () => {
     });
   });
 
-  test('lists every bookmarker behind the bookmark disclosure', async ({
+  test('completes the bookmark sentence and lists every bookmarker in the actor card', async ({
     browser,
   }) => {
     const { owner, firstReader, secondReader, thirdReader } =
@@ -191,61 +189,76 @@ test.describe('Notifications timeline', () => {
     const usernames = [firstReader, secondReader, thirdReader].map(
       (reader) => reader.username,
     );
+    const readers = usernames.join('|');
+    const sentence = new RegExp(
+      `^(${readers}), (${readers}) and 1 other bookmarked$`,
+    );
 
     await withTimelinePage(browser, owner, async (notificationsPage, page) => {
       const bookmarkEntry = notificationsPage.entryByText(/bookmarked/);
-      const showAll = notificationsPage.showAllButton(bookmarkEntry);
-      const nameCount = async () => {
-        let total = 0;
+      const seeAll = notificationsPage.seeAllButton(bookmarkEntry);
+      const card = notificationsPage.actorCard;
 
-        for (const username of usernames) {
-          total += await bookmarkEntry
-            .getByText(username, { exact: true })
-            .filter({ visible: true })
-            .count();
-        }
-
-        return total;
-      };
-
-      await expect(showAll).toHaveText('Show all 3');
-      await expect(showAll).toHaveAttribute('aria-expanded', 'false');
+      await expect(seeAll).toHaveText('See all 3');
+      await expect(seeAll).toHaveAttribute('aria-expanded', 'false');
+      await expect(notificationsPage.entrySentence(bookmarkEntry)).toHaveText(
+        sentence,
+      );
       await expect(notificationsPage.visibleTimes(bookmarkEntry)).toHaveCount(
         1,
       );
-      await expect.poll(nameCount).toBe(2);
 
-      await showAll.click();
-
-      const showLess = notificationsPage.showLessButton(bookmarkEntry);
-      await expect(showLess).toBeVisible();
-      await expect(showLess).toHaveAttribute('aria-expanded', 'true');
+      await notificationsPage.clickUntil(seeAll, card);
+      await expect(seeAll).toHaveAttribute('aria-expanded', 'true');
+      await expect(notificationsPage.actorCardRows).toHaveCount(3);
 
       for (const username of usernames) {
-        await expect(
-          bookmarkEntry.getByText(username, { exact: true }).last(),
-        ).toBeVisible();
+        await expect(card.getByText(username, { exact: true })).toBeVisible();
       }
 
-      await expect.poll(nameCount).toBe(5);
+      await expect(card.locator('time')).toHaveCount(0);
       await expect(notificationsPage.visibleTimes(bookmarkEntry)).toHaveCount(
-        4,
+        1,
+      );
+      await expect(notificationsPage.entrySentence(bookmarkEntry)).toHaveText(
+        sentence,
       );
 
-      await bookmarkEntry
-        .getByText(thirdReader.username, { exact: true })
-        .last()
-        .click();
+      await page.keyboard.press('Escape');
+      await expect(card).toBeHidden();
       await expect(page).toHaveURL(/\/notifications$/);
-
-      await showLess.click();
-      await expect(showAll).toHaveText('Show all 3');
     });
   });
 
-  test('shows no bookmark disclosure for a single bookmarker', async ({
+  test('opens the bookmark actor card on hover and from the keyboard', async ({
     browser,
   }) => {
+    const { owner } = await seedTimeline();
+
+    await withTimelinePage(browser, owner, async (notificationsPage, page) => {
+      const bookmarkEntry = notificationsPage.entryByText(/bookmarked/);
+      const seeAll = notificationsPage.seeAllButton(bookmarkEntry);
+      const card = notificationsPage.actorCard;
+
+      await seeAll.focus();
+      await page.keyboard.press('Enter');
+      await expect(card).toBeVisible();
+      await expect(seeAll).toHaveAttribute('aria-expanded', 'true');
+
+      await page.keyboard.press('Escape');
+      await expect(card).toBeHidden();
+      await expect(seeAll).toBeFocused();
+
+      await seeAll.hover();
+      await expect(card).toBeVisible();
+      await expect(notificationsPage.actorCardRows).toHaveCount(3);
+
+      await page.mouse.move(0, 0);
+      await expect(card).toBeHidden();
+    });
+  });
+
+  test('shows no actor toggle for a single bookmarker', async ({ browser }) => {
     const owner = unique('notif-owner');
     const reader = unique('notif-reader');
     const ownerApi = await provisionUser(owner);
@@ -258,7 +271,7 @@ test.describe('Notifications timeline', () => {
       const bookmarkEntry = notificationsPage.entryByText(/bookmarked/);
 
       await expect(bookmarkEntry).toBeVisible();
-      await expect(notificationsPage.showAllButton(bookmarkEntry)).toHaveCount(
+      await expect(notificationsPage.seeAllButton(bookmarkEntry)).toHaveCount(
         0,
       );
     });
@@ -807,7 +820,7 @@ test.describe('Notifications relative times', () => {
     });
   });
 
-  test('advances bookmark actor row times with the entry time', async ({
+  test('keeps a single entry time while the bookmark actor card is open', async ({
     browser,
   }) => {
     const { owner } = await seedTimeline();
@@ -819,21 +832,23 @@ test.describe('Notifications relative times', () => {
       page.on('framenavigated', () => navigations++);
 
       const bookmarkEntry = notificationsPage.entryByText(/bookmarked/);
-      await notificationsPage.showAllButton(bookmarkEntry).click();
+      await notificationsPage.clickUntil(
+        notificationsPage.seeAllButton(bookmarkEntry),
+        notificationsPage.actorCard,
+      );
       await page.mouse.move(0, 0);
 
+      await expect(notificationsPage.actorCard.locator('time')).toHaveCount(0);
+
       const times = notificationsPage.visibleTimes(bookmarkEntry);
-      await expect(times).toHaveText([NOW, NOW, NOW, NOW]);
-      await expect(times).not.toHaveText([CLOCK, CLOCK, CLOCK, CLOCK]);
+      await expect(times).toHaveText([NOW]);
+      await expect(times).not.toHaveText([CLOCK]);
 
       await page.clock.runFor(35 * MINUTE_MS);
-      await expect(times).toHaveText(['35m', '35m', '35m', '35m']);
-
-      for (const time of await times.all()) {
-        await expect(time).toHaveText(MINUTES);
-        await expect(time).toHaveAttribute('title', FULL_DATE_TIME);
-        await expect(time).toHaveAttribute('datetime', /^\d{4}-\d{2}-\d{2}T/);
-      }
+      await expect(times).toHaveText(['35m']);
+      await expect(times).toHaveText([MINUTES]);
+      await expect(times).toHaveAttribute('title', FULL_DATE_TIME);
+      await expect(times).toHaveAttribute('datetime', /^\d{4}-\d{2}-\d{2}T/);
 
       expect(navigations).toBe(0);
     });
@@ -894,9 +909,9 @@ test.describe('Notifications parent comment quote', () => {
       await expect(notificationsPage.entrySentence(replyEntry)).toHaveCount(1);
       await expect(replyEntry.getByText(QUOTE_LABEL)).toHaveCount(1);
       await expect(quote).toBeVisible();
-      await expect(quote).toContainText('↳');
+      await expect(quote.locator('svg')).toHaveCount(1);
       await expect(quote).toContainText(parent);
-      await expect(quote).toHaveAttribute('title', parent);
+      await expect(quote).not.toHaveAttribute('title', /\S/);
       await expect(quote.locator('[data-hashtag], button, a')).toHaveCount(0);
 
       const quoteBox = await quote.boundingBox();
@@ -985,12 +1000,10 @@ test.describe('Notifications parent comment quote', () => {
       await new Locale(page, ownerApi).set('uk');
       await notificationsPage.goto();
 
-      const quote = page.getByRole('main').locator('[title]', {
-        hasText: parent,
-      });
+      const quote = page.getByRole('main').getByText(parent, { exact: false });
 
       await expect(quote).toBeVisible();
-      await expect(quote).toContainText('↳');
+      await expect(quote.locator('svg')).toHaveCount(1);
       await expect(quote).toContainText('ваш коментар:');
       await expect(page.getByRole('main').getByText(QUOTE_LABEL)).toHaveCount(
         0,

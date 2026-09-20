@@ -4704,7 +4704,6 @@ msgstr "允许的上传格式"
 msgid "Supported formats"
 msgstr "支持的格式"
 
-#: src/feature/Notification/NotificationActorList/NotificationActorList.svelte
 #: src/feature/Upload/Uploader/UploaderConstraints.svelte
 msgid "Show less"
 msgstr "收起"
@@ -5104,7 +5103,6 @@ msgstr "无法处理此 SVG。它可能格式错误或嵌套层级过深。"
 msgid "No description"
 msgstr "暂无描述"
 
-#: src/feature/Notification/NotificationActorList/NotificationActorList.svelte
 #: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
 #: src/feature/Notification/NotificationThread/NotificationThread.svelte
 msgid "A visitor"
@@ -5163,9 +5161,9 @@ msgstr[0] "加入了书签"
 msgid "Open post"
 msgstr "打开帖子"
 
-#. 0: total
-#: src/feature/Notification/NotificationActorList/NotificationActorList.svelte
-msgid "Show all {0}"
+#. 0: group.actorTotal
+#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
+msgid "See all {0}"
 msgstr "显示全部 {0} 个"
 
 #: src/ui/components/thread-block/thread-block.svelte
@@ -5200,3 +5198,8 @@ msgstr "你的评论："
 #: src/routes/notifications/+page.svelte
 msgid "No notifications match this filter."
 msgstr "没有符合此筛选条件的通知。"
+
+#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
+msgid "and a visitor"
+msgid_plural "and # visitors"
+msgstr[0] "等#位访客"

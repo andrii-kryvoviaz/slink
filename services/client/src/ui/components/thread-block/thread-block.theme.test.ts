@@ -62,6 +62,14 @@ describe('threadBlock', () => {
     expect(tokens(theme.more())).toEqual(tokens(theme.trigger()));
   });
 
+  it('sizes the show-more chevron like the trigger chevron but never rotates it', () => {
+    const chevron = tokens(theme.moreChevron());
+
+    expect(chevron).toContain('size-3.5');
+    expect(tokens(theme.chevron())).toContain('size-3.5');
+    expect(chevron.filter((token) => token.includes('rotate'))).toEqual([]);
+  });
+
   it('renders the trigger as quiet muted text', () => {
     const trigger = tokens(theme.trigger());
 

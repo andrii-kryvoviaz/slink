@@ -2,7 +2,7 @@
   import { LoadMoreButton } from '@slink/feature/Action';
   import { EmptyState, GhostRows } from '@slink/feature/Layout';
   import {
-    NotificationActorList,
+    NotificationActorCard,
     NotificationEntry,
     NotificationFilterBar,
     NotificationSkeleton,
@@ -159,7 +159,7 @@
                   {#if group.type === 'comment' || group.type === 'comment_reply'}
                     <NotificationThread {group} onOpenItem={openItem} />
                   {:else if group.type === 'added_to_bookmarks'}
-                    <NotificationActorList {group} />
+                    <NotificationActorCard {group} />
                   {/if}
                 </NotificationEntry>
               {/each}
