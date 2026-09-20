@@ -11,6 +11,7 @@ import { HistoryPage } from '../pages/HistoryPage';
 import { ImageInfoPage } from '../pages/ImageInfoPage';
 import { LayoutControls } from '../pages/LayoutControls';
 import { LoginPage } from '../pages/LoginPage';
+import { NotificationsPage } from '../pages/NotificationsPage';
 import { PreferencesPage } from '../pages/PreferencesPage';
 import { SharePage } from '../pages/SharePage';
 import { SharesPage } from '../pages/SharesPage';
@@ -57,6 +58,7 @@ type AuthFixtures = {
   explorePage: ExplorePage;
   historyPage: HistoryPage;
   collectionsPage: CollectionsPage;
+  notificationsPage: NotificationsPage;
   preferencesPage: PreferencesPage;
   adminSettingsPage: AdminSettingsPage;
   adminUsersPage: AdminUsersPage;
@@ -114,6 +116,10 @@ export const test = base.extend<AuthFixtures>({
 
   collectionsPage: async ({ page }, use) => {
     await use(new CollectionsPage(page));
+  },
+
+  notificationsPage: async ({ page }, use) => {
+    await use(new NotificationsPage(page));
   },
 
   preferencesPage: async ({ page }, use) => {

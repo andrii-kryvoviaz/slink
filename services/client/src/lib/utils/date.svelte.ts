@@ -1,6 +1,8 @@
 import { runtimeTranslator } from '$lib/utils/i18n/RuntimeTranslator.svelte';
+import { createSubscriber } from 'svelte/reactivity';
 
-const HOUR_MS = 1000 * 60 * 60;
+const MINUTE_MS = 1000 * 60;
+const HOUR_MS = MINUTE_MS * 60;
 const DAY_MS = HOUR_MS * 24;
 
 export function getLocale(): string {
@@ -48,7 +50,7 @@ export function hoursUntil(date: Date | string): number {
   return Math.floor((toDate(date).getTime() - Date.now()) / HOUR_MS);
 }
 
-type TimeUnit = 'hour' | 'day' | 'week' | 'month' | 'year';
+type TimeUnit = 'minute' | 'hour' | 'day' | 'week' | 'month' | 'year';
 
 export function narrowUnit(value: number, unit: TimeUnit): string {
   return new Intl.NumberFormat(getLocale(), {
@@ -73,9 +75,13 @@ export function narrowFromDays(days: number): string {
   return narrowUnit(Math.floor(days / 365), 'year');
 }
 
+function relativeTimeFormat(): Intl.RelativeTimeFormat {
+  return new Intl.RelativeTimeFormat(getLocale(), { numeric: 'auto' });
+}
+
 export function relativeFromDays(days: number): string {
   const locale = getLocale();
-  const rtf = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' });
+  const rtf = relativeTimeFormat();
   const absDays = Math.abs(days);
 
   if (absDays === 0) return rtf.format(0, 'day');
@@ -94,3 +100,106 @@ export function relativeFromDays(days: number): string {
 export function formatDate(date: Date | string): string {
   return relativeFromDays(daysUntil(date));
 }
+
+export type DayKind = 'today' | 'yesterday' | 'earlier';
+
+export function startOfDay(date: Date): Date {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+}
+
+export function calendarDayKey(date: Date): string {
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${date.getFullYear()}-${month}-${day}`;
+}
+
+export function dayKind(date: Date, now: Date = new Date()): DayKind {
+  const diff = Math.round(
+    (startOfDay(now).getTime() - startOfDay(date).getTime()) / DAY_MS,
+  );
+
+  if (diff === 0) return 'today';
+  if (diff === 1) return 'yesterday';
+  return 'earlier';
+}
+
+export function formatClockTime(date: Date): string {
+  return new Intl.DateTimeFormat(getLocale(), {
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(date);
+}
+
+export function formatShortDate(date: Date): string {
+  const options: Intl.DateTimeFormatOptions = {
+    month: 'short',
+    day: 'numeric',
+  };
+
+  if (date.getFullYear() !== new Date().getFullYear()) {
+    options.year = 'numeric';
+  }
+
+  return new Intl.DateTimeFormat(getLocale(), options).format(date);
+}
+
+export function formatDayTime(date: Date, now: Date = new Date()): string {
+  if (dayKind(date, now) === 'earlier') {
+    return formatShortDate(date);
+  }
+
+  return formatClockTime(date);
+}
+
+export function formatRecentTime(date: Date, now: Date = new Date()): string {
+  if (dayKind(date, now) !== 'today') {
+    return formatDayTime(date, now);
+  }
+
+  const elapsed = Math.max(0, now.getTime() - date.getTime());
+
+  if (elapsed < MINUTE_MS) {
+    return relativeTimeFormat().format(0, 'second');
+  }
+
+  if (elapsed < HOUR_MS) {
+    return narrowUnit(Math.floor(elapsed / MINUTE_MS), 'minute');
+  }
+
+  return narrowUnit(Math.floor(elapsed / HOUR_MS), 'hour');
+}
+
+export function formatDateTime(date: Date): string {
+  return new Intl.DateTimeFormat(getLocale(), {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  }).format(date);
+}
+
+export class MinuteClock {
+  private _now: Date | null = null;
+  private readonly _subscribe: () => void;
+
+  constructor() {
+    this._subscribe = createSubscriber((update) => {
+      this._now = new Date();
+      const interval = setInterval(() => {
+        this._now = new Date();
+        update();
+      }, MINUTE_MS);
+
+      return () => {
+        this._now = null;
+        clearInterval(interval);
+      };
+    });
+  }
+
+  get now(): Date {
+    this._subscribe();
+
+    return this._now ?? new Date();
+  }
+}
+
+export const minuteClock = new MinuteClock();

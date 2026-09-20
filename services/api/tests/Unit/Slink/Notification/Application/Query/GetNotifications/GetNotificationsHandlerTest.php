@@ -9,6 +9,8 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Notification\Application\Query\GetNotifications\GetNotificationsHandler;
 use Slink\Notification\Application\Query\GetNotifications\GetNotificationsQuery;
+use Slink\Notification\Domain\Enum\NotificationType;
+use Slink\Notification\Domain\Filter\NotificationListFilter;
 use Slink\Notification\Domain\Repository\NotificationRepositoryInterface;
 use Slink\Notification\Infrastructure\ReadModel\View\NotificationView;
 use Slink\Shared\Application\Http\Collection;
@@ -25,7 +27,7 @@ final class GetNotificationsHandlerTest extends TestCase {
 
     $notificationRepository->expects($this->once())
       ->method('findByUserId')
-      ->with($userId, 1, 20)
+      ->with($userId, $this->isInstanceOf(NotificationListFilter::class), 1, 20)
       ->willReturn($paginator);
 
     $handler = new GetNotificationsHandler($notificationRepository);
@@ -50,14 +52,36 @@ final class GetNotificationsHandlerTest extends TestCase {
 
     $notificationRepository->expects($this->once())
       ->method('findByUserId')
-      ->with($userId, $page, $limit)
+      ->with($userId, $this->isInstanceOf(NotificationListFilter::class), $page, $limit)
       ->willReturn($paginator);
 
     $handler = new GetNotificationsHandler($notificationRepository);
 
-    $query = new GetNotificationsQuery($page, $limit);
+    $query = new GetNotificationsQuery(page: $page, limit: $limit);
 
     $handler($query, $userId);
+  }
+
+  #[Test]
+  public function itPassesQueryFilterToRepository(): void {
+    $notificationRepository = $this->createMock(NotificationRepositoryInterface::class);
+    $userId = 'user-123';
+    $filter = new NotificationListFilter(NotificationType::COMMENT_REPLY, true);
+
+    $paginator = $this->createStub(Paginator::class);
+    $paginator->method('getIterator')->willReturn(new \ArrayIterator([]));
+    $paginator->method('count')->willReturn(3);
+
+    $notificationRepository->expects($this->once())
+      ->method('findByUserId')
+      ->with($userId, $this->identicalTo($filter), 1, 20)
+      ->willReturn($paginator);
+
+    $handler = new GetNotificationsHandler($notificationRepository);
+
+    $result = $handler(new GetNotificationsQuery($filter), $userId);
+
+    $this->assertEquals(3, $result->total);
   }
 
   #[Test]

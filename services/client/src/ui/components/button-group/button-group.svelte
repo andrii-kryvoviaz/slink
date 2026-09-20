@@ -53,7 +53,7 @@
   });
 
   export const buttonGroupItemVariants = tv({
-    base: 'relative flex items-center justify-center rounded-md transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-ring/50 focus-visible:z-10 disabled:pointer-events-none disabled:opacity-50',
+    base: 'relative flex items-center justify-center rounded-md transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:z-10 disabled:pointer-events-none disabled:opacity-50',
     variants: {
       variant: {
         default:

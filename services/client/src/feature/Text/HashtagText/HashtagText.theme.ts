@@ -5,7 +5,7 @@ export const hashtagVariants = cva(
   [
     'inline-block rounded-md px-1 py-0.5 font-semibold transition-all duration-200',
     'cursor-pointer select-none',
-    'focus:outline-none focus:ring-2 focus:ring-offset-1',
+    'focus:outline-none focus:ring-2',
     'active:scale-95',
   ],
   {

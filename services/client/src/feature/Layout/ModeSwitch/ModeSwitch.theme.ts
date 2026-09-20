@@ -1,7 +1,7 @@
 import { cva } from 'class-variance-authority';
 
 export const ModeSwitchTheme = cva(
-  'group relative inline-flex items-center justify-center cursor-pointer rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed',
+  'group relative inline-flex items-center justify-center cursor-pointer rounded-full focus:outline-none focus-visible:ring-2 disabled:opacity-50 disabled:cursor-not-allowed',
   {
     variants: {
       variant: {

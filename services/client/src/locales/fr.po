@@ -246,11 +246,6 @@ msgstr "Enregistrer les modifications"
 msgid "Create Collection"
 msgstr "Créer une collection"
 
-#: src/feature/Notification/NotificationGroupItem.svelte
-#: src/feature/Notification/NotificationListItem.svelte
-msgid "Someone"
-msgstr "Quelqu'un"
-
 #: src/feature/Notification/NotificationListItem.svelte
 msgid "Mark as read"
 msgstr "Marquer comme lu"
@@ -4213,26 +4208,6 @@ msgstr[1] "# étiquettes"
 msgid "Tag name cannot contain a slash"
 msgstr "Le nom de l'étiquette ne peut pas contenir de barre oblique"
 
-#: src/feature/Notification/NotificationGroupItem.svelte
-msgid "commented"
-msgstr "a commenté"
-
-#: src/feature/Notification/NotificationGroupItem.svelte
-msgid "replied"
-msgstr "a répondu"
-
-#: src/feature/Notification/NotificationGroupItem.svelte
-msgid "favorited"
-msgstr "a mis en favori"
-
-#: src/feature/Notification/NotificationGroupItem.svelte
-msgid "bookmarked"
-msgstr "a mis en signet"
-
-#: src/feature/Notification/NotificationGroupItem.svelte
-msgid "interacted"
-msgstr "a interagi"
-
 #: src/feature/Image/Actions/CopyZoneAction/CopyZoneAction.svelte
 msgid "Copy image link"
 msgstr "Copier le lien de l'image"
@@ -5145,3 +5120,122 @@ msgstr "Ce SVG n'a pas pu être traité. Il est peut-être mal formé ou imbriqu
 #: src/feature/Image/Explore/ExploreListView/ExploreListView.svelte
 msgid "No description"
 msgstr "Aucune description"
+
+#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
+#: src/feature/Notification/NotificationThread/NotificationThread.svelte
+msgid "A visitor"
+msgid_plural "# visitors"
+msgstr[0] "Un visiteur"
+msgstr[1] "# visiteurs"
+
+#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
+msgid "and # other"
+msgid_plural "and # others"
+msgstr[0] "et # autre"
+msgstr[1] "et # autres"
+
+#: src/feature/Notification/NotificationThread/NotificationThread.svelte
+msgid "# earlier reply"
+msgid_plural "# earlier replies"
+msgstr[0] "# réponse précédente"
+msgstr[1] "# réponses précédentes"
+
+#: src/feature/Notification/NotificationThread/NotificationThread.svelte
+msgid "# earlier comment"
+msgid_plural "# earlier comments"
+msgstr[0] "# commentaire précédent"
+msgstr[1] "# commentaires précédents"
+
+#: src/routes/notifications/+page.svelte
+msgid "Yesterday"
+msgstr "Hier"
+
+#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
+msgid "and"
+msgstr "et"
+
+#: src/feature/Notification/NotificationThread/NotificationThread.svelte
+msgid "Hide earlier reply"
+msgid_plural "Hide earlier replies"
+msgstr[0] "Masquer la réponse précédente"
+msgstr[1] "Masquer les réponses précédentes"
+msgstr[2] "Masquer les réponses précédentes"
+
+#: src/feature/Notification/NotificationThread/NotificationThread.svelte
+msgid "Hide earlier comment"
+msgid_plural "Hide earlier comments"
+msgstr[0] "Masquer le commentaire précédent"
+msgstr[1] "Masquer les commentaires précédents"
+msgstr[2] "Masquer les commentaires précédents"
+
+#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
+msgid "commented"
+msgid_plural "commented"
+msgstr[0] "a commenté"
+msgstr[1] "ont commenté"
+msgstr[2] "ont commenté"
+
+#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
+msgid "replied to your comment"
+msgid_plural "replied to your comment"
+msgstr[0] "a répondu à votre commentaire"
+msgstr[1] "ont répondu à votre commentaire"
+msgstr[2] "ont répondu à votre commentaire"
+
+#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
+msgid "bookmarked"
+msgid_plural "bookmarked"
+msgstr[0] "a mis en signet"
+msgstr[1] "ont mis en signet"
+msgstr[2] "ont mis en signet"
+
+#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
+msgid "Open post"
+msgstr "Ouvrir la publication"
+
+#. 0: group.actorTotal
+#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
+msgid "See all {0}"
+msgstr "Afficher les {0}"
+
+#: src/ui/components/thread-block/thread-block.svelte
+msgid "Show # more"
+msgid_plural "Show # more"
+msgstr[0] "Afficher # de plus"
+msgstr[1] "Afficher # de plus"
+msgstr[2] "Afficher # de plus"
+
+#: src/lib/utils/notification/NotificationFilters.language.ts
+msgid "All"
+msgstr "Toutes"
+
+#: src/lib/utils/notification/NotificationFilters.language.ts
+msgid "Unread"
+msgstr "Non lues"
+
+#: src/lib/utils/notification/NotificationFilters.language.ts
+msgid "Replies"
+msgstr "Réponses"
+
+#: src/routes/notifications/+page.svelte
+msgid "Nothing here"
+msgstr "Rien ici"
+
+#: src/feature/Notification/NotificationFilterBar/NotificationFilterBar.svelte
+msgid "Filter notifications"
+msgstr "Filtrer les notifications"
+
+#: src/feature/Notification/NotificationThread/NotificationThread.svelte
+msgid "your comment:"
+msgstr "votre commentaire :"
+
+#: src/routes/notifications/+page.svelte
+msgid "No notifications match this filter."
+msgstr "Aucune notification ne correspond à ce filtre."
+
+#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
+msgid "and a visitor"
+msgid_plural "and # visitors"
+msgstr[0] "et un visiteur"
+msgstr[1] "et # visiteurs"
+msgstr[2] "et # visiteurs"

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Slink\Shared\Domain\ValueObject;
 
 use Slink\Shared\Domain\DataStructures\HashMap;
-use Slink\Shared\Domain\Exception\Date\DateTimeException;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
 
 trait MutableValueObject {
@@ -30,12 +29,10 @@ trait MutableValueObject {
     
     $this->_updates->set($name, $value);
     
-    try {
-      if (property_exists(static::class, 'updatedAt')) {
-        $this->_updates->set('updatedAt', DateTime::now());
-      }
-    } catch (DateTimeException) {};
-    
+    if (property_exists(static::class, 'updatedAt')) {
+      $this->_updates->set('updatedAt', DateTime::now());
+    }
+
     return $this;
   }
   

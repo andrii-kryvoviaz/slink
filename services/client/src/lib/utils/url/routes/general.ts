@@ -9,4 +9,8 @@ export const generalRoutes = {
     (collectionId: string) =>
       `/upload${buildQueryString({ collection: collectionId })}`,
   ),
+  explorePost: createRoute(
+    (postId: string, commentId?: string) =>
+      `/explore${buildQueryString({ post: postId, comment: commentId })}`,
+  ),
 };

@@ -1,9 +1,6 @@
 import { ApiClient } from '@slink/api';
 
-import type {
-  GroupedNotification,
-  NotificationItem,
-} from '@slink/api/Response';
+import type { NotificationItem } from '@slink/api/Response';
 
 import { AbstractPaginatedFeed } from '@slink/lib/state/core/AbstractPaginatedFeed.svelte';
 import type {
@@ -13,47 +10,20 @@ import type {
 } from '@slink/lib/state/core/AbstractPaginatedFeed.svelte';
 import { useState } from '@slink/lib/state/core/ContextAwareState';
 
+import {
+  type NotificationDayBucket,
+  NotificationDayBuckets,
+  type NotificationFilterId,
+  NotificationFilters,
+  type NotificationGroup,
+  NotificationGrouping,
+} from '@slink/utils/notification';
+
 const NOTIFICATION_FEED_KEY = Symbol('notificationFeed');
-
-function groupNotifications(items: NotificationItem[]): GroupedNotification[] {
-  const groups = new Map<string, GroupedNotification>();
-
-  for (const item of items) {
-    const key = `${item.type}:${item.reference.id}:${item.actor?.id ?? 'unknown'}`;
-
-    if (groups.has(key)) {
-      const group = groups.get(key)!;
-      group.items.push(item);
-      if (item.createdAt.timestamp > group.latestTimestamp) {
-        group.latestTimestamp = item.createdAt.timestamp;
-        group.latestComment = item.relatedComment;
-      }
-      if (!item.isRead) {
-        group.unreadCount++;
-        group.isRead = false;
-      }
-    } else {
-      groups.set(key, {
-        key,
-        type: item.type,
-        reference: item.reference,
-        actor: item.actor,
-        items: [item],
-        latestComment: item.relatedComment,
-        latestTimestamp: item.createdAt.timestamp,
-        unreadCount: item.isRead ? 0 : 1,
-        isRead: item.isRead,
-      });
-    }
-  }
-
-  return Array.from(groups.values()).sort(
-    (a, b) => b.latestTimestamp - a.latestTimestamp,
-  );
-}
 
 class NotificationFeed extends AbstractPaginatedFeed<NotificationItem> {
   private _unreadCount: number = $state(0);
+  private _activeFilter: NotificationFilterId = $state('all');
 
   public constructor() {
     super({
@@ -67,7 +37,11 @@ class NotificationFeed extends AbstractPaginatedFeed<NotificationItem> {
     params: LoadParams & SearchParams,
   ): Promise<PaginatedResponse<NotificationItem>> {
     const { page = 1, limit = 50 } = params;
-    const response = await ApiClient.notification.getNotifications(page, limit);
+    const response = await ApiClient.notification.getNotifications(
+      page,
+      limit,
+      NotificationFilters.queryOf(this._activeFilter),
+    );
 
     return {
       data: response.data,
@@ -87,8 +61,28 @@ class NotificationFeed extends AbstractPaginatedFeed<NotificationItem> {
     return this._unreadCount;
   }
 
-  public get groupedItems(): GroupedNotification[] {
-    return groupNotifications(this._items);
+  public get activeFilter(): NotificationFilterId {
+    return this._activeFilter;
+  }
+
+  public get isFiltered(): boolean {
+    return this._activeFilter !== 'all';
+  }
+
+  public async applyFilter(id: NotificationFilterId): Promise<void> {
+    if (id === this._activeFilter) return;
+
+    this._activeFilter = id;
+    this.reset();
+    await this.load({ page: 1 });
+  }
+
+  public get groupedItems(): NotificationGroup[] {
+    return NotificationGrouping.group(this._items);
+  }
+
+  public get dayBuckets(): NotificationDayBucket[] {
+    return NotificationDayBuckets.fromGroups(this.groupedItems);
   }
 
   public async loadUnreadCount(): Promise<void> {
@@ -97,16 +91,53 @@ class NotificationFeed extends AbstractPaginatedFeed<NotificationItem> {
   }
 
   public async markAsRead(notificationId: string): Promise<void> {
-    await ApiClient.notification.markAsRead(notificationId);
-    const index = this._items.findIndex((item) => item.id === notificationId);
-    if (index !== -1 && !this._items[index].isRead) {
-      this._items[index] = { ...this._items[index], isRead: true };
-      this._unreadCount = Math.max(0, this._unreadCount - 1);
+    try {
+      await ApiClient.notification.markAsRead(notificationId);
+    } catch {
+      return;
     }
+
+    const item = this.get(notificationId);
+    if (!item || item.isRead) {
+      return;
+    }
+
+    this.update(notificationId, { isRead: true });
+    this._unreadCount = Math.max(0, this._unreadCount - 1);
+  }
+
+  public async markGroupAsRead(group: NotificationGroup): Promise<void> {
+    const ids = group.items
+      .filter((item) => !item.isRead)
+      .map((item) => item.id);
+
+    if (ids.length === 0) return;
+
+    const results = await Promise.allSettled(
+      ids.map((id) => ApiClient.notification.markAsRead(id)),
+    );
+
+    let fulfilledCount = 0;
+    results.forEach((result, index) => {
+      if (result.status !== 'fulfilled') return;
+
+      const item = this.get(ids[index]);
+      if (!item || item.isRead) return;
+
+      this.update(ids[index], { isRead: true });
+      fulfilledCount += 1;
+    });
+
+    this._unreadCount = Math.max(0, this._unreadCount - fulfilledCount);
   }
 
   public async markAllAsRead(): Promise<void> {
-    await ApiClient.notification.markAllAsRead();
+    try {
+      await ApiClient.notification.markAllAsRead();
+    } catch {
+      return;
+    }
+
     this._items = this._items.map((item) => ({ ...item, isRead: true }));
     this._unreadCount = 0;
   }

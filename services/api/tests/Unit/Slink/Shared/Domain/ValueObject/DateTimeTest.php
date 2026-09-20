@@ -7,8 +7,10 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Shared\Domain\Exception\Date\DateTimeException;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
+use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 
 final class DateTimeTest extends TestCase {
+  use ClockSensitiveTrait;
 
   /**
    * @return array<int, array<int, mixed>>
@@ -97,5 +99,20 @@ final class DateTimeTest extends TestCase {
   public function itThrowsExceptionForInvalidDateTimeFormat(): void {
     $this->expectException(DateTimeException::class);
     DateTime::fromUnknown('invalid format');
+  }
+
+  #[Test]
+  public function nowReadsTheGlobalClock(): void {
+    self::mockTime(new \DateTimeImmutable('2024-01-01T00:00:00.000000+00:00'));
+
+    $now = DateTime::now();
+
+    $this->assertInstanceOf(DateTime::class, $now);
+    $this->assertSame('2024-01-01T00:00:00.000000+00:00', $now->toString());
+  }
+
+  #[Test]
+  public function nowDefaultsToTheSystemClock(): void {
+    $this->assertLessThanOrEqual(1, \abs(DateTime::now()->getTimestamp() - \time()));
   }
 }

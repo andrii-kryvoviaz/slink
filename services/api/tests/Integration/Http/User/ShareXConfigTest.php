@@ -88,10 +88,11 @@ final class ShareXConfigTest extends HttpTestCase {
 
   #[Test]
   public function expiredApiKeyIsNotFound(): void {
+    $clock = self::mockTime();
     $token = $this->bootOwner();
     $apiKey = $this->createApiKey($token, $this->futureIso(1));
 
-    \sleep(2);
+    $clock->sleep(2);
 
     self::assertSame(404, $this->requestConfig($token, ['apiKey' => $apiKey['key']]));
   }

@@ -13,11 +13,15 @@ use Slink\User\Domain\Enum\UserStatus;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Clock\Clock;
+use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 abstract class HttpTestCase extends WebTestCase {
+  use ClockSensitiveTrait;
+
   private static string $readModelDb = '';
   private static string $eventStoreDb = '';
   private static bool $schemaProvisioned = false;
@@ -540,13 +544,13 @@ abstract class HttpTestCase extends WebTestCase {
   }
 
   protected function setShareExpiration(string $token, string $shareId, string $isoDate): void {
-    $this->apiRequest(
+    self::assertSame(204, $this->apiRequest(
       'PUT',
       \sprintf('/api/share/%s/expiration', $shareId),
       $token,
       ['CONTENT_TYPE' => 'application/json'],
       \json_encode(['expiresAt' => $isoDate], JSON_THROW_ON_ERROR),
-    );
+    ));
   }
 
   /**
@@ -588,7 +592,9 @@ abstract class HttpTestCase extends WebTestCase {
   }
 
   protected function futureIso(int $offsetSeconds): string {
-    return (new \DateTimeImmutable('+' . $offsetSeconds . ' seconds', new \DateTimeZone('UTC')))
+    return Clock::get()->now()
+      ->setTimezone(new \DateTimeZone('UTC'))
+      ->modify('+' . $offsetSeconds . ' seconds')
       ->format('Y-m-d\TH:i:s.uP');
   }
 

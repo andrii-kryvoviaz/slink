@@ -153,7 +153,21 @@ class NotificationView extends AbstractView {
       'id' => $this->relatedComment->getId(),
       'content' => $this->relatedComment->getDisplayContent(),
       'isDeleted' => $this->relatedComment->isDeleted(),
+      'referencedComment' => $this->referencedCommentSummary($this->relatedComment),
     ];
+  }
+
+  /**
+   * @return array{id: string, content: string}|null
+   */
+  private function referencedCommentSummary(CommentView $comment): ?array {
+    $parent = $comment->getReferencedComment();
+
+    if ($parent === null || $parent->isDeleted()) {
+      return null;
+    }
+
+    return ['id' => $parent->getId(), 'content' => $parent->getDisplayContent()];
   }
 
   public function getActor(): ?UserView {

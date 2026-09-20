@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Slink\Notification\Infrastructure\ReadModel\Repository;
 
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Override;
+use Slink\Notification\Domain\Filter\NotificationListFilter;
 use Slink\Notification\Domain\Repository\NotificationRepositoryInterface;
 use Slink\Notification\Infrastructure\ReadModel\View\NotificationView;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
@@ -36,18 +38,32 @@ final class NotificationRepository extends AbstractRepository implements Notific
   }
 
   #[Override]
-  public function findByUserId(string $userId, int $page = 1, int $limit = 20): Paginator {
+  public function findByUserId(string $userId, NotificationListFilter $filter, int $page = 1, int $limit = 20): Paginator {
     $qb = $this->createQueryBuilder('n')
       ->join('n.user', 'u')
       ->join('n.reference', 'r')
       ->addSelect('r')
       ->leftJoin('n.relatedComment', 'c')
       ->addSelect('c')
+      ->leftJoin('c.referencedComment', 'pc')
+      ->addSelect('pc')
       ->where('u.uuid = :userId')
       ->setParameter('userId', $userId)
       ->orderBy('n.createdAt', 'DESC');
 
+    $this->applyFilter($qb, $filter);
+
     return $this->paginate($qb, $page, $limit);
+  }
+
+  private function applyFilter(QueryBuilder $qb, NotificationListFilter $filter): void {
+    if ($filter->getType() !== null) {
+      $qb->andWhere('n.type = :type')->setParameter('type', $filter->getType());
+    }
+
+    if ($filter->isUnreadOnly()) {
+      $qb->andWhere('n.isRead = :isRead')->setParameter('isRead', false);
+    }
   }
 
   #[Override]

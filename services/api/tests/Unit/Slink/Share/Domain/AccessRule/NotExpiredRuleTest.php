@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Slink\Share\Domain\AccessRule;
 
-use Exception;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Share\Domain\AccessRule\ExpirationAware;
 use Slink\Share\Domain\AccessRule\NotExpiredRule;
 use Slink\Share\Domain\Exception\ShareExpiredException;
-use Slink\Shared\Domain\Exception\Date\DateTimeException;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
 
 final class NotExpiredRuleTest extends TestCase {
@@ -47,20 +45,6 @@ final class NotExpiredRuleTest extends TestCase {
     $rule = new NotExpiredRule();
     $justBefore = DateTime::fromTimeStamp(\time() - 1);
     $subject = $this->subject($justBefore);
-
-    $this->expectException(ShareExpiredException::class);
-
-    $rule->allows($subject);
-  }
-
-  #[Test]
-  public function itThrowsWhenDateTimeExceptionIsThrown(): void {
-    $rule = new NotExpiredRule();
-    $subject = new class implements ExpirationAware {
-      public function getExpiresAt(): ?DateTime {
-        throw new DateTimeException(new Exception('failed'));
-      }
-    };
 
     $this->expectException(ShareExpiredException::class);
 

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Slink\User\Domain\ValueObject;
 
-use Slink\Shared\Domain\Exception\Date\DateTimeException;
 use Slink\Shared\Domain\ValueObject\AbstractValueObject;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
 
@@ -47,11 +46,7 @@ final readonly class ApiKey extends AbstractValueObject {
       return false;
     }
 
-    try {
-      return $this->expiresAt->isBefore(DateTime::now());
-    } catch (DateTimeException) {
-      return true;
-    }
+    return $this->expiresAt->isBefore(DateTime::now());
   }
 
   public function toString(): string {

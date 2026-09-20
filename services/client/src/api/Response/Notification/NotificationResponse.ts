@@ -1,7 +1,12 @@
 import type { ListingMetadata } from '@slink/api/Response/Common/ListingMetadata';
 
 export type NotificationType =
-  'comment' | 'comment_reply' | 'added_to_favorite' | 'added_to_bookmarks';
+  'comment' | 'comment_reply' | 'added_to_bookmarks';
+
+export interface NotificationListQuery {
+  type?: NotificationType;
+  unread?: boolean;
+}
 
 export interface NotificationActor {
   id: string;
@@ -13,10 +18,16 @@ export interface NotificationReference {
   fileName: string;
 }
 
+export interface NotificationReferencedComment {
+  id: string;
+  content: string;
+}
+
 export interface NotificationRelatedComment {
   id: string;
   content: string;
   isDeleted: boolean;
+  referencedComment: NotificationReferencedComment | null;
 }
 
 export interface NotificationItem {
@@ -31,18 +42,6 @@ export interface NotificationItem {
     formattedDate: string;
     timestamp: number;
   };
-}
-
-export interface GroupedNotification {
-  key: string;
-  type: NotificationType;
-  reference: NotificationReference;
-  actor: NotificationActor | null;
-  items: NotificationItem[];
-  latestComment: NotificationRelatedComment | null;
-  latestTimestamp: number;
-  unreadCount: number;
-  isRead: boolean;
 }
 
 export interface NotificationListingResponse {

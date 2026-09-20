@@ -1,5 +1,6 @@
 import { AbstractResource } from '@slink/api/AbstractResource';
 import type {
+  NotificationListQuery,
   NotificationListingResponse,
   UnreadCountResponse,
 } from '@slink/api/Response';
@@ -8,9 +9,10 @@ export class NotificationResource extends AbstractResource {
   public async getNotifications(
     page: number = 1,
     limit: number = 20,
+    query: NotificationListQuery = {},
   ): Promise<NotificationListingResponse> {
     return this.get('/notifications', {
-      query: { page, limit },
+      query: { page, limit, ...query },
     });
   }
 

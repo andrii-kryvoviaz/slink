@@ -52,7 +52,7 @@ export const toggleGroupInnerTheme = cva('flex overflow-hidden', {
 });
 
 export const toggleGroupItemTheme = cva(
-  'flex items-center justify-center text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+  'flex items-center justify-center text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       variant: {
