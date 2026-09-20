@@ -18,4 +18,10 @@ describe('notificationFilterBarTheme', () => {
 
     expect(root).toEqual(expect.arrayContaining(['p-1', '-m-1']));
   });
+
+  it('keeps the bottom margin after the tailwind-merge pass', () => {
+    const root = tokens(notificationFilterBarTheme().root());
+
+    expect(root).toEqual(expect.arrayContaining(['mb-6']));
+  });
 });

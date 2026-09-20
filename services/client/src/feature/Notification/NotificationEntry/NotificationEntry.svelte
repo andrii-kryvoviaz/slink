@@ -1,13 +1,9 @@
 <script lang="ts">
   import { Skeleton } from '@slink/feature/Layout';
+  import { NotificationTime } from '@slink/feature/Notification/NotificationTime';
   import { LazyImage } from '@slink/ui/components/lazy-image';
   import type { Snippet } from 'svelte';
 
-  import {
-    formatDateTime,
-    formatRecentTime,
-    minuteClock,
-  } from '$lib/utils/date.svelte';
   import { plural } from '$lib/utils/i18n';
   import Icon from '@iconify/svelte';
 
@@ -28,7 +24,6 @@
   const theme = $derived(notificationEntry({ read: group.isRead }));
   const shown = $derived(group.actors.slice(0, 2));
   const remaining = $derived(group.actorTotal - shown.length);
-  const latest = $derived(new Date(group.latestTimestamp * 1000));
 
   let target: HTMLButtonElement | undefined = $state();
 
@@ -109,13 +104,7 @@
   </p>
 
   <div class={theme.aside()}>
-    <time
-      datetime={latest.toISOString()}
-      title={formatDateTime(latest)}
-      class={theme.time()}
-    >
-      {formatRecentTime(latest, minuteClock.now)}
-    </time>
+    <NotificationTime timestamp={group.latestTimestamp} class={theme.time()} />
     {#if !group.isRead}
       <button
         type="button"

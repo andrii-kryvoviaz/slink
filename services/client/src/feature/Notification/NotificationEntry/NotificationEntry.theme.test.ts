@@ -23,6 +23,13 @@ describe('notificationEntry', () => {
     expect(time).toEqual(expect.arrayContaining(hideTokens));
   });
 
+  it('leaves the time tone to the shared notification time', () => {
+    const time = tokens(notificationEntry().time());
+
+    expect(time).not.toContain('text-xs');
+    expect(time).not.toContain('text-foreground-muted');
+  });
+
   it('renders the type badge as a hairline circle past the thumbnail corner', () => {
     const badge = tokens(notificationEntry().badge());
 

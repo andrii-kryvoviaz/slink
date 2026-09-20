@@ -5196,3 +5196,7 @@ msgstr "通知を絞り込む"
 #: src/feature/Notification/NotificationThread/NotificationThread.svelte
 msgid "your comment:"
 msgstr "あなたのコメント:"
+
+#: src/routes/notifications/+page.svelte
+msgid "No notifications match this filter."
+msgstr "このフィルタに一致する通知がありません。"

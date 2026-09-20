@@ -5230,3 +5230,7 @@ msgstr "Filtrar notificaciones"
 #: src/feature/Notification/NotificationThread/NotificationThread.svelte
 msgid "your comment:"
 msgstr "tu comentario:"
+
+#: src/routes/notifications/+page.svelte
+msgid "No notifications match this filter."
+msgstr "Ninguna notificación coincide con este filtro."

@@ -169,10 +169,6 @@ export function formatRecentTime(date: Date, now: Date = new Date()): string {
   return narrowUnit(Math.floor(elapsed / HOUR_MS), 'hour');
 }
 
-export function formatShortDateTime(date: Date): string {
-  return `${formatShortDate(date)}, ${formatClockTime(date)}`;
-}
-
 export function formatDateTime(date: Date): string {
   return new Intl.DateTimeFormat(getLocale(), {
     dateStyle: 'medium',
@@ -181,21 +177,19 @@ export function formatDateTime(date: Date): string {
 }
 
 export class MinuteClock {
-  private _now = new Date();
-  private _active = false;
+  private _now: Date | null = null;
   private readonly _subscribe: () => void;
 
   constructor() {
     this._subscribe = createSubscriber((update) => {
       this._now = new Date();
-      this._active = true;
       const interval = setInterval(() => {
         this._now = new Date();
         update();
       }, MINUTE_MS);
 
       return () => {
-        this._active = false;
+        this._now = null;
         clearInterval(interval);
       };
     });
@@ -204,11 +198,7 @@ export class MinuteClock {
   get now(): Date {
     this._subscribe();
 
-    if (!this._active) {
-      return new Date();
-    }
-
-    return this._now;
+    return this._now ?? new Date();
   }
 }
 

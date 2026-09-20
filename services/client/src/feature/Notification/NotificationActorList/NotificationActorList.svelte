@@ -1,13 +1,9 @@
 <script lang="ts">
   import { NotificationActorName } from '@slink/feature/Notification/NotificationActorName';
+  import { NotificationTime } from '@slink/feature/Notification/NotificationTime';
   import { UserAvatar } from '@slink/feature/User';
   import { ThreadBlock } from '@slink/ui/components/thread-block';
 
-  import {
-    formatDateTime,
-    formatRecentTime,
-    minuteClock,
-  } from '$lib/utils/date.svelte';
   import { plural } from '$lib/utils/i18n';
 
   import type { NotificationItem } from '@slink/api/Response';
@@ -31,7 +27,6 @@
 </script>
 
 {#snippet row(item: NotificationItem)}
-  {@const createdAt = new Date(item.createdAt.timestamp * 1000)}
   <div class={theme.row()}>
     {#if item.actor}
       <UserAvatar user={item.actor} size="xs" class={theme.avatar()} />
@@ -43,13 +38,10 @@
         {plural(group.visitorCount, ['A visitor', '# visitors'])}
       </NotificationActorName>
     {/if}
-    <time
-      datetime={createdAt.toISOString()}
-      title={formatDateTime(createdAt)}
+    <NotificationTime
+      timestamp={item.createdAt.timestamp}
       class={theme.time()}
-    >
-      {formatRecentTime(createdAt, minuteClock.now)}
-    </time>
+    />
   </div>
 {/snippet}
 

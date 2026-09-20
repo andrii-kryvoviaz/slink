@@ -1,6 +1,6 @@
 <script lang="ts">
   import { LoadMoreButton } from '@slink/feature/Action';
-  import { EmptyState, GhostRows } from '@slink/feature/Layout';
+  import { EmptyState, GhostList, GhostRows } from '@slink/feature/Layout';
   import {
     NotificationActorList,
     NotificationEntry,
@@ -115,10 +115,14 @@
     {:else if notificationFeed.isEmpty && notificationFeed.isFiltered}
       <div in:fade={{ duration: 200 }}>
         <EmptyState
-          kind="no-results"
+          kind="first-use"
           title="Nothing here"
-          icon="ph:funnel-simple"
-        />
+          description="No notifications match this filter."
+        >
+          {#snippet preview()}
+            <GhostList />
+          {/snippet}
+        </EmptyState>
       </div>
     {:else if notificationFeed.isEmpty}
       <div in:fade={{ duration: 200 }}>

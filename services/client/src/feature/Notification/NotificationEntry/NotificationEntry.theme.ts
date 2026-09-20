@@ -17,7 +17,7 @@ export const notificationEntry = tv({
     name: 'font-medium',
     verb: 'text-foreground-muted',
     aside: 'grid items-center justify-items-end pr-3',
-    time: 'text-xs text-foreground-muted transition-opacity [grid-area:1/1]',
+    time: 'transition-opacity [grid-area:1/1]',
     markRead:
       'relative inline-flex size-7 items-center justify-center rounded-full text-foreground-muted opacity-0 pointer-events-none outline-none transition-opacity [grid-area:1/1] before:absolute before:inset-x-0 before:-inset-y-2 before:content-[""] hover:bg-hover hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/50 group-hover/entry:opacity-100 group-hover/entry:pointer-events-auto group-focus-within/entry:opacity-100 group-focus-within/entry:pointer-events-auto [@media(hover:none)]:opacity-100 [@media(hover:none)]:pointer-events-auto',
     markReadIcon: 'size-4',

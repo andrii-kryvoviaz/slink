@@ -5224,3 +5224,7 @@ msgstr "Filter notifications"
 #: src/feature/Notification/NotificationThread/NotificationThread.svelte
 msgid "your comment:"
 msgstr "your comment:"
+
+#: src/routes/notifications/+page.svelte
+msgid "No notifications match this filter."
+msgstr "No notifications match this filter."

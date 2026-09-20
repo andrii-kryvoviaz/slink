@@ -1,3 +1,5 @@
+import { notificationActorName } from '@slink/feature/Notification/NotificationActorName/NotificationActorName.theme';
+import { threadBlock } from '@slink/ui/components/thread-block/thread-block.theme';
 import { describe, expect, it } from 'vitest';
 
 import { notificationThread } from './NotificationThread.theme';
@@ -18,7 +20,6 @@ describe('notificationThread', () => {
       theme.flow(),
       theme.target(),
       theme.text(),
-      theme.time(),
     ].flatMap(tokens);
 
     expect(tokens(theme.flow())).toEqual(
@@ -45,9 +46,9 @@ describe('notificationThread', () => {
     );
   });
 
-  it('leaves name tones to the shared actor name', () => {
+  it('keeps comment text at the muted row tone while the unread name lifts above it', () => {
     const theme = notificationThread();
-    const nameSlots = [
+    const ownSlots = [
       theme.row(),
       theme.flow(),
       theme.target(),
@@ -56,11 +57,20 @@ describe('notificationThread', () => {
       theme.toggleLabel(),
     ].flatMap(tokens);
 
-    expect(nameSlots).not.toContain('text-foreground');
-    expect(nameSlots).not.toContain('text-foreground-soft');
-    expect(nameSlots).not.toContain('text-foreground-muted');
-    expect(nameSlots).not.toContain('font-medium');
-    expect(tokens(theme.time())).not.toContain('font-medium');
+    expect(
+      ownSlots.filter((token) =>
+        /(^|:)(text-foreground|font-medium)/.test(token),
+      ),
+    ).toEqual([]);
+    expect(tokens(threadBlock().row())).toContain('text-foreground-muted');
+    expect(tokens(notificationActorName())).toContain('text-foreground');
+    expect(tokens(notificationActorName({ read: true }))).toContain(
+      'text-foreground-muted',
+    );
+  });
+
+  it('owns no time class of its own', () => {
+    expect(Object.keys(notificationThread())).not.toContain('time');
   });
 
   it('hides a repeated author name visually only', () => {

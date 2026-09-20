@@ -12,7 +12,6 @@ import {
   formatDayTime,
   formatRecentTime,
   formatShortDate,
-  formatShortDateTime,
   getLocale,
   hoursUntil,
   narrowFromDays,
@@ -244,19 +243,6 @@ describe('formatShortDate', () => {
     translator.locale = 'en-US';
 
     expect(formatShortDate(date)).not.toBe(british);
-  });
-});
-
-describe('formatShortDateTime', () => {
-  beforeEach(() => {
-    vi.useFakeTimers();
-    vi.setSystemTime(new Date(2026, 8, 18, 10));
-  });
-
-  it('joins the short date and the clock time with a comma', () => {
-    expect(formatShortDateTime(new Date(2026, 6, 11, 18, 2))).toBe(
-      '11 Jul, 18:02',
-    );
   });
 });
 

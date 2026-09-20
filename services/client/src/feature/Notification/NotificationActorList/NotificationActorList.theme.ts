@@ -5,7 +5,7 @@ export const notificationActorList = tv({
     row: 'flex items-center gap-2',
     avatar: 'size-5 shrink-0',
     name: 'min-w-0 truncate',
-    time: 'ml-auto shrink-0 text-xs text-foreground-muted',
+    time: 'ml-auto shrink-0',
     toggleLabel: 'tabular-nums',
   },
 });

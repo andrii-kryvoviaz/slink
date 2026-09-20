@@ -5,7 +5,7 @@ export const notificationActorName = tv({
   variants: {
     read: {
       true: 'text-foreground-muted',
-      false: 'text-foreground-soft',
+      false: 'text-foreground',
     },
   },
   defaultVariants: {

@@ -206,6 +206,8 @@ test.describe('Notification filters', () => {
     const owner = await seedMixed();
 
     await withFiltersPage(browser, owner, async (notificationsPage, page) => {
+      await expect(notificationsPage.unreadSubtitle).toHaveText('3 unread');
+
       await page.route(
         /\/notifications\?.*type=added_to_bookmarks/,
         async (route) => {
@@ -226,7 +228,8 @@ test.describe('Notification filters', () => {
       await expect(reply).toHaveCount(0);
 
       await notificationsPage.selectFilter('Replies');
-      await staleLanded;
+      const stale = await staleLanded;
+      await stale.finished();
 
       await expectOnlySelected(notificationsPage, 'Replies');
       await expect(reply).toHaveCount(1);

@@ -5196,3 +5196,7 @@ msgstr "筛选通知"
 #: src/feature/Notification/NotificationThread/NotificationThread.svelte
 msgid "your comment:"
 msgstr "你的评论："
+
+#: src/routes/notifications/+page.svelte
+msgid "No notifications match this filter."
+msgstr "没有符合此筛选条件的通知。"

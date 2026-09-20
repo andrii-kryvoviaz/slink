@@ -1,13 +1,9 @@
 <script lang="ts">
   import { NotificationActorName } from '@slink/feature/Notification/NotificationActorName';
+  import { NotificationTime } from '@slink/feature/Notification/NotificationTime';
   import { CommentText } from '@slink/feature/Text';
   import { ThreadBlock } from '@slink/ui/components/thread-block';
 
-  import {
-    formatDateTime,
-    formatRecentTime,
-    minuteClock,
-  } from '$lib/utils/date.svelte';
   import { plural } from '$lib/utils/i18n';
 
   import type { NotificationItem } from '@slink/api/Response';
@@ -44,7 +40,6 @@
 {/snippet}
 
 {#snippet row(item: NotificationItem, { latest }: { latest: boolean })}
-  {@const createdAt = new Date(item.createdAt.timestamp * 1000)}
   <div class={theme.row()}>
     <div class={theme.flow()}>
       <span
@@ -73,13 +68,7 @@
         </span>{/if}
     </div>
     {#if !latest}
-      <time
-        datetime={createdAt.toISOString()}
-        title={formatDateTime(createdAt)}
-        class={theme.time()}
-      >
-        {formatRecentTime(createdAt, minuteClock.now)}
-      </time>
+      <NotificationTime timestamp={item.createdAt.timestamp} />
     {/if}
   </div>
 {/snippet}
