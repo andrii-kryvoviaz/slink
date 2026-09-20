@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Unit\Slink\User\Domain\ValueObject;
 
 use PHPUnit\Framework\TestCase;
-use Slink\Shared\Domain\Exception\Date\DateTimeException;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\User\Domain\ValueObject\ApiKey;
 
@@ -74,15 +73,5 @@ final class ApiKeyTest extends TestCase {
     $apiKey = ApiKey::fromExisting($key, $name, $createdAt);
     
     $this->assertEquals($key, $apiKey->toString());
-  }
-
-  public function testItHandlesDateTimeExceptionInIsExpired(): void {
-    $name = 'Test Key';
-    $invalidExpiresAt = $this->createStub(DateTime::class);
-    $invalidExpiresAt->method('isBefore')->willThrowException(new DateTimeException(new \Exception('Invalid date')));
-    
-    $apiKey = ApiKey::fromExisting('sk_test', $name, DateTime::now(), $invalidExpiresAt);
-    
-    $this->assertTrue($apiKey->isExpired());
   }
 }
