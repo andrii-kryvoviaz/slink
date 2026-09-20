@@ -80,6 +80,16 @@ export class ContentApi {
     return Boolean(payload.isPublic);
   }
 
+  async setMediaVisibility(
+    imageIds: string[],
+    isPublic: boolean,
+  ): Promise<void> {
+    await this.http.request('PATCH', '/api/images/batch', {
+      imageIds,
+      isPublic,
+    });
+  }
+
   async getImageTagIds(imageId: string): Promise<string[]> {
     const data = await this.http.request('GET', `/api/images/${imageId}/tags`);
     const items = (data?.data ?? data ?? []) as Array<{ id: unknown }>;

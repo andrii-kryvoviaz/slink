@@ -28,6 +28,7 @@ test.describe('Explore bookmark', () => {
 
   test('bookmarked image appears in bookmarks page', async ({
     explorePage,
+    bookmarksPage,
     actor,
     page,
   }) => {
@@ -52,9 +53,9 @@ test.describe('Explore bookmark', () => {
     await explorePage.toggleBookmark(bookmarkButton, 'true');
     await saved;
 
-    const bookmarkLink = page.locator(`main img[src*="${imageId}"]`).first();
+    const bookmarkLink = bookmarksPage.mediaFor(imageId);
     await expect(async () => {
-      await page.goto('/bookmarks');
+      await bookmarksPage.goto();
       await expect(bookmarkLink).toBeVisible({ timeout: 2000 });
     }).toPass({ timeout: 15000 });
   });

@@ -3,6 +3,7 @@ import { expect, test } from '../fixtures/auth.fixture';
 test.describe('Bookmarks page removal', () => {
   test('removes a bookmark from the bookmarks page card', async ({
     explorePage,
+    bookmarksPage,
     actor,
     page,
   }) => {
@@ -27,15 +28,17 @@ test.describe('Bookmarks page removal', () => {
     await explorePage.toggleBookmark(bookmarkButton, 'true');
     await saved;
 
-    const card = page.locator(`main img[src*="${imageId}"]`).first();
+    const card = bookmarksPage.mediaFor(imageId);
     await expect(async () => {
-      await page.goto('/bookmarks');
+      await bookmarksPage.goto();
       await expect(card).toBeVisible({ timeout: 2000 });
     }).toPass({ timeout: 15000 });
 
-    const removeButton = page
-      .getByRole('button', { name: 'Remove bookmark' })
-      .first();
+    const cardContainer = bookmarksPage.cardFor(imageId);
+    const removeButton = cardContainer.getByRole('button', {
+      name: 'Remove bookmark',
+      exact: true,
+    });
 
     const removed = page.waitForResponse(
       (response) =>
