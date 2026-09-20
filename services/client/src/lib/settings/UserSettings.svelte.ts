@@ -49,6 +49,7 @@ export type ShareState = { format: ShareFormat };
 export type CommentState = { sortOrder: SortOrder };
 export type UploadOptionsState = { expanded: boolean };
 export type BannersState = { hideExifKeptNotice: boolean };
+export type BookmarksState = { viewMode: ViewMode };
 
 export type CookieSettings = { [K in SettingsKey]?: unknown };
 
@@ -137,6 +138,7 @@ export class UserSettings {
   readonly _table = new ObjectSetting<TableState>('table');
   readonly _history = new ObjectSetting<HistoryState>('history');
   readonly _explore = new ObjectSetting<ExploreState>('explore');
+  readonly _bookmarks = new ObjectSetting<BookmarksState>('bookmarks');
   readonly _tags = new ObjectSetting<TagsState>('tags');
   readonly _share = new ObjectSetting<ShareState>('share');
   readonly _comment = new ObjectSetting<CommentState>('comment');
@@ -159,6 +161,7 @@ export class UserSettings {
     table: this._table,
     history: this._history,
     explore: this._explore,
+    bookmarks: this._bookmarks,
     tags: this._tags,
     share: this._share,
     comment: this._comment,
@@ -225,6 +228,14 @@ export class UserSettings {
 
   set explore(v: ExploreState) {
     this._explore.current = v;
+  }
+
+  get bookmarks(): BookmarksState {
+    return this._bookmarks.current;
+  }
+
+  set bookmarks(v: BookmarksState) {
+    this._bookmarks.current = v;
   }
 
   get tags(): TagsState {

@@ -1,42 +1,64 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  type ViewMode,
   type ViewModeSettingsKey,
   defaultSettings,
+  defaultViewModes,
+  supportedViewModes,
 } from '@slink/lib/settings/Settings.enums';
 import { settingsPolicy } from '@slink/lib/settings/SettingsPolicy';
 
-const viewModeKeys: ViewModeSettingsKey[] = [
-  'userAdmin',
-  'history',
-  'explore',
-  'tags',
-  'collections',
+const viewModeCases: {
+  key: ViewModeSettingsKey;
+  supported: ViewMode[];
+  defaultMode: ViewMode;
+  unsupported: ViewMode;
+  kept: ViewMode;
+}[] = [
+  {
+    key: 'userAdmin',
+    supported: ['grid', 'list'],
+    defaultMode: 'list',
+    unsupported: 'table',
+    kept: 'grid',
+  },
+  {
+    key: 'history',
+    supported: ['grid', 'list', 'table'],
+    defaultMode: 'table',
+    unsupported: 'tree',
+    kept: 'list',
+  },
+  {
+    key: 'explore',
+    supported: ['grid', 'list'],
+    defaultMode: 'grid',
+    unsupported: 'table',
+    kept: 'list',
+  },
+  {
+    key: 'tags',
+    supported: ['table', 'tree'],
+    defaultMode: 'table',
+    unsupported: 'grid',
+    kept: 'tree',
+  },
+  {
+    key: 'collections',
+    supported: ['grid', 'table'],
+    defaultMode: 'grid',
+    unsupported: 'list',
+    kept: 'table',
+  },
+  {
+    key: 'bookmarks',
+    supported: ['grid', 'list'],
+    defaultMode: 'grid',
+    unsupported: 'table',
+    kept: 'list',
+  },
 ];
-
-const unsupportedViewModes: Record<ViewModeSettingsKey, string> = {
-  userAdmin: 'table',
-  history: 'tree',
-  explore: 'table',
-  tags: 'grid',
-  collections: 'list',
-};
-
-const supportedViewModes: Record<ViewModeSettingsKey, string> = {
-  userAdmin: 'grid',
-  history: 'list',
-  explore: 'list',
-  tags: 'tree',
-  collections: 'table',
-};
-
-const expectedDefaultViewModes: Record<ViewModeSettingsKey, string> = {
-  userAdmin: 'list',
-  history: 'table',
-  explore: 'grid',
-  tags: 'table',
-  collections: 'grid',
-};
 
 const defaultViewMode = (key: ViewModeSettingsKey): unknown =>
   (defaultSettings[key] as { viewMode: unknown }).viewMode;
@@ -45,19 +67,34 @@ const decodedViewMode = (key: ViewModeSettingsKey, value: unknown): unknown =>
   (settingsPolicy.decode(key, JSON.stringify(value)) as { viewMode: unknown })
     .viewMode;
 
+describe('settingsPolicy view-mode registry', () => {
+  it('every registry key has an expectation', () => {
+    expect(viewModeCases.map(({ key }) => key).sort()).toEqual(
+      Object.keys(supportedViewModes).sort(),
+    );
+  });
+
+  it.each(viewModeCases)(
+    '$key: supports $supported and defaults to $defaultMode',
+    ({ key, supported, defaultMode }) => {
+      expect(supportedViewModes[key]).toEqual(supported);
+      expect(defaultViewModes[key]).toBe(defaultMode);
+      expect(defaultViewMode(key)).toBe(defaultMode);
+    },
+  );
+});
+
 describe('settingsPolicy view-mode fallback', () => {
-  it.each(viewModeKeys)(
-    '%s: an unsupported viewMode falls back to the default',
-    (key) => {
-      expect(
-        decodedViewMode(key, { viewMode: unsupportedViewModes[key] }),
-      ).toBe(defaultViewMode(key));
+  it.each(viewModeCases)(
+    '$key: the unsupported viewMode $unsupported falls back to $defaultMode',
+    ({ key, unsupported, defaultMode }) => {
+      expect(decodedViewMode(key, { viewMode: unsupported })).toBe(defaultMode);
     },
   );
 
-  it.each(viewModeKeys)(
-    '%s: bogus, numeric, null and absent viewMode fall back to the default',
-    (key) => {
+  it.each(viewModeCases)(
+    '$key: bogus, numeric, null and absent viewMode fall back to $defaultMode',
+    ({ key, defaultMode }) => {
       const inputs = [
         { viewMode: 'bogus' },
         { viewMode: 42 },
@@ -66,7 +103,7 @@ describe('settingsPolicy view-mode fallback', () => {
       ];
 
       for (const input of inputs) {
-        expect(decodedViewMode(key, input)).toBe(defaultViewMode(key));
+        expect(decodedViewMode(key, input)).toBe(defaultMode);
       }
     },
   );
@@ -81,14 +118,36 @@ describe('settingsPolicy view-mode fallback', () => {
     );
   });
 
-  it.each(viewModeKeys)('%s: a supported viewMode is kept', (key) => {
-    expect(decodedViewMode(key, { viewMode: supportedViewModes[key] })).toBe(
-      supportedViewModes[key],
-    );
+  it.each(viewModeCases)(
+    '$key: the supported viewMode $kept is kept',
+    ({ key, kept }) => {
+      expect(decodedViewMode(key, { viewMode: kept })).toBe(kept);
+    },
+  );
+});
+
+describe('settingsPolicy bookmarks view mode', () => {
+  it('decodes an unsupported viewMode to the default', () => {
+    expect(settingsPolicy.decode('bookmarks', '{"viewMode":"table"}')).toEqual({
+      viewMode: 'grid',
+    });
   });
 
-  it.each(viewModeKeys)('%s: the default view mode is unchanged', (key) => {
-    expect(defaultViewMode(key)).toBe(expectedDefaultViewModes[key]);
+  it.each(['not json', 'null', '[]'])(
+    'decodes a malformed value %s to the default',
+    (raw) => {
+      expect(settingsPolicy.decode('bookmarks', raw)).toEqual({
+        viewMode: 'grid',
+      });
+    },
+  );
+
+  it('round-trips an encode then decode', () => {
+    const encoded = settingsPolicy.encode({ viewMode: 'list' });
+
+    expect(settingsPolicy.decode('bookmarks', encoded)).toEqual({
+      viewMode: 'list',
+    });
   });
 });
 

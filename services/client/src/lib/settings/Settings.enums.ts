@@ -44,7 +44,8 @@ export type SettingsKey =
   | 'comment'
   | 'uploadOptions'
   | 'banners'
-  | 'collections';
+  | 'collections'
+  | 'bookmarks';
 
 export const settingsKeys: SettingsKey[] = [
   'mode',
@@ -62,6 +63,7 @@ export const settingsKeys: SettingsKey[] = [
   'uploadOptions',
   'banners',
   'collections',
+  'bookmarks',
 ];
 
 const resolveEnum = <T extends Record<string, string>>(
@@ -88,7 +90,7 @@ export const resolveLocale = (value: unknown): Locale =>
 export type ViewMode = 'grid' | 'list' | 'table' | 'tree';
 
 export type ViewModeSettingsKey =
-  'userAdmin' | 'history' | 'explore' | 'tags' | 'collections';
+  'userAdmin' | 'history' | 'explore' | 'tags' | 'collections' | 'bookmarks';
 
 export const supportedViewModes: Record<
   ViewModeSettingsKey,
@@ -99,6 +101,7 @@ export const supportedViewModes: Record<
   explore: ['grid', 'list'],
   tags: ['table', 'tree'],
   collections: ['grid', 'table'],
+  bookmarks: ['grid', 'list'],
 };
 
 export const defaultViewModes: Record<ViewModeSettingsKey, ViewMode> = {
@@ -107,6 +110,7 @@ export const defaultViewModes: Record<ViewModeSettingsKey, ViewMode> = {
   explore: 'grid',
   tags: 'table',
   collections: 'grid',
+  bookmarks: 'grid',
 };
 
 export const isViewModeSettingsKey = (
@@ -182,4 +186,5 @@ export const defaultSettings: Record<SettingsKey, unknown> = {
     pageSize: 12,
     loadStrategy: 'load_more',
   },
+  bookmarks: { viewMode: defaultViewModes.bookmarks },
 };

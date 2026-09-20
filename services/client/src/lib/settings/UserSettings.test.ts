@@ -4,8 +4,10 @@ import { SortOrder } from '@slink/lib/enum/SortOrder';
 import {
   Locale,
   Mode,
+  type SettingsKey,
   Theme,
   defaultSettings,
+  settingsKeys,
 } from '@slink/lib/settings/Settings.enums';
 import {
   type CookieSettings,
@@ -22,20 +24,8 @@ vi.mock('@slink/utils/http/cookie', () => ({
   },
 }));
 
-const objectKeys = [
-  'sidebar',
-  'navigation',
-  'userAdmin',
-  'table',
-  'history',
-  'explore',
-  'tags',
-  'share',
-  'comment',
-  'collections',
-  'uploadOptions',
-  'banners',
-] as const;
+const enumKeys: SettingsKey[] = ['mode', 'theme', 'locale'];
+const objectKeys = settingsKeys.filter((key) => !enumKeys.includes(key));
 
 const nonDefaults = {
   mode: Mode.DARK,
@@ -60,6 +50,7 @@ const nonDefaults = {
     pageSize: 24,
     loadStrategy: 'infinite_scroll',
   },
+  bookmarks: { viewMode: 'list' },
 } satisfies CookieSettings;
 
 const read = (settings: UserSettings, key: string): unknown =>
@@ -70,7 +61,13 @@ describe('UserSettings', () => {
     vi.mocked(cookie.set).mockClear();
   });
 
-  it('hydrates all fifteen keys from initial without persisting', () => {
+  it('nonDefaults covers every registered settings key', () => {
+    expect([...Object.keys(nonDefaults)].sort()).toEqual(
+      [...settingsKeys].sort(),
+    );
+  });
+
+  it('hydrates all keys from initial without persisting', () => {
     const settings = new UserSettings(nonDefaults);
 
     expect(settings.mode.current).toBe(Mode.DARK);
@@ -102,7 +99,7 @@ describe('UserSettings', () => {
     expect(read(settings, 'bogus')).toBeUndefined();
   });
 
-  it('reset restores all fifteen keys', () => {
+  it('reset restores all keys', () => {
     const settings = new UserSettings(nonDefaults);
 
     settings.reset();
@@ -145,7 +142,7 @@ describe('UserSettings', () => {
     expect(JSON.parse(value)).toEqual({ viewMode: 'list' });
   });
 
-  it('each of the twelve keys round-trips through its accessor', () => {
+  it('each object key round-trips through its accessor', () => {
     const settings = new UserSettings({});
 
     for (const key of objectKeys) {
