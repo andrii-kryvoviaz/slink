@@ -420,10 +420,6 @@ msgstr "この画像は利用できなくなりました"
 msgid "Remove bookmark"
 msgstr "ブックマークを解除"
 
-#: src/routes/bookmarks/+page.svelte
-msgid "Saved <0/>"
-msgstr "保存済み <0/>"
-
 #: src/routes/explore/+page.svelte
 msgid "Explore Gallery | Slink"
 msgstr "ギャラリーを探索 | Slink"
@@ -5203,3 +5199,8 @@ msgstr "このフィルタに一致する通知がありません。"
 msgid "and a visitor"
 msgid_plural "and # visitors"
 msgstr[0] "ほか訪問者#人"
+
+#. 0: formattedDate
+#: src/feature/Image/SavedDateBadge/SavedDateBadge.svelte
+msgid "Saved on {0}"
+msgstr ""

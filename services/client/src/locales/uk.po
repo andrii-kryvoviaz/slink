@@ -420,10 +420,6 @@ msgstr "Зображення більше недоступне"
 msgid "Remove bookmark"
 msgstr "Видалити закладку"
 
-#: src/routes/bookmarks/+page.svelte
-msgid "Saved <0/>"
-msgstr "Збережено <0/>"
-
 #: src/routes/explore/+page.svelte
 msgid "Explore Gallery | Slink"
 msgstr "Галерея | Slink"
@@ -5268,3 +5264,8 @@ msgstr[0] "та ще # відвідувач"
 msgstr[1] "та ще # відвідувачі"
 msgstr[2] "та ще # відвідувачів"
 msgstr[3] "та ще # відвідувачів"
+
+#. 0: formattedDate
+#: src/feature/Image/SavedDateBadge/SavedDateBadge.svelte
+msgid "Saved on {0}"
+msgstr ""

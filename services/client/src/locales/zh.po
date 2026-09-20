@@ -420,10 +420,6 @@ msgstr "图片已不可用"
 msgid "Remove bookmark"
 msgstr "移除收藏"
 
-#: src/routes/bookmarks/+page.svelte
-msgid "Saved <0/>"
-msgstr "收藏于 <0/>"
-
 #: src/routes/explore/+page.svelte
 msgid "Explore Gallery | Slink"
 msgstr "发现作品 | Slink"
@@ -5203,3 +5199,8 @@ msgstr "没有符合此筛选条件的通知。"
 msgid "and a visitor"
 msgid_plural "and # visitors"
 msgstr[0] "等#位访客"
+
+#. 0: formattedDate
+#: src/feature/Image/SavedDateBadge/SavedDateBadge.svelte
+msgid "Saved on {0}"
+msgstr ""

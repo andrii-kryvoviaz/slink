@@ -1,39 +1,50 @@
 <script lang="ts">
   import { LoadMoreButton } from '@slink/feature/Action';
   import {
-    BookmarkButton,
-    ImagePlaceholder,
+    ExploreGridView,
+    ExploreListView,
     PostViewer,
+    SavedDateBadge,
   } from '@slink/feature/Image';
   import {
+    Card,
     EmptyState,
-    GhostGrid,
-    Masonry,
+    ExploreSkeleton,
+    GhostPreview,
+    PageHeader,
+    ViewModeToggle,
     hintIconVariants,
   } from '@slink/feature/Layout';
-  import { ExploreSkeleton } from '@slink/feature/Layout';
-  import { FormattedDate, Subtitle, Title } from '@slink/feature/Text';
-  import { UserAvatar } from '@slink/feature/User';
   import { Button } from '@slink/ui/components/button';
-  import { untrack } from 'svelte';
+  import { ViewModeLayout } from '@slink/ui/components/view-mode-layout';
 
+  import { page } from '$app/state';
+  import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
   import Icon from '@iconify/svelte';
-  import { fade, fly } from 'svelte/transition';
+  import { fade } from 'svelte/transition';
 
-  import type { BookmarkItem } from '@slink/api/Response/Bookmark/BookmarkResponse';
+  import type { BookmarkItem, ImageListingItem } from '@slink/api/Response';
 
   import { skeleton } from '@slink/lib/actions/skeleton';
+  import { supportedViewModes } from '@slink/lib/settings';
   import { MediaFeedAdapter } from '@slink/lib/state/MediaFeedAdapter';
   import { usePostViewerState } from '@slink/lib/state/PostViewerState.svelte';
   import { useUserBookmarksFeed } from '@slink/lib/state/UserBookmarksFeed.svelte';
+  import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
 
-  import type { PageServerData } from './$types';
+  import type { PageData } from './$types';
 
   interface Props {
-    data: PageServerData;
+    data: PageData;
   }
 
   let { data }: Props = $props();
+
+  const { settings } = page.data;
+
+  const licensingEnabled = $derived(
+    data.globalSettings?.image?.enableLicensing ?? false,
+  );
 
   const bookmarksFeed = useUserBookmarksFeed();
   const postViewerState = usePostViewerState();
@@ -42,24 +53,67 @@
   postViewerState.setFeed(new MediaFeedAdapter(bookmarksFeed));
 
   $effect(() => {
-    if (untrack(() => bookmarksFeed.needsLoad)) {
-      bookmarksFeed.load();
-    }
-  });
-
-  $effect(() => {
     if (!postViewerState.isOpen && bookmarksFeed.isDirty) {
       postViewerState.openFromUrlAsync();
     }
   });
 
-  const handleRemoveBookmark = (bookmark: BookmarkItem) =>
-    bookmarksFeed.removeBookmark(bookmark);
+  const items = $derived(bookmarksFeed.items.map((bookmark) => bookmark.image));
 
-  const openPostViewer = (imageId: string) => {
-    const index = bookmarksFeed.getMediaIndex(imageId);
+  const bookmarkByImageId = $derived(
+    new Map<string, BookmarkItem>(
+      bookmarksFeed.items.map((bookmark) => [bookmark.image.id, bookmark]),
+    ),
+  );
+
+  const savedAtTimestamp = (imageId: string): number | undefined =>
+    bookmarkByImageId.get(imageId)?.createdAt.timestamp;
+
+  const handleRemoveBookmark = async (imageId: string) => {
+    const bookmark = bookmarkByImageId.get(imageId);
+    if (!bookmark) return;
+
+    try {
+      await bookmarksFeed.removeBookmark(bookmark);
+    } catch {
+      toast.error(messages.bookmark.failedToUpdate);
+    }
+  };
+
+  const openPostViewer = (image: ImageListingItem) => {
+    const index = bookmarksFeed.getMediaIndex(image.id);
     if (index === -1) return;
+
     postViewerState.open(index);
+  };
+
+  const handleBookmarkChange = (
+    image: ImageListingItem,
+    isBookmarked: boolean,
+    count: number,
+  ) => {
+    bookmarksFeed.updateItemMedia(image.id, {
+      isBookmarked,
+      bookmarkCount: count,
+    });
+  };
+
+  const handleImageUpdate = (updatedImage: ImageListingItem) => {
+    bookmarksFeed.updateItemMedia(updatedImage.id, updatedImage);
+  };
+
+  const handleImageDelete = async (imageId: string) => {
+    const bookmark = bookmarkByImageId.get(imageId);
+    if (!bookmark) return;
+
+    await bookmarksFeed.removeItems([bookmark.id]);
+  };
+
+  const viewHandlers = {
+    open: openPostViewer,
+    bookmarkChange: handleBookmarkChange,
+    imageUpdate: handleImageUpdate,
+    imageDelete: handleImageDelete,
   };
 </script>
 
@@ -67,194 +121,119 @@
   <title>Bookmarks | Slink</title>
 </svelte:head>
 
+{#snippet savedBadge(image: ImageListingItem)}
+  {@const savedAt = savedAtTimestamp(image.id)}
+  {#if savedAt}
+    <SavedDateBadge date={savedAt} variant="overlay" />
+  {/if}
+{/snippet}
+
+{#snippet unavailableCard(image: Pick<ImageListingItem, 'id'>)}
+  <Card class="break-inside-avoid p-8 text-center">
+    <Icon icon="ph:image-broken" class="w-12 h-12 mx-auto text-ring mb-3" />
+    <p class="text-foreground-muted text-sm">Image no longer available</p>
+    <Button
+      variant="outline-danger"
+      size="sm"
+      rounded="lg"
+      class="mt-4"
+      onclick={() => handleRemoveBookmark(image.id)}
+    >
+      Remove bookmark
+    </Button>
+  </Card>
+{/snippet}
+
 <main in:fade={{ duration: 500 }} class="min-h-full">
   <div
     class="flex flex-col px-4 py-6 sm:px-6 w-full"
     use:skeleton={{ feed: bookmarksFeed }}
   >
-    <div class="mb-8">
-      <Title>Bookmarks</Title>
-      <Subtitle>Your saved images from the community</Subtitle>
-    </div>
+    <PageHeader>
+      {#snippet title()}Bookmarks{/snippet}
+      {#snippet subtitle()}Your saved images from the community{/snippet}
+      {#snippet actions()}
+        <ViewModeToggle
+          value={settings.bookmarks.viewMode}
+          modes={supportedViewModes.bookmarks}
+          on={{
+            change: (mode) => {
+              settings.bookmarks = { viewMode: mode };
+            },
+          }}
+        />
+      {/snippet}
+    </PageHeader>
 
-    {#if bookmarksFeed.showSkeleton}
-      <div in:fade={{ duration: 200 }}>
-        <ExploreSkeleton count={8} />
-      </div>
-    {:else if bookmarksFeed.isEmpty}
-      <div in:fade={{ duration: 200 }}>
-        <EmptyState
-          kind="first-use"
-          title="No bookmarks yet"
-          description="Images you bookmark are collected here, ready when you need them."
-        >
-          {#snippet preview()}
-            <GhostGrid />
-          {/snippet}
-          {#snippet action()}
-            <Button variant="primary" size="md" rounded="lg" href="/explore">
-              <Icon icon="lucide:search" class="h-4 w-4" />
-              Explore images
-            </Button>
-          {/snippet}
-          {#snippet hint()}
-            <span class={hintIconVariants()}>
-              <Icon icon="ph:bookmark-simple" class="h-3 w-3" />
-            </span>
-            Tap the bookmark on any image to save it here
-          {/snippet}
-        </EmptyState>
-      </div>
-    {:else if bookmarksFeed.items.length > 0}
-      <Masonry items={bookmarksFeed.items} class="gap-4">
-        {#snippet itemTemplate(bookmark)}
-          {#if !('url' in bookmark.image)}
-            <div
-              in:fly={{ y: 20, duration: 400, delay: Math.random() * 200 }}
-              class="break-inside-avoid bg-muted rounded-2xl border border-border overflow-hidden p-8 text-center"
-            >
-              <Icon
-                icon="ph:image-broken"
-                class="w-12 h-12 mx-auto text-ring mb-3"
-              />
-              <p class="text-foreground-muted text-sm">
-                Image no longer available
-              </p>
-              <button
-                class="mt-4 text-sm text-danger hover:text-danger-strong transition-colors"
-                onclick={() => handleRemoveBookmark(bookmark)}
-              >
-                Remove bookmark
-              </button>
-            </div>
-          {:else}
-            {@const image = bookmark.image}
-            <div
-              in:fly={{ y: 20, duration: 400, delay: Math.random() * 200 }}
-              class="group/card break-inside-avoid rounded-xl overflow-hidden bg-card/80 backdrop-blur-sm border border-border/30 hover:border-border/50 shadow-sm hover:shadow-lg dark:shadow-scrim/20 dark:hover:shadow-scrim/40 transition-all duration-300"
-            >
-              <button
-                type="button"
-                class="group/image relative block w-full text-left"
-                onclick={() => openPostViewer(image.id)}
-              >
-                <ImagePlaceholder
-                  uniqueId={image.id}
-                  src={image.url}
-                  metadata={image.metadata}
-                  showMetadata={false}
-                  showOpenInNewTab={false}
-                  rounded={false}
-                />
-
-                <div
-                  class="absolute inset-0 bg-gradient-to-t from-scrim/60 via-transparent to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300"
-                ></div>
-
-                <div
-                  class="absolute top-3 left-3 flex items-center gap-2 opacity-0 group-hover/card:opacity-100 transition-all duration-300 translate-y-1 group-hover/card:translate-y-0"
-                >
-                  <div
-                    class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-scrim/40 backdrop-blur-md text-on-surface-inverse text-xs"
-                  >
-                    <Icon icon="ph:eye" class="w-3.5 h-3.5" />
-                    <span>{image.attributes.views}</span>
-                  </div>
-                  <div
-                    class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-scrim/40 backdrop-blur-md text-on-surface-inverse text-xs"
-                  >
-                    <Icon icon="ph:frame-corners" class="w-3.5 h-3.5" />
-                    <span>{image.metadata.width}×{image.metadata.height}</span>
-                  </div>
-                </div>
-
-                <div
-                  class="absolute bottom-3 left-3 opacity-0 group-hover/card:opacity-100 transition-all duration-300 translate-y-1 group-hover/card:translate-y-0"
-                >
-                  <div
-                    class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-scrim/40 backdrop-blur-md text-on-surface-inverse text-xs"
-                  >
-                    <Icon icon="ph:bookmark-simple-fill" class="w-3.5 h-3.5" />
-                    <span
-                      >Saved <FormattedDate
-                        date={bookmark.createdAt.timestamp}
-                      /></span
-                    >
-                  </div>
-                </div>
-
-                <div
-                  class="absolute inset-0 flex items-center justify-center opacity-0 group-hover/card:opacity-100 transition-all duration-300 pointer-events-none"
-                >
-                  <div
-                    class="w-12 h-12 rounded-full bg-on-surface-inverse/20 backdrop-blur-sm flex items-center justify-center transform scale-75 group-hover/card:scale-100 transition-transform duration-300"
-                  >
-                    <Icon
-                      icon="ph:arrows-out"
-                      class="w-6 h-6 text-on-surface-inverse drop-shadow-lg"
-                    />
-                  </div>
-                </div>
-              </button>
-
-              <div
-                class="absolute top-3 right-3 opacity-0 group-hover/card:opacity-100 transition-all duration-300 translate-y-1 group-hover/card:translate-y-0"
-              >
-                <BookmarkButton
-                  imageId={image.id}
-                  imageOwnerId={image.owner.id}
-                  isBookmarked={true}
-                  size="sm"
-                  variant="overlay"
-                  onBookmarkChange={(isBookmarked: boolean) =>
-                    bookmarksFeed.updateItemMedia(image.id, { isBookmarked })}
-                />
-              </div>
-
-              <div class="p-3">
-                <div class="flex items-center gap-2.5">
-                  <UserAvatar size="sm" user={image.owner} />
-                  <div class="flex-1 min-w-0">
-                    <p
-                      class="font-medium text-foreground text-sm leading-tight truncate"
-                    >
-                      {image.owner.displayName}
-                    </p>
-                    <div class="text-xs text-foreground-muted mt-0.5">
-                      {#if image.attributes.createdAt.timestamp}
-                        <FormattedDate
-                          date={image.attributes.createdAt.timestamp}
-                        />
-                      {/if}
-                    </div>
-                  </div>
-                </div>
-
-                {#if image.attributes.description.trim()}
-                  <p
-                    class="mt-3 text-sm text-foreground-muted leading-relaxed line-clamp-2"
-                  >
-                    {image.attributes.description}
-                  </p>
-                {/if}
-              </div>
-            </div>
-          {/if}
-        {/snippet}
-      </Masonry>
-
-      {#if bookmarksFeed.hasMore}
-        <div class="flex justify-center mt-12">
-          <LoadMoreButton
-            visible={bookmarksFeed.hasMore}
-            loading={bookmarksFeed.isLoading}
-            onclick={() => bookmarksFeed.nextPage({ debounce: 300 })}
-            variant="modern"
-            rounded="full"
-          />
+    <ViewModeLayout
+      feed={bookmarksFeed}
+      mode={settings.bookmarks.viewMode}
+      config={{
+        grid: { toolbar: false, appendMode: 'auto' },
+        list: { toolbar: false, appendMode: 'auto' },
+      }}
+    >
+      {#snippet loading(mode)}
+        <div in:fade={{ duration: 200 }}>
+          <ExploreSkeleton count={12} viewMode={mode} />
         </div>
-      {/if}
-    {/if}
+      {/snippet}
+      {#snippet grid()}
+        <ExploreGridView
+          {items}
+          {licensingEnabled}
+          userIsAdmin={false}
+          badge={savedBadge}
+          unavailable={unavailableCard}
+          on={viewHandlers}
+        />
+      {/snippet}
+      {#snippet list()}
+        <ExploreListView
+          {items}
+          {licensingEnabled}
+          userIsAdmin={false}
+          badge={savedBadge}
+          unavailable={unavailableCard}
+          on={viewHandlers}
+        />
+      {/snippet}
+      {#snippet empty()}
+        <div in:fade={{ duration: 200 }}>
+          <EmptyState
+            kind="first-use"
+            title="No bookmarks yet"
+            description="Images you bookmark are collected here, ready when you need them."
+          >
+            {#snippet preview()}
+              <GhostPreview mode={settings.bookmarks.viewMode} />
+            {/snippet}
+            {#snippet action()}
+              <Button variant="primary" size="md" rounded="lg" href="/explore">
+                <Icon icon="lucide:search" class="h-4 w-4" />
+                Explore images
+              </Button>
+            {/snippet}
+            {#snippet hint()}
+              <span class={hintIconVariants()}>
+                <Icon icon="ph:bookmark-simple" class="h-3 w-3" />
+              </span>
+              Tap the bookmark on any image to save it here
+            {/snippet}
+          </EmptyState>
+        </div>
+      {/snippet}
+      {#snippet more()}
+        <LoadMoreButton
+          class="mt-8"
+          visible={bookmarksFeed.hasMore}
+          loading={bookmarksFeed.isLoading}
+          onclick={() => bookmarksFeed.nextPage({ debounce: 300 })}
+          variant="modern"
+          rounded="full"
+        />
+      {/snippet}
+    </ViewModeLayout>
   </div>
 </main>
 
