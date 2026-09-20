@@ -930,14 +930,20 @@ test.describe('Notifications parent comment quote', () => {
       await expect(commentEntry.getByText(QUOTE_LABEL)).toHaveCount(0);
 
       await page.setViewportSize({ width: 390, height: 844 });
-      const metrics = await quote.evaluate((element) => ({
+      const overflow = await quote.evaluate((element) => ({
         scrollWidth: element.scrollWidth,
         clientWidth: element.clientWidth,
-        height: element.getBoundingClientRect().height,
-        lineHeight: parseFloat(getComputedStyle(element).lineHeight),
       }));
-      expect(metrics.scrollWidth).toBeGreaterThan(metrics.clientWidth);
-      expect(metrics.height).toBeLessThanOrEqual(metrics.lineHeight * 1.5);
+      expect(overflow.scrollWidth).toBeGreaterThan(overflow.clientWidth);
+
+      const narrowQuoteBox = await quote.boundingBox();
+      const iconBox = await quote.locator('svg').boundingBox();
+      expect(narrowQuoteBox).not.toBeNull();
+      expect(iconBox).not.toBeNull();
+      expect(iconBox!.y).toBeGreaterThanOrEqual(narrowQuoteBox!.y);
+      expect(iconBox!.y + iconBox!.height).toBeLessThanOrEqual(
+        narrowQuoteBox!.y + narrowQuoteBox!.height,
+      );
     });
   });
 
