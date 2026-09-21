@@ -16,7 +16,6 @@ export * from './BookmarkersPanel/BookmarkersPanel.theme';
 export { default as CardActionsOverlay } from './CardActionsOverlay/CardActionsOverlay.svelte';
 export { default as ImageDescription } from './Description/ImageDescription.svelte';
 export { default as DimensionsBadge } from './DimensionsBadge/DimensionsBadge.svelte';
-export * from './DimensionsBadge/DimensionsBadge.theme';
 export { default as DownloadButton } from './DownloadButton/DownloadButton.svelte';
 export * from './Explore';
 export { default as FilterChip } from './FilterChip/FilterChip.svelte';
@@ -74,6 +73,7 @@ export { default as PostViewerDescription } from './PostViewer/PostViewerDescrip
 export { default as PostViewerItem } from './PostViewer/PostViewerItem.svelte';
 export { default as PostViewerNavigation } from './PostViewer/PostViewerNavigation.svelte';
 export { default as PostViewerSidebar } from './PostViewer/PostViewerSidebar.svelte';
+export { default as SavedDateBadge } from './SavedDateBadge/SavedDateBadge.svelte';
 export { default as Card } from './Share/Card.svelte';
 export * from './Share/CardState.svelte';
 export * from './ShareFormat/shareFormats.language';

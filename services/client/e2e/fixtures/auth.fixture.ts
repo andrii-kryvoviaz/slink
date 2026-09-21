@@ -5,6 +5,7 @@ import { provisionUser } from '../helpers/provisioning';
 import { AdminSettingsPage } from '../pages/AdminSettingsPage';
 import { AdminUsersPage } from '../pages/AdminUsersPage';
 import { AwaitingApprovalPage } from '../pages/AwaitingApprovalPage';
+import { BookmarksPage } from '../pages/BookmarksPage';
 import { CollectionsPage } from '../pages/CollectionsPage';
 import { ExplorePage } from '../pages/ExplorePage';
 import { HistoryPage } from '../pages/HistoryPage';
@@ -51,6 +52,7 @@ type AuthFixtures = {
   loginPage: LoginPage;
   signupPage: SignupPage;
   awaitingApprovalPage: AwaitingApprovalPage;
+  bookmarksPage: BookmarksPage;
   uploadPage: UploadPage;
   sharePage: SharePage;
   sharesPage: SharesPage;
@@ -108,6 +110,10 @@ export const test = base.extend<AuthFixtures>({
 
   explorePage: async ({ page }, use) => {
     await use(new ExplorePage(page));
+  },
+
+  bookmarksPage: async ({ page }, use) => {
+    await use(new BookmarksPage(page));
   },
 
   historyPage: async ({ page }, use) => {

@@ -1,13 +1,13 @@
 import { type Locator, type Page, expect } from '@playwright/test';
 
-import { BasePage } from './BasePage';
+import { MediaFeedPage } from './MediaFeedPage';
 
 const EMPTY_STATE_HEADINGS = {
   'no-results': 'No images found',
   'nothing-shared': 'Nothing shared yet',
 } as const;
 
-export class ExplorePage extends BasePage {
+export class ExplorePage extends MediaFeedPage {
   static readonly URL = '/explore';
 
   readonly searchInput = this.page.getByPlaceholder(/Search/);
@@ -21,19 +21,6 @@ export class ExplorePage extends BasePage {
   readonly emptyStateClearButton = this.page.getByRole('button', {
     name: 'Clear search',
     exact: true,
-  });
-  readonly strayViewModeListbox = this.page.locator(
-    'main [role="listbox"], main [aria-haspopup="listbox"]',
-  );
-  readonly feedItems = this.page.locator('main [role="button"][tabindex="0"]');
-  readonly listRows = this.page.locator('main ul[role="list"] > li');
-  readonly viewer = this.page.getByRole('dialog');
-  readonly viewerClose = this.page.getByRole('button', {
-    name: 'Close viewer',
-  });
-  readonly viewerNext = this.page.getByRole('button', { name: 'Next post' });
-  readonly viewerPrev = this.page.getByRole('button', {
-    name: 'Previous post',
   });
 
   constructor(page: Page) {
@@ -75,18 +62,6 @@ export class ExplorePage extends BasePage {
     });
   }
 
-  cardFor(imageId: string) {
-    return this.feedItems.filter({
-      has: this.page.locator(`img[src*="${imageId}"]`),
-    });
-  }
-
-  rowFor(imageId: string) {
-    return this.listRows.filter({
-      has: this.page.locator(`img[src*="${imageId}"]`),
-    });
-  }
-
   async openFirstItem() {
     const first = this.feedItems.first();
     await first.waitFor({ state: 'visible' });
@@ -94,26 +69,6 @@ export class ExplorePage extends BasePage {
     await expect(async () => {
       await first.click();
       await expect(this.viewer).toBeVisible({ timeout: 1000 });
-    }).toPass({ timeout: 15000 });
-  }
-
-  currentPost() {
-    return new URL(this.page.url()).searchParams.get('post');
-  }
-
-  async nextItem() {
-    const before = this.currentPost();
-    await expect(async () => {
-      await this.viewerNext.click();
-      expect(this.currentPost()).not.toBe(before);
-    }).toPass({ timeout: 15000 });
-  }
-
-  async prevItem() {
-    const before = this.currentPost();
-    await expect(async () => {
-      await this.viewerPrev.click();
-      expect(this.currentPost()).not.toBe(before);
     }).toPass({ timeout: 15000 });
   }
 
@@ -125,11 +80,6 @@ export class ExplorePage extends BasePage {
       await this.page.keyboard.press(direction);
       expect(this.currentPost()).not.toBe(before);
     }).toPass({ timeout: 15000 });
-  }
-
-  async closeViewer() {
-    await this.viewerClose.click();
-    await this.viewer.waitFor({ state: 'hidden' });
   }
 
   bookmarkButton(name: 'Save' | 'Remove bookmark' = 'Save') {

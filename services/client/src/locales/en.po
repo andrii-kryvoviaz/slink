@@ -420,10 +420,6 @@ msgstr "Image no longer available"
 msgid "Remove bookmark"
 msgstr "Remove bookmark"
 
-#: src/routes/bookmarks/+page.svelte
-msgid "Saved <0/>"
-msgstr "Saved <0/>"
-
 #: src/routes/explore/+page.svelte
 msgid "Explore Gallery | Slink"
 msgstr "Explore Gallery | Slink"
@@ -5232,3 +5228,8 @@ msgid "and a visitor"
 msgid_plural "and # visitors"
 msgstr[0] "and a visitor"
 msgstr[1] "and # visitors"
+
+#. 0: formattedDate
+#: src/feature/Image/SavedDateBadge/SavedDateBadge.svelte
+msgid "Saved on {0}"
+msgstr "Saved on {0}"
