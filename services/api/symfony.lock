@@ -285,6 +285,9 @@
             "config/routes/web_profiler.yaml"
         ]
     },
+    "web-token/jwt-bundle": {
+        "version": "4.1.7"
+    },
     "web-token/jwt-framework": {
         "version": "4.1.3"
     }

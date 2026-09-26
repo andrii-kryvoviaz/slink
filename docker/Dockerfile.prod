@@ -12,7 +12,6 @@ RUN yarn install --frozen-lockfile --non-interactive --production && \
 FROM node AS build-client
 WORKDIR /client
 COPY services/client/package.json services/client/yarn.lock ./
-COPY services/client/patches ./patches
 RUN yarn install --frozen-lockfile --non-interactive
 COPY services/client/plugins ./plugins
 COPY services/client/src ./src
