@@ -1,4 +1,5 @@
 export { default as AccessSettings } from './AccessSettings/AccessSettings.svelte';
+export { default as AutoRedirectSettings } from './AutoRedirectSettings/AutoRedirectSettings.svelte';
 export { default as CacheSettings } from './CacheSettings/CacheSettings.svelte';
 export { default as CustomizationSettings } from './CustomizationSettings/CustomizationSettings.svelte';
 export { default as ImageSettings } from './ImageSettings/ImageSettings.svelte';

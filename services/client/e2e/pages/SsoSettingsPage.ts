@@ -52,6 +52,49 @@ export class SsoSettingsPage extends BasePage {
     return this.callbackUrlButton.locator('xpath=following-sibling::button');
   }
 
+  get callbackUrlChip(): Locator {
+    return this.page
+      .locator('div')
+      .filter({ has: this.page.getByText('Callback URL', { exact: true }) })
+      .filter({ has: this.callbackUrlButton })
+      .last();
+  }
+
+  get callbackUrlGuidance(): Locator {
+    return this.page.getByText(
+      "Add this callback URL to your identity provider's allowed redirect URIs",
+      { exact: true },
+    );
+  }
+
+  get autoRedirectRow(): Locator {
+    return this.page
+      .locator('div')
+      .filter({ has: this.page.getByText('Auto-redirect', { exact: true }) })
+      .filter({ has: this.page.locator('[data-slot="select-trigger"]') })
+      .last();
+  }
+
+  get autoRedirectTrigger(): Locator {
+    return this.autoRedirectRow.locator('[data-slot="select-trigger"]');
+  }
+
+  async selectAutoRedirect(label: string) {
+    const option = this.page.getByRole('option', { name: label, exact: true });
+
+    await this.clickUntil(this.autoRedirectTrigger, option);
+
+    const saved = this.page.waitForResponse(
+      (response) =>
+        response.url().includes('/api/settings') &&
+        response.request().method() === 'POST',
+    );
+    await option.click();
+    await expect(this.page.getByRole('option')).toHaveCount(0);
+
+    return saved;
+  }
+
   async openRegistrationPolicyInfo() {
     await this.openHoverCard(this.registrationPolicyInfo);
   }

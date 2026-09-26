@@ -2222,7 +2222,6 @@ msgstr "管理用户注册、访问控制与认证策略"
 
 #: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/admin/settings/+page.svelte
-#: src/routes/admin/settings/sso/+page.svelte
 msgid "Single Sign-On"
 msgstr "单点登录"
 
@@ -2645,16 +2644,8 @@ msgid "SSO Settings | Slink"
 msgstr "SSO 设置 | Slink"
 
 #: src/routes/admin/settings/sso/+page.svelte
-msgid "Manage SSO/OIDC identity providers"
-msgstr "管理 SSO/OIDC 身份提供方"
-
-#: src/routes/admin/settings/sso/+page.svelte
 msgid "Back to Settings"
 msgstr "返回设置"
-
-#: src/routes/admin/settings/sso/+page.svelte
-msgid "Add this callback URL to your identity provider's allowed redirect URIs:"
-msgstr "请将此回调地址添加到身份提供方的允许重定向 URI："
 
 #: src/routes/admin/settings/sso/+page.svelte
 msgid "Failed to load SSO providers."
@@ -5204,3 +5195,35 @@ msgstr[0] "等#位访客"
 #: src/feature/Image/SavedDateBadge/SavedDateBadge.svelte
 msgid "Saved on {0}"
 msgstr ""
+
+#: src/feature/Settings/AutoRedirectSettings/AutoRedirectSettings.svelte
+msgid "None"
+msgstr "无"
+
+#: src/feature/Settings/AutoRedirectSettings/AutoRedirectSettings.svelte
+msgid "Select provider"
+msgstr "选择提供商"
+
+#: src/feature/Settings/AutoRedirectSettings/AutoRedirectSettings.svelte
+msgid "Auto-redirect"
+msgstr "自动重定向"
+
+#: src/feature/Settings/AutoRedirectSettings/AutoRedirectSettings.svelte
+msgid "Skip the login page and send visitors to this provider"
+msgstr "跳过登录页面，将访问者直接发送到此提供方"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Add this callback URL to your identity provider's allowed redirect URIs"
+msgstr "请将此回调地址添加到身份提供方的允许重定向 URI"
+
+#: src/feature/Settings/OAuthSettings/CallbackUrlChip/CallbackUrlChip.svelte
+msgid "Callback URL"
+msgstr "回调地址"
+
+#: src/routes/admin/settings/sso/+page.svelte
+msgid "Single sign-on"
+msgstr "单点登录"
+
+#: src/routes/admin/settings/sso/+page.svelte
+msgid "Identity providers your users can sign in with"
+msgstr "用户可用于登录的身份提供方"

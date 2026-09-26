@@ -72,6 +72,7 @@ class SettingsPageState {
 
   handleSave = async ({ category }: { category: SettingCategory }) => {
     const { [category]: categoryData } = this.settings;
+    this._request.reset();
     this._categoryBeingSaved = category;
     this._validationErrors = {};
 

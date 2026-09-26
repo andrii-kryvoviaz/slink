@@ -1,3 +1,4 @@
+export { default as CallbackUrlChip } from './CallbackUrlChip/CallbackUrlChip.svelte';
 export { default as OAuthProviderForm } from './OAuthProviderForm.svelte';
 export { default as OAuthProviderList } from './OAuthProviderList.svelte';
 export { default as OAuthProviderListSkeleton } from './OAuthProviderListSkeleton.svelte';

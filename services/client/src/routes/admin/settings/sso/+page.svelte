@@ -1,15 +1,21 @@
 <script lang="ts">
-  import { SettingsPageLayout } from '@slink/feature/Settings';
   import {
+    AutoRedirectSettings,
+    SettingsPageLayout,
+  } from '@slink/feature/Settings';
+  import {
+    CallbackUrlChip,
     OAuthProviderList,
     OAuthProviderListSkeleton,
   } from '@slink/feature/Settings/OAuthSettings';
-  import { CopyableText, Notice } from '@slink/feature/Text';
+  import { Notice } from '@slink/feature/Text';
   import { BackLink } from '@slink/ui/components/back-link';
   import { SplitButton } from '@slink/ui/components/split-button';
 
   import { goto } from '$app/navigation';
   import Icon from '@iconify/svelte';
+
+  import { useSettingsPage } from '@slink/lib/state/SettingsPage.svelte';
 
   import type { PageData } from './$types';
 
@@ -19,7 +25,9 @@
 
   let { data }: Props = $props();
 
-  let callbackUrl = $derived(data.callbackUrl);
+  const page = useSettingsPage();
+
+  let providerRequest = $derived(data.providers);
 </script>
 
 <svelte:head>
@@ -27,12 +35,16 @@
 </svelte:head>
 
 <SettingsPageLayout
-  title="Single Sign-On"
-  description="Manage SSO/OIDC identity providers"
+  title="Single sign-on"
+  description="Identity providers your users can sign in with"
   isInitialized={true}
 >
   {#snippet navigation()}
     <BackLink href="/admin/settings" class="mb-4">Back to Settings</BackLink>
+  {/snippet}
+
+  {#snippet meta()}
+    <CallbackUrlChip class="mt-3" />
   {/snippet}
 
   {#snippet actions()}
@@ -44,21 +56,24 @@
     </SplitButton>
   {/snippet}
 
-  <Notice variant="info" size="sm">
-    <p>
-      Add this callback URL to your identity provider's allowed redirect URIs:
-    </p>
-    <CopyableText text={callbackUrl} class="mt-1.5 font-mono text-xs" />
-  </Notice>
-
-  {#await data.providers}
+  {#await providerRequest}
     <OAuthProviderListSkeleton />
   {:then providers}
     {#key providers}
       <OAuthProviderList
         {providers}
         onEdit={(provider) => goto(`/admin/settings/sso/${provider.id}/edit`)}
-      />
+      >
+        {#snippet footer(listProviders)}
+          <AutoRedirectSettings
+            bind:settings={page.settings.user}
+            providers={listProviders}
+            saving={page.isLoadingCategory('user')}
+            failed={page.error !== null && page.categoryBeingSaved === 'user'}
+            onSave={() => page.handleSave({ category: 'user' })}
+          />
+        {/snippet}
+      </OAuthProviderList>
     {/key}
   {:catch}
     <Notice variant="error">Failed to load SSO providers.</Notice>

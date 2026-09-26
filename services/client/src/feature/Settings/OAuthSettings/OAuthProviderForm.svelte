@@ -17,6 +17,7 @@
 
   import type { UserSettings } from '@slink/lib/settings/Type/UserSettings';
 
+  import CallbackUrlChip from './CallbackUrlChip/CallbackUrlChip.svelte';
   import { type OAuthProviderFormState } from './OAuthProviderFormState.svelte';
   import PolicyInfo from './PolicyInfo.svelte';
   import PolicyInfoOption from './PolicyInfoOption.svelte';
@@ -64,6 +65,13 @@
     >
       Configuration
     </h2>
+  </div>
+
+  <div class="space-y-2 pb-4">
+    <p class="text-xs text-foreground-muted">
+      Add this callback URL to your identity provider's allowed redirect URIs
+    </p>
+    <CallbackUrlChip />
   </div>
 
   <form
