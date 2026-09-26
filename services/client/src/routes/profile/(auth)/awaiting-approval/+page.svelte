@@ -226,7 +226,11 @@
           />
         {/snippet}
         {#snippet action()}
-          <BannerAction variant="info" href="/profile/login" text="Sign In" />
+          <BannerAction
+            variant="info"
+            href={page.data.gatewayUrl}
+            text="Sign In"
+          />
         {/snippet}
       </Banner>
     </BannerContainer>

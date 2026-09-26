@@ -6,6 +6,7 @@ import type { ApiClientType } from '@slink/api/Client';
 import type { UserPreferencesResponse } from '@slink/api/Response/User/UserPreferencesResponse';
 
 import type { CookieManager } from '@slink/lib/auth/CookieManager';
+import type { Gateway } from '@slink/lib/auth/Gateway';
 import type { User } from '@slink/lib/auth/Type/User';
 import type { GlobalSettings } from '@slink/lib/settings/Type/GlobalSettings';
 import type { UploadPolicy } from '@slink/lib/settings/UploadPolicy';
@@ -29,10 +30,12 @@ declare global {
       userPreferences: UserPreferencesResponse | null;
       uploadPolicy: UploadPolicy;
       cookies: CookieManager;
+      gateway: Gateway;
     }
     interface PageData {
       settings: UserSettings;
       userAgent: string;
+      gatewayUrl: string;
       sidebarGroups?: AppSidebarGroup[];
       uploadPolicy?: UploadPolicy;
       user?: User | null;

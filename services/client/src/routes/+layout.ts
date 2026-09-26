@@ -9,7 +9,7 @@ import '@slink/utils/string/stringExtensions';
 import type { LayoutLoad } from './$types';
 
 export const load: LayoutLoad = async ({ fetch, data }) => {
-  await Application.initialize(fetch);
+  await Application.initialize(fetch, data.gatewayUrl);
 
   const locale = data.settings.locale.current;
   runtimeTranslator.locale = locale;

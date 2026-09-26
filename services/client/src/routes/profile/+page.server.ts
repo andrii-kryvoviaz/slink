@@ -1,4 +1,4 @@
-import { fail, redirect } from '@sveltejs/kit';
+import { fail } from '@sveltejs/kit';
 
 import { HttpException } from '@slink/api/Exceptions';
 
@@ -16,7 +16,7 @@ export const load: PageServerLoad = async ({ locals, parent }) => {
   const { user } = locals;
 
   if (!user) {
-    redirect(302, '/profile/login');
+    return locals.gateway.redirect();
   }
 
   return {
