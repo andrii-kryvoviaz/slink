@@ -8,7 +8,7 @@ export const load: PageServerLoad = async ({ params, locals, parent }) => {
   const parentData = await parent();
 
   if (!locals.user) {
-    redirect(302, '/profile/login');
+    return locals.gateway.redirect();
   }
 
   const licensingEnabled =

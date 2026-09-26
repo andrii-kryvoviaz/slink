@@ -22,6 +22,7 @@ parameters:
   user:
     allowRegistration: '%env(bool:USER_ALLOW_REGISTRATION)%'
     approvalRequired: '%env(bool:USER_APPROVAL_REQUIRED)%'
+    autoRedirectProviderId: ~
     password:
       minLength: '%env(int:USER_PASSWORD_MIN_LENGTH)%'
       requirements: '%env(int:USER_PASSWORD_REQUIREMENTS)%'

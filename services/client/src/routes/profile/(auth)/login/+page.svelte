@@ -43,7 +43,7 @@
     }
   });
   let showPassword = $state(false);
-  let formElement: HTMLFormElement;
+  let formElement = $state<HTMLFormElement>();
 
   let providers = $derived(
     (data.sso?.providers ?? []).map((p) => ({

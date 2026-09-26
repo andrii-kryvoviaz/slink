@@ -1,44 +1,21 @@
 import { expect, test } from '../fixtures/auth.fixture';
-import type { OAuthProviderPayload } from '../helpers/api/resources/OAuthApi';
+import {
+  deleteSsoProviders,
+  ssoProviderPayload,
+  uniqueSsoSlug,
+} from '../helpers/ssoProviders';
 
 const SLUG_PREFIX = 'e2e-sso';
 
-const uniqueSlug = () =>
-  `${SLUG_PREFIX}-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
-
-const providerPayload = (
-  slug: string,
-  overrides: Partial<OAuthProviderPayload> = {},
-): OAuthProviderPayload => ({
-  name: 'E2E Policy Provider',
-  slug,
-  type: 'oidc',
-  clientId: 'e2e-client-id',
-  clientSecret: 'e2e-client-secret',
-  discoveryUrl: 'https://sso-e2e.example.com',
-  scopes: 'openid email profile',
-  enabled: true,
-  registrationPolicy: 'inherit',
-  approvalPolicy: 'inherit',
-  ...overrides,
-});
-
 test.describe('Admin SSO provider policies', { tag: '@serial' }, () => {
   test.afterEach(async ({ api }) => {
-    const providers = await api.oauth.listProviders();
-    const created = providers.filter((provider) =>
-      provider.slug.startsWith(`${SLUG_PREFIX}-`),
-    );
-
-    for (const provider of created) {
-      await api.oauth.deleteProvider(provider.id);
-    }
+    await deleteSsoProviders(api, SLUG_PREFIX);
   });
 
   test('creates a provider with explicit policies and shows the open registration badge', async ({
     ssoSettingsPage,
   }) => {
-    const slug = uniqueSlug();
+    const slug = uniqueSsoSlug(SLUG_PREFIX);
 
     await ssoSettingsPage.gotoNew();
     await ssoSettingsPage.selectCustomProvider();
@@ -73,9 +50,9 @@ test.describe('Admin SSO provider policies', { tag: '@serial' }, () => {
     api,
     ssoSettingsPage,
   }) => {
-    const slug = uniqueSlug();
+    const slug = uniqueSsoSlug(SLUG_PREFIX);
     const id = await api.oauth.createProvider(
-      providerPayload(slug, {
+      ssoProviderPayload(slug, {
         registrationPolicy: 'allowed',
         approvalPolicy: 'none',
       }),
@@ -83,6 +60,8 @@ test.describe('Admin SSO provider policies', { tag: '@serial' }, () => {
 
     await ssoSettingsPage.gotoEdit(id);
 
+    await expect(ssoSettingsPage.callbackUrlGuidance).toBeVisible();
+    await expect(ssoSettingsPage.callbackUrlChip).toBeVisible();
     await expect(
       ssoSettingsPage.registrationPolicyRadio('Allowed'),
     ).toHaveAttribute('aria-checked', 'true');
@@ -116,9 +95,9 @@ test.describe('Admin SSO provider policies', { tag: '@serial' }, () => {
     api,
     ssoSettingsPage,
   }) => {
-    const slug = uniqueSlug();
+    const slug = uniqueSsoSlug(SLUG_PREFIX);
     const id = await api.oauth.createProvider(
-      providerPayload(slug, {
+      ssoProviderPayload(slug, {
         registrationPolicy: 'allowed',
         approvalPolicy: 'required',
       }),
@@ -143,8 +122,8 @@ test.describe('Admin SSO provider policies', { tag: '@serial' }, () => {
     settingsApi,
     ssoSettingsPage,
   }) => {
-    const slug = uniqueSlug();
-    const id = await api.oauth.createProvider(providerPayload(slug));
+    const slug = uniqueSsoSlug(SLUG_PREFIX);
+    const id = await api.oauth.createProvider(ssoProviderPayload(slug));
 
     await settingsApi.set('user', { allowRegistration: false });
 
@@ -168,9 +147,9 @@ test.describe('Admin SSO provider policies', { tag: '@serial' }, () => {
     api,
     ssoSettingsPage,
   }) => {
-    const slug = uniqueSlug();
+    const slug = uniqueSsoSlug(SLUG_PREFIX);
     const id = await api.oauth.createProvider(
-      providerPayload(slug, { registrationPolicy: 'blocked' }),
+      ssoProviderPayload(slug, { registrationPolicy: 'blocked' }),
     );
 
     await ssoSettingsPage.gotoEdit(id);

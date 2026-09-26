@@ -6,6 +6,8 @@
     BannerIcon,
   } from '@slink/feature/Layout';
 
+  import { page } from '$app/state';
+
   interface Props {
     allowGuestUploads?: boolean;
   }
@@ -25,7 +27,7 @@
       />
     {/snippet}
     {#snippet action()}
-      <BannerAction variant="info" href="/profile/login" text="Sign In" />
+      <BannerAction variant="info" href={page.data.gatewayUrl} text="Sign In" />
     {/snippet}
   </Banner>
 {:else}
@@ -42,7 +44,7 @@
     {#snippet action()}
       <BannerAction
         variant="warning"
-        href="/profile/login"
+        href={page.data.gatewayUrl}
         text="Get Started"
       />
     {/snippet}

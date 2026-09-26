@@ -2222,7 +2222,6 @@ msgstr "Administra el registro de usuarios, el control de acceso y las política
 
 #: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/admin/settings/+page.svelte
-#: src/routes/admin/settings/sso/+page.svelte
 msgid "Single Sign-On"
 msgstr "Inicio de sesión único"
 
@@ -2645,16 +2644,8 @@ msgid "SSO Settings | Slink"
 msgstr "Configuración de SSO | Slink"
 
 #: src/routes/admin/settings/sso/+page.svelte
-msgid "Manage SSO/OIDC identity providers"
-msgstr "Administra los proveedores de identidad SSO/OIDC"
-
-#: src/routes/admin/settings/sso/+page.svelte
 msgid "Back to Settings"
 msgstr "Volver a configuración"
-
-#: src/routes/admin/settings/sso/+page.svelte
-msgid "Add this callback URL to your identity provider's allowed redirect URIs:"
-msgstr "Agrega esta URL de callback a los URIs de redirección permitidos de tu proveedor de identidad:"
 
 #: src/routes/admin/settings/sso/+page.svelte
 msgid "Failed to load SSO providers."
@@ -5240,3 +5231,35 @@ msgstr[2] "y # visitantes"
 #: src/feature/Image/SavedDateBadge/SavedDateBadge.svelte
 msgid "Saved on {0}"
 msgstr ""
+
+#: src/feature/Settings/AutoRedirectSettings/AutoRedirectSettings.svelte
+msgid "None"
+msgstr "Ninguno"
+
+#: src/feature/Settings/AutoRedirectSettings/AutoRedirectSettings.svelte
+msgid "Select provider"
+msgstr "Seleccionar proveedor"
+
+#: src/feature/Settings/AutoRedirectSettings/AutoRedirectSettings.svelte
+msgid "Auto-redirect"
+msgstr "Redirección automática"
+
+#: src/feature/Settings/AutoRedirectSettings/AutoRedirectSettings.svelte
+msgid "Skip the login page and send visitors to this provider"
+msgstr "Omitir la página de inicio de sesión y enviar a los visitantes a este proveedor"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Add this callback URL to your identity provider's allowed redirect URIs"
+msgstr "Agrega esta URL de callback a los URIs de redirección permitidos de tu proveedor de identidad"
+
+#: src/feature/Settings/OAuthSettings/CallbackUrlChip/CallbackUrlChip.svelte
+msgid "Callback URL"
+msgstr "URL de callback"
+
+#: src/routes/admin/settings/sso/+page.svelte
+msgid "Single sign-on"
+msgstr "Inicio de sesión único"
+
+#: src/routes/admin/settings/sso/+page.svelte
+msgid "Identity providers your users can sign in with"
+msgstr "Proveedores de identidad con los que tus usuarios pueden iniciar sesión"

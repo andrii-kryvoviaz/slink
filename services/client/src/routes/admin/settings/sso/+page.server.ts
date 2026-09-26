@@ -3,13 +3,11 @@ import type { PageServerLoad } from './$types';
 export const load: PageServerLoad = async ({
   parent,
   locals,
-  url,
   depends,
+  untrack,
 }) => {
   depends('app:sso-providers');
-  await parent();
+  await untrack(() => parent());
 
-  const callbackUrl = `${url.origin}/profile/sso/callback`;
-
-  return { providers: locals.api.oauth.list(), callbackUrl };
+  return { providers: locals.api.oauth.list() };
 };

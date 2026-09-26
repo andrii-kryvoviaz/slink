@@ -9,6 +9,7 @@
   interface Props {
     title: string;
     description: string;
+    meta?: Snippet;
     isInitialized: boolean;
     navigation?: Snippet;
     actions?: Snippet;
@@ -18,6 +19,7 @@
   let {
     title,
     description,
+    meta,
     isInitialized,
     navigation,
     actions,
@@ -38,6 +40,9 @@
       <div>
         <Title size="sm">{title}</Title>
         <Subtitle>{description}</Subtitle>
+        {#if meta}
+          {@render meta()}
+        {/if}
       </div>
       {#if actions}
         {@render actions()}

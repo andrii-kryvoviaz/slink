@@ -39,6 +39,7 @@
   import { type OAuthProvider } from '@slink/lib/auth/oauth';
 
   import { className } from '@slink/utils/ui/className';
+  import { routes } from '@slink/utils/url';
 
   import ProviderIcon from './ProviderIcon/ProviderIcon.svelte';
 
@@ -65,7 +66,7 @@
 </script>
 
 <a
-  href="/profile/sso/login/{provider.slug}"
+  href={routes.sso.login(provider.slug)}
   class={outerClasses}
   data-sveltekit-reload
   {onclick}

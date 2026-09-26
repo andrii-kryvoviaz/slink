@@ -1,12 +1,10 @@
 import { fail, redirect } from '@sveltejs/kit';
 
 import { HttpException } from '@slink/api/Exceptions';
-import type { SsoProvider } from '@slink/api/Resources/SsoResource';
 
 import { Auth } from '@slink/lib/auth/Auth';
 import { SsoError } from '@slink/lib/auth/sso';
 
-import { graceful } from '@slink/utils/async/graceful';
 import { formData } from '@slink/utils/form/formData';
 
 import type { Actions, PageServerLoad } from './$types';
@@ -20,10 +18,7 @@ export const load: PageServerLoad = async (event) => {
     redirect(302, '/profile');
   }
 
-  const providers = await graceful(
-    () => locals.api.sso.getProviders(),
-    [] as SsoProvider[],
-  );
+  const providers = await locals.gateway.providers();
 
   const { settings, globalSettings, user, userPreferences } = locals;
 

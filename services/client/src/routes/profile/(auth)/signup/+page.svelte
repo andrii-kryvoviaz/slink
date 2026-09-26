@@ -28,7 +28,7 @@
     data: PageData;
   }
 
-  let { form }: Props = $props();
+  let { form, data }: Props = $props();
 
   let isLoading = useWritable('signUpFormLoadingState', false);
   let passwordValue = $state('');
@@ -186,7 +186,7 @@
         />
       {/snippet}
       {#snippet action()}
-        <BannerAction variant="success" href="/profile/login" text="Sign In" />
+        <BannerAction variant="success" href={data.gatewayUrl} text="Sign In" />
       {/snippet}
     </Banner>
   </BannerContainer>

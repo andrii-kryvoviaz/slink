@@ -2222,7 +2222,6 @@ msgstr "ユーザー登録、アクセス制御、認証ポリシーを管理"
 
 #: src/feature/Navigation/Sidebar/config.ts
 #: src/routes/admin/settings/+page.svelte
-#: src/routes/admin/settings/sso/+page.svelte
 msgid "Single Sign-On"
 msgstr "シングルサインオン"
 
@@ -2645,16 +2644,8 @@ msgid "SSO Settings | Slink"
 msgstr "SSO設定 | Slink"
 
 #: src/routes/admin/settings/sso/+page.svelte
-msgid "Manage SSO/OIDC identity providers"
-msgstr "SSO/OIDCアイデンティティプロバイダーを管理"
-
-#: src/routes/admin/settings/sso/+page.svelte
 msgid "Back to Settings"
 msgstr "設定に戻る"
-
-#: src/routes/admin/settings/sso/+page.svelte
-msgid "Add this callback URL to your identity provider's allowed redirect URIs:"
-msgstr "このコールバックURLをアイデンティティプロバイダーの許可済みリダイレクトURIに追加してください："
 
 #: src/routes/admin/settings/sso/+page.svelte
 msgid "Failed to load SSO providers."
@@ -5204,3 +5195,35 @@ msgstr[0] "ほか訪問者#人"
 #: src/feature/Image/SavedDateBadge/SavedDateBadge.svelte
 msgid "Saved on {0}"
 msgstr ""
+
+#: src/feature/Settings/AutoRedirectSettings/AutoRedirectSettings.svelte
+msgid "None"
+msgstr "なし"
+
+#: src/feature/Settings/AutoRedirectSettings/AutoRedirectSettings.svelte
+msgid "Select provider"
+msgstr "プロバイダーを選択"
+
+#: src/feature/Settings/AutoRedirectSettings/AutoRedirectSettings.svelte
+msgid "Auto-redirect"
+msgstr "自動リダイレクト"
+
+#: src/feature/Settings/AutoRedirectSettings/AutoRedirectSettings.svelte
+msgid "Skip the login page and send visitors to this provider"
+msgstr "ログインページをスキップして訪問者をこのプロバイダーに送ります"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Add this callback URL to your identity provider's allowed redirect URIs"
+msgstr "このコールバックURLをアイデンティティプロバイダーの許可済みリダイレクトURIに追加してください"
+
+#: src/feature/Settings/OAuthSettings/CallbackUrlChip/CallbackUrlChip.svelte
+msgid "Callback URL"
+msgstr "コールバックURL"
+
+#: src/routes/admin/settings/sso/+page.svelte
+msgid "Single sign-on"
+msgstr "シングルサインオン"
+
+#: src/routes/admin/settings/sso/+page.svelte
+msgid "Identity providers your users can sign in with"
+msgstr "ユーザーがサインインに使用できるアイデンティティプロバイダー"

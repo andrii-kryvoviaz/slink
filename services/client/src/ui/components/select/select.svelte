@@ -23,6 +23,7 @@
     class?: string;
     size?: 'sm' | 'default';
     disabled?: boolean;
+    busy?: boolean;
     trigger?: Snippet<[Record<string, unknown>]>;
     itemClass?: string;
     align?: 'start' | 'center' | 'end';
@@ -56,6 +57,7 @@
     class: className,
     size = 'default',
     disabled = false,
+    busy = false,
     type = 'single',
     onValueChange,
     trigger,
@@ -124,6 +126,13 @@
       (onValueChange as (value: string) => void)(newValue);
     }
   };
+
+  let open = $state(false);
+
+  const setOpen = (next: boolean) => {
+    if (busy && next) return;
+    open = next;
+  };
 </script>
 
 {#if type === 'single'}
@@ -132,16 +141,21 @@
     onValueChange={handleSingleValueChange}
     type="single"
     {disabled}
+    bind:open={() => open, setOpen}
     {...props}
   >
     {#if trigger}
-      <SelectPrimitive.Trigger>
+      <SelectPrimitive.Trigger aria-disabled={busy || undefined}>
         {#snippet child({ props })}
           {@render trigger(props)}
         {/snippet}
       </SelectPrimitive.Trigger>
     {:else}
-      <Trigger class={cn('justify-between', className)} {size}>
+      <Trigger
+        class={cn('justify-between', className)}
+        {size}
+        aria-disabled={busy || undefined}
+      >
         <div class="flex items-center gap-2 flex-1 min-w-0">
           {#if selectedItem?.icon}
             <Icon
@@ -162,7 +176,7 @@
       {#each items as item (item.value)}
         <Item
           value={item.value}
-          disabled={item.disabled}
+          disabled={item.disabled || disabled || busy}
           class={cn('cursor-pointer', itemClass)}
         >
           {#snippet children()}
@@ -183,16 +197,21 @@
     onValueChange={(v) => (inner.value = v)}
     type="multiple"
     {disabled}
+    bind:open={() => open, setOpen}
     {...props}
   >
     {#if trigger}
-      <SelectPrimitive.Trigger>
+      <SelectPrimitive.Trigger aria-disabled={busy || undefined}>
         {#snippet child({ props })}
           {@render trigger(props)}
         {/snippet}
       </SelectPrimitive.Trigger>
     {:else}
-      <Trigger class={cn('justify-between', className)} {size}>
+      <Trigger
+        class={cn('justify-between', className)}
+        {size}
+        aria-disabled={busy || undefined}
+      >
         <div class="flex items-center gap-2 flex-1 min-w-0">
           {#if selectedCount > 0}
             {#if selectedItem?.icon}
@@ -216,7 +235,7 @@
         {#each items as item (item.value)}
           <Item
             value={item.value}
-            disabled={item.disabled}
+            disabled={item.disabled || disabled || busy}
             class={cn('cursor-pointer', itemClass)}
           >
             {#snippet children()}

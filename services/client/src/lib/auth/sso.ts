@@ -3,9 +3,10 @@ import { type RequestEvent, isRedirect, redirect } from '@sveltejs/kit';
 import { extractShortErrorMessage } from '@slink/lib/utils/error/extractErrorMessage';
 import { t } from '@slink/lib/utils/i18n';
 
+import { authRoutes } from '@slink/utils/url/routes/auth';
+
 export class SsoError {
   private static readonly COOKIE_NAME = 'sso_error';
-  private static readonly LOGIN_PATH = '/profile/login';
 
   private constructor() {}
 
@@ -14,7 +15,7 @@ export class SsoError {
       httpOnly: true,
     });
 
-    redirect(302, SsoError.LOGIN_PATH);
+    redirect(302, authRoutes.login);
   }
 
   public static consume({ cookies, locals }: RequestEvent): string | null {

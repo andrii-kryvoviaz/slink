@@ -6,6 +6,7 @@
   import type { Snippet } from 'svelte';
 
   import { goto } from '$app/navigation';
+  import { page } from '$app/state';
   import type { User } from '$lib/auth/Type/User';
   import Icon from '@iconify/svelte';
 
@@ -125,7 +126,7 @@
 
     {#if showLoginButton}
       <Button
-        href="/profile/login"
+        href={page.data.gatewayUrl}
         variant="glass"
         size="sm"
         rounded="full"

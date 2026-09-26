@@ -12,6 +12,7 @@ export const hookSettings: Record<HookId, HookSettings> = {
   'locals/apiClient': { order: 30 },
   'locals/apiProxy': { order: 40 },
   'locals/globalSettings': { order: 50 },
+  'locals/gateway': { order: 55 },
   'locals/userPreferences': { order: 60 },
   'locals/uploadPolicy': { order: 70 },
   'locals/accountSettings': { order: 80 },

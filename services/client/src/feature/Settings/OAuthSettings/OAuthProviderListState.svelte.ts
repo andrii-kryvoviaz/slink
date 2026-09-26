@@ -1,5 +1,6 @@
 import { ApiClient } from '@slink/api';
 
+import { invalidate } from '$app/navigation';
 import { SvelteMap } from 'svelte/reactivity';
 
 import { ReactiveState } from '@slink/api/ReactiveState';
@@ -76,12 +77,15 @@ export class OAuthProviderListState {
 
     if (this._delete.error) {
       printErrorsAsToastMessage(this._delete.error);
-    } else {
-      this._providerMap.delete(provider.id);
-      this._order.splice(this._order.indexOf(provider.id), 1);
-      this._deleteConfirmId = null;
-      toast.success('Provider deleted');
+      return;
     }
+
+    this._providerMap.delete(provider.id);
+    this._order.splice(this._order.indexOf(provider.id), 1);
+    this._deleteConfirmId = null;
+    toast.success('Provider deleted');
+
+    await invalidate('app:settings');
   }
 
   async reorder(id: string, toIndex: number) {
@@ -108,13 +112,16 @@ export class OAuthProviderListState {
     const target = this._providerMap.get(provider.id);
     if (!target) return;
 
-    target.enabled = enabled;
+    this._providerMap.set(provider.id, { ...target, enabled });
 
     await this._toggle.run(provider.id, enabled);
 
     if (this._toggle.error) {
-      target.enabled = !enabled;
+      this._providerMap.set(provider.id, target);
       printErrorsAsToastMessage(this._toggle.error);
+      return;
     }
+
+    await invalidate('app:settings');
   }
 }

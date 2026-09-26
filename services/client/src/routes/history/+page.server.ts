@@ -1,5 +1,3 @@
-import { redirect } from '@sveltejs/kit';
-
 import { graceful } from '@slink/utils/async/graceful';
 import { urlParamUtils } from '@slink/utils/url';
 
@@ -9,7 +7,7 @@ export const load: PageServerLoad = async ({ parent, locals, url }) => {
   const { user } = await parent();
 
   if (!user) {
-    redirect(302, '/profile/login');
+    return locals.gateway.redirect();
   }
 
   const { searchTerm, searchBy } = urlParamUtils.fromPage(url).searchFilter();

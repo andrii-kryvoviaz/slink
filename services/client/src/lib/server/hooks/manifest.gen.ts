@@ -4,6 +4,7 @@ export type HookId =
   | 'locals/apiClient'
   | 'locals/apiProxy'
   | 'locals/cookies'
+  | 'locals/gateway'
   | 'locals/globalSettings'
   | 'locals/settings'
   | 'locals/uploadPolicy'

@@ -5,4 +5,5 @@ export type UserSettings = {
     minLength: number | undefined;
     requirements: number;
   };
+  autoRedirectProviderId: string | null;
 };

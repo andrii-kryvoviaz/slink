@@ -5,7 +5,9 @@ import { isAdmin, isAuthorized } from '@slink/lib/auth/utils';
 
 import type { LayoutServerLoad } from './$types';
 
-export const load: LayoutServerLoad = async ({ locals, request }) => {
+export const load: LayoutServerLoad = async ({ depends, locals, request }) => {
+  depends('app:settings', 'app:sso-providers');
+
   const { settings, globalSettings, user, userPreferences } = locals;
 
   const userAgent = request.headers.get('user-agent') || '';
@@ -37,6 +39,7 @@ export const load: LayoutServerLoad = async ({ locals, request }) => {
     user,
     userPreferences,
     userAgent,
+    gatewayUrl: await locals.gateway.url(),
     sidebarGroups,
   };
 };

@@ -15,7 +15,7 @@ export const load: PageServerLoad = async ({ parent, locals }) => {
   }
 
   if (locals.globalSettings?.user?.allowRegistration === false) {
-    redirect(302, '/profile/login');
+    return locals.gateway.redirect();
   }
 
   const { settings, globalSettings, user, userPreferences } = locals;

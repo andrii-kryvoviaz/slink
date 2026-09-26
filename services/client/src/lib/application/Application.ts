@@ -20,9 +20,12 @@ export class Application {
     return this._api;
   }
 
-  static async initialize(fetch: typeof globalThis.fetch): Promise<void> {
+  static async initialize(
+    fetch: typeof globalThis.fetch,
+    gatewayUrl: string,
+  ): Promise<void> {
     this._api = createApiClient(fetch);
-    this.registerApiEventHandlers();
+    this.registerApiEventHandlers(gatewayUrl);
 
     this._bootstrapped ??= this.bootstrap();
     return this._bootstrapped;
@@ -32,8 +35,8 @@ export class Application {
     await preloadIconSet(themeIcons);
   }
 
-  private static registerApiEventHandlers(): void {
-    this.api.on('unauthorized', () => this.redirectToLogin());
+  private static registerApiEventHandlers(gatewayUrl: string): void {
+    this.api.on('unauthorized', () => this.redirectToLogin(gatewayUrl));
 
     this.api.on('forbidden', () => {
       error(403, {
@@ -42,12 +45,12 @@ export class Application {
     });
   }
 
-  private static redirectToLogin(): Promise<void> {
+  private static redirectToLogin(gatewayUrl: string): Promise<void> {
     if (!browser) {
-      redirect(302, '/profile/login');
+      redirect(302, gatewayUrl);
     }
 
-    this._redirectingUnauthorized ??= goto('/profile/login', {
+    this._redirectingUnauthorized ??= goto(gatewayUrl, {
       invalidateAll: true,
     }).finally(() => {
       this._redirectingUnauthorized = null;

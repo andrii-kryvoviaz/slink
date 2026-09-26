@@ -3,6 +3,7 @@ import type { Handle } from '@sveltejs/kit';
 import { Session } from '@slink/lib/auth/Session';
 
 import { getResponseWithCookies } from '@slink/utils/http/cookie';
+import { authRoutes } from '@slink/utils/url/routes/auth';
 
 import { ApiRequestBuilder } from './ApiRequestBuilder';
 import { TokenRefreshManager } from './TokenRefreshManager';
@@ -78,7 +79,7 @@ export const ApiProxy = (options: ApiOptions): Handle => {
         return getResponseWithCookies({
           response: new Response(null, {
             status: 302,
-            headers: { Location: '/profile/login' },
+            headers: { Location: authRoutes.login },
           }),
           cookies,
           requireSsl: globalSettings?.access?.requireSsl ?? false,

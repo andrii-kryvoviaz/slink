@@ -26,6 +26,21 @@ export class BasePage {
     await locator.fill(value);
   }
 
+  protected async saveSettingsPane(pane: Locator) {
+    const saveButton = pane.getByRole('button', { name: 'Save Changes' });
+
+    await expect(async () => {
+      const responsePromise = this.page.waitForResponse(
+        (response) =>
+          response.url().includes('/api/settings') &&
+          response.request().method() === 'POST',
+        { timeout: 1000 },
+      );
+      await saveButton.click();
+      await responsePromise;
+    }).toPass({ timeout: 15000 });
+  }
+
   async clickUntil(
     trigger: Locator,
     target: Locator,
