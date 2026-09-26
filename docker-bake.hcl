@@ -2,7 +2,8 @@ variable "NODE_VERSION"                  { default = "24.21.0" }
 variable "PHP_VERSION"                   { default = "8.5.11" }
 variable "FRANKENPHP_VERSION"            { default = "1.12.7" }
 variable "MERCURE_VERSION"               { default = "0.24.2" }
-variable "GRPC_VERSION"                  { default = "1.84.0" }
+variable "GRPC_VERSION"                  { default = "1.85.0-dev.0.20260825072537-93e31b48545e" }
+variable "X_CRYPTO_VERSION"              { default = "0.57.0" }
 variable "ALPINE_VERSION"                { default = "3.24" }
 variable "COMPOSER_VERSION"              { default = "2" }
 variable "MEMORY_LIMIT"                  { default = "512" }
@@ -21,6 +22,7 @@ target "_base" {
     FRANKENPHP_VERSION           = FRANKENPHP_VERSION
     MERCURE_VERSION              = MERCURE_VERSION
     GRPC_VERSION                 = GRPC_VERSION
+    X_CRYPTO_VERSION             = X_CRYPTO_VERSION
     ALPINE_VERSION               = ALPINE_VERSION
     MEMORY_LIMIT                 = MEMORY_LIMIT
     UPLOAD_MAX_FILESIZE_IN_BYTES = UPLOAD_MAX_FILESIZE_IN_BYTES

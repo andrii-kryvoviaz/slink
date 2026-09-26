@@ -28,6 +28,7 @@ RUN rm -rf /usr/src/php* \
 FROM dunglas/frankenphp:${FRANKENPHP_VERSION}-builder-php${PHP_VERSION}-alpine AS frankenphp-build
 ARG MERCURE_VERSION
 ARG GRPC_VERSION
+ARG X_CRYPTO_VERSION
 COPY --from=caddy:builder /usr/bin/xcaddy /usr/bin/xcaddy
 RUN CGO_ENABLED=1 \
         XCADDY_GO_BUILD_FLAGS="-ldflags '-w -s -extldflags \"-Wl,-z,stack-size=0x80000\"' -tags=nobadger,nomysql,nopgx" \
@@ -38,7 +39,8 @@ RUN CGO_ENABLED=1 \
         --with github.com/dunglas/frankenphp=./ \
         --with github.com/dunglas/frankenphp/caddy=./caddy/ \
         --with github.com/dunglas/mercure/caddy@v${MERCURE_VERSION} \
-        --replace google.golang.org/grpc=google.golang.org/grpc@v${GRPC_VERSION}
+        --replace google.golang.org/grpc=google.golang.org/grpc@v${GRPC_VERSION} \
+        --replace golang.org/x/crypto=golang.org/x/crypto@v${X_CRYPTO_VERSION}
 
 FROM frankenphp-upstream AS php-extensions
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
