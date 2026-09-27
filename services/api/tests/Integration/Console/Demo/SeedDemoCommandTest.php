@@ -617,19 +617,24 @@ final class SeedDemoCommandTest extends HttpTestCase {
   }
 
   private function randomPng(): string {
-    $image = \imagecreatetruecolor(4, 4);
-    self::assertNotFalse($image);
+    $ihdr = \pack('NNCCCCC', 4, 4, 8, 2, 0, 0, 0);
 
-    for ($x = 0; $x < 4; $x++) {
-      for ($y = 0; $y < 4; $y++) {
-        \imagesetpixel($image, $x, $y, \random_int(0, 0xFFFFFF));
-      }
+    $raw = '';
+    for ($y = 0; $y < 4; $y++) {
+      $raw .= "\x00" . \random_bytes(12);
     }
 
-    \ob_start();
-    \imagepng($image);
+    $idat = \gzcompress($raw);
+    self::assertNotFalse($idat);
 
-    return (string) \ob_get_clean();
+    return "\x89PNG\r\n\x1a\n"
+      . $this->pngChunk('IHDR', $ihdr)
+      . $this->pngChunk('IDAT', $idat)
+      . $this->pngChunk('IEND', '');
+  }
+
+  private function pngChunk(string $type, string $data): string {
+    return \pack('N', \strlen($data)) . $type . $data . \pack('N', \crc32($type . $data));
   }
 
   private function tokenStorage(): TokenStorageInterface {
