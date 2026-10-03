@@ -7,6 +7,6 @@
     "target": "ES2022",
     "module": "ESNext"
   },
-  "exclude": ["node_modules/**", "src/locales/**"],
+  "exclude": ["node_modules/**", "src/locales/**", "src/service-worker.ts"],
   "include": ["src", "vite.config.ts"]
 }
