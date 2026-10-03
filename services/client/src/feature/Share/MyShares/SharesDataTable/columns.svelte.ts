@@ -1,3 +1,4 @@
+import { isShareExpired } from '@slink/feature/Share/Attributes/expiryDecision';
 import { FormattedDate } from '@slink/feature/Text';
 import {
   type DataTableFeatures,
@@ -63,7 +64,7 @@ export function createShareColumns(): ColumnDef<
 }
 
 export function shareRowClass(share: ShareListItemResponse): string {
-  if (share.isExpired) {
+  if (isShareExpired(share.expiresAt, share.isExpired)) {
     return '[&>td:not(:last-child)>*]:opacity-60';
   }
 

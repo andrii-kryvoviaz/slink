@@ -67,7 +67,7 @@
       <div class="flex items-start gap-2">
         <Icon icon="ph:clock" class="h-3.5 w-3.5 mt-0.5 shrink-0 opacity-70" />
         <div class="flex flex-col gap-0.5">
-          {#if isExpired}
+          {#if expiry.expired}
             <span class="whitespace-nowrap">Expired on {expiry.longDate}</span>
           {:else}
             <span class="whitespace-nowrap">Expires on {expiry.longDate}</span>

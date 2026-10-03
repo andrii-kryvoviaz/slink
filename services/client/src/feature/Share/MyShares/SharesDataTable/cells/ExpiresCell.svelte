@@ -23,7 +23,7 @@
     </HoverCard.Trigger>
     <HoverCard.Content side="bottom" align="start" variant="glass" size="sm">
       <div class={theme.card()}>
-        {#if isExpired}
+        {#if expiry.expired}
           <span class={theme.cardLabel()}>Expired on {expiry.longDate}</span>
         {:else}
           <span class={theme.cardLabel()}>Expires on {expiry.longDate}</span>
