@@ -14,7 +14,7 @@
   import { DatePicker as DatePickerPrimitive } from 'bits-ui';
   import type { Snippet } from 'svelte';
 
-  import { getLocale } from '$lib/utils/date.svelte';
+  import { getLocale } from '#lib/utils/date.svelte.js';
   import Icon from '@iconify/svelte';
 
   import { cn } from '@slink/utils/ui/index.js';

@@ -1,7 +1,7 @@
 import { ShareReroute } from '@slink/feature/Share';
-import type { Transport } from '@sveltejs/kit';
+import type { Transport } from '@sveltejs/kit/hooks';
 
-import { Application } from '$lib/application';
+import { Application } from '#lib/application/index.js';
 
 import { API_CLIENT_BRAND } from '@slink/api/Client';
 

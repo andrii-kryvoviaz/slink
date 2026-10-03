@@ -1,7 +1,7 @@
 <script lang="ts">
   import { TablePagination } from '@slink/ui/components/table-pagination';
 
-  import { plural } from '$lib/utils/i18n';
+  import { plural } from '#lib/utils/i18n/index.js';
 
   import type { SharesFeed } from '@slink/lib/state/SharesFeed.svelte';
 

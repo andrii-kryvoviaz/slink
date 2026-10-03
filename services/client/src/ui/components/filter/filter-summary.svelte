@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
 
-  import { plural } from '$lib/utils/i18n';
+  import { plural } from '#lib/utils/i18n/index.js';
   import Icon from '@iconify/svelte';
 
   import { filterSummaryVariants } from './filter.theme';

@@ -5,8 +5,8 @@
   import { MarkdownAlert } from '@slink/ui/components/markdown-alert';
   import { ScrollArea } from '@slink/ui/components/scroll-area';
 
-  import { getLocale } from '$lib/utils/date.svelte';
-  import type { GitHubRelease } from '$lib/utils/version';
+  import { getLocale } from '#lib/utils/date.svelte.js';
+  import type { GitHubRelease } from '#lib/utils/version/index.js';
   import Icon from '@iconify/svelte';
 
   import { navigateToUrl } from '@slink/utils/navigation/navigate';

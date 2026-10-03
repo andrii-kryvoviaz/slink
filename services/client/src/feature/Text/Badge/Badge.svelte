@@ -3,7 +3,7 @@
   import type { BadgeProps } from '@slink/feature/Text/Badge/Badge.types';
   import type { Snippet } from 'svelte';
 
-  import { className } from '$lib/utils/ui/className';
+  import { className } from '#lib/utils/ui/className.js';
   import type { HTMLAttributes } from 'svelte/elements';
 
   interface Props extends BadgeProps, HTMLAttributes<HTMLSpanElement> {

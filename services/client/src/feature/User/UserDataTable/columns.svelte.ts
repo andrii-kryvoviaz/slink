@@ -11,7 +11,7 @@ import {
 } from '@slink/ui/components/data-table';
 import type { ColumnDef } from '@tanstack/table-core';
 
-import type { User } from '$lib/auth/Type/User';
+import type { User } from '#lib/auth/Type/User.js';
 
 interface UserColumnCallbacks {
   getLoggedInUser: () => User | null | undefined;

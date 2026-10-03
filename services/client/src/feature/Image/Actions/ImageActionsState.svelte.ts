@@ -1,14 +1,14 @@
 import { ApiClient } from '@slink/api';
 
+import { useUploadHistoryFeed } from '#lib/state/UploadHistoryFeed.svelte.js';
+import { downloadByLink } from '#lib/utils/http/downloadByLink.js';
+import { createExclusiveToggle } from '#lib/utils/state/createExclusiveToggle.svelte.js';
+import { bindRequestState } from '#lib/utils/store/bindRequestState.svelte.js';
+import { useAutoReset } from '#lib/utils/time/useAutoReset.svelte.js';
+import { toast } from '#lib/utils/ui/toast-sonner.svelte.js';
+import { routes } from '#lib/utils/url/routes/index.js';
 import { goto } from '$app/navigation';
 import { page } from '$app/state';
-import { useUploadHistoryFeed } from '$lib/state/UploadHistoryFeed.svelte.js';
-import { downloadByLink } from '$lib/utils/http/downloadByLink';
-import { createExclusiveToggle } from '$lib/utils/state/createExclusiveToggle.svelte';
-import { bindRequestState } from '$lib/utils/store/bindRequestState.svelte';
-import { useAutoReset } from '$lib/utils/time/useAutoReset.svelte';
-import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
-import { routes } from '$lib/utils/url/routes';
 
 import { ReactiveState } from '@slink/api/ReactiveState';
 import type { Tag } from '@slink/api/Resources/TagResource';

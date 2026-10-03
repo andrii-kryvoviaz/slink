@@ -1,4 +1,4 @@
-import { copyText } from '$lib/utils/ui/clipboard';
+import { copyText } from '#lib/utils/ui/clipboard.js';
 
 import type { ShareFormat } from '@slink/lib/settings';
 import { localize } from '@slink/lib/utils/i18n';

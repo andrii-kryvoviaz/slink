@@ -70,8 +70,7 @@ export class UrlSearchFilterManager implements SearchFilterManager {
     if (isUnchanged) return;
 
     await replaceUrl(this._urlManager.buildUrl(), {
-      keepFocus: true,
-      noScroll: true,
+      reset: false,
       ...navigationConfig,
     });
   }

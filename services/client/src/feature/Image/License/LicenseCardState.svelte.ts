@@ -1,7 +1,7 @@
 import { ApiClient } from '@slink/api';
 
-import { bindRequestState } from '$lib/utils/store/bindRequestState.svelte';
-import { printErrorsAsToastMessage } from '$lib/utils/ui/printErrorsAsToastMessage';
+import { bindRequestState } from '#lib/utils/store/bindRequestState.svelte.js';
+import { printErrorsAsToastMessage } from '#lib/utils/ui/printErrorsAsToastMessage.js';
 
 import { ReactiveState } from '@slink/api/ReactiveState';
 

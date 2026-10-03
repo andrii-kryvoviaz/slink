@@ -5,9 +5,9 @@
   import * as HoverCard from '@slink/ui/components/hover-card';
   import type { Snippet } from 'svelte';
 
+  import type { User } from '#lib/auth/Type/User.js';
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
-  import type { User } from '$lib/auth/Type/User';
   import Icon from '@iconify/svelte';
 
   import { customization } from '@slink/lib/settings';

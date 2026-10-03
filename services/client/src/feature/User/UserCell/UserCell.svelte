@@ -2,7 +2,7 @@
   import CopyableText from '@slink/feature/Text/CopyableText/CopyableText.svelte';
   import { UserAvatar } from '@slink/feature/User';
 
-  import type { User } from '$lib/auth/Type/User';
+  import type { User } from '#lib/auth/Type/User.js';
 
   interface Props {
     user: User;

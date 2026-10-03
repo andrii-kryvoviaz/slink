@@ -4,8 +4,8 @@
   import { UnsupportedFormatToast } from '@slink/ui/components/sonner/toasts/index.js';
   import type { Snippet } from 'svelte';
 
-  import { className as cn } from '$lib/utils/ui/className';
-  import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
+  import { className as cn } from '#lib/utils/ui/className.js';
+  import { toast } from '#lib/utils/ui/toast-sonner.svelte.js';
 
   import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
 

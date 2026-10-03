@@ -5,7 +5,7 @@
   } from '@slink/ui/components/dropdown-simple';
   import * as Filter from '@slink/ui/components/filter';
 
-  import { hasHashtags } from '$lib/utils/text/hashtag';
+  import { hasHashtags } from '#lib/utils/text/hashtag.js';
   import Icon from '@iconify/svelte';
 
   import { cn } from '@slink/utils/ui/index.js';

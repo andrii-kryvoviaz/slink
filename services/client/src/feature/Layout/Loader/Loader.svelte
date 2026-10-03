@@ -2,7 +2,7 @@
   import { type LoaderProps, LoaderTheme } from '@slink/feature/Layout/index';
   import type { Snippet } from 'svelte';
 
-  import { className } from '$lib/utils/ui/className';
+  import { className } from '#lib/utils/ui/className.js';
 
   interface Props extends LoaderProps {
     class?: string;

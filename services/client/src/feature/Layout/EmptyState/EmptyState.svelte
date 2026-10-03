@@ -2,7 +2,7 @@
   import { PrefersReducedMotion } from '@slink/ui/hooks/prefers-reduced-motion.svelte';
   import type { Snippet } from 'svelte';
 
-  import { className as cn } from '$lib/utils/ui/className';
+  import { className as cn } from '#lib/utils/ui/className.js';
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 

@@ -2,7 +2,7 @@
   import { ShareExpirationState } from '@slink/feature/Share';
   import { DatePickerField } from '@slink/ui/components/date-picker';
 
-  import { plural } from '$lib/utils/i18n';
+  import { plural } from '#lib/utils/i18n/index.js';
   import { slide } from 'svelte/transition';
 
   import { getShareControls } from '../../State/Context';

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Badge, type BadgeProps } from '@slink/feature/Text';
 
-  import { UserStatus } from '$lib/auth/Type/User';
+  import { UserStatus } from '#lib/auth/Type/User.js';
 
   import { getUserStatusLabel } from './userStatus.language';
 

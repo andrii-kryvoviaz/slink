@@ -2,8 +2,8 @@
   import { formatMimeType } from '@slink/feature/Image/utils/formatMimeType';
   import { FormattedDate } from '@slink/feature/Text';
 
-  import { bytesToSize } from '$lib/utils/bytesConverter';
-  import { plural } from '$lib/utils/i18n';
+  import { bytesToSize } from '#lib/utils/bytesConverter.js';
+  import { plural } from '#lib/utils/i18n/index.js';
 
   import type { ImageListingItem } from '@slink/api/Response';
 

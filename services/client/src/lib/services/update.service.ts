@@ -1,5 +1,5 @@
-import { CACHE } from '$lib/constants/app';
-import { cleanVersion, compareVersions } from '$lib/utils/version/helpers';
+import { CACHE } from '#lib/constants/app.js';
+import { cleanVersion, compareVersions } from '#lib/utils/version/helpers.js';
 
 import { CacheService } from './cache.service';
 import { gitHubService } from './github.service';

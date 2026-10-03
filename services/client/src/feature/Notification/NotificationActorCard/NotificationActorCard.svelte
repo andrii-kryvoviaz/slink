@@ -7,7 +7,7 @@
   } from '@slink/ui/components/popover';
   import { ScrollArea } from '@slink/ui/components/scroll-area';
 
-  import { plural } from '$lib/utils/i18n';
+  import { plural } from '#lib/utils/i18n/index.js';
   import Icon from '@iconify/svelte';
 
   import type { NotificationGroup } from '@slink/utils/notification';

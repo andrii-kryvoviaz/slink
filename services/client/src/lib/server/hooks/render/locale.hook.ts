@@ -1,4 +1,4 @@
-import type { Handle } from '@sveltejs/kit';
+import type { Handle } from '@sveltejs/kit/hooks';
 import { runWithLocale } from 'wuchale/load-utils/server';
 
 import { defineHook } from '../define';

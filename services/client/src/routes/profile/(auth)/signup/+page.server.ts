@@ -1,5 +1,6 @@
-import { env } from '$env/dynamic/private';
 import { fail, redirect } from '@sveltejs/kit';
+
+import { NODE_ENV } from '$app/env/private';
 
 import { HttpException } from '@slink/api/Exceptions';
 
@@ -49,7 +50,7 @@ const defaultAction: Action = async ({ request, locals }) => {
       });
     }
 
-    if (env.NODE_ENV === 'development') {
+    if (NODE_ENV === 'development') {
       console.error(e);
     }
 
@@ -59,7 +60,7 @@ const defaultAction: Action = async ({ request, locals }) => {
   }
 
   if (redirectUrl) {
-    redirect(302, redirectUrl);
+    redirect(302, redirectUrl, { external: true });
   }
 };
 

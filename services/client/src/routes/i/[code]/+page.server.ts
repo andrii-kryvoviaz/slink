@@ -1,7 +1,7 @@
-import { env } from '$env/dynamic/private';
 import { error, redirect } from '@sveltejs/kit';
 
-import { crawlerDetect } from '$lib/utils/http/CrawlerDetect';
+import { crawlerDetect } from '#lib/utils/http/CrawlerDetect.js';
+import { API_URL } from '$app/env/private';
 
 import type { ImageListingItem } from '@slink/api/Response/Image/ImageListingResponse';
 
@@ -55,7 +55,7 @@ async function buildOgMeta(
 ): Promise<OgMeta> {
   const match = location.match(/\/image\/([^.]+)\.(\w+)/);
   if (!match) {
-    redirect(302, resolveUrl(origin, location));
+    redirect(302, resolveUrl(origin, location), { external: true });
   }
 
   const [, imageId, ext] = match;
@@ -91,13 +91,13 @@ async function buildOgMeta(
 }
 
 export const load: PageServerLoad = async ({ params, fetch, request, url }) => {
-  const apiUrl = env.API_URL || 'http://localhost:8080';
+  const apiUrl = API_URL || 'http://localhost:8080';
   const location = await resolveShortCode(params.code, apiUrl, fetch);
 
   if (
     !crawlerDetect.isCrawler(request.headers.get(/* @wc-ignore */ 'User-Agent'))
   ) {
-    redirect(302, resolveUrl(url.origin, location));
+    redirect(302, resolveUrl(url.origin, location), { external: true });
   }
 
   return {

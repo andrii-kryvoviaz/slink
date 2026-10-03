@@ -1,6 +1,6 @@
 import { ApiClient } from '@slink/api';
 
-import { browser } from '$app/environment';
+import { browser } from '$app/env';
 import { invalidate } from '$app/navigation';
 
 import { ValidationException } from '@slink/api/Exceptions';

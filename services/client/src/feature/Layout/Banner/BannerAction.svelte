@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Button } from '@slink/ui/components/button';
 
-  import { className } from '$lib/utils/ui/className';
+  import { className } from '#lib/utils/ui/className.js';
   import Icon from '@iconify/svelte';
 
   import { BannerActionTheme } from './Banner.theme';

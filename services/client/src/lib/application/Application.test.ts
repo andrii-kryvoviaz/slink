@@ -9,7 +9,7 @@ const env = vi.hoisted(() => ({ browser: false }));
 const listeners = vi.hoisted(() => new Map<object, Map<string, () => void>>());
 const deferred = vi.hoisted(() => ({ resolve: () => {} }));
 
-vi.mock('$app/environment', () => ({
+vi.mock('$app/env', () => ({
   get browser() {
     return env.browser;
   },
@@ -100,7 +100,7 @@ describe('Application', () => {
 
     expect(gotoMock).toHaveBeenCalledTimes(1);
     expect(gotoMock).toHaveBeenCalledWith('/profile/sso/login/acme', {
-      invalidateAll: true,
+      refreshAll: true,
     });
   });
 
@@ -135,7 +135,7 @@ describe('Application', () => {
 
     secondListener();
     expect(gotoMock).toHaveBeenLastCalledWith('/profile/sso/login/other', {
-      invalidateAll: true,
+      refreshAll: true,
     });
 
     deferred.resolve();
@@ -144,7 +144,7 @@ describe('Application', () => {
 
     firstListener();
     expect(gotoMock).toHaveBeenLastCalledWith('/profile/sso/login/acme', {
-      invalidateAll: true,
+      refreshAll: true,
     });
   });
 });

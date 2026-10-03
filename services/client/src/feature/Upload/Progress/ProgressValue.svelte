@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
 
-  import { className as cn } from '$lib/utils/ui/className';
+  import { className as cn } from '#lib/utils/ui/className.js';
   import { cubicOut } from 'svelte/easing';
   import { Tween } from 'svelte/motion';
 

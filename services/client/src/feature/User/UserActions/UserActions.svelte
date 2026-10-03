@@ -8,9 +8,9 @@
   } from '@slink/ui/components';
   import { untrack } from 'svelte';
 
-  import { type User, UserRole } from '$lib/auth/Type/User';
-  import { UserStatus as UserStatusEnum } from '$lib/auth/Type/User';
-  import { printErrorsAsToastMessage } from '$lib/utils/ui/printErrorsAsToastMessage';
+  import { type User, UserRole } from '#lib/auth/Type/User.js';
+  import { UserStatus as UserStatusEnum } from '#lib/auth/Type/User.js';
+  import { printErrorsAsToastMessage } from '#lib/utils/ui/printErrorsAsToastMessage.js';
   import Icon from '@iconify/svelte';
 
   import { ReactiveState } from '@slink/api/ReactiveState';

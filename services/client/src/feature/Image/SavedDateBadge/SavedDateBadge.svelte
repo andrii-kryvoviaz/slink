@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { formatShortDate } from '$lib/utils/date.svelte';
+  import { formatShortDate } from '#lib/utils/date.svelte.js';
   import Icon from '@iconify/svelte';
 
   import {

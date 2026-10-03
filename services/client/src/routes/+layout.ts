@@ -1,5 +1,5 @@
-import { browser } from '$app/environment';
-import { Application } from '$lib/application';
+import { Application } from '#lib/application/index.js';
+import { browser } from '$app/env';
 
 import { runtimeTranslator } from '@slink/lib/utils/i18n/RuntimeTranslator.svelte';
 import { initLocale } from '@slink/lib/utils/i18n/initLocale';

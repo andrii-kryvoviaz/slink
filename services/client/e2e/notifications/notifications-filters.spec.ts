@@ -329,11 +329,16 @@ test.describe('Notification filters', () => {
   }) => {
     const owner = unique('filter-empty');
     await provisionUser(owner);
+    const context = await signInContext(browser, owner);
 
-    await withFiltersPage(browser, owner, async (notificationsPage) => {
+    try {
+      const notificationsPage = new NotificationsPage(await context.newPage());
+      await notificationsPage.goto();
       await expect(notificationsPage.emptyHeading).toBeVisible();
       await expect(notificationsPage.filterGroup).toHaveCount(0);
-    });
+    } finally {
+      await context.close();
+    }
   });
 
   test('pages within the filtered set', async ({ browser }) => {

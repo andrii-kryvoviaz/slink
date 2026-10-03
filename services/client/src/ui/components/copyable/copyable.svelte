@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
 
-  import { useAutoReset } from '$lib/utils/time/useAutoReset.svelte';
-  import { copyText } from '$lib/utils/ui/clipboard';
+  import { useAutoReset } from '#lib/utils/time/useAutoReset.svelte.js';
+  import { copyText } from '#lib/utils/ui/clipboard.js';
 
   interface CopyState {
     copied: boolean;

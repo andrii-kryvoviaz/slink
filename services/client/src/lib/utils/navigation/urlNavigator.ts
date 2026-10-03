@@ -1,10 +1,9 @@
 import { goto } from '$app/navigation';
 
 export interface NavigationConfig {
-  replaceState?: boolean;
-  noScroll?: boolean;
-  invalidateAll?: boolean;
-  keepFocus?: boolean;
+  replace?: boolean;
+  reset?: boolean;
+  refreshAll?: boolean;
 }
 
 /**
@@ -42,9 +41,9 @@ export async function navigateToUrl(
  */
 export async function replaceUrl(
   url: string,
-  config?: Omit<NavigationConfig, 'replaceState'>,
+  config?: Omit<NavigationConfig, 'replace'>,
 ): Promise<void> {
-  await navigateToUrl(url, { ...config, replaceState: true });
+  await navigateToUrl(url, { ...config, replace: true });
 }
 
 /**
@@ -52,7 +51,7 @@ export async function replaceUrl(
  */
 export async function pushUrl(
   url: string,
-  config?: Omit<NavigationConfig, 'replaceState'>,
+  config?: Omit<NavigationConfig, 'replace'>,
 ): Promise<void> {
-  await navigateToUrl(url, { ...config, replaceState: false });
+  await navigateToUrl(url, { ...config, replace: false });
 }

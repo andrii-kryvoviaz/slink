@@ -18,8 +18,8 @@
   import { Button } from '@slink/ui/components/button';
   import { ViewModeLayout } from '@slink/ui/components/view-mode-layout';
 
+  import { toast } from '#lib/utils/ui/toast-sonner.svelte.js';
   import { page } from '$app/state';
-  import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 

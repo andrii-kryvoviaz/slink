@@ -1,4 +1,4 @@
-import { BUILD_GLOBALS, VERSION } from '$lib/constants/app';
+import { BUILD_GLOBALS, VERSION } from '#lib/constants/app.js';
 
 export interface VersionInfo {
   version: string;

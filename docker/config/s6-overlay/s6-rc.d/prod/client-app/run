@@ -1,2 +1,2 @@
 #!/command/with-contenv sh
-exec delegate www-data node /services/client/svelte-kit/index.js
+exec delegate www-data node /services/client/svelte-kit/server.js

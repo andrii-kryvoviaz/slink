@@ -1,5 +1,5 @@
-import { downloadByLink } from '$lib/utils/http/downloadByLink';
-import { routes } from '$lib/utils/url/routes';
+import { downloadByLink } from '#lib/utils/http/downloadByLink.js';
+import { routes } from '#lib/utils/url/routes/index.js';
 
 import type { BatchContext } from '../BatchContext.svelte';
 

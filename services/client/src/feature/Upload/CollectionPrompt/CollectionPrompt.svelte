@@ -10,8 +10,8 @@
   } from '@slink/ui/components/input-group';
   import { PrefersReducedMotion } from '@slink/ui/hooks/prefers-reduced-motion.svelte';
 
-  import { plural } from '$lib/utils/i18n';
-  import { className as cn } from '$lib/utils/ui/className';
+  import { plural } from '#lib/utils/i18n/index.js';
+  import { className as cn } from '#lib/utils/ui/className.js';
   import Icon from '@iconify/svelte';
   import { cubicOut } from 'svelte/easing';
   import { fade, fly } from 'svelte/transition';

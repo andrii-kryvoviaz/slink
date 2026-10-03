@@ -5,7 +5,7 @@
   import { StatDisclosure } from '@slink/ui/components/stat-disclosure';
   import { onMount } from 'svelte';
 
-  import { plural } from '$lib/utils/i18n';
+  import { plural } from '#lib/utils/i18n/index.js';
   import Icon from '@iconify/svelte';
 
   import { ReactiveState } from '@slink/api/ReactiveState';

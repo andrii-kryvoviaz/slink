@@ -7,7 +7,7 @@
     DropdownSimpleItem,
   } from '@slink/ui/components';
 
-  import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
+  import { toast } from '#lib/utils/ui/toast-sonner.svelte.js';
   import Icon from '@iconify/svelte';
 
   import { ReactiveState } from '@slink/api/ReactiveState';

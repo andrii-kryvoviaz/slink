@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
 
-  import { cn } from '$lib/utils/ui';
+  import { cn } from '#lib/utils/ui/index.js';
 
   import {
     type TextEllipsisFadeVariants,

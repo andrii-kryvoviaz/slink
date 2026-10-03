@@ -3,8 +3,8 @@
   import { Tooltip, type TooltipVariant } from '@slink/ui/components/tooltip';
   import { mergeProps } from 'bits-ui';
 
-  import { downloadByLink } from '$lib/utils/http/downloadByLink';
-  import { useAutoReset } from '$lib/utils/time/useAutoReset.svelte';
+  import { downloadByLink } from '#lib/utils/http/downloadByLink.js';
+  import { useAutoReset } from '#lib/utils/time/useAutoReset.svelte.js';
   import Icon from '@iconify/svelte';
 
   import {

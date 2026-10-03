@@ -2,8 +2,8 @@
   import { Tooltip, TooltipProvider } from '@slink/ui/components/tooltip';
   import { AspectRatio } from 'bits-ui';
 
-  import { bytesToSize } from '$lib/utils/bytesConverter';
-  import { className as cn } from '$lib/utils/ui/className';
+  import { bytesToSize } from '#lib/utils/bytesConverter.js';
+  import { className as cn } from '#lib/utils/ui/className.js';
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 

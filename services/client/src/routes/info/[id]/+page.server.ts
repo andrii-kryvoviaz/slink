@@ -35,8 +35,7 @@ export const load: PageServerLoad = async ({ params, locals, parent }) => {
     }
 
     if (e instanceof ForbiddenException) {
-      error(e.status, {
-        message: e.message,
+      error(e.status, e.message, {
         button: {
           text: 'Take me to my Uploads',
           href: '/history',

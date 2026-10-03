@@ -3,7 +3,7 @@ import {
   calendarDayKey,
   dayKind,
   startOfDay,
-} from '$lib/utils/date.svelte';
+} from '#lib/utils/date.svelte.js';
 
 import type { NotificationGroup } from './NotificationGrouping';
 

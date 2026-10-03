@@ -60,7 +60,8 @@ export class NotificationsPage extends BasePage {
     return this.page.waitForResponse(
       (response) =>
         new URL(response.url()).pathname.endsWith('/notifications') &&
-        response.request().method() === 'GET',
+        response.request().method() === 'GET' &&
+        response.request().resourceType() === 'fetch',
     );
   }
 

@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
 
-  import { className } from '$lib/utils/ui/className';
+  import { className } from '#lib/utils/ui/className.js';
 
   interface Props {
     class?: string;

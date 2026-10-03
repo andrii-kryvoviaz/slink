@@ -3,8 +3,8 @@
   import { OverflowBadgeList } from '@slink/feature/Layout/OverflowBadgeList';
   import { TagBadge } from '@slink/feature/Tag';
 
-  import { browser } from '$app/environment';
-  import { plural } from '$lib/utils/i18n';
+  import { plural } from '#lib/utils/i18n/index.js';
+  import { browser } from '$app/env';
 
   import { ReactiveState } from '@slink/api/ReactiveState';
   import type { Tag } from '@slink/api/Resources/TagResource';

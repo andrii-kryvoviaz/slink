@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { goto } from '$app/navigation';
   import {
     createHashtagSearchUrl,
     splitTextIntoSegments,
-  } from '$lib/utils/text/hashtag';
-  import { className } from '$lib/utils/ui/className';
+  } from '#lib/utils/text/hashtag.js';
+  import { className } from '#lib/utils/ui/className.js';
+  import { goto } from '$app/navigation';
 
   import { Key } from '@slink/utils/ui';
 

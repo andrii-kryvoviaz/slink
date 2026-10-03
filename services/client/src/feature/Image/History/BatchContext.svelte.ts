@@ -1,6 +1,6 @@
-import { useUploadHistoryFeed } from '$lib/state/UploadHistoryFeed.svelte.js';
-import { plural } from '$lib/utils/i18n';
-import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
+import { useUploadHistoryFeed } from '#lib/state/UploadHistoryFeed.svelte.js';
+import { plural } from '#lib/utils/i18n/index.js';
+import { toast } from '#lib/utils/ui/toast-sonner.svelte.js';
 
 import type { ImageListingItem } from '@slink/api/Response';
 

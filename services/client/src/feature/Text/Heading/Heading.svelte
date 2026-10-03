@@ -6,7 +6,7 @@
     HeadingText,
   } from '@slink/feature/Text';
 
-  import { className } from '$lib/utils/ui/className';
+  import { className } from '#lib/utils/ui/className.js';
 
   interface Props extends HeadingProps {
     children?: import('svelte').Snippet;

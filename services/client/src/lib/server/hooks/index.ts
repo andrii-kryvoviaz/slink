@@ -1,5 +1,4 @@
-import type { Handle } from '@sveltejs/kit';
-import { sequence } from '@sveltejs/kit/hooks';
+import { type Handle, sequence } from '@sveltejs/kit/hooks';
 
 import { type HookSettings, hookSettings } from './config';
 import type { HookDefinition } from './define';

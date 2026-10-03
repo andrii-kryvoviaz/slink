@@ -1,5 +1,5 @@
-import type { Handle } from '@sveltejs/kit';
 import { json } from '@sveltejs/kit';
+import type { Handle } from '@sveltejs/kit/hooks';
 
 import { defineHook } from '../define';
 

@@ -10,8 +10,8 @@ import {
   ShareState,
 } from '@slink/feature/Share';
 
-import { printErrorsAsToastMessage } from '$lib/utils/ui/printErrorsAsToastMessage';
-import { PreviewUrl } from '$lib/utils/url';
+import { printErrorsAsToastMessage } from '#lib/utils/ui/printErrorsAsToastMessage.js';
+import { PreviewUrl } from '#lib/utils/url/index.js';
 
 export interface ShareCardImage {
   id: string;

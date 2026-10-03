@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { dismiss } from '$lib/utils/time/dismiss.svelte';
+  import { dismiss } from '#lib/utils/time/dismiss.svelte.js';
   import Icon from '@iconify/svelte';
 
   import type { ShareStatusKind } from '../share.theme';

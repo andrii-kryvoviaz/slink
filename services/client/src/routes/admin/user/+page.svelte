@@ -10,8 +10,8 @@
   import { DataTable } from '@slink/ui/components/data-table';
   import { ViewModeLayout } from '@slink/ui/components/view-mode-layout';
 
+  import type { User } from '#lib/auth/Type/User.js';
   import { page } from '$app/state';
-  import type { User } from '$lib/auth/Type/User';
   import { fade } from 'svelte/transition';
 
   import { skeleton } from '@slink/lib/actions/skeleton';

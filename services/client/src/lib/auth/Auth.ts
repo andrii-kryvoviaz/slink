@@ -1,5 +1,6 @@
-import { env } from '$env/dynamic/private';
 import type { Cookies } from '@sveltejs/kit';
+
+import { SESSION_TTL_SECONDS } from '$app/env/private';
 
 import { type ApiClientType, createApiClient } from '@slink/api/Client';
 
@@ -33,7 +34,7 @@ export class Auth {
     api: Pick<ApiClientType, 'user'>,
   ) {
     cookieManager.setCookie('refreshToken', refreshToken, {
-      maxAge: Number(env.SESSION_TTL_SECONDS),
+      maxAge: Number(SESSION_TTL_SECONDS),
       httpOnly: true,
     });
 
@@ -61,7 +62,7 @@ export class Auth {
     cookieManager,
   }: TokenPair & Omit<AuthDependencies, 'fetch'>) {
     cookieManager.setCookie('refreshToken', refreshToken, {
-      maxAge: Number(env.SESSION_TTL_SECONDS),
+      maxAge: Number(SESSION_TTL_SECONDS),
       httpOnly: true,
     });
 

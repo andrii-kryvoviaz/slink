@@ -1,7 +1,7 @@
 <script lang="ts">
   import { UserCard } from '@slink/feature/User';
 
-  import type { User } from '$lib/auth/Type/User';
+  import type { User } from '#lib/auth/Type/User.js';
   import { fly } from 'svelte/transition';
 
   interface Props {

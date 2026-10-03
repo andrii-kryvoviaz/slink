@@ -10,7 +10,7 @@
   } from '@slink/ui/components/popover';
   import type { Snippet } from 'svelte';
 
-  import { browser } from '$app/environment';
+  import { browser } from '$app/env';
 
   import { cn } from '@slink/utils/ui/index.js';
 

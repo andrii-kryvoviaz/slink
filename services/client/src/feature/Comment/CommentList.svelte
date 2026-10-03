@@ -5,8 +5,8 @@
   import { Tooltip } from '@slink/ui/components/tooltip';
   import { onDestroy } from 'svelte';
 
+  import { plural } from '#lib/utils/i18n/index.js';
   import { page } from '$app/state';
-  import { plural } from '$lib/utils/i18n';
   import Icon from '@iconify/svelte';
 
   import type { AuthenticatedUser } from '@slink/api/Response';

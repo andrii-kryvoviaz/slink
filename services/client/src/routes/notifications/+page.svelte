@@ -13,8 +13,8 @@
   import * as Timeline from '@slink/ui/components/timeline';
   import { untrack } from 'svelte';
 
+  import { formatShortDate } from '#lib/utils/date.svelte.js';
   import { goto } from '$app/navigation';
-  import { formatShortDate } from '$lib/utils/date.svelte';
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 

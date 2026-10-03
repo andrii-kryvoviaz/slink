@@ -12,7 +12,7 @@
   import { SplitButton } from '@slink/ui/components/split-button';
   import { onMount } from 'svelte';
 
-  import { useApiKeyStore } from '$lib/state/ApiKeyStore.svelte.js';
+  import { useApiKeyStore } from '#lib/state/ApiKeyStore.svelte.js';
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 

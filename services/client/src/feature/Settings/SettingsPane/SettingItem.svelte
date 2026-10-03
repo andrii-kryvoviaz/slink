@@ -7,7 +7,7 @@
   import {
     formatFileSize,
     sizeMatchingRegex,
-  } from '$lib/utils/string/parseFileSize';
+  } from '#lib/utils/string/parseFileSize.js';
   import Icon from '@iconify/svelte';
 
   const settingItem = tv({

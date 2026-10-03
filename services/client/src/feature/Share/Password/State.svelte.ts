@@ -1,6 +1,6 @@
 import { ApiClient } from '@slink/api';
 
-import { bindRequestState } from '$lib/utils/store/bindRequestState.svelte';
+import { bindRequestState } from '#lib/utils/store/bindRequestState.svelte.js';
 
 import { ReactiveState } from '@slink/api/ReactiveState';
 

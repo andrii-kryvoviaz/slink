@@ -3,7 +3,7 @@
     formatDateTime,
     formatRecentTime,
     minuteClock,
-  } from '$lib/utils/date.svelte';
+  } from '#lib/utils/date.svelte.js';
 
   import { notificationTime } from './NotificationTime.theme';
 

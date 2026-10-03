@@ -2,8 +2,8 @@
   import { Loader } from '@slink/feature/Layout';
   import { Progress } from '@slink/ui/components/progress';
 
-  import { bytesToSize } from '$lib/utils/bytesConverter';
-  import { className as cn } from '$lib/utils/ui/className';
+  import { bytesToSize } from '#lib/utils/bytesConverter.js';
+  import { className as cn } from '#lib/utils/ui/className.js';
   import Icon from '@iconify/svelte';
 
   import type { UploadItem } from '@slink/lib/services/upload.service';

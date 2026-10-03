@@ -2,7 +2,7 @@
   import { Popover as PopoverPrimitive } from 'bits-ui';
   import type { Snippet } from 'svelte';
 
-  import { browser } from '$app/environment';
+  import { browser } from '$app/env';
 
   import { responsive } from '@slink/lib/stores/responsive.svelte';
   import { className } from '@slink/lib/utils/ui/className';

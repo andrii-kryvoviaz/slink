@@ -1,4 +1,4 @@
-import type { Reroute } from '@sveltejs/kit';
+import type { Reroute } from '@sveltejs/kit/hooks';
 
 export const sequenceReroute =
   (...rules: Reroute[]): Reroute =>

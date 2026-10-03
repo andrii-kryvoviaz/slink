@@ -10,7 +10,7 @@
   } from '@slink/feature/User';
   import { onMount } from 'svelte';
 
-  import { formatDate } from '$lib/utils/date.svelte';
+  import { formatDate } from '#lib/utils/date.svelte.js';
   import Icon from '@iconify/svelte';
   import { fade, fly } from 'svelte/transition';
 

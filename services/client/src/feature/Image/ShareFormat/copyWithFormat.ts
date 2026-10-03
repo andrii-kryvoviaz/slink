@@ -1,4 +1,4 @@
-import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
+import { toast } from '#lib/utils/ui/toast-sonner.svelte.js';
 
 import type { ShareFormat } from '@slink/lib/settings';
 import { messages } from '@slink/lib/utils/i18n/messages/toast.language';

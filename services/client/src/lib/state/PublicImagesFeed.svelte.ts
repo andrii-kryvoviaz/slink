@@ -1,6 +1,6 @@
 import { ApiClient } from '@slink/api';
 
-import { browser } from '$app/environment';
+import { browser } from '$app/env';
 
 import type { ImageListingItem } from '@slink/api/Response';
 

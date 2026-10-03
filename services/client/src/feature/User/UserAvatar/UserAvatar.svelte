@@ -1,7 +1,7 @@
 <script lang="ts">
   import * as Avatar from '@slink/ui/components/avatar';
 
-  import { cn } from '$lib/utils/ui';
+  import { cn } from '#lib/utils/ui/index.js';
 
   import {
     type UserAvatarSize,

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { plural } from '$lib/utils/i18n';
+  import { plural } from '#lib/utils/i18n/index.js';
   import Icon from '@iconify/svelte';
   import { fly } from 'svelte/transition';
 

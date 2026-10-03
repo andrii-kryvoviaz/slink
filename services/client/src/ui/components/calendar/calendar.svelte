@@ -3,7 +3,7 @@
   import { Calendar as CalendarPrimitive } from 'bits-ui';
   import type { Snippet } from 'svelte';
 
-  import { getLocale } from '$lib/utils/date.svelte';
+  import { getLocale } from '#lib/utils/date.svelte.js';
 
   import { type WithoutChildrenOrChild, cn } from '@slink/utils/ui/index.js';
 

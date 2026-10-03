@@ -1,4 +1,4 @@
-import { runtimeTranslator } from '$lib/utils/i18n/RuntimeTranslator.svelte';
+import { runtimeTranslator } from '#lib/utils/i18n/RuntimeTranslator.svelte.js';
 import { createSubscriber } from 'svelte/reactivity';
 
 const MINUTE_MS = 1000 * 60;
@@ -33,9 +33,8 @@ export function todayPlusDays(days: number): Date {
   return d;
 }
 
-export function daysUntil(date: Date | string): number {
+export function daysUntil(date: Date | string, now: Date = new Date()): number {
   const target = toDate(date);
-  const now = new Date();
   const dateOnly = new Date(
     target.getFullYear(),
     target.getMonth(),
@@ -46,8 +45,11 @@ export function daysUntil(date: Date | string): number {
   return Math.floor((dateOnly.getTime() - todayOnly.getTime()) / DAY_MS);
 }
 
-export function hoursUntil(date: Date | string): number {
-  return Math.floor((toDate(date).getTime() - Date.now()) / HOUR_MS);
+export function hoursUntil(
+  date: Date | string,
+  now: Date = new Date(),
+): number {
+  return Math.floor((toDate(date).getTime() - now.getTime()) / HOUR_MS);
 }
 
 type TimeUnit = 'minute' | 'hour' | 'day' | 'week' | 'month' | 'year';

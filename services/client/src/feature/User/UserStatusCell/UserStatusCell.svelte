@@ -2,7 +2,7 @@
   import { Badge } from '@slink/feature/Text';
   import { UserStatus } from '@slink/feature/User';
 
-  import type { User } from '$lib/auth/Type/User';
+  import type { User } from '#lib/auth/Type/User.js';
   import Icon from '@iconify/svelte';
 
   interface Props {

@@ -2,8 +2,8 @@ import { resolveSearchBy } from './searchFilter';
 import type { SearchFilter } from './searchFilter';
 
 export interface UrlParamConfig {
-  replaceState?: boolean;
-  noScroll?: boolean;
+  replace?: boolean;
+  reset?: boolean;
 }
 
 export class UrlParamManager {

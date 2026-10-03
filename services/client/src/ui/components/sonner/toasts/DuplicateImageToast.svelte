@@ -1,8 +1,8 @@
 <script lang="ts">
   import { cva } from 'class-variance-authority';
 
-  import { formatDate } from '$lib/utils/date.svelte';
-  import { navigateToUrl } from '$lib/utils/navigation/navigate.js';
+  import { formatDate } from '#lib/utils/date.svelte.js';
+  import { navigateToUrl } from '#lib/utils/navigation/navigate.js';
   import Icon from '@iconify/svelte';
 
   import BaseToast from './BaseToast.svelte';

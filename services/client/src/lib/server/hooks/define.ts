@@ -1,4 +1,5 @@
-import type { Handle, RequestEvent } from '@sveltejs/kit';
+import type { RequestEvent } from '@sveltejs/kit';
+import type { Handle } from '@sveltejs/kit/hooks';
 
 export type LocalsInitializer = (event: RequestEvent) => void | Promise<void>;
 

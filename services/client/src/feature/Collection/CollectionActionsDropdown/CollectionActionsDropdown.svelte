@@ -10,7 +10,7 @@
   } from '@slink/ui/components';
   import { Dialog } from '@slink/ui/components/dialog';
 
-  import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
+  import { toast } from '#lib/utils/ui/toast-sonner.svelte.js';
   import Icon from '@iconify/svelte';
 
   import { ValidationException } from '@slink/api/Exceptions';

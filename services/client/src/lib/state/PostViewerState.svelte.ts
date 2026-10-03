@@ -134,11 +134,11 @@ class PostViewerState {
     replaceState(url, {});
   }
 
-  clearUrlParam(): void {
+  clearUrlParam(): Promise<void> {
     const url = new URL(window.location.href);
     url.searchParams.delete('post');
     url.searchParams.delete('comment');
-    replaceState(url, {});
+    return replaceState(url, {});
   }
 
   openFromUrl(): boolean {

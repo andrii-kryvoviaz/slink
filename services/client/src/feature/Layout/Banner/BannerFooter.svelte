@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { className } from '$lib/utils/ui/className';
+  import { className } from '#lib/utils/ui/className.js';
   import Icon from '@iconify/svelte';
 
   import { BannerFooterTextTheme, BannerFooterTheme } from './Banner.theme';

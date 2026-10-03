@@ -5,7 +5,7 @@
   import { Chart, type ChartOptions } from '@slink/feature/Layout';
   import { onMount } from 'svelte';
 
-  import { plural } from '$lib/utils/i18n';
+  import { plural } from '#lib/utils/i18n/index.js';
 
   import { ReactiveState } from '@slink/api/ReactiveState';
   import type { UserAnalyticsData } from '@slink/api/Response';

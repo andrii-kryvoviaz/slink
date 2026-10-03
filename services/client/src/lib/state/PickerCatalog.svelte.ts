@@ -1,6 +1,6 @@
 import { ApiClient } from '@slink/api';
 
-import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
+import { toast } from '#lib/utils/ui/toast-sonner.svelte.js';
 
 import type { Tag } from '@slink/api/Resources/TagResource';
 import type { CollectionResponse } from '@slink/api/Response';

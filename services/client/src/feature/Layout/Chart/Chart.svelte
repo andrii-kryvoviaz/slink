@@ -5,8 +5,8 @@
   import type ApexCharts from 'apexcharts';
   import { twMerge } from 'tailwind-merge';
 
+  import { deepMerge } from '#lib/utils/object/deepMerge.js';
   import { page } from '$app/state';
-  import { deepMerge } from '$lib/utils/object/deepMerge';
 
   interface Props {
     class?: string;

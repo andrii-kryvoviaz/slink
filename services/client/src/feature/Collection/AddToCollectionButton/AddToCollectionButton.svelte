@@ -12,8 +12,8 @@
   import { Tooltip, type TooltipVariant } from '@slink/ui/components/tooltip';
   import { Popover as PopoverPrimitive } from 'bits-ui';
 
+  import { toast } from '#lib/utils/ui/toast-sonner.svelte.js';
   import { page } from '$app/state';
-  import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
   import Icon from '@iconify/svelte';
 
   import { createCreateCollectionModalState } from '@slink/lib/state/CreateCollectionModalState.svelte';

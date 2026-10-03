@@ -1,6 +1,6 @@
 import type { Cookies } from '@sveltejs/kit';
 
-import { browser } from '$app/environment';
+import { browser } from '$app/env';
 
 interface CookieProvider {
   get: (key: string, defaultValue?: string) => string;

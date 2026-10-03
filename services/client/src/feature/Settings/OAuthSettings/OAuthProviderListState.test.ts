@@ -11,7 +11,7 @@ import { toast } from '@slink/utils/ui/toast-sonner.svelte';
 
 import { OAuthProviderListState } from './OAuthProviderListState.svelte';
 
-vi.mock('$app/environment', () => ({ browser: true }));
+vi.mock('$app/env', () => ({ browser: true }));
 vi.mock('@slink/api', () => ({
   ApiClient: {
     oauth: {

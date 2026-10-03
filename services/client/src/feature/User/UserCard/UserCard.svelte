@@ -4,7 +4,7 @@
   import { UserStatusCell } from '@slink/feature/User';
   import { UserRoleCell } from '@slink/feature/User';
 
-  import { type User } from '$lib/auth/Type/User';
+  import { type User } from '#lib/auth/Type/User.js';
 
   interface Props {
     user?: User;

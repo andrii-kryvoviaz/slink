@@ -2,7 +2,7 @@
   import { Button } from '@slink/ui/components/button';
   import { Switch } from '@slink/ui/components/switch';
 
-  import { plural } from '$lib/utils/i18n';
+  import { plural } from '#lib/utils/i18n/index.js';
   import Icon from '@iconify/svelte';
 
   interface Props {

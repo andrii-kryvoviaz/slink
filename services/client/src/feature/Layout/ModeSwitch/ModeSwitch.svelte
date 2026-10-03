@@ -11,7 +11,7 @@
   } from '@slink/feature/Layout/ModeSwitch/ModeSwitch.types';
   import { twMerge } from 'tailwind-merge';
 
-  import { Mode } from '$lib/settings';
+  import { Mode } from '#lib/settings/index.js';
   import Icon from '@iconify/svelte';
   import type { HTMLButtonAttributes } from 'svelte/elements';
 
@@ -82,11 +82,8 @@
     aria-label={defaultTooltip}
     {...buttonProps}
   >
-    {#if checked}
-      <Icon icon="ph:moon-thin" class={iconClasses} />
-    {:else}
-      <Icon icon="ph:sun-thin" class={iconClasses} />
-    {/if}
+    <Icon icon="ph:moon-thin" class="{iconClasses} hidden dark:block" />
+    <Icon icon="ph:sun-thin" class="{iconClasses} dark:hidden" />
   </button>
 
   {#if showTooltip}

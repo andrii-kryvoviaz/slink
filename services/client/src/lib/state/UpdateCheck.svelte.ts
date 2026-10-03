@@ -1,5 +1,8 @@
-import { checkForUpdates } from '$lib/utils/version';
-import type { UpdateCheckResult, VersionInfo } from '$lib/utils/version';
+import { checkForUpdates } from '#lib/utils/version/index.js';
+import type {
+  UpdateCheckResult,
+  VersionInfo,
+} from '#lib/utils/version/index.js';
 
 class UpdateCheckStateClass {
   private _isLoading = $state(false);

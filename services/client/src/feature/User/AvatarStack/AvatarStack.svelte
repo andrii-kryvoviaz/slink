@@ -1,7 +1,7 @@
 <script lang="ts">
   import { UserAvatar, type UserAvatarSize } from '@slink/feature/User';
 
-  import { cn } from '$lib/utils/ui';
+  import { cn } from '#lib/utils/ui/index.js';
 
   import { avatarStackTheme } from './AvatarStack.theme';
 

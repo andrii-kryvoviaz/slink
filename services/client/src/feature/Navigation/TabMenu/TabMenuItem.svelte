@@ -3,8 +3,8 @@
   import { TabMenuItemTheme } from '@slink/feature/Navigation/TabMenu/TabMenu.theme';
   import { type Snippet, getContext, onMount } from 'svelte';
 
+  import { randomId } from '#lib/utils/string/randomId.js';
   import { page } from '$app/state';
-  import { randomId } from '$lib/utils/string/randomId';
   import type { HTMLAttributes } from 'svelte/elements';
 
   import { Key } from '@slink/utils/ui';

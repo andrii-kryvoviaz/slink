@@ -1,4 +1,4 @@
-import { CACHE } from '$lib/constants/app';
+import { CACHE } from '#lib/constants/app.js';
 
 export interface CacheEntry<T> {
   data: T;

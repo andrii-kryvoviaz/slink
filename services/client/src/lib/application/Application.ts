@@ -1,7 +1,7 @@
 import { themeIcons } from '@slink/theme.icons';
 import { error, redirect } from '@sveltejs/kit';
 
-import { browser } from '$app/environment';
+import { browser } from '$app/env';
 import { goto } from '$app/navigation';
 
 import { type ApiClientType, createApiClient } from '@slink/api/Client';
@@ -39,9 +39,7 @@ export class Application {
     this.api.on('unauthorized', () => this.redirectToLogin(gatewayUrl));
 
     this.api.on('forbidden', () => {
-      error(403, {
-        message: 'You do not have permission to access this page.',
-      });
+      error(403, 'You do not have permission to access this page.');
     });
   }
 
@@ -51,7 +49,7 @@ export class Application {
     }
 
     this._redirectingUnauthorized ??= goto(gatewayUrl, {
-      invalidateAll: true,
+      refreshAll: true,
     }).finally(() => {
       this._redirectingUnauthorized = null;
     });

@@ -1,5 +1,6 @@
-import { env } from '$env/dynamic/private';
 import { error, redirect } from '@sveltejs/kit';
+
+import { API_URL } from '$app/env/private';
 
 import type { PageServerLoad } from './$types';
 
@@ -37,7 +38,7 @@ function resolveUrl(origin: string, location: string): string {
 }
 
 export const load: PageServerLoad = async ({ params, fetch, url }) => {
-  const apiUrl = env.API_URL || 'http://localhost:8080';
+  const apiUrl = API_URL || 'http://localhost:8080';
   const result = await resolveShortCode(params.code, apiUrl, fetch);
 
   if (result.kind === 'unavailable') {
@@ -46,5 +47,5 @@ export const load: PageServerLoad = async ({ params, fetch, url }) => {
     };
   }
 
-  redirect(302, resolveUrl(url.origin, result.location));
+  redirect(302, resolveUrl(url.origin, result.location), { external: true });
 };

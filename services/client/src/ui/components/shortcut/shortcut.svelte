@@ -2,7 +2,7 @@
   import { KeyboardKey } from '@slink/feature/Text';
   import type { KeyboardKeyProps } from '@slink/feature/Text';
 
-  import { browser } from '$app/environment';
+  import { browser } from '$app/env';
   import { page } from '$app/state';
 
   import { useUserAgent } from '@slink/utils/http/useUserAgent.svelte';
@@ -13,7 +13,7 @@
     alt?: boolean;
     shift?: boolean;
     key: string;
-    onHit?: () => boolean | void;
+    onHit?: () => boolean | void | Promise<void>;
     enabled?: boolean;
     hidden?: boolean;
   }

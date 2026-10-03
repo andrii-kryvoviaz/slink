@@ -1,4 +1,4 @@
-import { VERSION } from '$lib/constants/app';
+import { VERSION } from '#lib/constants/app.js';
 
 export function cleanVersion(version: string): string {
   if (!version || typeof version !== 'string') {

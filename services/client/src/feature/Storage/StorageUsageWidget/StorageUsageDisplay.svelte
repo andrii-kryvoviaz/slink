@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { bytesToSize } from '$lib/utils/bytesConverter';
+  import { bytesToSize } from '#lib/utils/bytesConverter.js';
   import Icon from '@iconify/svelte';
 
   import type { StorageUsageResponse } from '@slink/api/Resources/StorageResource';

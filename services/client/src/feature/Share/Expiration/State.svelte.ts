@@ -6,8 +6,8 @@ import {
   narrowUnit,
   relativeFromDays,
   todayPlusDays,
-} from '$lib/utils/date.svelte';
-import { bindRequestState } from '$lib/utils/store/bindRequestState.svelte';
+} from '#lib/utils/date.svelte.js';
+import { bindRequestState } from '#lib/utils/store/bindRequestState.svelte.js';
 
 import { ReactiveState } from '@slink/api/ReactiveState';
 

@@ -6,7 +6,7 @@
   } from '@slink/ui/components/action-popover';
   import type { Snippet } from 'svelte';
 
-  import { browser } from '$app/environment';
+  import { browser } from '$app/env';
   import { fly } from 'svelte/transition';
 
   import ExpirationDetail from './ExpirationDetail.svelte';

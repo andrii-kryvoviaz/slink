@@ -1,7 +1,7 @@
 <script lang="ts">
   import { cva } from 'class-variance-authority';
 
-  import { className as cn } from '$lib/utils/ui/className';
+  import { className as cn } from '#lib/utils/ui/className.js';
 
   interface Props {
     value: number;

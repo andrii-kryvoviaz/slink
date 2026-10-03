@@ -70,7 +70,7 @@ describe('UrlSearchFilterManager', () => {
     expect(
       new URL(url, 'https://slink.test').searchParams.get('searchBy'),
     ).toBe('user');
-    expect(config).toEqual({ keepFocus: true, noScroll: true });
+    expect(config).toEqual({ reset: false });
   });
 
   it('does not navigate when the trimmed term is unchanged', async () => {
@@ -121,7 +121,7 @@ describe('UrlSearchFilterManager', () => {
     expect(params.has('search')).toBe(false);
     expect(params.has('searchBy')).toBe(false);
     expect(params.get('foo')).toBe('1');
-    expect(config).toEqual({ keepFocus: true, noScroll: true });
+    expect(config).toEqual({ reset: false });
   });
 
   it('does not navigate clearing an already clean url', async () => {

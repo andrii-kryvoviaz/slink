@@ -1,4 +1,6 @@
-import { sveltekit } from '@sveltejs/kit/vite';
+import adapter from '@sveltejs/adapter-node';
+import { type Config, sveltekit } from '@sveltejs/kit/vite';
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import tailwindcss from '@tailwindcss/vite';
 import { SvelteKitPWA } from '@vite-pwa/sveltekit';
 import { readFileSync } from 'fs';
@@ -20,6 +22,31 @@ const getPackageVersion = (): string => {
   }
 };
 
+export const svelteKitConfig: Config = {
+  preprocess: vitePreprocess(),
+  compilerOptions: {
+    warningFilter: (warning) => {
+      if (warning.code === 'state_referenced_locally') return false;
+      return true;
+    },
+  },
+  adapter: adapter({
+    out: 'build',
+  }),
+  csrf: {
+    trustedOrigins: [process.env.ORIGIN ?? 'http://localhost:3000'],
+  },
+  alias: {
+    '@slink/api': './src/api',
+    '@slink/utils': './src/lib/utils',
+    '@slink/components': './src/components',
+    '@slink/store': './src/lib/utils/store',
+    '@slink/ui': './src/ui',
+    '@slink': './src',
+    '@slink/*': './src/*',
+  },
+};
+
 export default defineConfig({
   resolve: {
     alias: {
@@ -38,7 +65,7 @@ export default defineConfig({
     }),
     iconifyExport(),
     wuchale(),
-    sveltekit(),
+    sveltekit(svelteKitConfig),
     tailwindcss(),
     SvelteKitPWA({
       srcDir: './src',

@@ -54,7 +54,9 @@
     return () => publicFeedState.unsubscribe();
   });
 
-  const searchFilter = $derived(createSearchFilterManager(page.url));
+  const searchFilter = $derived(
+    createSearchFilterManager(new URL(page.url.href)),
+  );
   const urlSearch = $derived(searchFilter.read());
 
   $effect(() => {

@@ -23,7 +23,7 @@ import {
 
 const translator = vi.hoisted(() => ({ locale: 'en-GB' }));
 
-vi.mock('$lib/utils/i18n/RuntimeTranslator.svelte', () => ({
+vi.mock('#lib/utils/i18n/RuntimeTranslator.svelte.js', () => ({
   runtimeTranslator: translator,
 }));
 

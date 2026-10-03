@@ -4,7 +4,7 @@
   import { CommentText } from '@slink/feature/Text';
   import { ThreadBlock } from '@slink/ui/components/thread-block';
 
-  import { plural } from '$lib/utils/i18n';
+  import { plural } from '#lib/utils/i18n/index.js';
   import Icon from '@iconify/svelte';
 
   import type { NotificationItem } from '@slink/api/Response';

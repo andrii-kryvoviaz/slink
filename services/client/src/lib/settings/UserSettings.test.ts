@@ -16,7 +16,7 @@ import {
 
 import { cookie } from '@slink/utils/http/cookie';
 
-vi.mock('$app/environment', () => ({ browser: true }));
+vi.mock('$app/env', () => ({ browser: true }));
 vi.mock('@slink/utils/http/cookie', () => ({
   cookie: {
     get: vi.fn(() => undefined),

@@ -1,4 +1,4 @@
-import { useAutoReset } from '$lib/utils/time/useAutoReset.svelte';
+import { useAutoReset } from '#lib/utils/time/useAutoReset.svelte.js';
 
 import type { ShareFormat } from '@slink/lib/settings';
 

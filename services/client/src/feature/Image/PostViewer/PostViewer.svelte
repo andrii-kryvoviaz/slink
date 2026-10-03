@@ -3,9 +3,9 @@
   import { Shortcut } from '@slink/ui/components/shortcut';
   import { onDestroy } from 'svelte';
 
-  import { browser } from '$app/environment';
+  import { useAutoReset } from '#lib/utils/time/useAutoReset.svelte.js';
+  import { browser } from '$app/env';
   import { page } from '$app/state';
-  import { useAutoReset } from '$lib/utils/time/useAutoReset.svelte';
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
@@ -36,8 +36,8 @@
     viewerState.close();
   });
 
-  function handleClose() {
-    viewerState.clearUrlParam();
+  async function handleClose() {
+    await viewerState.clearUrlParam();
     viewerState.close();
   }
 

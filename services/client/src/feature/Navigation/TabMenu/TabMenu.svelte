@@ -7,8 +7,8 @@
   import { TabMenuTheme } from '@slink/feature/Navigation/TabMenu/TabMenu.theme';
   import { onMount, setContext } from 'svelte';
 
-  import { debounce } from '$lib/utils/time/debounce';
-  import { className } from '$lib/utils/ui/className';
+  import { debounce } from '#lib/utils/time/debounce.js';
+  import { className } from '#lib/utils/ui/className.js';
   import type { HTMLBaseAttributes } from 'svelte/elements';
 
   interface Props extends TabMenuProps, HTMLBaseAttributes {}

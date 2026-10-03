@@ -1,4 +1,4 @@
-import { copyClipboardItems } from '$lib/utils/ui/clipboard';
+import { copyClipboardItems } from '#lib/utils/ui/clipboard.js';
 
 export const copyImageContent = async (url: string): Promise<boolean> => {
   try {

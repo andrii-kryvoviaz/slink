@@ -1,5 +1,5 @@
-import { browser } from '$app/environment';
-import { invalidateAll } from '$app/navigation';
+import { browser } from '$app/env';
+import { refreshAll } from '$app/navigation';
 
 import {
   BadRequestException,
@@ -217,7 +217,7 @@ export class Client {
 
     if (browser && response.headers.has('x-auth-refreshed')) {
       this.emit({ event: 'auth-refreshed' });
-      invalidateAll();
+      refreshAll();
     }
 
     if (response.status === HttpStatus.NoContent) {

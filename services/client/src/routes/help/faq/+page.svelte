@@ -3,9 +3,9 @@
   import { Subtitle, Title } from '@slink/feature/Text';
   import { type Snippet, onMount } from 'svelte';
 
-  import { browser } from '$app/environment';
+  import { GITHUB } from '#lib/constants/app.js';
+  import { browser } from '$app/env';
   import { page } from '$app/state';
-  import { GITHUB } from '$lib/constants/app';
   import Icon from '@iconify/svelte';
   import { fade, slide } from 'svelte/transition';
 

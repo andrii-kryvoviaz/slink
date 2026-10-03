@@ -9,7 +9,7 @@ import {
 } from '@slink/ui/components/data-table';
 import type { ColumnDef } from '@tanstack/table-core';
 
-import { bytesToSize } from '$lib/utils/bytesConverter';
+import { bytesToSize } from '#lib/utils/bytesConverter.js';
 
 import type { Tag } from '@slink/api/Resources/TagResource';
 import type { ImageListingItem } from '@slink/api/Response';

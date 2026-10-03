@@ -5,9 +5,9 @@ import {
   type ShareStateRegistry,
 } from '@slink/feature/Share';
 
-import { bindRequestState } from '$lib/utils/store/bindRequestState.svelte';
-import { printErrorsAsToastMessage } from '$lib/utils/ui/printErrorsAsToastMessage';
-import { routes } from '$lib/utils/url/routes';
+import { bindRequestState } from '#lib/utils/store/bindRequestState.svelte.js';
+import { printErrorsAsToastMessage } from '#lib/utils/ui/printErrorsAsToastMessage.js';
+import { routes } from '#lib/utils/url/routes/index.js';
 
 import { ReactiveState } from '@slink/api/ReactiveState';
 import type { ShareResponse } from '@slink/api/Response';

@@ -1,7 +1,7 @@
 import { ApiClient } from '@slink/api';
 
-import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
-import { routes } from '$lib/utils/url/routes';
+import { toast } from '#lib/utils/ui/toast-sonner.svelte.js';
+import { routes } from '#lib/utils/url/routes/index.js';
 
 import type { ShareFormat } from '@slink/lib/settings';
 import { messages } from '@slink/lib/utils/i18n/messages/toast.language';

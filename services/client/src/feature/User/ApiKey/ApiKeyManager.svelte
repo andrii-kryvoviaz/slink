@@ -11,7 +11,7 @@
   import { Dialog } from '@slink/ui/components/dialog';
   import { onMount } from 'svelte';
 
-  import { useApiKeyStore } from '$lib/state/ApiKeyStore.svelte.js';
+  import { useApiKeyStore } from '#lib/state/ApiKeyStore.svelte.js';
   import Icon from '@iconify/svelte';
 
   import type { ApiKeyResponse } from '@slink/api/Resources/ApiKeyResource';

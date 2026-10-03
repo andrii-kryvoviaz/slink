@@ -8,8 +8,9 @@ test.describe('Explore view mode', () => {
   }) => {
     const owner = await actor('owner');
     const imageId = await owner.content.uploadImage({ isPublic: true });
+    const { displayName } = (await owner.users.getMe()).data;
 
-    await explorePage.goto();
+    await page.goto(`/explore?search=${displayName}&searchBy=user`);
     await expect(explorePage.cardFor(imageId)).toBeVisible();
 
     await explorePage.switchViewMode('List');

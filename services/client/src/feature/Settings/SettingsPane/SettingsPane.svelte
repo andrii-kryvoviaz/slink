@@ -4,7 +4,7 @@
   import { Button } from '@slink/ui/components/button';
   import type { Snippet } from 'svelte';
 
-  import type { SettingCategory } from '$lib/settings/Type/GlobalSettings';
+  import type { SettingCategory } from '#lib/settings/Type/GlobalSettings.js';
 
   import { useSettingsPage } from '@slink/lib/state/SettingsPage.svelte';
 

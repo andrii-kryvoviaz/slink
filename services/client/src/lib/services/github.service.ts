@@ -1,4 +1,4 @@
-import { GITHUB } from '$lib/constants/app';
+import { GITHUB } from '#lib/constants/app.js';
 
 export interface GitHubRelease {
   tag_name: string;

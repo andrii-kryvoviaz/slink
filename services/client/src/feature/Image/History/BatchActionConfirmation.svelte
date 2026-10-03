@@ -3,7 +3,7 @@
   import { cva } from 'class-variance-authority';
   import type { Snippet } from 'svelte';
 
-  import { plural } from '$lib/utils/i18n';
+  import { plural } from '#lib/utils/i18n/index.js';
   import Icon from '@iconify/svelte';
 
   const iconContainerVariants = cva(

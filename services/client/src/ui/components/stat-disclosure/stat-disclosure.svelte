@@ -2,7 +2,7 @@
   import * as Collapsible from '@slink/ui/components/collapsible';
   import type { Snippet } from 'svelte';
 
-  import { cn } from '$lib/utils/ui';
+  import { cn } from '#lib/utils/ui/index.js';
   import Icon from '@iconify/svelte';
 
   import {

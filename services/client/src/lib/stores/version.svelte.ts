@@ -1,5 +1,5 @@
-import { BUILD_GLOBALS } from '$lib/constants/app';
-import type { VersionInfo } from '$lib/utils/version/utils';
+import { BUILD_GLOBALS } from '#lib/constants/app.js';
+import type { VersionInfo } from '#lib/utils/version/utils.js';
 import { writable } from 'svelte/store';
 
 export const versionStore = writable<VersionInfo | null>(null);

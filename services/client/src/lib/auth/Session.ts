@@ -1,7 +1,7 @@
-import { env } from '$env/dynamic/private';
 import type { Cookies } from '@sveltejs/kit';
 
-import { browser } from '$app/environment';
+import { browser } from '$app/env';
+import { SESSION_TTL_SECONDS } from '$app/env/private';
 
 import type { CookieManager } from '@slink/lib/auth/CookieManager';
 import { RedisSessionProvider } from '@slink/lib/auth/SessionProvider/RedisSessionProvider';
@@ -55,7 +55,7 @@ class SessionManager {
 
     const sessionId = crypto.randomUUID();
 
-    const lifetime = ttl ?? Number(env.SESSION_TTL_SECONDS);
+    const lifetime = ttl ?? Number(SESSION_TTL_SECONDS);
 
     await this._provider.create(sessionId, lifetime);
 
@@ -100,7 +100,7 @@ class SessionManager {
     await this._provider.set(
       sessionId,
       session,
-      ttl ?? Number(env.SESSION_TTL_SECONDS),
+      ttl ?? Number(SESSION_TTL_SECONDS),
     );
   }
 

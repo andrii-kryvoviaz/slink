@@ -1,10 +1,10 @@
-import { env } from '$env/dynamic/private';
+import { MERCURE_HUB_URL } from '$app/env/private';
 
 import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async ({ url, cookies }) => {
   const mercureUrl =
-    env.MERCURE_HUB_URL || 'http://localhost:3333/.well-known/mercure';
+    MERCURE_HUB_URL || 'http://localhost:3333/.well-known/mercure';
 
   const topic = url.searchParams.get('topic');
 

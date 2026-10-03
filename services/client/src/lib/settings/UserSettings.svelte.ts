@@ -1,4 +1,4 @@
-import { browser } from '$app/environment';
+import { browser } from '$app/env';
 import { MediaQuery } from 'svelte/reactivity';
 
 import { SortOrder } from '@slink/lib/enum/SortOrder';

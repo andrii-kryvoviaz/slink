@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getLocale } from '$lib/utils/date.svelte';
+  import { getLocale } from '#lib/utils/date.svelte.js';
 
   interface Props {
     date: number;

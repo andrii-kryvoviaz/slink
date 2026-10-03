@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Button } from '@slink/ui/components/button';
 
-  import { plural } from '$lib/utils/i18n';
+  import { plural } from '#lib/utils/i18n/index.js';
   import Icon from '@iconify/svelte';
 
   import type { Tag } from '@slink/api/Resources/TagResource';

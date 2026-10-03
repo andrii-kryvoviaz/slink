@@ -4,8 +4,8 @@
   import { Tooltip, type TooltipVariant } from '@slink/ui/components/tooltip';
   import { mergeProps } from 'bits-ui';
 
+  import { toast } from '#lib/utils/ui/toast-sonner.svelte.js';
   import { page } from '$app/state';
-  import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
   import Icon from '@iconify/svelte';
 
   import { messages } from '@slink/lib/utils/i18n/messages/toast.language';

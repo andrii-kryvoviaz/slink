@@ -1,7 +1,7 @@
 <script lang="ts">
   import { OverflowBadgeList } from '@slink/feature/Layout/OverflowBadgeList';
 
-  import { plural } from '$lib/utils/i18n';
+  import { plural } from '#lib/utils/i18n/index.js';
 
   import type { CollectionReference } from '@slink/api/Response/Collection/CollectionResponse';
 

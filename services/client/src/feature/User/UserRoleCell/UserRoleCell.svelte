@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { User } from '$lib/auth/Type/User';
+  import type { User } from '#lib/auth/Type/User.js';
 
   import UserRoleBadge from '../UserRoleBadge/UserRoleBadge.svelte';
 

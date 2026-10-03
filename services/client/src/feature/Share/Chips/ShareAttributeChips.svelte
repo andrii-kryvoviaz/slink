@@ -2,7 +2,7 @@
   import { FormattedDate } from '@slink/feature/Text';
   import type { Snippet } from 'svelte';
 
-  import { plural } from '$lib/utils/i18n';
+  import { plural } from '#lib/utils/i18n/index.js';
 
   import ExpirationPicker from '../Controls/ExpirationPicker/ExpirationPicker.svelte';
   import PasswordPicker from '../Controls/PasswordPicker/PasswordPicker.svelte';

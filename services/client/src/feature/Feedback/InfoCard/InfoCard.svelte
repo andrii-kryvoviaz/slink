@@ -8,7 +8,7 @@
   import type { InfoCardProps } from '@slink/feature/Feedback/InfoCard/InfoCard.types';
   import type { Snippet } from 'svelte';
 
-  import { className } from '$lib/utils/ui/className';
+  import { className } from '#lib/utils/ui/className.js';
   import Icon from '@iconify/svelte';
 
   interface Props extends InfoCardProps {

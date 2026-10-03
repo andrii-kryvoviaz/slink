@@ -11,7 +11,7 @@ export const load: PageServerLoad = async (event) => {
     const { authorizationUrl } = await locals.api.sso.authorize({
       provider: params.provider,
     });
-    redirect(302, authorizationUrl);
+    redirect(302, authorizationUrl, { external: true });
   } catch (e) {
     SsoError.handle(event, e);
   }

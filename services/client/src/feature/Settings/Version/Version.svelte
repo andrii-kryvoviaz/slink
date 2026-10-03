@@ -3,9 +3,9 @@
   import { Tooltip, TooltipProvider } from '@slink/ui/components/tooltip';
   import { onMount } from 'svelte';
 
-  import { UpdateCheckState } from '$lib/state';
-  import { versionStore } from '$lib/stores/version.svelte';
-  import { formatVersion, getVersionInfo } from '$lib/utils/version';
+  import { UpdateCheckState } from '#lib/state/index.js';
+  import { versionStore } from '#lib/stores/version.svelte.js';
+  import { formatVersion, getVersionInfo } from '#lib/utils/version/index.js';
 
   import ReleaseModal from './ReleaseModal.svelte';
 

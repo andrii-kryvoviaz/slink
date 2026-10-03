@@ -3,7 +3,7 @@
   import type { NoticeProps } from '@slink/feature/Text/Notice/Notice.types';
   import type { Snippet } from 'svelte';
 
-  import { className } from '$lib/utils/ui/className';
+  import { className } from '#lib/utils/ui/className.js';
 
   interface Props extends NoticeProps {
     class?: string;

@@ -2,8 +2,8 @@
   import * as Collapsible from '@slink/ui/components/collapsible';
   import { type Snippet, tick } from 'svelte';
 
-  import { plural } from '$lib/utils/i18n';
-  import { cn } from '$lib/utils/ui';
+  import { plural } from '#lib/utils/i18n/index.js';
+  import { cn } from '#lib/utils/ui/index.js';
   import Icon from '@iconify/svelte';
 
   import { threadBlock } from './thread-block.theme';

@@ -10,8 +10,8 @@ export interface TagFilterParams {
 }
 
 export interface TagFilterUrlConfig {
-  replaceState?: boolean;
-  noScroll?: boolean;
+  replace?: boolean;
+  reset?: boolean;
 }
 
 export class TagFilterUrlManager {

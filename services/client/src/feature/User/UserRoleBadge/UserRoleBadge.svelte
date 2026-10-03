@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Badge, type BadgeProps } from '@slink/feature/Text';
 
-  import { UserRole } from '$lib/auth/Type/User';
+  import { UserRole } from '#lib/auth/Type/User.js';
   import Icon from '@iconify/svelte';
 
   interface Props extends Omit<BadgeProps, 'variant'> {

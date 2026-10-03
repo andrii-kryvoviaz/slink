@@ -1,6 +1,6 @@
-import type { Reroute } from '@sveltejs/kit';
+import type { Reroute } from '@sveltejs/kit/hooks';
 
-import { shareRoutes } from '$lib/routes/share';
+import { shareRoutes } from '#lib/routes/share.js';
 
 type ShareRerouteRule = {
   match: RegExp;

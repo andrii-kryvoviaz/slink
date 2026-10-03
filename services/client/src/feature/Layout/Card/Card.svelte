@@ -2,7 +2,7 @@
   import { type CardProps, CardTheme } from '@slink/feature/Layout';
   import type { Snippet } from 'svelte';
 
-  import { className } from '$lib/utils/ui/className';
+  import { className } from '#lib/utils/ui/className.js';
 
   interface Props extends CardProps {
     class?: string;

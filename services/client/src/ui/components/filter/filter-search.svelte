@@ -2,7 +2,7 @@
   import { Command as CommandPrimitive, Popover } from 'bits-ui';
   import type { Snippet } from 'svelte';
 
-  import { debounce } from '$lib/utils/time/debounce';
+  import { debounce } from '#lib/utils/time/debounce.js';
 
   import { Key, cn } from '@slink/utils/ui/index.js';
 

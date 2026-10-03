@@ -1,4 +1,4 @@
-import { Application } from '$lib/application';
+import { Application } from '#lib/application/index.js';
 
 import type { ApiClientType } from './Client';
 

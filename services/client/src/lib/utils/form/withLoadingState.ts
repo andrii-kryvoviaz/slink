@@ -1,6 +1,5 @@
-import type { ActionResult } from '@sveltejs/kit';
-
-import { invalidateAll } from '$app/navigation';
+import type { ActionResult } from '$app/forms';
+import { refreshAll } from '$app/navigation';
 import type { Writable } from 'svelte/store';
 
 type WithLoadingStateOptions = {
@@ -29,7 +28,7 @@ export function withLoadingState(
       loading.set(false);
 
       if (options.invalidate) {
-        await invalidateAll();
+        await refreshAll();
       }
 
       await update({ reset: options.reset });

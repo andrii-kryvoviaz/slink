@@ -1,4 +1,4 @@
-import { GITHUB } from '$lib/constants/app';
+import { GITHUB } from '#lib/constants/app.js';
 import Icon from '@iconify/svelte';
 
 import type {

@@ -29,7 +29,7 @@
 
   let { data }: Props = $props();
 
-  const uploadState = useUploadPageState(data, page.url);
+  const uploadState = useUploadPageState(data, new URL(page.url.href));
 
   const exifNotice = useExifNotice();
 

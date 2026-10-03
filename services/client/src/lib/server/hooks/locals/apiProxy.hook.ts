@@ -1,5 +1,6 @@
-import { env } from '$env/dynamic/private';
-import type { Handle } from '@sveltejs/kit';
+import type { Handle } from '@sveltejs/kit/hooks';
+
+import { API_URL } from '$app/env/private';
 
 import { ApiProxy } from '@slink/api/ApiProxy';
 
@@ -7,7 +8,7 @@ import { defineHook } from '../define';
 
 const injectApiHandling: Handle = ApiProxy({
   urlPrefix: '/api',
-  baseUrl: env.API_URL || 'http://localhost:8080',
+  baseUrl: API_URL || 'http://localhost:8080',
   registeredPaths: ['/api'],
 });
 
