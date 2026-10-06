@@ -8,7 +8,7 @@
   let { class: className }: Props = $props();
 
   const handleError = (event: Event) => {
-    (event.currentTarget as HTMLImageElement).src = '/favicon.png';
+    (event.currentTarget as HTMLImageElement).src = '/favicon.svg';
   };
 </script>
 

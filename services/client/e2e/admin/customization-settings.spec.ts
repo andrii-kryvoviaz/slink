@@ -171,7 +171,7 @@ test.describe('Admin customization settings', { tag: '@serial' }, () => {
     await gotoCustomization(page);
 
     const brandLogo = page.getByAltText('Slink').first();
-    await expect(brandLogo).toHaveAttribute('src', '/favicon.png');
+    await expect(brandLogo).toHaveAttribute('src', '/favicon.svg');
   });
 
   test('forbids logo upload for a non-admin user', async ({ actor }) => {

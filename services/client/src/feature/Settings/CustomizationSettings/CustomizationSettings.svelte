@@ -27,7 +27,7 @@
     onSave,
   }: Props = $props();
 
-  const defaultLogoUrl = '/favicon.png';
+  const defaultLogoUrl = '/favicon.svg';
 
   const logoUpload = new LogoUpload(settings.logoUrl || defaultLogoUrl);
 

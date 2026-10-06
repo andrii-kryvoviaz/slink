@@ -57,7 +57,12 @@
   <title>{customization.siteName}: Image Sharing Service</title>
   <meta name="description" content={customization.siteDescription} />
   <meta name="apple-mobile-web-app-title" content={customization.siteName} />
-  <link rel="icon" href={customization.logoUrl} />
+  {#if customization.logoUrl === '/favicon.svg'}
+    <link rel="icon" href="/favicon.png" type="image/png" sizes="768x768" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" sizes="any" />
+  {:else}
+    <link rel="icon" href={customization.logoUrl} />
+  {/if}
   <link rel="apple-touch-icon" href={customization.appleTouchIconUrl} />
 </svelte:head>
 

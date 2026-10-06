@@ -7,7 +7,7 @@ class Customization {
   siteDescription = $derived(
     this._settings?.siteDescription || 'Fast and secure image sharing service',
   );
-  logoUrl = $derived(this._settings?.logoUrl || '/favicon.png');
+  logoUrl = $derived(this._settings?.logoUrl || '/favicon.svg');
   appleTouchIconUrl = $derived(
     this._settings?.logoUrl || '/icons/icon-192x192.png',
   );
