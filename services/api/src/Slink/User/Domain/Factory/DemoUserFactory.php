@@ -46,16 +46,4 @@ final readonly class DemoUserFactory {
       UserStatus::Active,
     );
   }
-
-  /**
-   * @return array<string, string>
-   */
-  public function getDemoUserCredentials(): array {
-    return [
-      'username' => $this->configurationProvider->get('demo.demoUsername'),
-      'password' => $this->configurationProvider->get('demo.demoPassword'),
-      'displayName' => $this->configurationProvider->get('demo.demoDisplayName'),
-      'email' => $this->configurationProvider->get('demo.demoEmail')
-    ];
-  }
 }

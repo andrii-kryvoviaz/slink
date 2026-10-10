@@ -23,7 +23,7 @@ final class BatchDeleteImagesController {
 
   public function __invoke(
     #[MapRequestPayload] BatchDeleteImagesCommand $command,
-    #[CurrentUser] JWTUser $user,
+    #[CurrentUser] JwtUser $user,
   ): ApiResponse {
     /** @var BatchDeleteImagesResult $result */
     $result = $this->handleSync($command->withContext([

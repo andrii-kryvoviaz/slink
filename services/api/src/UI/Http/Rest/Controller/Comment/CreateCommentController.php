@@ -29,7 +29,7 @@ final readonly class CreateCommentController {
 
   public function __invoke(
     #[MapRequestPayload] CreateCommentCommand $command,
-    #[CurrentUser] JWTUser $user,
+    #[CurrentUser] JwtUser $user,
     string $imageId,
   ): ApiResponse {
     $commentId = $this->handleSync($command->withContext([

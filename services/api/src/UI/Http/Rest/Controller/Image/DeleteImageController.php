@@ -22,7 +22,7 @@ final class DeleteImageController {
   
   public function __invoke(
     #[MapRequestPayload] DeleteImageCommand $command,
-    #[CurrentUser] JWTUser $user,
+    #[CurrentUser] JwtUser $user,
     string $id,
   ): ApiResponse {
     $this->handle($command->withContext([

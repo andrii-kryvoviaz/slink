@@ -32,10 +32,6 @@ final readonly class CreateDemoUserHandler implements CommandHandlerInterface {
   }
 
   private function userAlreadyExists(CreateDemoUserCommand $command): bool {
-    $credentials = $this->demoUserFactory->getDemoUserCredentials();
-    
-    $username = $command->username ?? $credentials['username'];
-
-    return $this->userRepository->getByUsername(Username::fromString($username)) !== null;
+    return $this->userRepository->getByUsername(Username::fromString($command->username)) !== null;
   }
 }

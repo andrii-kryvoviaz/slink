@@ -24,7 +24,7 @@ final readonly class CreateCollectionController {
   use QueryTrait;
 
   public function __invoke(
-    #[CurrentUser] JWTUser $user,
+    #[CurrentUser] JwtUser $user,
     #[MapRequestPayload] CreateCollectionCommand $command,
   ): ApiResponse {
     $this->handleSync($command->withContext(['userId' => $user->getIdentifier()]));

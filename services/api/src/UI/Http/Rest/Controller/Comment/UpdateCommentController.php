@@ -22,7 +22,7 @@ final readonly class UpdateCommentController {
 
   public function __invoke(
     #[MapRequestPayload] UpdateCommentCommand $command,
-    #[CurrentUser] JWTUser $user,
+    #[CurrentUser] JwtUser $user,
     string $commentId,
   ): ApiResponse {
     $this->handle($command->withContext([

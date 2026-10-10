@@ -20,7 +20,7 @@ final class GetUnreadCountController {
   use QueryTrait;
 
   public function __invoke(
-    #[CurrentUser] JWTUser $user,
+    #[CurrentUser] JwtUser $user,
   ): ApiResponse {
     $query = new GetUnreadCountQuery();
     $result = $this->ask($query->withContext([

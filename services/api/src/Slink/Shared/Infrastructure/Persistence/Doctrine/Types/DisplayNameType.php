@@ -35,8 +35,6 @@ final class DisplayNameType extends StringType {
    * @param DisplayName|string|null $value
    * @param AbstractPlatform $platform
    * @return DisplayName
-   *
-   * @throws ConversionException
    */
   public function convertToPHPValue($value, AbstractPlatform $platform): DisplayName {
     if ($value instanceof DisplayName) {

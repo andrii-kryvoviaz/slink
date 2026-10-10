@@ -26,6 +26,7 @@ final class BrandingLogoTest extends HttpTestCase {
     }
   }
 
+  /** @phpstan-impure */
   private function uploadLogo(UploadedFile $file, string $token): int {
     $this->client->request(
       'POST',

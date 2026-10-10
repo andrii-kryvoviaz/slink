@@ -22,7 +22,7 @@ final readonly class GetUserCollectionsController {
 
   public function __invoke(
     #[MapQueryString] GetUserCollectionsQuery $query,
-    #[CurrentUser] JWTUser                    $user,
+    #[CurrentUser] JwtUser                    $user,
   ): ApiResponse {
     $collections = $this->ask($query->withContext([
       'userId' => $user->getIdentifier(),

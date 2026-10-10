@@ -25,7 +25,7 @@ final class GetNotificationsController {
   use QueryTrait;
 
   public function __invoke(
-    #[CurrentUser] JWTUser $user,
+    #[CurrentUser] JwtUser $user,
     #[MapQueryParameter(validationFailedStatusCode: Response::HTTP_BAD_REQUEST)] ?string $type = null,
     #[MapQueryParameter(validationFailedStatusCode: Response::HTTP_BAD_REQUEST)] bool $unread = false,
     #[MapQueryParameter] int $page = 1,

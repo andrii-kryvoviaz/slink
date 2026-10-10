@@ -24,7 +24,7 @@ final readonly class UpdateCollectionController {
   use QueryTrait;
 
   public function __invoke(
-    #[CurrentUser] JWTUser $user,
+    #[CurrentUser] JwtUser $user,
     #[MapRequestPayload] UpdateCollectionCommand $command,
   ): ApiResponse {
     $this->handleSync($command->withContext(['userId' => $user->getIdentifier()]));

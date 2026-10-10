@@ -20,7 +20,7 @@ final readonly class MarkNotificationReadController {
   use CommandTrait;
 
   public function __invoke(
-    #[CurrentUser] JWTUser $user,
+    #[CurrentUser] JwtUser $user,
     string $notificationId,
   ): ApiResponse {
     $command = new MarkNotificationReadCommand();

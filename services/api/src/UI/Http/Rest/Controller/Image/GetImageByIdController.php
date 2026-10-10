@@ -20,7 +20,7 @@ final class GetImageByIdController {
   use QueryTrait;
   
   public function __invoke(
-    #[CurrentUser] JWTUser $user,
+    #[CurrentUser] JwtUser $user,
     string $id,
   ): ApiResponse {
     $query = new GetImageByIdQuery($id);

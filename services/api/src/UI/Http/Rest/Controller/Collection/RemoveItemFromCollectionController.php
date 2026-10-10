@@ -20,7 +20,7 @@ final readonly class RemoveItemFromCollectionController {
   use CommandTrait;
 
   public function __invoke(
-    #[CurrentUser] JWTUser $user,
+    #[CurrentUser] JwtUser $user,
     string $id,
     string $itemId,
   ): ApiResponse {

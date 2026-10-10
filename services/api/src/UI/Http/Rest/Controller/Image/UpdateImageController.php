@@ -22,7 +22,7 @@ final readonly class UpdateImageController {
   
   public function __invoke(
     #[MapRequestPayload] UpdateImageCommand $command,
-    #[CurrentUser] JWTUser $user,
+    #[CurrentUser] JwtUser $user,
     string $id
   ): ApiResponse {
     $this->handle($command->withContext([

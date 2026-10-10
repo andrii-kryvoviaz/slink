@@ -22,7 +22,7 @@ final readonly class GetImageBookmarkersController {
 
   public function __invoke(
     #[MapQueryString] GetImageBookmarkersQuery $query,
-    #[CurrentUser] JWTUser $user,
+    #[CurrentUser] JwtUser $user,
     string $imageId,
   ): ApiResponse {
     $bookmarkers = $this->ask(

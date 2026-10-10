@@ -30,7 +30,7 @@ final class GetImageListController {
 
   public function __invoke(
     #[MapQueryString] GetImageListQuery $query,
-    #[CurrentUser] ?JWTUser             $user = null,
+    #[CurrentUser] ?JwtUser             $user = null,
   ): ApiResponse {
     $resourceContext = new ImageResourceContext(
       groups: ['public', 'bookmark', 'license'],

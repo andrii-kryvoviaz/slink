@@ -22,7 +22,7 @@ final readonly class GetUserBookmarksController {
 
   public function __invoke(
     #[MapQueryString] GetUserBookmarksQuery $query,
-    #[CurrentUser] JWTUser $user,
+    #[CurrentUser] JwtUser $user,
   ): ApiResponse {
     $bookmarks = $this->ask(
       $query->withContext(['userId' => $user->getIdentifier()])

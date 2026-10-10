@@ -37,8 +37,6 @@ final class HashedPasswordType extends StringType
    * @param HashedPassword|string|null $value
    * @param AbstractPlatform $platform
    * @return HashedPassword|null
-   *
-   * @throws ConversionException
    */
     public function convertToPHPValue($value, AbstractPlatform $platform): ?HashedPassword {
         if (null === $value || $value instanceof HashedPassword) {

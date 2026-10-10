@@ -23,7 +23,7 @@ final readonly class RemoveBookmarkController {
   use QueryTrait;
 
   public function __invoke(
-    #[CurrentUser] JWTUser $user,
+    #[CurrentUser] JwtUser $user,
     string $imageId,
   ): ApiResponse {
     $command = new RemoveBookmarkCommand($imageId);

@@ -23,7 +23,7 @@ final readonly class AddBookmarkController {
   use QueryTrait;
 
   public function __invoke(
-    #[CurrentUser] JWTUser $user,
+    #[CurrentUser] JwtUser $user,
     string $imageId,
   ): ApiResponse {
     $command = new AddBookmarkCommand($imageId);

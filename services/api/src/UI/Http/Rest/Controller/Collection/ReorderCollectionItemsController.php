@@ -21,7 +21,7 @@ final readonly class ReorderCollectionItemsController {
   use CommandTrait;
 
   public function __invoke(
-    #[CurrentUser] JWTUser $user,
+    #[CurrentUser] JwtUser $user,
     #[MapRequestPayload] ReorderCollectionItemsCommand $command,
   ): ApiResponse {
     $this->handleSync($command->withContext(['userId' => $user->getIdentifier()]));

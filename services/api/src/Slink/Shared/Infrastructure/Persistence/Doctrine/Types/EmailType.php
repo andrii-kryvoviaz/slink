@@ -36,8 +36,6 @@ final class EmailType extends StringType {
    * @param Email|string|null $value
    * @param AbstractPlatform $platform
    * @return Email|null
-   *
-   * @throws ConversionException
    */
     public function convertToPHPValue($value, AbstractPlatform $platform): ?Email {
         if (null === $value || $value instanceof Email) {

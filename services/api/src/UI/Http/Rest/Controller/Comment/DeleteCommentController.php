@@ -20,7 +20,7 @@ final readonly class DeleteCommentController {
   use CommandTrait;
 
   public function __invoke(
-    #[CurrentUser] JWTUser $user,
+    #[CurrentUser] JwtUser $user,
     string $commentId,
   ): ApiResponse {
     $command = new DeleteCommentCommand();

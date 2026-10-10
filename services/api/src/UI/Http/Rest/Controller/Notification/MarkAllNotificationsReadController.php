@@ -20,7 +20,7 @@ final readonly class MarkAllNotificationsReadController {
   use CommandTrait;
 
   public function __invoke(
-    #[CurrentUser] JWTUser $user,
+    #[CurrentUser] JwtUser $user,
   ): ApiResponse {
     $command = new MarkAllNotificationsReadCommand();
     $this->handle($command->withContext([

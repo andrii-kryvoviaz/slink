@@ -20,7 +20,7 @@ final readonly class GetBookmarkStatusController {
   use QueryTrait;
 
   public function __invoke(
-    #[CurrentUser] JWTUser $user,
+    #[CurrentUser] JwtUser $user,
     string $imageId,
   ): ApiResponse {
     $query = new GetBookmarkStatusQuery($imageId);

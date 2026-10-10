@@ -22,7 +22,7 @@ final readonly class DeleteCollectionController {
 
   public function __invoke(
     #[MapRequestPayload] DeleteCollectionCommand $command,
-    #[CurrentUser] JWTUser $user,
+    #[CurrentUser] JwtUser $user,
   ): ApiResponse {
     $this->handleSync($command->withContext(['userId' => $user->getIdentifier()]));
 

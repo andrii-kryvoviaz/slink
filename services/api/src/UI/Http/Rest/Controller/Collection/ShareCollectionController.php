@@ -34,7 +34,7 @@ final readonly class ShareCollectionController {
   ) {}
 
   public function __invoke(
-    #[CurrentUser] JWTUser $user,
+    #[CurrentUser] JwtUser $user,
     string $id,
   ): ApiResponse {
     $query = new GetCollectionQuery($id);
