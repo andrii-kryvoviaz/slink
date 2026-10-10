@@ -323,7 +323,30 @@ class SvgSanitizerTest extends TestCase {
     #[Test]
     public function itRemovesXmlEntitiesAndDtdInjection(): void {
         $sanitizer = new SvgSanitizer();
-        
+
+        $maliciousSvg = '<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg [
+  <!ENTITY xxe SYSTEM "file:///etc/passwd">
+  <!ENTITY js "javascript:alert(\'DTD_XSS\')">
+]>
+<svg xmlns="http://www.w3.org/2000/svg">
+  <rect x="10" y="10" width="50" height="50" />
+</svg>';
+
+        $sanitizedSvg = $sanitizer->sanitize($maliciousSvg);
+
+        $this->assertStringNotContainsString('<!DOCTYPE', $sanitizedSvg);
+        $this->assertStringNotContainsString('<!ENTITY', $sanitizedSvg);
+        $this->assertStringNotContainsString('SYSTEM', $sanitizedSvg);
+        $this->assertStringNotContainsString('file:///', $sanitizedSvg);
+        $this->assertStringNotContainsString('javascript:', $sanitizedSvg);
+        $this->assertStringContainsString('<rect', $sanitizedSvg);
+    }
+
+    #[Test]
+    public function itRejectsSvgReferencingDtdEntities(): void {
+        $sanitizer = new SvgSanitizer();
+
         $maliciousSvg = '<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE svg [
   <!ENTITY xxe SYSTEM "file:///etc/passwd">
@@ -332,19 +355,11 @@ class SvgSanitizerTest extends TestCase {
 <svg xmlns="http://www.w3.org/2000/svg">
   <text>&xxe;</text>
   <a href="&js;">Click me</a>
-  <rect x="10" y="10" width="50" height="50" />
 </svg>';
-        
-        $sanitizedSvg = $sanitizer->sanitize($maliciousSvg);
-        
-        $this->assertStringNotContainsString('<!DOCTYPE', $sanitizedSvg);
-        $this->assertStringNotContainsString('<!ENTITY', $sanitizedSvg);
-        $this->assertStringNotContainsString('SYSTEM', $sanitizedSvg);
-        $this->assertStringNotContainsString('file:///', $sanitizedSvg);
-        $this->assertStringNotContainsString('javascript:', $sanitizedSvg);
-        $this->assertStringNotContainsString('&xxe;', $sanitizedSvg);
-        $this->assertStringNotContainsString('&js;', $sanitizedSvg);
-        $this->assertStringContainsString('<rect', $sanitizedSvg);
+
+        $this->expectException(UnsanitizableImageException::class);
+
+        $sanitizer->sanitize($maliciousSvg);
     }
     
     #[Test]
