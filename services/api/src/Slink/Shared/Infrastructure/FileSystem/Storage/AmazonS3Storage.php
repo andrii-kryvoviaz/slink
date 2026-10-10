@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Slink\Shared\Infrastructure\FileSystem\Storage;
 
+use Aws\S3\BatchDelete;
 use Aws\S3\S3Client;
 use GuzzleHttp\Psr7\StreamWrapper;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
@@ -45,7 +46,7 @@ final class AmazonS3Storage extends AbstractStorage implements ObjectStorageInte
   public function delete(string $fileName): void {
     $name = BaseFileName::fromFileName($fileName)->toString();
 
-    $this->deleteByPrefix($name);
+    $this->deleteObjectsByPrefix($this->cachePath($name . '-'), [$fileName]);
   }
   
   protected function deletePath(string $path): void {
@@ -57,10 +58,6 @@ final class AmazonS3Storage extends AbstractStorage implements ObjectStorageInte
     } catch (\Exception $e) {
       throw new AmazonS3Exception($e->getMessage());
     }
-  }
-
-  public function deleteByPrefix(string $prefix): void {
-    $this->deleteObjectsByPrefix($prefix);
   }
   
   public function exists(string $path): bool {
@@ -128,38 +125,39 @@ final class AmazonS3Storage extends AbstractStorage implements ObjectStorageInte
     return StorageProvider::AmazonS3->value;
   }
   
-  private function deleteObjectsByPrefix(string $prefix): int {
+  /**
+   * @param list<string> $extraKeys
+   */
+  private function deleteObjectsByPrefix(string $prefix, array $extraKeys = []): int {
     try {
       $bucket = $this->settings->getBucket();
-      $pages = $this->client->getPaginator('ListObjectsV2', ['Bucket' => $bucket, 'Prefix' => $prefix]);
-      $count = 0;
+      $objects = $this->objectsToDelete($bucket, $prefix, $extraKeys);
       
-      foreach ($pages as $page) {
-        $count += $this->deleteKeys($bucket, array_column($page['Contents'] ?? [], 'Key'));
-      }
+      BatchDelete::fromIterator($this->client, $bucket, $objects)->delete();
       
-      return $count;
+      return $objects->getReturn();
     } catch (\Exception $e) {
       throw new AmazonS3Exception($e->getMessage());
     }
   }
   
   /**
-   * @param list<string> $keys
+   * @param list<string> $extraKeys
+   * @return \Generator<int, array{Key: string}, mixed, int>
    */
-  private function deleteKeys(string $bucket, array $keys): int {
-    if ($keys === []) {
-      return 0;
+  private function objectsToDelete(string $bucket, string $prefix, array $extraKeys): \Generator {
+    foreach ($extraKeys as $key) {
+      yield ['Key' => $key];
     }
     
-    $this->client->deleteObjects([
-      'Bucket' => $bucket,
-      'Delete' => [
-        'Objects' => array_map(static fn(string $key): array => ['Key' => $key], $keys),
-        'Quiet' => true,
-      ],
-    ]);
+    $count = 0;
+    $listedKeys = $this->client->getPaginator('ListObjectsV2', ['Bucket' => $bucket, 'Prefix' => $prefix])->search('Contents[].Key');
     
-    return count($keys);
+    foreach ($listedKeys as $key) {
+      $count++;
+      yield ['Key' => $key];
+    }
+    
+    return $count;
   }
 }

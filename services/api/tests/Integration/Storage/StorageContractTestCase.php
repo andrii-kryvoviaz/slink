@@ -7,6 +7,7 @@ namespace Tests\Integration\Storage;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
+use Slink\Shared\Domain\ValueObject\BaseFileName;
 use Slink\Shared\Infrastructure\FileSystem\Storage\AbstractStorage;
 use Slink\Shared\Domain\FileSystem\Storage\DirectoryStorageInterface;
 use Slink\Shared\Domain\FileSystem\Storage\ObjectStorageInterface;
@@ -250,6 +251,35 @@ abstract class StorageContractTestCase extends TestCase {
   }
 
   #[Test]
+  public function itDeletesImageCacheVariantsButKeepsOtherImageVariantsAndCollectionCover(): void {
+    $fileName = $this->uniqueFileName('variants', 'jpg');
+    $stem = BaseFileName::fromFileName($fileName)->toString();
+    $otherStem = BaseFileName::fromFileName($this->uniqueFileName('other-variants', 'jpg'))->toString();
+    $variants = [$stem . '-w200.jpg', $stem . '-w300-h300-crop.jpg', $stem . '-w200.webp'];
+    $survivors = [$otherStem . '-w200.jpg', $stem . '.avif'];
+
+    $this->uploadFixture($fileName);
+    $this->writeCacheEntries([...$variants, ...$survivors]);
+
+    $this->storage()->delete($fileName);
+
+    self::assertFalse(
+      $this->storage()->exists($this->imagePath($fileName)),
+      $this->describe('delete must remove the original ' . $fileName),
+    );
+    self::assertSame(
+      [],
+      array_values(array_filter($variants, $this->storage()->existsInCache(...))),
+      $this->describe('delete must remove every cache variant of ' . $fileName),
+    );
+    self::assertSame(
+      $survivors,
+      array_values(array_filter($survivors, $this->storage()->existsInCache(...))),
+      $this->describe('delete must keep another image\'s variants and a collection cover sharing the stem'),
+    );
+  }
+
+  #[Test]
   public function itClearsRemoteCacheEntries(): void {
     $first = $this->uniqueFileName('clear-one', 'txt');
     $second = $this->uniqueFileName('clear-two', 'txt');
@@ -310,6 +340,15 @@ abstract class StorageContractTestCase extends TestCase {
   protected function uploadFixture(string $fileName): void {
     $this->storage()->upload(new File(self::fixturePath()), $fileName);
     self::$uploadedFileNames[] = $fileName;
+  }
+
+  /**
+   * @param list<string> $fileNames
+   */
+  protected function writeCacheEntries(array $fileNames): void {
+    foreach ($fileNames as $fileName) {
+      $this->storage()->writeToCache($fileName, 'cached ' . $fileName);
+    }
   }
 
   protected function describe(string $message): string {

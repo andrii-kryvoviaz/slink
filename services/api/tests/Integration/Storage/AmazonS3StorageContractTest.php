@@ -6,6 +6,7 @@ namespace Tests\Integration\Storage;
 
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Slink\Shared\Domain\ValueObject\BaseFileName;
 use Slink\Shared\Infrastructure\Encryption\EncryptionRegistry;
 use Slink\Shared\Infrastructure\Encryption\EncryptionService;
 use Slink\Shared\Infrastructure\FileSystem\Storage\AbstractStorage;
@@ -44,7 +45,7 @@ final class AmazonS3StorageContractTest extends StorageContractTestCase {
   #[Test]
   public function itClearsCacheBeyondSingleListingPage(): void {
     $this->storage()->clearCache();
-    $this->writeBulkCacheEntries('bulk-clear');
+    $this->writeBulkCacheEntries($this->uniqueFileName('bulk-clear', 'jpg'));
 
     self::assertSame(
       self::BULK_OBJECT_COUNT,
@@ -59,29 +60,27 @@ final class AmazonS3StorageContractTest extends StorageContractTestCase {
   }
 
   #[Test]
-  public function itDeletesByPrefixBeyondSingleListingPage(): void {
-    $storage = $this->storage();
-    self::assertInstanceOf(AmazonS3Storage::class, $storage);
+  public function itDeletesImageCacheVariantsBeyondSingleListingPage(): void {
+    $this->storage()->clearCache();
+    $fileName = $this->uniqueFileName('bulk-variants', 'jpg');
+    $this->uploadFixture($fileName);
+    $this->writeBulkCacheEntries($fileName);
 
-    $storage->clearCache();
-    $prefix = $this->writeBulkCacheEntries('bulk-prefix');
+    $this->storage()->delete($fileName);
 
-    $storage->deleteByPrefix($prefix);
-
+    self::assertFalse(
+      $this->storage()->exists($this->imagePath($fileName)),
+      $this->describe('delete must remove the original ' . $fileName . ' alongside more than one listing page of variants'),
+    );
     self::assertSame(
       0,
-      $storage->clearCache(),
-      $this->describe('deleteByPrefix must remove every object under ' . $prefix . ' across all listing pages'),
+      $this->storage()->clearCache(),
+      $this->describe('delete must remove every cache variant of ' . $fileName . ' across all listing pages'),
     );
   }
 
-  private function writeBulkCacheEntries(string $label): string {
-    $prefix = $this->storage()->cachePath($this->uniqueFileName($label, ''));
-
-    for ($index = 0; $index < self::BULK_OBJECT_COUNT; $index++) {
-      $this->storage()->write($prefix . $index, 'x');
-    }
-
-    return $prefix;
+  private function writeBulkCacheEntries(string $fileName): void {
+    $stem = BaseFileName::fromFileName($fileName)->toString();
+    $this->writeCacheEntries(array_map(static fn(int $index): string => $stem . '-w' . $index . '.jpg', range(1, self::BULK_OBJECT_COUNT)));
   }
 }

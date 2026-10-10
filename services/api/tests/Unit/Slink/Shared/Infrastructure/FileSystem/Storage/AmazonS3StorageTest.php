@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Slink\Shared\Infrastructure\FileSystem\Storage;
 
+use Aws\CommandInterface;
+use Aws\MockHandler;
 use Aws\Result;
 use Aws\S3\S3Client;
 use GuzzleHttp\Psr7\Utils;
@@ -14,9 +16,21 @@ use Slink\Settings\Domain\Exception\S3CredentialsNotConfiguredException;
 use Slink\Settings\Domain\Exception\S3RegionNotConfiguredException;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Settings\Domain\ValueObject\Storage\AmazonS3StorageSettings;
+use Slink\Shared\Infrastructure\Exception\Storage\AmazonS3Exception;
 use Slink\Shared\Infrastructure\FileSystem\Storage\AmazonS3Storage;
 
 final class AmazonS3StorageTest extends TestCase {
+  private const int MOCK_HANDLER_CAPACITY = 8;
+
+  /** @var list<CommandInterface> */
+  private array $commands = [];
+
+  /** @var list<list<string>> */
+  private array $listedPages = [];
+
+  /** @var Result<int|string, mixed> */
+  private Result $deleteResult;
+
   #[Test]
   public function itThrowsExceptionWhenRegionIsMissingForAws(): void {
     $configProvider = $this->createConfigProvider([
@@ -205,20 +219,16 @@ final class AmazonS3StorageTest extends TestCase {
 
   #[Test]
   public function itDerivesDeletePrefixFromFullStemForMultiDotNames(): void {
-    $listing = null;
-    $deletedBatches = [];
-    $storage = $this->createStorageWithClient($this->createListingClient([[]], $listing, $deletedBatches));
+    $storage = $this->createRecordingStorage([[]]);
 
     $storage->delete('img.2024-06-24.avif');
 
-    $this->assertSame('img.2024-06-24', $listing['Prefix'] ?? null);
+    $this->assertSame('cache/img.2024-06-24-', $this->listingRequests()[0]['Prefix'] ?? null);
   }
 
   #[Test]
   public function itDerivesDeletePrefixForExtensionlessFileName(): void {
-    $listing = null;
-    $deletedBatches = [];
-    $storage = $this->createStorageWithClient($this->createListingClient([[]], $listing, $deletedBatches));
+    $storage = $this->createRecordingStorage([[]]);
 
     set_error_handler(function(int $errno, string $errstr): bool {
       throw new \ErrorException($errstr, 0, $errno);
@@ -230,105 +240,161 @@ final class AmazonS3StorageTest extends TestCase {
       restore_error_handler();
     }
 
-    $this->assertSame('nodotname', $listing['Prefix'] ?? null);
+    $this->assertSame('cache/nodotname-', $this->listingRequests()[0]['Prefix'] ?? null);
+    $this->assertSame([['nodotname']], $this->deletedBatches());
   }
 
   #[Test]
-  public function itDeletesByPrefixAcrossAllListedPages(): void {
-    $listing = null;
-    $deletedBatches = [];
-    $pages = [$this->listedPage('img-a.jpg', 'img-b.jpg'), $this->listedPage('img-c.jpg')];
-    $storage = $this->createStorageWithClient($this->createListingClient($pages, $listing, $deletedBatches));
+  public function itDeletesOriginalAlongsideCacheVariantsAcrossAllListedPages(): void {
+    $storage = $this->createRecordingStorage([['cache/img-w200.jpg', 'cache/img-w300-h300-crop.jpg'], ['cache/img-w200.webp']]);
 
-    $storage->deleteByPrefix('img');
+    $storage->delete('img.jpg');
 
-    $this->assertSame(['operation' => 'ListObjectsV2', 'Bucket' => 'my-bucket', 'Prefix' => 'img'], $listing);
-    $this->assertSame([['img-a.jpg', 'img-b.jpg'], ['img-c.jpg']], $deletedBatches);
+    $this->assertSame([
+      ['Bucket' => 'my-bucket', 'Prefix' => 'cache/img-'],
+      ['Bucket' => 'my-bucket', 'Prefix' => 'cache/img-', 'ContinuationToken' => '1'],
+    ], $this->listingRequests());
+    $this->assertSame([['img.jpg', 'cache/img-w200.jpg', 'cache/img-w300-h300-crop.jpg', 'cache/img-w200.webp']], $this->deletedBatches());
+  }
+
+  #[Test]
+  public function itDeletesOnlyOriginalWhenImageHasNoCacheVariants(): void {
+    $storage = $this->createRecordingStorage([[]]);
+
+    $storage->delete('img.jpg');
+
+    $this->assertSame(['ListObjectsV2', 'DeleteObjects'], $this->commandNames());
+    $this->assertSame([['img.jpg']], $this->deletedBatches());
+  }
+
+  #[Test]
+  public function itSplitsDeleteBatchesAtTheThousandKeyLimit(): void {
+    $variants = array_map(static fn(int $index): string => sprintf('cache/img-w%d.jpg', $index), range(1, 1000));
+    $storage = $this->createRecordingStorage([$variants]);
+
+    $storage->delete('img.jpg');
+
+    $this->assertSame([1000, 1], array_map(count(...), $this->deletedBatches()));
+    $this->assertSame(['img.jpg', ...$variants], array_merge(...$this->deletedBatches()));
+  }
+
+  #[Test]
+  public function itThrowsWhenDeleteObjectsReportsPerKeyErrors(): void {
+    $storage = $this->createRecordingStorage(
+      [['cache/img-w200.jpg']],
+      new Result(['Errors' => [['Key' => 'cache/img-w200.jpg', 'Code' => 'AccessDenied', 'Message' => 'Access Denied']]]),
+    );
+
+    $this->expectException(AmazonS3Exception::class);
+    $this->expectExceptionMessage('AccessDenied');
+
+    $storage->delete('img.jpg');
   }
 
   #[Test]
   public function itClearsCacheAcrossAllListedPagesAndReturnsSummedCount(): void {
-    $listing = null;
-    $deletedBatches = [];
-    $pages = [$this->listedPage('cache/a.jpg', 'cache/b.jpg'), $this->listedPage('cache/c.jpg')];
-    $storage = $this->createStorageWithClient($this->createListingClient($pages, $listing, $deletedBatches));
+    $storage = $this->createRecordingStorage([['cache/a.jpg', 'cache/b.jpg'], ['cache/c.jpg']]);
 
     $count = $storage->clearCache();
 
     $this->assertSame(3, $count);
-    $this->assertSame(['operation' => 'ListObjectsV2', 'Bucket' => 'my-bucket', 'Prefix' => 'cache/'], $listing);
-    $this->assertSame([['cache/a.jpg', 'cache/b.jpg'], ['cache/c.jpg']], $deletedBatches);
+    $this->assertSame([
+      ['Bucket' => 'my-bucket', 'Prefix' => 'cache/'],
+      ['Bucket' => 'my-bucket', 'Prefix' => 'cache/', 'ContinuationToken' => '1'],
+    ], $this->listingRequests());
+    $this->assertSame([['cache/a.jpg', 'cache/b.jpg', 'cache/c.jpg']], $this->deletedBatches());
   }
 
   #[Test]
   public function itSkipsDeletionWhenCacheListingIsEmpty(): void {
-    $listing = null;
-    $deletedBatches = [];
-    $storage = $this->createStorageWithClient($this->createListingClient([[]], $listing, $deletedBatches));
+    $storage = $this->createRecordingStorage([[]]);
 
     $count = $storage->clearCache();
 
     $this->assertSame(0, $count);
-    $this->assertSame([], $deletedBatches);
+    $this->assertSame(['ListObjectsV2'], $this->commandNames());
   }
 
   /**
-   * @return array<string, mixed>
+   * @param list<list<string>> $listedPages
+   * @param Result<int|string, mixed> $deleteResult
    */
-  private function listedPage(string ...$keys): array {
-    return ['Contents' => array_map(static fn(string $key): array => ['Key' => $key], $keys)];
+  private function createRecordingStorage(array $listedPages, Result $deleteResult = new Result([])): AmazonS3Storage {
+    $this->listedPages = $listedPages;
+    $this->deleteResult = $deleteResult;
+
+    return $this->createStorageWithHandler(new MockHandler(array_fill(0, self::MOCK_HANDLER_CAPACITY, $this->respondTo(...))));
   }
 
   /**
-   * @param list<array<string, mixed>> $pages
-   * @param array<string, mixed>|null $listing
-   * @param list<list<string>> $deletedBatches
+   * @return Result<int|string, mixed>
    */
-  private function createListingClient(array $pages, ?array &$listing, array &$deletedBatches): S3Client {
-    return new class($pages, $listing, $deletedBatches) extends S3Client {
-      /** @var \Closure(string, array<string, mixed>): void */
-      private \Closure $recordListing;
+  private function listingResult(int $page): Result {
+    $lastPage = count($this->listedPages) - 1;
+    $listing = ['IsTruncated' => $page < $lastPage];
 
-      /** @var \Closure(array<string, mixed>): void */
-      private \Closure $recordDeletion;
+    if ($this->listedPages[$page] !== []) {
+      $listing['Contents'] = array_map(static fn(string $key): array => ['Key' => $key], $this->listedPages[$page]);
+    }
 
-      /**
-       * @param list<array<string, mixed>> $pages
-       * @param array<string, mixed>|null $listing
-       * @param list<list<string>> $deletedBatches
-       */
-      public function __construct(private readonly array $pages, ?array &$listing, array &$deletedBatches) {
-        $this->recordListing = static function(string $name, array $args) use (&$listing): void {
-          $listing = ['operation' => $name, ...$args];
-        };
-        $this->recordDeletion = static function(array $args) use (&$deletedBatches): void {
-          $deletedBatches[] = array_column($args['Delete']['Objects'], 'Key');
-        };
-      }
+    if ($page < $lastPage) {
+      $listing['NextContinuationToken'] = (string) ($page + 1);
+    }
 
-      /**
-       * @param array<string, mixed> $args
-       * @return \Iterator<int, \ArrayAccess<string, mixed>>
-       */
-      public function getPaginator($name, array $args = []): \Iterator {
-        ($this->recordListing)($name, $args);
-
-        return new \ArrayIterator(array_map(static fn(array $page): Result => new Result($page), $this->pages));
-      }
-
-      /**
-       * @param array<string, mixed> $args
-       * @return Result<int|string, mixed>
-       */
-      public function deleteObjects(array $args = []): Result {
-        ($this->recordDeletion)($args);
-
-        return new Result([]);
-      }
-    };
+    return new Result($listing);
   }
 
-  private function createStorageWithClient(S3Client $client): AmazonS3Storage {
+  /**
+   * @return Result<int|string, mixed>
+   */
+  private function respondTo(CommandInterface $command): Result {
+    $this->commands[] = $command;
+
+    if ($command->getName() === 'ListObjectsV2') {
+      return $this->listingResult((int) ($command['ContinuationToken'] ?? 0));
+    }
+
+    return $this->deleteResult;
+  }
+
+  /**
+   * @return list<string>
+   */
+  private function commandNames(): array {
+    return array_map(static fn(CommandInterface $command): string => $command->getName(), $this->commands);
+  }
+
+  /**
+   * @return list<array<string, mixed>>
+   */
+  private function listingRequests(): array {
+    $listingKeys = array_flip(['Bucket', 'Prefix', 'ContinuationToken']);
+
+    return array_map(static fn(CommandInterface $command): array => array_intersect_key($command->toArray(), $listingKeys), $this->commandsNamed('ListObjectsV2'));
+  }
+
+  /**
+   * @return list<list<string>>
+   */
+  private function deletedBatches(): array {
+    return array_map(static fn(CommandInterface $command): array => array_column($command['Delete']['Objects'], 'Key'), $this->commandsNamed('DeleteObjects'));
+  }
+
+  /**
+   * @return list<CommandInterface>
+   */
+  private function commandsNamed(string $name): array {
+    return array_values(array_filter($this->commands, static fn(CommandInterface $command): bool => $command->getName() === $name));
+  }
+
+  private function createStorageWithHandler(MockHandler $handler): AmazonS3Storage {
+    $client = new S3Client([
+      'region' => 'us-east-1',
+      'version' => 'latest',
+      'credentials' => ['key' => 'access-key', 'secret' => 'secret-key'],
+      'handler' => $handler,
+    ]);
+
     $settings = $this->createStub(AmazonS3StorageSettings::class);
     $settings->method('getBucket')->willReturn('my-bucket');
 
@@ -342,29 +408,7 @@ final class AmazonS3StorageTest extends TestCase {
   }
 
   private function createStorageWithObjectBytes(string $bytes): AmazonS3Storage {
-    $client = new class($bytes) extends S3Client {
-      public function __construct(private readonly string $bytes) {
-      }
-
-      /**
-       * @param array<string, mixed> $args
-       * @return Result<int|string, mixed>
-       */
-      public function getObject(array $args = []): Result {
-        return new Result(['Body' => Utils::streamFor($this->bytes)]);
-      }
-    };
-
-    $settings = $this->createStub(AmazonS3StorageSettings::class);
-    $settings->method('getBucket')->willReturn('my-bucket');
-
-    $reflection = new \ReflectionClass(AmazonS3Storage::class);
-    $storage = $reflection->newInstanceWithoutConstructor();
-
-    $reflection->getProperty('client')->setValue($storage, $client);
-    $reflection->getProperty('settings')->setValue($storage, $settings);
-
-    return $storage;
+    return $this->createStorageWithHandler(new MockHandler([new Result(['Body' => Utils::streamFor($bytes)])]));
   }
 
   private function countTemporaryCopies(): int {
