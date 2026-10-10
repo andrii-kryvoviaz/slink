@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Integration\Storage;
 
 use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use Slink\Shared\Infrastructure\Encryption\EncryptionRegistry;
 use Slink\Shared\Infrastructure\Encryption\EncryptionService;
 use Slink\Shared\Infrastructure\FileSystem\Storage\AbstractStorage;
@@ -12,6 +13,8 @@ use Slink\Shared\Infrastructure\FileSystem\Storage\AmazonS3Storage;
 
 #[Group('storage-integration')]
 final class AmazonS3StorageContractTest extends StorageContractTestCase {
+  private const int BULK_OBJECT_COUNT = 1001;
+
   #[\Override]
   protected static function backendName(): string {
     return 'S3';
@@ -36,5 +39,49 @@ final class AmazonS3StorageContractTest extends StorageContractTestCase {
       'storage.adapter.s3.forcePathStyle' => true,
       'storage.adapter.s3.useIamRole' => false,
     ]));
+  }
+
+  #[Test]
+  public function itClearsCacheBeyondSingleListingPage(): void {
+    $this->storage()->clearCache();
+    $this->writeBulkCacheEntries('bulk-clear');
+
+    self::assertSame(
+      self::BULK_OBJECT_COUNT,
+      $this->storage()->clearCache(),
+      $this->describe('clearCache must delete and count every cache entry across all listing pages'),
+    );
+    self::assertSame(
+      0,
+      $this->storage()->clearCache(),
+      $this->describe('no cache entry may remain after clearCache'),
+    );
+  }
+
+  #[Test]
+  public function itDeletesByPrefixBeyondSingleListingPage(): void {
+    $storage = $this->storage();
+    self::assertInstanceOf(AmazonS3Storage::class, $storage);
+
+    $storage->clearCache();
+    $prefix = $this->writeBulkCacheEntries('bulk-prefix');
+
+    $storage->deleteByPrefix($prefix);
+
+    self::assertSame(
+      0,
+      $storage->clearCache(),
+      $this->describe('deleteByPrefix must remove every object under ' . $prefix . ' across all listing pages'),
+    );
+  }
+
+  private function writeBulkCacheEntries(string $label): string {
+    $prefix = $this->storage()->cachePath($this->uniqueFileName($label, ''));
+
+    for ($index = 0; $index < self::BULK_OBJECT_COUNT; $index++) {
+      $this->storage()->write($prefix . $index, 'x');
+    }
+
+    return $prefix;
   }
 }

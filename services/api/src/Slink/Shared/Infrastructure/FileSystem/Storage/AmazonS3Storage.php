@@ -60,28 +60,7 @@ final class AmazonS3Storage extends AbstractStorage implements ObjectStorageInte
   }
 
   public function deleteByPrefix(string $prefix): void {
-    try {
-      $bucket = $this->settings->getBucket();
-      
-      $result = $this->client->listObjectsV2([
-        'Bucket' => $bucket,
-        'Prefix' => $prefix,
-      ]);
-      
-      if (!empty($result['Contents'])) {
-        $objectsToDelete = array_map(fn($object) => ['Key' => $object['Key']], $result['Contents']);
-        
-        $this->client->deleteObjects([
-          'Bucket' => $bucket,
-          'Delete' => [
-            'Objects' => $objectsToDelete,
-            'Quiet' => true,
-          ],
-        ]);
-      }
-    } catch (\Exception $e) {
-      throw new AmazonS3Exception($e->getMessage());
-    }
+    $this->deleteObjectsByPrefix($prefix);
   }
   
   public function exists(string $path): bool {
@@ -142,29 +121,22 @@ final class AmazonS3Storage extends AbstractStorage implements ObjectStorageInte
   }
 
   public function clearCache(): int {
+    return $this->deleteObjectsByPrefix($this->cacheDir . '/');
+  }
+  
+  public static function getAlias(): string {
+    return StorageProvider::AmazonS3->value;
+  }
+  
+  private function deleteObjectsByPrefix(string $prefix): int {
     try {
       $bucket = $this->settings->getBucket();
-      $cachePrefix = $this->cacheDir . '/';
+      $pages = $this->client->getPaginator('ListObjectsV2', ['Bucket' => $bucket, 'Prefix' => $prefix]);
+      $count = 0;
       
-      $result = $this->client->listObjectsV2([
-        'Bucket' => $bucket,
-        'Prefix' => $cachePrefix,
-      ]);
-      
-      if (empty($result['Contents'])) {
-        return 0;
+      foreach ($pages as $page) {
+        $count += $this->deleteKeys($bucket, array_column($page['Contents'] ?? [], 'Key'));
       }
-      
-      $objectsToDelete = array_map(fn($object) => ['Key' => $object['Key']], $result['Contents']);
-      $count = count($objectsToDelete);
-      
-      $this->client->deleteObjects([
-        'Bucket' => $bucket,
-        'Delete' => [
-          'Objects' => $objectsToDelete,
-          'Quiet' => true,
-        ],
-      ]);
       
       return $count;
     } catch (\Exception $e) {
@@ -172,7 +144,22 @@ final class AmazonS3Storage extends AbstractStorage implements ObjectStorageInte
     }
   }
   
-  public static function getAlias(): string {
-    return StorageProvider::AmazonS3->value;
+  /**
+   * @param list<string> $keys
+   */
+  private function deleteKeys(string $bucket, array $keys): int {
+    if ($keys === []) {
+      return 0;
+    }
+    
+    $this->client->deleteObjects([
+      'Bucket' => $bucket,
+      'Delete' => [
+        'Objects' => array_map(static fn(string $key): array => ['Key' => $key], $keys),
+        'Quiet' => true,
+      ],
+    ]);
+    
+    return count($keys);
   }
 }

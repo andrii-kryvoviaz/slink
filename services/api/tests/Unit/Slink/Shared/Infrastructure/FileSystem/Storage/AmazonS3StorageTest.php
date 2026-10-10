@@ -205,20 +205,20 @@ final class AmazonS3StorageTest extends TestCase {
 
   #[Test]
   public function itDerivesDeletePrefixFromFullStemForMultiDotNames(): void {
-    $capturedPrefix = null;
-    $client = $this->createPrefixCapturingClient($capturedPrefix);
-    $storage = $this->createStorageWithClient($client);
+    $listing = null;
+    $deletedBatches = [];
+    $storage = $this->createStorageWithClient($this->createListingClient([[]], $listing, $deletedBatches));
 
     $storage->delete('img.2024-06-24.avif');
 
-    $this->assertSame('img.2024-06-24', $capturedPrefix);
+    $this->assertSame('img.2024-06-24', $listing['Prefix'] ?? null);
   }
 
   #[Test]
   public function itDerivesDeletePrefixForExtensionlessFileName(): void {
-    $capturedPrefix = null;
-    $client = $this->createPrefixCapturingClient($capturedPrefix);
-    $storage = $this->createStorageWithClient($client);
+    $listing = null;
+    $deletedBatches = [];
+    $storage = $this->createStorageWithClient($this->createListingClient([[]], $listing, $deletedBatches));
 
     set_error_handler(function(int $errno, string $errstr): bool {
       throw new \ErrorException($errstr, 0, $errno);
@@ -230,28 +230,100 @@ final class AmazonS3StorageTest extends TestCase {
       restore_error_handler();
     }
 
-    $this->assertSame('nodotname', $capturedPrefix);
+    $this->assertSame('nodotname', $listing['Prefix'] ?? null);
   }
 
-  private function createPrefixCapturingClient(?string &$capturedPrefix): S3Client {
-    return new class($capturedPrefix) extends S3Client {
-      /** @var \Closure(array<string, mixed>): void */
-      private \Closure $capture;
+  #[Test]
+  public function itDeletesByPrefixAcrossAllListedPages(): void {
+    $listing = null;
+    $deletedBatches = [];
+    $pages = [$this->listedPage('img-a.jpg', 'img-b.jpg'), $this->listedPage('img-c.jpg')];
+    $storage = $this->createStorageWithClient($this->createListingClient($pages, $listing, $deletedBatches));
 
-      public function __construct(?string &$capturedPrefix) {
-        $this->capture = static function(array $args) use (&$capturedPrefix): void {
-          $capturedPrefix = $args['Prefix'] ?? null;
+    $storage->deleteByPrefix('img');
+
+    $this->assertSame(['operation' => 'ListObjectsV2', 'Bucket' => 'my-bucket', 'Prefix' => 'img'], $listing);
+    $this->assertSame([['img-a.jpg', 'img-b.jpg'], ['img-c.jpg']], $deletedBatches);
+  }
+
+  #[Test]
+  public function itClearsCacheAcrossAllListedPagesAndReturnsSummedCount(): void {
+    $listing = null;
+    $deletedBatches = [];
+    $pages = [$this->listedPage('cache/a.jpg', 'cache/b.jpg'), $this->listedPage('cache/c.jpg')];
+    $storage = $this->createStorageWithClient($this->createListingClient($pages, $listing, $deletedBatches));
+
+    $count = $storage->clearCache();
+
+    $this->assertSame(3, $count);
+    $this->assertSame(['operation' => 'ListObjectsV2', 'Bucket' => 'my-bucket', 'Prefix' => 'cache/'], $listing);
+    $this->assertSame([['cache/a.jpg', 'cache/b.jpg'], ['cache/c.jpg']], $deletedBatches);
+  }
+
+  #[Test]
+  public function itSkipsDeletionWhenCacheListingIsEmpty(): void {
+    $listing = null;
+    $deletedBatches = [];
+    $storage = $this->createStorageWithClient($this->createListingClient([[]], $listing, $deletedBatches));
+
+    $count = $storage->clearCache();
+
+    $this->assertSame(0, $count);
+    $this->assertSame([], $deletedBatches);
+  }
+
+  /**
+   * @return array<string, mixed>
+   */
+  private function listedPage(string ...$keys): array {
+    return ['Contents' => array_map(static fn(string $key): array => ['Key' => $key], $keys)];
+  }
+
+  /**
+   * @param list<array<string, mixed>> $pages
+   * @param array<string, mixed>|null $listing
+   * @param list<list<string>> $deletedBatches
+   */
+  private function createListingClient(array $pages, ?array &$listing, array &$deletedBatches): S3Client {
+    return new class($pages, $listing, $deletedBatches) extends S3Client {
+      /** @var \Closure(string, array<string, mixed>): void */
+      private \Closure $recordListing;
+
+      /** @var \Closure(array<string, mixed>): void */
+      private \Closure $recordDeletion;
+
+      /**
+       * @param list<array<string, mixed>> $pages
+       * @param array<string, mixed>|null $listing
+       * @param list<list<string>> $deletedBatches
+       */
+      public function __construct(private readonly array $pages, ?array &$listing, array &$deletedBatches) {
+        $this->recordListing = static function(string $name, array $args) use (&$listing): void {
+          $listing = ['operation' => $name, ...$args];
         };
+        $this->recordDeletion = static function(array $args) use (&$deletedBatches): void {
+          $deletedBatches[] = array_column($args['Delete']['Objects'], 'Key');
+        };
+      }
+
+      /**
+       * @param array<string, mixed> $args
+       * @return \Iterator<int, \ArrayAccess<string, mixed>>
+       */
+      public function getPaginator($name, array $args = []): \Iterator {
+        ($this->recordListing)($name, $args);
+
+        return new \ArrayIterator(array_map(static fn(array $page): Result => new Result($page), $this->pages));
       }
 
       /**
        * @param array<string, mixed> $args
        * @return Result<int|string, mixed>
        */
-      public function listObjectsV2(array $args = []): Result {
-        ($this->capture)($args);
+      public function deleteObjects(array $args = []): Result {
+        ($this->recordDeletion)($args);
 
-        return new Result(['Contents' => []]);
+        return new Result([]);
       }
     };
   }
