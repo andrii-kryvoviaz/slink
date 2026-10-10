@@ -12,10 +12,10 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
     return new Response('Missing topic parameter', { status: 400 });
   }
 
-  const jwt = cookies.get('mercureAuthorization');
+  const jwt = cookies.get('mercure_access_token');
 
   const targetUrl = new URL(mercureUrl);
-  targetUrl.searchParams.append('topic', topic);
+  targetUrl.searchParams.append('match', topic);
 
   const response = await fetch(targetUrl.toString(), {
     headers: {

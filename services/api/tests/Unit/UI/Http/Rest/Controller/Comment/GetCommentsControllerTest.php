@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\UI\Http\Rest\Controller\Comment;
 
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Comment\Application\Query\GetCommentsByImage\GetCommentsByImageQuery;
@@ -15,6 +16,7 @@ use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mercure\Authorization;
 use Symfony\Component\Mercure\HubRegistry;
+use Symfony\Component\Mercure\Jwt\DefaultClaimsTokenFactory;
 use Symfony\Component\Mercure\Jwt\LcobucciFactory;
 use Symfony\Component\Mercure\Jwt\StaticTokenProvider;
 use Symfony\Component\Mercure\MockHub;
@@ -22,6 +24,13 @@ use UI\Http\Rest\Controller\Comment\GetCommentsController;
 use UI\Http\Rest\Response\ApiResponse;
 
 final class GetCommentsControllerTest extends TestCase {
+  private const array CLAIMS = [
+    'iss' => 'slink',
+    'aud' => 'https://mercure.slink.example',
+    'sub' => 'slink',
+    'client_id' => 'slink',
+  ];
+
   #[Test]
   public function itReturnsCommentsSuccessfully(): void {
     $queryBus = $this->createMock(QueryBusInterface::class);
@@ -175,7 +184,8 @@ final class GetCommentsControllerTest extends TestCase {
   }
 
   #[Test]
-  public function itSetsMercureAuthorizationCookieOnSuccess(): void {
+  #[Group('sc-878')]
+  public function itSetsMercureAccessTokenCookieOnSuccess(): void {
     $queryBus = $this->createStub(QueryBusInterface::class);
     $imageId = 'image-123';
     $queryBus->method('ask')->willReturn(new Collection(0, 50, 0, []));
@@ -191,11 +201,51 @@ final class GetCommentsControllerTest extends TestCase {
     $cookie = array_values($cookies)[0] ?? null;
 
     $this->assertInstanceOf(Cookie::class, $cookie);
-    $this->assertSame('mercureAuthorization', $cookie->getName());
+    $this->assertSame('mercure_access_token', $cookie->getName());
     $this->assertSame('/sse', $cookie->getPath());
 
     $payload = base64_decode(strtr(explode('.', (string) $cookie->getValue())[1], '-_', '+/'));
     $this->assertStringContainsString('comments/image/image-123', $payload);
+  }
+
+  #[Test]
+  #[Group('sc-878')]
+  public function itMintsAccessTokenWithRegisteredClaimsAndExactCommentSubscribeGrant(): void {
+    $queryBus = $this->createStub(QueryBusInterface::class);
+    $queryBus->method('ask')->willReturn(new Collection(0, 50, 0, []));
+
+    $controller = new GetCommentsController();
+    $controller->setQueryBus($queryBus);
+
+    $request = new Request();
+    $before = time();
+    $controller($request, $this->createAuthorization(), 'image-123');
+
+    /** @var array<string, Cookie> $cookies */
+    $cookies = $request->attributes->get('_mercure_authorization_cookies', []);
+    $cookie = array_values($cookies)[0] ?? null;
+    $this->assertInstanceOf(Cookie::class, $cookie);
+
+    /** @var array<string, mixed> $payload */
+    $payload = json_decode(
+      (string) base64_decode(strtr(explode('.', (string) $cookie->getValue())[1], '-_', '+/')),
+      true,
+      512,
+      JSON_THROW_ON_ERROR,
+    );
+
+    $this->assertSame('slink', $payload['iss'] ?? null);
+    $this->assertSame(['https://mercure.slink.example'], (array) ($payload['aud'] ?? []));
+    $this->assertSame('slink', $payload['sub'] ?? null);
+    $this->assertSame('slink', $payload['client_id'] ?? null);
+    $this->assertIsNumeric($payload['exp'] ?? null);
+    $this->assertGreaterThanOrEqual($before + 1800, (int) $payload['exp']);
+    $this->assertLessThanOrEqual(time() + 1800, (int) $payload['exp']);
+    $this->assertSame([[
+      'type' => 'https://mercure.rocks/authorization-detail',
+      'actions' => ['subscribe'],
+      'topics' => [['match' => 'comments/image/image-123']],
+    ]], $payload['authorization_details'] ?? null);
   }
 
   #[Test]
@@ -221,8 +271,12 @@ final class GetCommentsControllerTest extends TestCase {
       'http://localhost:3333/.well-known/mercure',
       new StaticTokenProvider('test.jwt.token'),
       fn(): string => 'id',
-      new LcobucciFactory('a-string-that-is-at-least-256-bits-long-for-hs256'),
+      new DefaultClaimsTokenFactory(
+        new LcobucciFactory('a-string-that-is-at-least-256-bits-long-for-hs256'),
+        self::CLAIMS,
+      ),
       '/sse',
+      'mercure_access_token',
     );
 
     return new Authorization(new HubRegistry($hub), 1800);

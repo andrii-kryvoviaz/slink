@@ -31,7 +31,7 @@
         "symfony/flex": "^2",
         "symfony/framework-bundle": "^8.1",
         "symfony/lock": "8.1.*",
-        "symfony/mercure-bundle": "^0.4.2",
+        "symfony/mercure-bundle": "^0.6",
         "symfony/messenger": "^8.1",
         "symfony/mime": "^8.1",
         "symfony/monolog-bundle": "^4.0",

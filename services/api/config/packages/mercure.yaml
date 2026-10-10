@@ -6,4 +6,10 @@ mercure:
       jwt:
         secret: '%env(MERCURE_JWT_SECRET)%'
         publish: ['*']
+        claims:
+          iss: slink
+          sub: slink
+          client_id: slink
+          aud: https://mercure.slink.example
+      cookie_name: mercure_access_token
   default_cookie_lifetime: 1800

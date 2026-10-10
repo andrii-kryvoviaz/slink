@@ -13,11 +13,16 @@
 :3333 {
 	route {
 		mercure {
-			publisher_jwt {env.MERCURE_JWT_SECRET}
-			subscriber_jwt {env.MERCURE_JWT_SECRET}
-			anonymous {
-				subscribe comments/*
+			resource_identifier https://mercure.slink.example
+			issuer slink {
+				publisher {
+					jwt {env.MERCURE_JWT_SECRET} HS256
+				}
+				subscriber {
+					jwt {env.MERCURE_JWT_SECRET} HS256
+				}
 			}
+			anonymous
 			cors_origins *
 			publish_origins *
 			subscriptions

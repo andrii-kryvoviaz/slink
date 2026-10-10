@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\UI\Http\Rest\Controller\User;
 
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Shared\Application\Command\CommandBusInterface;
@@ -12,6 +13,7 @@ use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mercure\Authorization;
 use Symfony\Component\Mercure\HubRegistry;
+use Symfony\Component\Mercure\Jwt\DefaultClaimsTokenFactory;
 use Symfony\Component\Mercure\Jwt\LcobucciFactory;
 use Symfony\Component\Mercure\Jwt\StaticTokenProvider;
 use Symfony\Component\Mercure\MockHub;
@@ -38,7 +40,8 @@ final class LogOutControllerTest extends TestCase {
   }
 
   #[Test]
-  public function itClearsMercureAuthorizationCookie(): void {
+  #[Group('sc-878')]
+  public function itClearsMercureAccessTokenCookie(): void {
     $commandBus = $this->createStub(CommandBusInterface::class);
 
     $controller = new LogOutController();
@@ -52,7 +55,7 @@ final class LogOutControllerTest extends TestCase {
     $cookie = array_values($cookies)[0] ?? null;
 
     $this->assertInstanceOf(Cookie::class, $cookie);
-    $this->assertSame('mercureAuthorization', $cookie->getName());
+    $this->assertSame('mercure_access_token', $cookie->getName());
     $this->assertSame('/sse', $cookie->getPath());
     $this->assertNull($cookie->getValue());
     $this->assertLessThan(time(), $cookie->getExpiresTime());
@@ -63,8 +66,12 @@ final class LogOutControllerTest extends TestCase {
       'http://localhost:3333/.well-known/mercure',
       new StaticTokenProvider('test.jwt.token'),
       fn(): string => 'id',
-      new LcobucciFactory('a-string-that-is-at-least-256-bits-long-for-hs256'),
+      new DefaultClaimsTokenFactory(
+        new LcobucciFactory('a-string-that-is-at-least-256-bits-long-for-hs256'),
+        ['iss' => 'slink', 'aud' => 'https://mercure.slink.example', 'sub' => 'slink', 'client_id' => 'slink'],
+      ),
       '/sse',
+      'mercure_access_token',
     );
 
     return new Authorization(new HubRegistry($hub), 1800);

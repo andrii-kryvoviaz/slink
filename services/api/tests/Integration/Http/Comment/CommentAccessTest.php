@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Integration\Http\Comment;
 
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Cookie;
 use Tests\Integration\Http\HttpTestCase;
@@ -56,7 +57,7 @@ final class CommentAccessTest extends HttpTestCase {
 
   private function mercureCookie(): ?Cookie {
     foreach ($this->client->getResponse()->headers->getCookies() as $cookie) {
-      if ($cookie->getName() === 'mercureAuthorization') {
+      if ($cookie->getName() === 'mercure_access_token') {
         return $cookie;
       }
     }
@@ -67,12 +68,13 @@ final class CommentAccessTest extends HttpTestCase {
   private function assertMercureCookiePresent(): void {
     $cookie = $this->mercureCookie();
 
-    self::assertNotNull($cookie, 'Expected a mercureAuthorization cookie on granted comment reads.');
+    self::assertNotNull($cookie, 'Expected a mercure_access_token cookie on granted comment reads.');
     self::assertSame('/sse', $cookie->getPath());
     self::assertNotEmpty((string) $cookie->getValue());
   }
 
   #[Test]
+  #[Group('sc-878')]
   public function ownerViewsCommentsOnOwnPrivateImage(): void {
     $this->setAccessSettings([]);
     $this->bootActors();
@@ -92,6 +94,7 @@ final class CommentAccessTest extends HttpTestCase {
   }
 
   #[Test]
+  #[Group('sc-878')]
   public function anonymousIsDeniedOnPublicImageWhenUnauthenticatedAccessIsOff(): void {
     $this->setAccessSettings(['allowUnauthenticatedAccess' => false]);
     $this->bootActors();
@@ -102,6 +105,7 @@ final class CommentAccessTest extends HttpTestCase {
   }
 
   #[Test]
+  #[Group('sc-878')]
   public function nonOwnerIsDeniedOnPrivateImageWithoutCollection(): void {
     $this->setAccessSettings([]);
     $this->bootActors();
@@ -123,6 +127,42 @@ final class CommentAccessTest extends HttpTestCase {
   }
 
   #[Test]
+  #[Group('sc-878')]
+  public function grantedCommentReadMintsAccessTokenForTheHubResource(): void {
+    $this->setAccessSettings([]);
+    $this->bootActors();
+    $imageId = $this->uploadImage($this->ownerToken, false);
+
+    self::assertSame(200, $this->getComments($imageId, $this->ownerToken));
+
+    $cookie = $this->mercureCookie();
+    self::assertNotNull($cookie, 'Expected a mercure_access_token cookie on granted comment reads.');
+
+    /** @var array<string, mixed> $payload */
+    $payload = \json_decode(
+      (string) \base64_decode(\strtr(\explode('.', (string) $cookie->getValue())[1], '-_', '+/')),
+      true,
+      512,
+      JSON_THROW_ON_ERROR,
+    );
+
+    self::assertSame(['https://mercure.slink.example'], (array) ($payload['aud'] ?? []));
+    self::assertIsString($payload['iss'] ?? null);
+    self::assertNotSame('', $payload['iss']);
+    self::assertIsString($payload['sub'] ?? null);
+    self::assertNotSame('', $payload['sub']);
+    self::assertIsString($payload['client_id'] ?? null);
+    self::assertNotSame('', $payload['client_id']);
+    self::assertIsNumeric($payload['exp'] ?? null);
+    self::assertSame([[
+      'type' => 'https://mercure.rocks/authorization-detail',
+      'actions' => ['subscribe'],
+      'topics' => [['match' => \sprintf('comments/image/%s', $imageId)]],
+    ]], $payload['authorization_details'] ?? null);
+  }
+
+  #[Test]
+  #[Group('sc-878')]
   public function nonOwnerViewsCommentsOnPrivateImageInPublishedCollection(): void {
     $this->setAccessSettings([]);
     $this->bootActors();
@@ -133,6 +173,7 @@ final class CommentAccessTest extends HttpTestCase {
   }
 
   #[Test]
+  #[Group('sc-878')]
   public function anonymousViewsSharedCollectionCommentsWhenAuthNotRequired(): void {
     $this->setAccessSettings(['requireAuthForCollectionShares' => false]);
     $this->bootActors();
@@ -143,6 +184,7 @@ final class CommentAccessTest extends HttpTestCase {
   }
 
   #[Test]
+  #[Group('sc-878')]
   public function anonymousIsDeniedSharedCollectionCommentsWhenAuthRequired(): void {
     $this->setAccessSettings(['requireAuthForCollectionShares' => true]);
     $this->bootActors();
@@ -153,6 +195,7 @@ final class CommentAccessTest extends HttpTestCase {
   }
 
   #[Test]
+  #[Group('sc-878')]
   public function nonOwnerIsDeniedWhenCollectionShareIsUnpublished(): void {
     $this->setAccessSettings([]);
     $this->bootActors();
@@ -209,6 +252,7 @@ final class CommentAccessTest extends HttpTestCase {
   }
 
   #[Test]
+  #[Group('sc-878')]
   public function logoutExpiresMercureCookie(): void {
     $this->setAccessSettings([]);
     $this->createUser('logout@local.test', 'logoutuser', self::PASSWORD);
@@ -236,7 +280,7 @@ final class CommentAccessTest extends HttpTestCase {
     self::assertContains($status, [200, 204]);
 
     $cookie = $this->mercureCookie();
-    self::assertNotNull($cookie, 'Logout must send an expiring mercureAuthorization cookie.');
+    self::assertNotNull($cookie, 'Logout must send an expiring mercure_access_token cookie.');
     self::assertSame('/sse', $cookie->getPath());
     self::assertLessThanOrEqual(\time(), $cookie->getExpiresTime());
   }
