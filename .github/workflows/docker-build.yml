@@ -17,6 +17,11 @@ on:
         required: false
         type: string
         default: ""
+      version:
+        description: "Version without v prefix"
+        required: false
+        type: string
+        default: ""
     secrets:
       DOCKERHUB_USERNAME:
         required: true
@@ -62,6 +67,7 @@ jobs:
             *.cache-to=type=gha,scope=${{ matrix.scope }},mode=max
             *.labels.org.opencontainers.image.title=${{ vars.APP_NAME }}
             *.labels.org.opencontainers.image.version=${{ inputs.tag }}
+            *.args.VERSION=${{ inputs.version || inputs.tag }}
             *.labels.org.opencontainers.image.revision=${{ inputs.ref || github.sha }}
 
   manifest:

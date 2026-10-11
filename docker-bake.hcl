@@ -6,6 +6,7 @@ variable "GO_VERSION"                    { default = "1.27.2" }
 variable "X_NET_VERSION"                 { default = "0.61.0" }
 variable "ALPINE_VERSION"                { default = "3.24" }
 variable "COMPOSER_VERSION"              { default = "2" }
+variable "VERSION"                       { default = "dev" }
 variable "MEMORY_LIMIT"                  { default = "512" }
 variable "UPLOAD_MAX_FILESIZE_IN_BYTES"  { default = "52428800" }
 variable "USER_ID"                       { default = "1000" }
@@ -67,6 +68,7 @@ target "_prod-base" {
     ALPINE_VERSION               = ALPINE_VERSION
     COMPOSER_VERSION             = COMPOSER_VERSION
     UPLOAD_MAX_FILESIZE_IN_BYTES = UPLOAD_MAX_FILESIZE_IN_BYTES
+    VERSION                      = VERSION
   }
 }
 
