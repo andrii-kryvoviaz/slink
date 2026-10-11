@@ -38,6 +38,8 @@ purge:
 	docker compose -f docker/docker-compose.yaml down --rmi all --volumes --remove-orphans
 
 release:
-	@if [ -z $(version) ]; then echo "Version is required. Usage: make release version=x.x.x"; exit 1; fi
-	@echo "Releasing version $(version)"
-	gh workflow run release.yml -f version=$(version)
+	@if [ -z "$(version)" ]; then echo "Usage: make release version=x.y.z"; exit 1; fi
+	$(eval tag := v$(patsubst v%,%,$(version)))
+	git fetch origin main
+	git tag $(tag) origin/main
+	git push origin refs/tags/$(tag)

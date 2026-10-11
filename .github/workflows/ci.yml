@@ -4,6 +4,7 @@ on:
   workflow_call:
 
   push:
+    branches: ["**"]
     paths:
       - "services/**"
       - "docker/**"
