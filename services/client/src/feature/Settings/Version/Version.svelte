@@ -6,6 +6,7 @@
   import { UpdateCheckState } from '#lib/state/index.js';
   import { versionStore } from '#lib/stores/version.svelte.js';
   import { formatVersion, getVersionInfo } from '#lib/utils/version/index.js';
+  import { page } from '$app/state';
 
   import ReleaseModal from './ReleaseModal.svelte';
 
@@ -47,7 +48,7 @@
   const isClickable = $derived(showUpdateIndicator && release !== null);
 
   if (!$versionStore) {
-    versionStore.set(getVersionInfo());
+    versionStore.set(getVersionInfo(page.data.version));
   }
 
   onMount(async () => {

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Slink\Shared\Application\Service;
 
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 final readonly class ProjectMetadataExtractor {
@@ -15,7 +16,9 @@ final readonly class ProjectMetadataExtractor {
   
   public function __construct(
     protected KernelInterface $kernel,
-    protected ConfigurationProviderInterface $configurationProvider
+    protected ConfigurationProviderInterface $configurationProvider,
+    #[Autowire('%env(SLINK_VERSION)%')]
+    protected string $version
   ) {
     $packageJsonPath = $this->kernel->getEnvironment() === 'dev'
       ? '/../client/package.json'
@@ -27,7 +30,7 @@ final readonly class ProjectMetadataExtractor {
   }
   
   public function version(): string {
-    return $this->clientAppMetadata['version'] ?? 'N/A';
+    return $this->version;
   }
   
   /**

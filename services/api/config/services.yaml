@@ -3,6 +3,7 @@ imports:
   - { resource: 'services/*.yaml' }
 
 parameters:
+  env(SLINK_VERSION): 'dev'
   slink.runtime_dir: '/app/etc/runtime'
   image.public_max_width: 1920
 

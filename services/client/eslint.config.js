@@ -22,7 +22,6 @@ export default [
         ...globals.browser,
         ...globals.node,
         ...globals.builtin,
-        __APP_VERSION__: 'readonly',
         __BUILD_DATE__: 'readonly',
         __COMMIT_HASH__: 'readonly',
       },
@@ -57,7 +56,6 @@ export default [
       globals: {
         ...globals.browser,
         ...globals.node,
-        __APP_VERSION__: 'readonly',
         __BUILD_DATE__: 'readonly',
         __COMMIT_HASH__: 'readonly',
       },

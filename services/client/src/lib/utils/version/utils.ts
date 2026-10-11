@@ -1,5 +1,7 @@
 import { BUILD_GLOBALS, VERSION } from '#lib/constants/app.js';
 
+import { cleanVersion, isSemver } from './helpers.js';
+
 export interface VersionInfo {
   version: string;
   buildDate?: string;
@@ -9,10 +11,6 @@ export interface VersionInfo {
 
 function getGlobalValue(key: string, fallback?: string): string {
   switch (key) {
-    case BUILD_GLOBALS.APP_VERSION:
-      return typeof __APP_VERSION__ !== 'undefined'
-        ? __APP_VERSION__
-        : fallback || VERSION.UNKNOWN;
     case BUILD_GLOBALS.BUILD_DATE:
       return typeof __BUILD_DATE__ !== 'undefined'
         ? __BUILD_DATE__
@@ -30,7 +28,7 @@ function getGlobalValue(key: string, fallback?: string): string {
 
 export function getVersionInfo(serverVersion?: string): VersionInfo {
   return {
-    version: serverVersion || getGlobalValue(BUILD_GLOBALS.APP_VERSION),
+    version: serverVersion || VERSION.UNKNOWN,
     buildDate: getGlobalValue(
       BUILD_GLOBALS.BUILD_DATE,
       import.meta.env.VITE_BUILD_DATE,
@@ -48,7 +46,11 @@ export function formatVersion(info: VersionInfo): string {
     return '';
   }
 
-  let formatted = `${VERSION.PREFIX}${info.version}`;
+  let formatted = info.version;
+
+  if (isSemver(cleanVersion(info.version))) {
+    formatted = `${VERSION.PREFIX}${info.version}`;
+  }
 
   if (info.commitHash && info.commitHash !== VERSION.UNKNOWN) {
     formatted += ` (${info.commitHash.substring(0, VERSION.COMMIT_HASH_LENGTH)})`;

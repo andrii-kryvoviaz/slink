@@ -7,5 +7,6 @@ export const variables = defineEnvVars({
   MERCURE_HUB_URL: { schema: optional },
   NODE_ENV: { schema: optional },
   REQUIRE_SSL: { schema: optional },
+  SLINK_VERSION: { schema: (value: string | undefined) => value || 'dev' },
   SESSION_TTL_SECONDS: { schema: optional },
 });

@@ -37,6 +37,7 @@ declare global {
       userAgent: string;
       gatewayUrl: string;
       sidebarGroups?: AppSidebarGroup[];
+      version?: string;
       uploadPolicy?: UploadPolicy;
       user?: User | null;
     }
@@ -49,7 +50,6 @@ declare global {
     decodeHtmlEntities(): string;
   }
 
-  const __APP_VERSION__: string;
   const __BUILD_DATE__: string;
   const __COMMIT_HASH__: string;
 }

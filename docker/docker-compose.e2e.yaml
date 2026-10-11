@@ -8,3 +8,4 @@ services:
     environment:
       - ORIGIN=http://localhost:3100
       - SESSION_TTL_SECONDS=1209600
+      - SLINK_VERSION=${E2E_SLINK_VERSION:-dev}

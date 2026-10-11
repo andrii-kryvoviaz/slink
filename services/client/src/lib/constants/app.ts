@@ -18,7 +18,6 @@ export const VERSION = {
 } as const;
 
 export const BUILD_GLOBALS = {
-  APP_VERSION: '__APP_VERSION__',
   BUILD_DATE: '__BUILD_DATE__',
   COMMIT_HASH: '__COMMIT_HASH__',
 } as const;

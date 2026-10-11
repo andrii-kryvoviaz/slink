@@ -2,24 +2,12 @@ import adapter from '@sveltejs/adapter-node';
 import { type Config, sveltekit } from '@sveltejs/kit/vite';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import tailwindcss from '@tailwindcss/vite';
-import { readFileSync } from 'fs';
-import { join } from 'path';
 import { fileURLToPath } from 'url';
 import { defineConfig } from 'vite';
 import { wuchale } from 'wuchale/vite';
 
 import hookManifest from './plugins/vite-hook-manifest';
 import iconifyExport from './plugins/vite-iconify-export';
-
-const getPackageVersion = (): string => {
-  try {
-    return JSON.parse(
-      readFileSync(join(process.cwd(), 'package.json'), 'utf-8'),
-    ).version;
-  } catch {
-    return 'unknown';
-  }
-};
 
 export const svelteKitConfig: Config = {
   preprocess: vitePreprocess(),
@@ -76,6 +64,5 @@ export default defineConfig({
   define: {
     __BUILD_DATE__: JSON.stringify(new Date().toISOString()),
     __COMMIT_HASH__: JSON.stringify(process.env.VITE_COMMIT_HASH || 'unknown'),
-    __APP_VERSION__: JSON.stringify(getPackageVersion()),
   },
 });

@@ -1,6 +1,8 @@
 import { createAppSidebarItems } from '@slink/feature/Navigation/Sidebar/config';
 import type { AppSidebarGroup } from '@slink/feature/Navigation/Sidebar/types';
 
+import { SLINK_VERSION } from '$app/env/private';
+
 import { isAdmin, isAuthorized } from '@slink/lib/auth/utils';
 
 import type { LayoutServerLoad } from './$types';
@@ -41,5 +43,6 @@ export const load: LayoutServerLoad = async ({ depends, locals, request }) => {
     userAgent,
     gatewayUrl: await locals.gateway.url(),
     sidebarGroups,
+    version: SLINK_VERSION,
   };
 };

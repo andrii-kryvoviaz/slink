@@ -1,5 +1,9 @@
 import { CACHE } from '#lib/constants/app.js';
-import { cleanVersion, compareVersions } from '#lib/utils/version/helpers.js';
+import {
+  cleanVersion,
+  compareVersions,
+  isSemver,
+} from '#lib/utils/version/helpers.js';
 
 import { CacheService } from './cache.service';
 import { gitHubService } from './github.service';
@@ -23,6 +27,10 @@ class UpdateService {
       return this.createResult(currentVersion || 'unknown', {
         error: 'Invalid current version provided',
       });
+    }
+
+    if (!isSemver(cleanVersion(currentVersion))) {
+      return { hasUpdate: false, currentVersion };
     }
 
     let release = this.cache.get();

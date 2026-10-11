@@ -15,10 +15,15 @@ interface SemanticVersion {
   build?: string;
 }
 
+const SEMVER_REGEX =
+  /^(\d+)\.(\d+)\.(\d+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?$/;
+
+export function isSemver(version: string): boolean {
+  return SEMVER_REGEX.test(version);
+}
+
 function parseVersion(version: string): SemanticVersion {
-  const semverRegex =
-    /^(\d+)\.(\d+)\.(\d+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?$/;
-  const match = version.match(semverRegex);
+  const match = version.match(SEMVER_REGEX);
 
   if (!match) {
     throw new Error(`Invalid semantic version: ${version}`);
