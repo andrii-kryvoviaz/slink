@@ -90,6 +90,19 @@ export class ContentApi {
     });
   }
 
+  async updateImage(
+    imageId: string,
+    changes: { description?: string },
+  ): Promise<void> {
+    await this.http.request('PATCH', `/api/image/${imageId}`, changes);
+  }
+
+  async deleteImage(imageId: string): Promise<void> {
+    await this.http.request('DELETE', `/api/image/${imageId}`, {
+      preserveOnDisk: false,
+    });
+  }
+
   async getImageTagIds(imageId: string): Promise<string[]> {
     const data = await this.http.request('GET', `/api/images/${imageId}/tags`);
     const items = (data?.data ?? data ?? []) as Array<{ id: unknown }>;
@@ -161,6 +174,10 @@ export class ContentApi {
       content,
       referencedCommentId: parentCommentId,
     });
+  }
+
+  async editComment(commentId: string, content: string): Promise<void> {
+    await this.http.request('PATCH', `/api/comment/${commentId}`, { content });
   }
 
   async deleteComment(commentId: string): Promise<void> {
