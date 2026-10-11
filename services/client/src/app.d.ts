@@ -49,9 +49,6 @@ declare global {
     toFormattedHtml(): string;
     decodeHtmlEntities(): string;
   }
-
-  const __BUILD_DATE__: string;
-  const __COMMIT_HASH__: string;
 }
 
 export {};

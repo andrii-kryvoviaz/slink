@@ -13,11 +13,5 @@ export const CACHE = {
 
 export const VERSION = {
   PREFIX: 'v',
-  COMMIT_HASH_LENGTH: 7,
   UNKNOWN: 'unknown',
-} as const;
-
-export const BUILD_GLOBALS = {
-  BUILD_DATE: '__BUILD_DATE__',
-  COMMIT_HASH: '__COMMIT_HASH__',
 } as const;
