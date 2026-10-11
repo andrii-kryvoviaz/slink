@@ -37,9 +37,18 @@ run-dev-host:
 purge:
 	docker compose -f docker/docker-compose.yaml down --rmi all --volumes --remove-orphans
 
+BUMP := $(filter patch minor major,$(MAKECMDGOALS))
+
+patch minor major:
+	@:
+
 release:
-	@if [ -z "$(version)" ]; then echo "Usage: make release version=x.y.z"; exit 1; fi
-	$(eval tag := v$(patsubst v%,%,$(version)))
-	git fetch origin main
-	git tag $(tag) origin/main
-	git push origin refs/tags/$(tag)
+	@[ -n "$(version)$(BUMP)" ] || { echo "Usage: make release patch|minor|major | version=x.y.z [dry=1]"; exit 1; }; \
+	git fetch -q --tags origin main; \
+	last=$$(git tag -l 'v[0-9]*.[0-9]*.[0-9]*' --sort=-v:refname | grep -v -- - | head -1); \
+	if [ -n "$(version)" ]; then next="v$(patsubst v%,%,$(version))"; else \
+	set -- $$(echo "$${last:-v0.0.0}" | tr -d v | tr . ' '); \
+	case "$(firstword $(BUMP))" in major) next="v$$(($$1+1)).0.0";; minor) next="v$$1.$$(($$2+1)).0";; *) next="v$$1.$$2.$$(($$3+1))";; esac; fi; \
+	echo "$${last:-none} -> $$next at $$(git rev-parse --short origin/main)"; \
+	[ -z "$(dry)" ] || exit 0; \
+	git tag "$$next" origin/main && git push origin "refs/tags/$$next"
