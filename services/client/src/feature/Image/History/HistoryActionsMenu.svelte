@@ -31,7 +31,9 @@
       fileName: string;
       isPublic: boolean;
       collectionIds?: string[];
+      collections?: CollectionReference[];
       tagIds?: string[];
+      tags?: Tag[];
     };
     on: {
       imageDelete?: (imageId: string) => void;

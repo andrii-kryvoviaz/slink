@@ -75,9 +75,7 @@
     }
   }
 
-  const hasCollections = $derived(
-    picker.items.some((c) => picker.isAssigned(c.id)),
-  );
+  const hasCollections = $derived(picker.hasAssignments);
   const tooltipText = $derived.by(() => {
     if (!isAuthenticated) return 'Sign in to add to collection';
     if (!isOwnImage) return 'Only own images can be added';

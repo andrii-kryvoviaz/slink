@@ -21,6 +21,7 @@
     getItemState?: (id: string) => SelectionState;
     onToggle?: (collection: CollectionResponse) => void;
     create?: PickerCreate;
+    onSearch: (term: string) => void;
   }
 
   let {
@@ -34,17 +35,13 @@
     showSearch,
     onToggle,
     create,
+    onSearch,
   }: Props = $props();
 
   const resolveSelected = $derived(
     createSelectionResolver(selectedIds, getItemState),
   );
   const isToggling = (collectionId: string) => togglingId === collectionId;
-
-  const filterCollection = (
-    collection: CollectionResponse,
-    searchTerm: string,
-  ) => collection.name.toLowerCase().includes(searchTerm.toLowerCase());
 </script>
 
 <PickerList
@@ -54,8 +51,8 @@
   {isLoading}
   {showSearch}
   searchPlaceholder="Search"
-  filterFn={filterCollection}
   {create}
+  {onSearch}
 >
   {#snippet emptyCaption()}Your collections will appear here{/snippet}
   {#snippet createFooter()}Create collection{/snippet}

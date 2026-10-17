@@ -23,6 +23,7 @@
     getItemState?: (id: string) => SelectionState;
     onToggle?: (tag: Tag) => void;
     create?: PickerCreate;
+    onSearch: (term: string) => void;
   }
 
   let {
@@ -36,15 +37,13 @@
     showSearch,
     onToggle,
     create,
+    onSearch,
   }: Props = $props();
 
   const resolveSelected = $derived(
     createSelectionResolver(selectedIds, getItemState),
   );
   const isToggling = (tagId: string) => togglingId === tagId;
-
-  const filterTag = (tag: Tag, searchTerm: string) =>
-    tag.path.toLowerCase().includes(searchTerm.toLowerCase());
 </script>
 
 <PickerList
@@ -54,8 +53,8 @@
   {isLoading}
   {showSearch}
   searchPlaceholder="Search"
-  filterFn={filterTag}
   {create}
+  {onSearch}
 >
   {#snippet emptyCaption()}Your tags will appear here{/snippet}
   {#snippet createFooter()}Create tag{/snippet}

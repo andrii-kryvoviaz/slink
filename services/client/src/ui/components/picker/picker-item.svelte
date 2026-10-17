@@ -49,6 +49,10 @@
   });
   const isChecked = $derived(resolvedState === 'checked');
   const isPartial = $derived(resolvedState === 'partial');
+  const pressed = $derived.by(() => {
+    if (isPartial) return 'mixed';
+    return isChecked;
+  });
   const isSelected = $derived(resolvedState !== 'unchecked');
 
   const handleClick = () => {
@@ -62,6 +66,7 @@
   type="button"
   class={pickerItemTheme({ variant, color, selected: isSelected, highlighted })}
   onclick={handleClick}
+  aria-pressed={pressed}
   data-highlighted={highlighted || undefined}
   {disabled}
 >

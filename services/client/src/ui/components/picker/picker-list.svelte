@@ -29,8 +29,8 @@
     children: Snippet<[{ item: T; index: number; highlighted: boolean }]>;
     emptyCaption?: Snippet;
     createFooter?: Snippet;
-    filterFn?: (item: T, searchTerm: string) => boolean;
     create?: PickerCreate;
+    onSearch: (term: string) => void;
   }
 
   let {
@@ -43,8 +43,8 @@
     children,
     emptyCaption,
     createFooter,
-    filterFn,
     create,
+    onSearch,
   }: Props = $props();
 
   let searchTerm = $state('');
@@ -52,24 +52,17 @@
 
   const hasInstant = $derived(!!create?.instant);
 
-  const showSearch = $derived(
-    showSearchProp !== undefined
-      ? showSearchProp
-      : items.length > 5 || hasInstant,
-  );
+  const showSearch = $derived(showSearchProp ?? true);
 
-  const filteredItems = $derived(
-    searchTerm && filterFn
-      ? items.filter((item) => filterFn(item, searchTerm))
-      : items,
-  );
+  const isPristineEmpty = $derived(items.length === 0 && !searchTerm.trim());
 
   let highlightedIndex = $state(-1);
 
-  $effect(() => {
-    searchTerm;
+  const setSearchTerm = (value: string) => {
+    searchTerm = value;
     highlightedIndex = -1;
-  });
+    onSearch(value);
+  };
 
   async function runCreate() {
     const name = searchTerm.trim();
@@ -79,7 +72,7 @@
 
     try {
       await create.instant(name);
-      searchTerm = '';
+      setSearchTerm('');
     } catch {
       isCreating = false;
       return;
@@ -97,16 +90,16 @@
       return;
     }
 
-    if (filteredItems.length === 0) return;
+    if (items.length === 0) return;
 
     if (e.key === Key.ArrowDown) {
       e.preventDefault();
       highlightedIndex =
-        highlightedIndex < filteredItems.length - 1 ? highlightedIndex + 1 : 0;
+        highlightedIndex < items.length - 1 ? highlightedIndex + 1 : 0;
     } else if (e.key === Key.ArrowUp) {
       e.preventDefault();
       highlightedIndex =
-        highlightedIndex > 0 ? highlightedIndex - 1 : filteredItems.length - 1;
+        highlightedIndex > 0 ? highlightedIndex - 1 : items.length - 1;
     } else if (e.key === Key.Enter && highlightedIndex >= 0) {
       e.preventDefault();
     }
@@ -122,14 +115,17 @@
   tabindex="0"
 >
   {#if (variant === 'popover' || variant === 'glass') && showSearch}
-    <PickerSearch bind:value={searchTerm} placeholder={searchPlaceholder} />
+    <PickerSearch
+      bind:value={() => searchTerm, setSearchTerm}
+      placeholder={searchPlaceholder}
+    />
   {/if}
 
   {#if isLoading}
     <div class="flex items-center justify-center py-10">
       <Loader variant="minimal" size="sm" />
     </div>
-  {:else if items.length === 0}
+  {:else if isPristineEmpty}
     {#if create?.instant && searchTerm.trim()}
       <div class={pickerListTheme({ variant })}>
         <PickerCreateRow
@@ -156,7 +152,7 @@
   {:else}
     <ScrollArea maxHeight="sm" orientation="vertical" type="scroll">
       <div class={pickerListTheme({ variant })}>
-        {#if filteredItems.length === 0}
+        {#if items.length === 0}
           {#if create?.instant && searchTerm.trim()}
             <PickerCreateRow
               term={searchTerm.trim()}
@@ -181,7 +177,7 @@
             </div>
           {/if}
         {:else}
-          {#each filteredItems as item, index (index)}
+          {#each items as item, index (index)}
             {@render children({
               item,
               index,

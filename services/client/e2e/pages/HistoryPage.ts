@@ -269,16 +269,19 @@ export class HistoryPage extends BasePage {
     ).toBeVisible();
   }
 
-  private pickerOverlay(title: string) {
-    return this.page
-      .locator('[data-slot="popover-content"]')
-      .filter({ hasText: title });
-  }
-
   private popoverTrigger(name: string) {
     return this.actionBar
       .locator('[data-slot="popover-trigger"]')
       .filter({ hasText: name });
+  }
+
+  private async openPicker(triggerName: string, overlayTitle: string) {
+    await this.popoverTrigger(triggerName).click();
+
+    const overlay = this.pickerOverlay(overlayTitle);
+    await expect(overlay).toBeVisible();
+
+    return overlay;
   }
 
   private async applyPicker(
@@ -286,10 +289,7 @@ export class HistoryPage extends BasePage {
     overlayTitle: string,
     itemName: string,
   ) {
-    await this.popoverTrigger(triggerName).click();
-
-    const overlay = this.pickerOverlay(overlayTitle);
-    await expect(overlay).toBeVisible();
+    const overlay = await this.openPicker(triggerName, overlayTitle);
 
     const item = overlay.getByRole('button', { name: itemName });
     const apply = overlay.getByRole('button', { name: 'Apply' });
@@ -311,11 +311,128 @@ export class HistoryPage extends BasePage {
     await this.applyPicker('Tag', 'Assign Tags', name);
   }
 
-  async setVisibility(target: 'public' | 'private') {
-    await this.popoverTrigger('Visibility').click();
+  get tagPicker() {
+    return this.pickerOverlay('Assign Tags');
+  }
 
-    const overlay = this.pickerOverlay('Change Visibility');
-    await expect(overlay).toBeVisible();
+  get tagPickerSearchInput() {
+    return this.tagPicker.getByPlaceholder('Search');
+  }
+
+  get tagPickerApplyButton() {
+    return this.tagPicker.getByRole('button', { name: 'Apply' });
+  }
+
+  tagPickerItem(name: string) {
+    return this.pickerItem(this.tagPicker, name);
+  }
+
+  get rowTagPicker() {
+    return this.pickerOverlay('Manage tags');
+  }
+
+  get rowTagSearchInput() {
+    return this.rowTagPicker.getByPlaceholder('Search');
+  }
+
+  rowTagPickerItem(name: string) {
+    return this.pickerItem(this.rowTagPicker, name);
+  }
+
+  tableRowTagLink(id: string, name: string) {
+    return this.tableRowFor(id).getByRole('link', { name, exact: true });
+  }
+
+  async searchRowTags(id: string, term: string) {
+    const row = this.tableRowFor(id);
+    await row.waitFor({ state: 'visible' });
+
+    await expect(async () => {
+      await row.hover();
+      await row
+        .locator('button[aria-label="Image actions"]:visible')
+        .first()
+        .click();
+      await this.page.getByRole('menuitem', { name: 'Manage tags' }).click();
+      await expect(this.rowTagSearchInput).toBeVisible({ timeout: 1000 });
+    }).toPass({ timeout: 15000 });
+
+    await this.rowTagSearchInput.fill(term);
+  }
+
+  async searchTagPicker(term: string) {
+    if (await this.tagPicker.isHidden()) {
+      await this.openPicker('Tag', 'Assign Tags');
+    }
+
+    await expect(this.tagPickerSearchInput).toBeVisible();
+    await this.tagPickerSearchInput.fill(term);
+  }
+
+  async applyTagPicker() {
+    await expect(this.tagPickerApplyButton).toBeEnabled();
+    await this.tagPickerApplyButton.click();
+    await expect(this.tagPicker).toBeHidden({ timeout: 15000 });
+  }
+
+  get collectionPicker() {
+    return this.pickerOverlay('Add to Collection');
+  }
+
+  get collectionPickerSearchInput() {
+    return this.collectionPicker.getByPlaceholder('Search');
+  }
+
+  get collectionPickerApplyButton() {
+    return this.collectionPicker.getByRole('button', { name: 'Apply' });
+  }
+
+  collectionPickerItem(name: string) {
+    return this.collectionPicker.getByRole('button', { name, exact: true });
+  }
+
+  async openCollectionPicker() {
+    if (await this.collectionPicker.isHidden()) {
+      await this.openPicker('Collection', 'Add to Collection');
+    }
+
+    await expect(this.collectionPickerSearchInput).toBeVisible();
+  }
+
+  async searchCollectionPicker(term: string) {
+    await this.openCollectionPicker();
+    await this.collectionPickerSearchInput.fill(term);
+  }
+
+  async applyCollectionPicker() {
+    await expect(this.collectionPickerApplyButton).toBeEnabled();
+    await this.collectionPickerApplyButton.click();
+    await expect(this.collectionPicker).toBeHidden({ timeout: 15000 });
+  }
+
+  async searchRowCollections(id: string, term: string) {
+    const row = this.tableRowFor(id);
+    await row.waitFor({ state: 'visible' });
+
+    await expect(async () => {
+      await row.hover();
+      await row
+        .locator('button[aria-label="Image actions"]:visible')
+        .first()
+        .click();
+      await this.page
+        .getByRole('menuitem', { name: 'Add to collection' })
+        .click();
+      await expect(this.collectionPickerSearchInput).toBeVisible({
+        timeout: 1000,
+      });
+    }).toPass({ timeout: 15000 });
+
+    await this.collectionPickerSearchInput.fill(term);
+  }
+
+  async setVisibility(target: 'public' | 'private') {
+    const overlay = await this.openPicker('Visibility', 'Change Visibility');
 
     const label = target === 'public' ? 'Make Public' : 'Make Private';
     await overlay.getByRole('button', { name: label }).click();

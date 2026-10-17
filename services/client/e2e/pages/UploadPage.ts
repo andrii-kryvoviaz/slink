@@ -48,6 +48,15 @@ export class UploadPage extends BasePage {
     name: 'View collection',
   });
   readonly collectionCreatedHeading = this.page.getByText('Collection created');
+  readonly collectionsOption = this.page.getByRole('button', {
+    name: 'Collections',
+    exact: true,
+  });
+  readonly collectionsPicker = this.page
+    .locator('[data-slot="popover-content"]')
+    .filter({ has: this.page.getByRole('listbox') });
+  readonly collectionsSearchInput =
+    this.collectionsPicker.getByPlaceholder('Search');
 
   constructor(page: Page) {
     super(page);
@@ -206,5 +215,14 @@ export class UploadPage extends BasePage {
 
   async waitForUploadComplete() {
     await this.page.waitForURL(/\/info\//, { timeout: 30000 });
+  }
+
+  collectionsPickerItem(name: string) {
+    return this.collectionsPicker.getByRole('button', { name, exact: true });
+  }
+
+  async searchCollections(term: string) {
+    await this.clickUntil(this.collectionsOption, this.collectionsSearchInput);
+    await this.collectionsSearchInput.fill(term);
   }
 }

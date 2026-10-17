@@ -9,7 +9,9 @@ export function createActionBarImage(item: ImageListingItem) {
     fileName: item.attributes.fileName,
     isPublic: item.attributes.isPublic,
     collectionIds: item.collections?.map((c) => c.id),
+    collections: item.collections,
     tagIds: item.tags?.map((t) => t.id),
+    tags: item.tags,
   };
 }
 

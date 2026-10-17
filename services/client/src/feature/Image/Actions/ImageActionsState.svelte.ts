@@ -1,4 +1,5 @@
 import { ApiClient } from '@slink/api';
+import { untrack } from 'svelte';
 
 import { useUploadHistoryFeed } from '#lib/state/UploadHistoryFeed.svelte.js';
 import { downloadByLink } from '#lib/utils/http/downloadByLink.js';
@@ -33,7 +34,9 @@ export interface ImageActionsConfig {
     fileName: string;
     isPublic: boolean;
     collectionIds?: string[];
+    collections?: CollectionReference[];
     tagIds?: string[];
+    tags?: Tag[];
   };
   onImageUpdate: (image: {
     id: string;
@@ -120,13 +123,13 @@ export class ImageActionsState {
 
     $effect(() => {
       if (this._overlays.collection) {
-        this._collectionPickerState.load();
+        untrack(() => this._collectionPickerState.load());
       }
     });
 
     $effect(() => {
       if (this._overlays.tag) {
-        this._tagPickerState.load();
+        untrack(() => this._tagPickerState.load());
       }
     });
 
@@ -224,6 +227,19 @@ export class ImageActionsState {
     await this._formatCopy.copy(format);
   };
 
+  private _mergeItems<TItem extends { id: string }>(
+    ids: string[],
+    existing: TItem[],
+    resolved: TItem[],
+  ): TItem[] {
+    const known = new Map(
+      [...existing, ...resolved].map((item) => [item.id, item]),
+    );
+    return ids
+      .map((id) => known.get(id))
+      .filter((item): item is TItem => item !== undefined);
+  }
+
   handleCollectionToggle = ({
     added,
     itemId,
@@ -235,9 +251,13 @@ export class ImageActionsState {
     const ids = image.collectionIds ?? [];
     const newIds = added ? [...ids, itemId] : ids.filter((id) => id !== itemId);
     this._config.onImageUpdate({ ...image, collectionIds: newIds });
-    const references: CollectionReference[] = this._collectionPickerState.items
-      .filter((c) => newIds.includes(c.id))
-      .map(({ id, name }) => ({ id, name }));
+    const references = this._mergeItems(
+      newIds,
+      image.collections ?? [],
+      this._collectionPickerState
+        .resolve(newIds)
+        .map(({ id, name }) => ({ id, name })),
+    );
     this._config.onCollectionChange?.(image.id, references);
   };
 
@@ -252,8 +272,10 @@ export class ImageActionsState {
     const ids = image.tagIds ?? [];
     const newIds = added ? [...ids, itemId] : ids.filter((id) => id !== itemId);
     this._config.onImageUpdate({ ...image, tagIds: newIds });
-    const tags: Tag[] = this._tagPickerState.items.filter((t) =>
-      newIds.includes(t.id),
+    const tags = this._mergeItems(
+      newIds,
+      image.tags ?? [],
+      this._tagPickerState.resolve(newIds),
     );
     this._config.onTagChange?.(image.id, tags);
   };

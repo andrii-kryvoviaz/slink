@@ -59,6 +59,7 @@
       {disabled}
       variant="glass"
       onToggle={picker.toggle}
+      onSearch={(term) => picker.catalog.search(term)}
       create={picker.create}
     />
   </Popover.Content>

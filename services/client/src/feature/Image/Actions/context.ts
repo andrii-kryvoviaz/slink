@@ -1,5 +1,8 @@
 import { getContext, setContext } from 'svelte';
 
+import type { Tag } from '@slink/api/Resources/TagResource';
+import type { CollectionReference } from '@slink/api/Response/Collection/CollectionResponse';
+
 import type { ImageActionsState } from './ImageActionsState.svelte';
 import type { ActionLayout } from './actions.theme';
 
@@ -8,7 +11,9 @@ export interface ImageActionTarget {
   fileName: string;
   isPublic: boolean;
   collectionIds?: string[];
+  collections?: CollectionReference[];
   tagIds?: string[];
+  tags?: Tag[];
 }
 
 export interface ImageActionsOverlayProps {
