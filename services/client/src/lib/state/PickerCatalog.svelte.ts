@@ -5,6 +5,7 @@ import { toast } from '#lib/utils/ui/toast-sonner.svelte.js';
 import type { Tag } from '@slink/api/Resources/TagResource';
 import type { CollectionResponse } from '@slink/api/Response';
 
+import { LatestCall } from '@slink/lib/state/core/LatestCall';
 import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
 import { debounce } from '@slink/lib/utils/time/debounce';
 
@@ -47,6 +48,7 @@ export class PickerCatalog<TItem extends { id: string }> {
 
   protected _deps: PickerCatalogDeps<TItem>;
   protected _term: string = '';
+  protected _latestSearch = new LatestCall();
   protected _known: Map<string, TItem> = new Map();
   protected _debouncedSearch: ReturnType<
     typeof debounce<(term: string) => void>
@@ -93,6 +95,7 @@ export class PickerCatalog<TItem extends { id: string }> {
     const next = term.trim();
     if (next === this._term) return;
 
+    this._latestSearch.invalidate();
     this._debouncedSearch.cancel();
     this._term = next;
 
@@ -135,6 +138,7 @@ export class PickerCatalog<TItem extends { id: string }> {
   }
 
   protected _clearSearch() {
+    this._latestSearch.invalidate();
     this._debouncedSearch.cancel();
     this._term = '';
     this._results = null;
@@ -148,13 +152,14 @@ export class PickerCatalog<TItem extends { id: string }> {
   }
 
   protected async _runSearch(term: string) {
+    const isLatest = this._latestSearch.enter();
     try {
       const results = await this._deps.fetch(term);
-      if (term !== this._term) return;
+      if (!isLatest()) return;
       this._remember(results);
       this._results = results;
     } catch {
-      if (term !== this._term) return;
+      if (!isLatest()) return;
       this._deps.onLoadError();
       this._results = [];
     }

@@ -203,6 +203,48 @@ test.describe('History batch tag picker search', { tag: '@sc-997' }, () => {
     expect(terms).toEqual(['', TARGET_TAG, fillerTagName(2)]);
   });
 
+  test('keeps newer results when the same search is cleared and repeated before an older response arrives', async ({
+    browser,
+  }) => {
+    const { api, page, historyPage } = await openScene(browser, FEW_FILLERS);
+    await selectOnlyImage(historyPage);
+
+    let staleCaptured = false;
+    let releaseStale: () => void = () => {};
+    const staleGate = new Promise<void>((resolve) => {
+      releaseStale = resolve;
+    });
+
+    await page.route(isTagListUrl, async (route) => {
+      if (searchTermOf(route.request()) !== TARGET_TAG || staleCaptured) {
+        await route.continue();
+        return;
+      }
+
+      const response = await route.fetch();
+      staleCaptured = true;
+      await staleGate;
+      await route.fulfill({ response });
+    });
+
+    await historyPage.searchTagPicker(TARGET_TAG);
+    await expect.poll(() => staleCaptured).toBe(true);
+
+    const newTag = `${TARGET_TAG}-new`;
+    await api.content.createTag(newTag);
+    await historyPage.searchTagPicker('');
+    await historyPage.searchTagPicker(TARGET_TAG);
+    await expect(historyPage.tagPickerItem(newTag)).toBeVisible();
+
+    const staleSettled = settledRequest(page, isTagSearchFor(TARGET_TAG));
+    releaseStale();
+    await staleSettled;
+    await flushRendering(page);
+
+    await expect(historyPage.tagPickerItem(newTag)).toBeVisible();
+    await expect(historyPage.tagPickerItem(TARGET_TAG)).toBeVisible();
+  });
+
   test('keeps the newer result when an older search answers late and shows no stale list meanwhile', async ({
     browser,
   }) => {
