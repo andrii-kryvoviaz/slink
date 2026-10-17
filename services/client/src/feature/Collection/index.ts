@@ -1,5 +1,3 @@
-export { default as AddToCollectionButton } from './AddToCollectionButton/AddToCollectionButton.svelte';
-export * from './AddToCollectionButton/AddToCollectionButton.theme';
 export { default as CollectionActionsDropdown } from './CollectionActionsDropdown/CollectionActionsDropdown.svelte';
 export { default as CollectionBadge } from './CollectionBadge/CollectionBadge.svelte';
 export { default as CollectionDeletePopover } from './CollectionDeletePopover/CollectionDeletePopover.svelte';

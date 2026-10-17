@@ -34,12 +34,12 @@ export class BatchActionsState {
     updateVisibility(this._ctx, isPublic);
   download = () => download(this._ctx);
   delete = (preserveOnDisk: boolean) => batchDelete(this._ctx, preserveOnDisk);
-  reassignTags = (selection: PendingMultiSelection, pickerItems: Tag[]) =>
-    reassignTags(this._ctx, selection, pickerItems);
+  reassignTags = (selection: PendingMultiSelection, added: Tag[]) =>
+    reassignTags(this._ctx, selection, added);
   reassignCollections = (
     selection: PendingMultiSelection,
-    pickerItems: CollectionResponse[],
-  ) => reassignCollections(this._ctx, selection, pickerItems);
+    added: CollectionResponse[],
+  ) => reassignCollections(this._ctx, selection, added);
 }
 
 export const createBatchActionsState = (

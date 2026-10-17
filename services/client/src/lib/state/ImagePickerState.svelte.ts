@@ -56,10 +56,6 @@ export class ImagePickerState<
     }
   }
 
-  get hasAssignments(): boolean {
-    return this._assignedIds.length > 0;
-  }
-
   isAssigned(itemId: string): boolean {
     return this._assignedIds.includes(itemId);
   }

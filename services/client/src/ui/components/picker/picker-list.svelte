@@ -39,7 +39,7 @@
     color = 'blue',
     isLoading = false,
     searchPlaceholder = 'Search...',
-    showSearch: showSearchProp,
+    showSearch = true,
     children,
     emptyCaption,
     createFooter,
@@ -51,8 +51,6 @@
   let isCreating = $state(false);
 
   const hasInstant = $derived(!!create?.instant);
-
-  const showSearch = $derived(showSearchProp ?? true);
 
   const isPristineEmpty = $derived(items.length === 0 && !searchTerm.trim());
 
@@ -126,21 +124,9 @@
       <Loader variant="minimal" size="sm" />
     </div>
   {:else if isPristineEmpty}
-    {#if create?.instant && searchTerm.trim()}
-      <div class={pickerListTheme({ variant })}>
-        <PickerCreateRow
-          term={searchTerm.trim()}
-          {color}
-          {variant}
-          {isCreating}
-          onclick={runCreate}
-        />
-      </div>
-    {:else}
-      <PickerEmptyState caption={emptyCaption} />
-    {/if}
+    <PickerEmptyState caption={emptyCaption} />
 
-    {#if create?.detailed && (!hasInstant || !searchTerm.trim())}
+    {#if create?.detailed}
       <PickerCreateFooter
         {color}
         highlighted

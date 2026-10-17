@@ -102,7 +102,7 @@ export const createBatchCollectionPickerState = (
     addItem: (collection) => picker.addItem(collection),
     getCounts: () => batchActions.collectionAssignmentCounts,
     getTotal: () => batchActions.selectedItemCount,
-    applyChanges: (s, items) => batchActions.reassignCollections(s, items),
+    applyChanges: (s, added) => batchActions.reassignCollections(s, added),
   });
 };
 
@@ -116,7 +116,7 @@ export const createBatchTagPickerState = (batchActions: BatchActionsState) => {
       addItem: (tag) => picker.addItem(tag),
       getCounts: () => batchActions.tagAssignmentCounts,
       getTotal: () => batchActions.selectedItemCount,
-      applyChanges: (s, items) => batchActions.reassignTags(s, items),
+      applyChanges: (s, added) => batchActions.reassignTags(s, added),
     },
   );
 };
