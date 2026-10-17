@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Integration\Http\Image;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Integration\Http\HttpTestCase;
 
@@ -26,6 +28,41 @@ final class UploadSuccessTest extends HttpTestCase {
     $payload = \json_decode((string) $this->client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
     return $payload['data'] ?? [];
+  }
+
+  /**
+   * @return array<string, array{0: string}>
+   */
+  public static function falseSpellingProvider(): array {
+    return [
+      'false' => ['false'],
+      'no' => ['no'],
+      'off' => ['off'],
+      'zero' => ['0'],
+      'empty' => [''],
+    ];
+  }
+
+  /**
+   * @return array<string, array{0: string}>
+   */
+  public static function trueSpellingProvider(): array {
+    return [
+      'true' => ['true'],
+      'one' => ['1'],
+      'on' => ['on'],
+      'yes' => ['yes'],
+    ];
+  }
+
+  private function uploadWithVisibility(string $isPublic): string {
+    $status = $this->uploadImageWithFields($this->ownerToken, ['isPublic' => $isPublic]);
+    self::assertSame(201, $status, 'Upload failed: ' . (string) $this->client->getResponse()->getContent());
+
+    $imageId = $this->extractId((string) $this->client->getResponse()->getContent());
+    self::assertNotSame('', $imageId);
+
+    return $imageId;
   }
 
   #[Test]
@@ -66,5 +103,31 @@ final class UploadSuccessTest extends HttpTestCase {
 
     self::assertSame($imageId, $detail['id'] ?? null);
     self::assertTrue($detail['isPublic'] ?? null);
+  }
+
+  #[Test]
+  #[Group('sc-994')]
+  #[DataProvider('falseSpellingProvider')]
+  public function ownerUploadWithFalseIsPublicSpellingStoresPrivateImage(string $isPublic): void {
+    $this->setAccessSettings(['allowUnauthenticatedAccess' => true]);
+    $this->bootOwner();
+
+    $imageId = $this->uploadWithVisibility($isPublic);
+
+    self::assertFalse($this->getImageDetail($this->ownerToken, $imageId)['isPublic'] ?? null);
+    self::assertSame(404, $this->apiRequest('GET', \sprintf('/api/image/public/%s.png', $imageId)));
+  }
+
+  #[Test]
+  #[Group('sc-994')]
+  #[DataProvider('trueSpellingProvider')]
+  public function ownerUploadWithTrueIsPublicSpellingStoresPublicImage(string $isPublic): void {
+    $this->setAccessSettings(['allowUnauthenticatedAccess' => true]);
+    $this->bootOwner();
+
+    $imageId = $this->uploadWithVisibility($isPublic);
+
+    self::assertTrue($this->getImageDetail($this->ownerToken, $imageId)['isPublic'] ?? null);
+    self::assertSame(200, $this->apiRequest('GET', \sprintf('/api/image/public/%s.png', $imageId)));
   }
 }

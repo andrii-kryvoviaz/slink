@@ -478,6 +478,21 @@ abstract class HttpTestCase extends WebTestCase {
     return $this->extractId((string) $response->getContent());
   }
 
+  /**
+   * @param array<string, string|array<int, string>> $fields
+   */
+  protected function uploadImageWithFields(string $token, array $fields, string $endpoint = '/api/upload'): int {
+    $this->client->request(
+      'POST',
+      $endpoint,
+      $fields,
+      ['image' => $this->sampleImage()],
+      ['HTTP_AUTHORIZATION' => 'Bearer ' . $token],
+    );
+
+    return $this->client->getResponse()->getStatusCode();
+  }
+
   protected function createCollection(string $token): string {
     $this->client->request(
       'POST',

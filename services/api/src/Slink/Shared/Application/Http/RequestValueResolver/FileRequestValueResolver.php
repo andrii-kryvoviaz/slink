@@ -17,6 +17,7 @@ use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 use Symfony\Component\Serializer\Exception\PartialDenormalizationException;
 use Symfony\Component\Serializer\Exception\UnsupportedFormatException;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Constraints\GroupSequence;
@@ -31,6 +32,7 @@ final class FileRequestValueResolver implements ValueResolverInterface, EventSub
    */
   private const array CONTEXT_DENORMALIZE = [
     'disable_type_enforcement' => true,
+    AbstractNormalizer::FILTER_BOOL => true,
     'collect_denormalization_errors' => true,
   ];
   
