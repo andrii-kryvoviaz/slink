@@ -2,7 +2,7 @@
   import { BatchActionConfirmation } from '@slink/feature/Image';
   import { Button } from '@slink/ui/components/button';
   import { Overlay } from '@slink/ui/components/popover';
-  import type { Snippet } from 'svelte';
+  import { type Snippet, untrack } from 'svelte';
 
   import Icon from '@iconify/svelte';
 
@@ -33,7 +33,7 @@
   }: Props = $props();
 
   $effect(() => {
-    if (open) onOpen?.();
+    if (open) untrack(() => onOpen?.());
   });
 
   const handleApply = () => {

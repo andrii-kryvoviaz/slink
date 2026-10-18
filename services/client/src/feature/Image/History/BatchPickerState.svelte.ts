@@ -28,13 +28,13 @@ interface BatchPickerDeps<TItem> {
   getTotal: () => number;
   applyChanges: (
     selection: PendingMultiSelection,
-    pickerItems: TItem[],
+    added: TItem[],
   ) => Promise<void>;
 }
 
 class BatchPickerState<
   TItem,
-  TPicker extends { load(): void; items: TItem[] },
+  TPicker extends { load(): void; resolve(ids: string[]): TItem[] },
   TModal extends {
     open(onSuccess?: (item: TItem) => void, onClose?: () => void): void;
   },
@@ -48,7 +48,7 @@ class BatchPickerState<
   private _addItem: (item: TItem) => void;
   private _applyChanges: (
     selection: PendingMultiSelection,
-    pickerItems: TItem[],
+    added: TItem[],
   ) => Promise<void>;
 
   constructor(picker: TPicker, modal: TModal, deps: BatchPickerDeps<TItem>) {
@@ -81,7 +81,10 @@ class BatchPickerState<
 
   apply = async () => {
     if (!this.selection.hasChanges) return;
-    await this._applyChanges(this.selection, this.picker.items);
+    await this._applyChanges(
+      this.selection,
+      this.picker.resolve(this.selection.addedIds),
+    );
     this.selection.reset();
   };
 }
@@ -99,7 +102,7 @@ export const createBatchCollectionPickerState = (
     addItem: (collection) => picker.addItem(collection),
     getCounts: () => batchActions.collectionAssignmentCounts,
     getTotal: () => batchActions.selectedItemCount,
-    applyChanges: (s, items) => batchActions.reassignCollections(s, items),
+    applyChanges: (s, added) => batchActions.reassignCollections(s, added),
   });
 };
 
@@ -113,7 +116,7 @@ export const createBatchTagPickerState = (batchActions: BatchActionsState) => {
       addItem: (tag) => picker.addItem(tag),
       getCounts: () => batchActions.tagAssignmentCounts,
       getTotal: () => batchActions.selectedItemCount,
-      applyChanges: (s, items) => batchActions.reassignTags(s, items),
+      applyChanges: (s, added) => batchActions.reassignTags(s, added),
     },
   );
 };

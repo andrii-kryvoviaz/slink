@@ -16,6 +16,7 @@ export class ImageInfoPage extends BasePage {
   readonly collectionTrigger = this.page.locator(
     'button[aria-label="Add to collection"]',
   );
+  readonly tagTrigger = this.page.locator('button[aria-label="Manage tags"]');
   readonly descriptionEditTrigger = this.page.getByRole('button', {
     name: 'Click to add a description...',
   });
@@ -72,9 +73,71 @@ export class ImageInfoPage extends BasePage {
     await this.confirmDeleteButton.click();
   }
 
+  get tagPicker() {
+    return this.pickerOverlay('Manage tags');
+  }
+
+  get tagSearchInput() {
+    return this.tagPicker.getByPlaceholder('Search');
+  }
+
+  tagPickerItem(name: string) {
+    return this.pickerItem(this.tagPicker, name);
+  }
+
+  tagLink(name: string) {
+    return this.page
+      .locator('a[href*="tagIds="]')
+      .and(this.page.getByRole('link', { name, exact: true }));
+  }
+
+  async openTagPicker() {
+    await this.clickUntil(this.tagTrigger, this.tagPicker);
+  }
+
+  async searchTags(term: string) {
+    await this.openTagPicker();
+    await expect(this.tagSearchInput).toBeVisible();
+    await this.tagSearchInput.fill(term);
+  }
+
   async addToCollection(collectionName: string) {
     const option = this.page.getByRole('button', { name: collectionName });
     await this.clickUntil(this.collectionTrigger, option.first());
     await option.first().click();
+  }
+
+  get collectionPicker() {
+    return this.page
+      .locator('[data-slot="popover-content"]')
+      .filter({ hasText: 'Add to collection' });
+  }
+
+  get collectionSearchInput() {
+    return this.collectionPicker.getByPlaceholder('Search');
+  }
+
+  collectionPickerItem(name: string) {
+    return this.collectionPicker.getByRole('button', { name, exact: true });
+  }
+
+  get collectionLinks() {
+    return this.page.locator('a[href^="/collection/"]');
+  }
+
+  collectionLink(collectionId: string) {
+    return this.page.locator(`a[href="/collection/${collectionId}"]`);
+  }
+
+  async openCollectionPicker() {
+    await this.clickUntil(this.collectionTrigger, this.collectionSearchInput);
+  }
+
+  async searchCollections(term: string) {
+    if (await this.collectionSearchInput.isHidden()) {
+      await this.openCollectionPicker();
+    }
+
+    await this.collectionSearchInput.fill(term);
   }
 }

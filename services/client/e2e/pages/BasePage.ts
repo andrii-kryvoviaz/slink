@@ -41,6 +41,18 @@ export class BasePage {
     }).toPass({ timeout: 15000 });
   }
 
+  protected pickerOverlay(title: string) {
+    return this.page
+      .locator('[data-slot="popover-content"]')
+      .filter({ hasText: title });
+  }
+
+  protected pickerItem(overlay: Locator, name: string) {
+    return overlay
+      .getByRole('button')
+      .filter({ has: this.page.getByText(name, { exact: true }) });
+  }
+
   async clickUntil(
     trigger: Locator,
     target: Locator,

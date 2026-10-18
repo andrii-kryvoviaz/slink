@@ -19,7 +19,9 @@ type ActionBarImage = {
   fileName: string;
   isPublic: boolean;
   collectionIds: string[];
+  collections: CollectionReference[];
   tagIds: string[];
+  tags: Tag[];
 };
 
 export interface ImageInfoPageConfig {
@@ -35,7 +37,9 @@ const buildActionBarImage = (
   fileName: image.fileName,
   isPublic: image.isPublic,
   collectionIds: collections.map((c) => c.id),
+  collections,
   tagIds: tags.map((t) => t.id),
+  tags,
 });
 
 export class ImageInfoPageState {

@@ -48,6 +48,21 @@ export class UploadPage extends BasePage {
     name: 'View collection',
   });
   readonly collectionCreatedHeading = this.page.getByText('Collection created');
+  readonly collectionsOption = this.page.getByRole('button', {
+    name: 'Collections',
+    exact: true,
+  });
+  readonly collectionsPicker = this.page
+    .locator('[data-slot="popover-content"]')
+    .filter({ has: this.page.getByRole('listbox') });
+  readonly collectionsSearchInput =
+    this.collectionsPicker.getByPlaceholder('Search');
+  readonly tagsOption = this.page.getByRole('button', {
+    name: 'Tags',
+    exact: true,
+  });
+  readonly tagsPicker = this.collectionsPicker;
+  readonly tagsSearchInput = this.tagsPicker.getByPlaceholder('Search');
 
   constructor(page: Page) {
     super(page);
@@ -206,5 +221,31 @@ export class UploadPage extends BasePage {
 
   async waitForUploadComplete() {
     await this.page.waitForURL(/\/info\//, { timeout: 30000 });
+  }
+
+  collectionsPickerItem(name: string) {
+    return this.collectionsPicker.getByRole('button', { name, exact: true });
+  }
+
+  tagsPickerItem(name: string) {
+    return this.tagsPicker.getByRole('button', {
+      name: new RegExp(`^${name}( |$)`),
+    });
+  }
+
+  createRow(name: string) {
+    return this.collectionsPicker.getByRole('button', {
+      name: `Create "${name}"`,
+    });
+  }
+
+  async searchTags(term: string) {
+    await this.clickUntil(this.tagsOption, this.tagsSearchInput);
+    await this.tagsSearchInput.fill(term);
+  }
+
+  async searchCollections(term: string) {
+    await this.clickUntil(this.collectionsOption, this.collectionsSearchInput);
+    await this.collectionsSearchInput.fill(term);
   }
 }

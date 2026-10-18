@@ -32,6 +32,7 @@
           variant: PickerVariant;
           onToggle: (item: TItem) => void;
           onCreateNew: () => void;
+          onSearch: (term: string) => void;
         },
       ]
     >;
@@ -96,4 +97,5 @@
   variant,
   onToggle: handleToggle,
   onCreateNew: handleCreateNew,
+  onSearch: (term) => pickerState.search(term),
 })}

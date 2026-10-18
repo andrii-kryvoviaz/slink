@@ -389,6 +389,7 @@
           onToggle={(collection) =>
             batchCollectionPicker.selection.toggle(collection.id)}
           create={{ detailed: batchCollectionPicker.handleCreateNew }}
+          onSearch={(term) => batchCollectionPicker.picker.search(term)}
         />
       </BatchPickerAction>
       <BatchPickerAction
@@ -410,6 +411,7 @@
           getItemState={(id) => batchTagPicker.selection.getState(id)}
           onToggle={(tag) => batchTagPicker.selection.toggle(tag.id)}
           create={{ detailed: batchTagPicker.handleCreateNew }}
+          onSearch={(term) => batchTagPicker.picker.search(term)}
         />
       </BatchPickerAction>
       <DownloadAction

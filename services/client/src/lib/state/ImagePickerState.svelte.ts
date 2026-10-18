@@ -9,11 +9,13 @@ import {
   PickerCatalog,
   createCollection,
   createTag,
+  searchCollections,
+  searchTags,
 } from '@slink/lib/state/PickerCatalog.svelte';
 import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
 
 interface ImagePickerDeps<TItem extends { id: string }> {
-  load: () => Promise<TItem[]>;
+  fetch: (searchTerm: string) => Promise<TItem[]>;
   create: (name: string) => Promise<TItem>;
   assign: (imageId: string, itemId: string) => Promise<void>;
   unassign: (imageId: string, itemId: string) => Promise<void>;
@@ -33,7 +35,7 @@ export class ImagePickerState<
 
   constructor(deps: ImagePickerDeps<TItem>) {
     super({
-      fetch: deps.load,
+      fetch: deps.fetch,
       create: deps.create,
       onLoadError: () => deps.onError('load'),
     });
@@ -98,7 +100,7 @@ export class ImagePickerState<
 
 export function createCollectionPickerState(): ImagePickerState<CollectionResponse> {
   return new ImagePickerState<CollectionResponse>({
-    load: () => ApiClient.collection.getList(50).then((r) => r.data),
+    fetch: searchCollections,
     create: (name) => createCollection({ name }),
     assign: (imageId, itemId) => ApiClient.collection.addItem(itemId, imageId),
     unassign: (imageId, itemId) =>
@@ -116,15 +118,7 @@ export function createCollectionPickerState(): ImagePickerState<CollectionRespon
 
 export function createImageTagPickerState(): ImagePickerState<Tag> {
   return new ImagePickerState<Tag>({
-    load: () =>
-      ApiClient.tag
-        .getList({
-          limit: 50,
-          orderBy: 'path',
-          order: 'asc',
-          includeChildren: true,
-        })
-        .then((r) => r.data),
+    fetch: searchTags,
     create: (name) => createTag(name),
     assign: (imageId, itemId) => ApiClient.tag.tagImage(imageId, itemId),
     unassign: (imageId, itemId) => ApiClient.tag.untagImage(imageId, itemId),

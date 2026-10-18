@@ -29,8 +29,8 @@
     children: Snippet<[{ item: T; index: number; highlighted: boolean }]>;
     emptyCaption?: Snippet;
     createFooter?: Snippet;
-    filterFn?: (item: T, searchTerm: string) => boolean;
     create?: PickerCreate;
+    onSearch: (term: string) => void;
   }
 
   let {
@@ -39,47 +39,41 @@
     color = 'blue',
     isLoading = false,
     searchPlaceholder = 'Search...',
-    showSearch: showSearchProp,
+    showSearch = true,
     children,
     emptyCaption,
     createFooter,
-    filterFn,
     create,
+    onSearch,
   }: Props = $props();
 
   let searchTerm = $state('');
   let isCreating = $state(false);
 
-  const hasInstant = $derived(!!create?.instant);
+  const createTerm = $derived.by(() => {
+    const name = searchTerm.trim();
+    if (!create?.instant || !name || create.exists?.(name)) return null;
+    return name;
+  });
 
-  const showSearch = $derived(
-    showSearchProp !== undefined
-      ? showSearchProp
-      : items.length > 5 || hasInstant,
-  );
-
-  const filteredItems = $derived(
-    searchTerm && filterFn
-      ? items.filter((item) => filterFn(item, searchTerm))
-      : items,
-  );
+  const isPristineEmpty = $derived(items.length === 0 && !searchTerm.trim());
 
   let highlightedIndex = $state(-1);
 
-  $effect(() => {
-    searchTerm;
+  const setSearchTerm = (value: string) => {
+    searchTerm = value;
     highlightedIndex = -1;
-  });
+    onSearch(value);
+  };
 
   async function runCreate() {
-    const name = searchTerm.trim();
-    if (!name || isCreating || !create?.instant) return;
+    if (!createTerm || isCreating) return;
 
     isCreating = true;
 
     try {
-      await create.instant(name);
-      searchTerm = '';
+      await create?.instant?.(createTerm);
+      setSearchTerm('');
     } catch {
       isCreating = false;
       return;
@@ -89,24 +83,27 @@
   }
 
   const handleKeydown = (e: KeyboardEvent) => {
-    const canCreate = hasInstant && !!searchTerm.trim() && !isCreating;
-
-    if (e.key === Key.Enter && highlightedIndex < 0 && canCreate) {
+    if (
+      e.key === Key.Enter &&
+      highlightedIndex < 0 &&
+      createTerm &&
+      !isCreating
+    ) {
       e.preventDefault();
       runCreate();
       return;
     }
 
-    if (filteredItems.length === 0) return;
+    if (items.length === 0) return;
 
     if (e.key === Key.ArrowDown) {
       e.preventDefault();
       highlightedIndex =
-        highlightedIndex < filteredItems.length - 1 ? highlightedIndex + 1 : 0;
+        highlightedIndex < items.length - 1 ? highlightedIndex + 1 : 0;
     } else if (e.key === Key.ArrowUp) {
       e.preventDefault();
       highlightedIndex =
-        highlightedIndex > 0 ? highlightedIndex - 1 : filteredItems.length - 1;
+        highlightedIndex > 0 ? highlightedIndex - 1 : items.length - 1;
     } else if (e.key === Key.Enter && highlightedIndex >= 0) {
       e.preventDefault();
     }
@@ -122,29 +119,20 @@
   tabindex="0"
 >
   {#if (variant === 'popover' || variant === 'glass') && showSearch}
-    <PickerSearch bind:value={searchTerm} placeholder={searchPlaceholder} />
+    <PickerSearch
+      bind:value={() => searchTerm, setSearchTerm}
+      placeholder={searchPlaceholder}
+    />
   {/if}
 
   {#if isLoading}
     <div class="flex items-center justify-center py-10">
       <Loader variant="minimal" size="sm" />
     </div>
-  {:else if items.length === 0}
-    {#if create?.instant && searchTerm.trim()}
-      <div class={pickerListTheme({ variant })}>
-        <PickerCreateRow
-          term={searchTerm.trim()}
-          {color}
-          {variant}
-          {isCreating}
-          onclick={runCreate}
-        />
-      </div>
-    {:else}
-      <PickerEmptyState caption={emptyCaption} />
-    {/if}
+  {:else if isPristineEmpty}
+    <PickerEmptyState caption={emptyCaption} />
 
-    {#if create?.detailed && (!hasInstant || !searchTerm.trim())}
+    {#if create?.detailed}
       <PickerCreateFooter
         {color}
         highlighted
@@ -156,10 +144,10 @@
   {:else}
     <ScrollArea maxHeight="sm" orientation="vertical" type="scroll">
       <div class={pickerListTheme({ variant })}>
-        {#if filteredItems.length === 0}
-          {#if create?.instant && searchTerm.trim()}
+        {#if items.length === 0}
+          {#if createTerm}
             <PickerCreateRow
-              term={searchTerm.trim()}
+              term={createTerm}
               {color}
               {variant}
               {isCreating}
@@ -181,16 +169,16 @@
             </div>
           {/if}
         {:else}
-          {#each filteredItems as item, index (index)}
+          {#each items as item, index (index)}
             {@render children({
               item,
               index,
               highlighted: index === highlightedIndex,
             })}
           {/each}
-          {#if create?.instant && searchTerm.trim()}
+          {#if createTerm}
             <PickerCreateRow
-              term={searchTerm.trim()}
+              term={createTerm}
               {color}
               {variant}
               {isCreating}
@@ -201,7 +189,7 @@
       </div>
     </ScrollArea>
 
-    {#if create?.detailed && (!hasInstant || !searchTerm.trim())}
+    {#if create?.detailed && (!create?.instant || !searchTerm.trim())}
       <PickerCreateFooter onclick={() => create?.detailed?.(searchTerm)}>
         {@render (createFooter ?? defaultCreateLabel)()}
       </PickerCreateFooter>

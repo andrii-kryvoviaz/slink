@@ -50,6 +50,7 @@
     variant: v,
     onToggle: toggle,
     onCreateNew,
+    onSearch,
   })}
     <TagPickerList
       tags={items}
@@ -58,6 +59,7 @@
       {togglingId}
       variant={v}
       onToggle={toggle}
+      {onSearch}
       create={{ detailed: onCreateNew }}
     />
   {/snippet}

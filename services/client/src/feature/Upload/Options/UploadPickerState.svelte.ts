@@ -23,6 +23,7 @@ import { toast } from '@slink/lib/utils/ui/toast-sonner.svelte';
 interface UploadPickerDeps<TItem extends { id: string }> {
   selected: () => TItem[];
   onChange: (items: TItem[]) => void;
+  matches: (item: TItem, name: string) => boolean;
   createFallbackMessage: string;
 }
 
@@ -104,6 +105,8 @@ class UploadPickerState<
         throw error;
       }
     },
+    exists: (name) =>
+      this.catalog.items.some((item) => this._deps.matches(item, name)),
     detailed: (name) => this.openDialog(name),
   };
 }
@@ -115,7 +118,11 @@ export const createUploadTagPicker = (deps: {
   new UploadPickerState<Tag, CreateTagModalState>(
     createTagCatalog(),
     createCreateTagModalState(),
-    { ...deps, createFallbackMessage: messages.tag.failedToCreate },
+    {
+      ...deps,
+      matches: (tag, name) => tag.isRoot && tag.name === name,
+      createFallbackMessage: messages.tag.failedToCreate,
+    },
   );
 
 export const createUploadCollectionPicker = (deps: {
@@ -125,5 +132,9 @@ export const createUploadCollectionPicker = (deps: {
   new UploadPickerState<CollectionResponse, CreateCollectionModalState>(
     createCollectionCatalog(),
     createCreateCollectionModalState(),
-    { ...deps, createFallbackMessage: messages.collection.failedToCreate },
+    {
+      ...deps,
+      matches: (collection, name) => collection.name === name,
+      createFallbackMessage: messages.collection.failedToCreate,
+    },
   );
