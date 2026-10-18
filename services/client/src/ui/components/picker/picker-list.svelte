@@ -50,7 +50,11 @@
   let searchTerm = $state('');
   let isCreating = $state(false);
 
-  const hasInstant = $derived(!!create?.instant);
+  const createTerm = $derived.by(() => {
+    const name = searchTerm.trim();
+    if (!create?.instant || !name || create.exists?.(name)) return null;
+    return name;
+  });
 
   const isPristineEmpty = $derived(items.length === 0 && !searchTerm.trim());
 
@@ -63,13 +67,12 @@
   };
 
   async function runCreate() {
-    const name = searchTerm.trim();
-    if (!name || isCreating || !create?.instant) return;
+    if (!createTerm || isCreating) return;
 
     isCreating = true;
 
     try {
-      await create.instant(name);
+      await create?.instant?.(createTerm);
       setSearchTerm('');
     } catch {
       isCreating = false;
@@ -80,9 +83,12 @@
   }
 
   const handleKeydown = (e: KeyboardEvent) => {
-    const canCreate = hasInstant && !!searchTerm.trim() && !isCreating;
-
-    if (e.key === Key.Enter && highlightedIndex < 0 && canCreate) {
+    if (
+      e.key === Key.Enter &&
+      highlightedIndex < 0 &&
+      createTerm &&
+      !isCreating
+    ) {
       e.preventDefault();
       runCreate();
       return;
@@ -139,9 +145,9 @@
     <ScrollArea maxHeight="sm" orientation="vertical" type="scroll">
       <div class={pickerListTheme({ variant })}>
         {#if items.length === 0}
-          {#if create?.instant && searchTerm.trim()}
+          {#if createTerm}
             <PickerCreateRow
-              term={searchTerm.trim()}
+              term={createTerm}
               {color}
               {variant}
               {isCreating}
@@ -170,9 +176,9 @@
               highlighted: index === highlightedIndex,
             })}
           {/each}
-          {#if create?.instant && searchTerm.trim()}
+          {#if createTerm}
             <PickerCreateRow
-              term={searchTerm.trim()}
+              term={createTerm}
               {color}
               {variant}
               {isCreating}
@@ -183,7 +189,7 @@
       </div>
     </ScrollArea>
 
-    {#if create?.detailed && (!hasInstant || !searchTerm.trim())}
+    {#if create?.detailed && (!create?.instant || !searchTerm.trim())}
       <PickerCreateFooter onclick={() => create?.detailed?.(searchTerm)}>
         {@render (createFooter ?? defaultCreateLabel)()}
       </PickerCreateFooter>

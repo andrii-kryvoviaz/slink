@@ -57,6 +57,12 @@ export class UploadPage extends BasePage {
     .filter({ has: this.page.getByRole('listbox') });
   readonly collectionsSearchInput =
     this.collectionsPicker.getByPlaceholder('Search');
+  readonly tagsOption = this.page.getByRole('button', {
+    name: 'Tags',
+    exact: true,
+  });
+  readonly tagsPicker = this.collectionsPicker;
+  readonly tagsSearchInput = this.tagsPicker.getByPlaceholder('Search');
 
   constructor(page: Page) {
     super(page);
@@ -219,6 +225,23 @@ export class UploadPage extends BasePage {
 
   collectionsPickerItem(name: string) {
     return this.collectionsPicker.getByRole('button', { name, exact: true });
+  }
+
+  tagsPickerItem(name: string) {
+    return this.tagsPicker.getByRole('button', {
+      name: new RegExp(`^${name}( |$)`),
+    });
+  }
+
+  createRow(name: string) {
+    return this.collectionsPicker.getByRole('button', {
+      name: `Create "${name}"`,
+    });
+  }
+
+  async searchTags(term: string) {
+    await this.clickUntil(this.tagsOption, this.tagsSearchInput);
+    await this.tagsSearchInput.fill(term);
   }
 
   async searchCollections(term: string) {
