@@ -1,50 +1,22 @@
 name: 'Storage Test'
-description: 'Run storage integration tests against local storage backends'
+description: 'Run storage integration tests on the test Docker image'
 
 runs:
   using: 'composite'
   steps:
-    - name: Start storage backends
-      shell: bash
+    - uses: ./.github/actions/build-test-image
+
+    - shell: bash
       run: docker compose -f docker/docker-compose.storage-test.yaml -p slink-storage-test up -d --wait
 
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: "8.5"
-        extensions: ffi, vips, gd
-        tools: composer:v2
-        coverage: none
-
-    - name: Install smbclient
-      shell: bash
-      run: sudo apt-get update && sudo apt-get install -y smbclient
-
-    - name: Cache Composer dependencies
-      uses: actions/cache@v5
-      with:
-        path: services/api/vendor
-        key: composer-${{ hashFiles('services/api/composer.lock') }}
-        restore-keys: composer-
-
-    - name: Install Composer dependencies
-      shell: bash
-      working-directory: services/api
-      run: composer install --ignore-platform-reqs --no-interaction --no-scripts
-
-    - name: Prepare test environment
-      shell: bash
-      working-directory: services/api
+    - shell: bash
       run: |
-        cp .env.example .env
-        mkdir -p config/jwt
-        openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:4096 -out config/jwt/private.pem
-        openssl pkey -in config/jwt/private.pem -pubout -out config/jwt/public.pem
-
-    - name: Run storage integration tests
-      shell: bash
-      working-directory: services/api
-      run: vendor/bin/phpunit --group storage-integration --no-coverage
+        docker run --rm --network slink-storage-test_default \
+          -e CI=true \
+          -e STORAGE_TEST_SMB_HOST=samba \
+          -e STORAGE_TEST_S3_ENDPOINT=http://seaweedfs:8333 \
+          slink-test:${{ github.sha }} \
+          php /services/api/vendor/bin/phpunit --configuration /services/api/phpunit.xml --group storage-integration --no-coverage
 
     - name: Dump backend logs
       if: failure()
