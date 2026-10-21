@@ -54,92 +54,54 @@ jobs:
     runs-on: ubuntu-latest
     needs: changes
     if: needs.changes.outputs.backend == 'true'
+    strategy:
+      fail-fast: false
+      matrix:
+        task: [lint, test, storage]
     steps:
       - uses: actions/checkout@v5
 
       - name: PHPStan Static Analysis
+        if: matrix.task == 'lint'
         uses: ./.github/actions/phpstan
 
       - name: PHPUnit tests
+        if: matrix.task == 'test'
         uses: ./.github/actions/phpunit
 
-      - name: Start storage backends
-        run: docker compose -f docker/docker-compose.storage-test.yaml -p slink-storage-test up -d --wait
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: "8.5"
-          extensions: ffi, vips, gd
-          tools: composer:v2
-          coverage: none
-
-      - name: Install smbclient
-        run: sudo apt-get update && sudo apt-get install -y smbclient
-
-      - name: Cache Composer dependencies
-        uses: actions/cache@v5
-        with:
-          path: services/api/vendor
-          key: composer-${{ hashFiles('services/api/composer.lock') }}
-          restore-keys: composer-
-
-      - name: Install Composer dependencies
-        working-directory: services/api
-        run: composer install --ignore-platform-reqs --no-interaction --no-scripts
-
-      - name: Prepare test environment
-        working-directory: services/api
-        run: |
-          cp .env.example .env
-          mkdir -p config/jwt
-          openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:4096 -out config/jwt/private.pem
-          openssl pkey -in config/jwt/private.pem -pubout -out config/jwt/public.pem
-
-      - name: Run storage integration tests
-        working-directory: services/api
-        run: vendor/bin/phpunit --group storage-integration --no-coverage
-
-      - name: Dump backend logs
-        if: failure()
-        run: |
-          docker compose -f docker/docker-compose.storage-test.yaml -p slink-storage-test logs
-          docker ps -a
+      - name: Storage integration tests
+        if: matrix.task == 'storage'
+        uses: ./.github/actions/storage-test
 
   client:
     name: Client
     runs-on: ubuntu-latest
     needs: changes
     if: needs.changes.outputs.frontend == 'true' || needs.changes.outputs.backend == 'true'
+    strategy:
+      fail-fast: false
+      matrix:
+        task: [lint, e2e]
     steps:
       - uses: actions/checkout@v5
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v5
-        with:
-          node-version: "24"
-          cache: "yarn"
-          cache-dependency-path: "./services/client/yarn.lock"
-
-      - name: Install dependencies
-        run: yarn --cwd ./services/client install --frozen-lockfile
-
-      - name: Run ESLint
-        if: needs.changes.outputs.frontend == 'true'
-        run: yarn --cwd ./services/client run lint
+      - name: ESLint
+        if: matrix.task == 'lint' && needs.changes.outputs.frontend == 'true'
+        uses: ./.github/actions/eslint
 
       - name: E2E Tests
+        if: matrix.task == 'e2e'
         uses: ./.github/actions/e2e
 
       - name: Upload Playwright report
-        if: always()
+        if: always() && matrix.task == 'e2e'
         uses: actions/upload-artifact@v7
         with:
           name: playwright-report
           path: services/client/playwright-report/
 
       - name: Upload test results
-        if: failure()
+        if: failure() && matrix.task == 'e2e'
         uses: actions/upload-artifact@v7
         with:
           name: playwright-results
