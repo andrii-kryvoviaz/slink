@@ -1,6 +1,6 @@
-variable "NODE_VERSION"                  { default = "24.21.0" }
-variable "PHP_VERSION"                   { default = "8.5.11" }
-variable "FRANKENPHP_VERSION"            { default = "1.13.0" }
+variable "NODE_VERSION"                  { default = "24.22.1" }
+variable "PHP_VERSION"                   { default = "8.5.12" }
+variable "FRANKENPHP_VERSION"            { default = "1.13.1" }
 variable "MERCURE_VERSION"               { default = "1.1.1" }
 variable "GO_VERSION"                    { default = "1.27.2" }
 variable "X_NET_VERSION"                 { default = "0.61.0" }
