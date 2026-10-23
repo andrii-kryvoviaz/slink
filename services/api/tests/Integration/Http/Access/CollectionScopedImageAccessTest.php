@@ -152,4 +152,29 @@ final class CollectionScopedImageAccessTest extends HttpTestCase {
 
     self::assertSame(404, $this->apiRequest('GET', $this->url($collection, $orphan)));
   }
+
+  #[Test]
+  public function nonOwnerCannotAddOwnersPrivateImageToOwnCollection(): void {
+    $this->bootActors();
+    $image = $this->uploadImage($this->ownerToken, false);
+    $collection = $this->createCollection($this->otherToken);
+
+    $status = $this->apiRequest('POST', \sprintf('/api/collection/%s/items/%s', $collection, $image), $this->otherToken);
+
+    self::assertSame(403, $status);
+  }
+
+  #[Test]
+  public function sharedCollectionDoesNotExposeImageOfAnotherOwner(): void {
+    $this->setAccessSettings(['requireAuthForCollectionShares' => false]);
+    $this->bootActors();
+    $image = $this->uploadImage($this->ownerToken, false);
+    $collection = $this->createCollection($this->otherToken);
+    $this->seedCollectionItem($collection, $image);
+    $share = $this->createCollectionShare($this->otherToken, $collection);
+    $this->publishShare($this->otherToken, $share);
+
+    self::assertSame(404, $this->apiRequest('GET', $this->url($collection, $image), $this->otherToken));
+    self::assertSame(404, $this->apiRequest('GET', $this->url($collection, $image)));
+  }
 }

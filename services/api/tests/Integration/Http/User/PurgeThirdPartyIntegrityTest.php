@@ -116,8 +116,7 @@ final class PurgeThirdPartyIntegrityTest extends HttpTestCase {
     $memberImage = $this->uploadImage($memberToken, true);
     $collectionId = $this->createCollection($nonOwnerToken);
 
-    $addStatus = $this->apiRequest('POST', \sprintf('/api/collection/%s/items/%s', $collectionId, $memberImage), $nonOwnerToken);
-    self::assertSame(201, $addStatus, 'Add item to collection failed: ' . (string) $this->client->getResponse()->getContent());
+    $this->seedCollectionItem($collectionId, $memberImage);
 
     self::assertCount(1, $this->fetchCollectionItems($collectionId, $nonOwnerToken));
 

@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace Tests\Integration\Http;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Slink\Collection\Domain\Enum\ItemType;
+use Slink\Collection\Domain\Repository\CollectionStoreRepositoryInterface;
 use Slink\Settings\Application\Command\SaveSettings\SaveSettingsCommand;
 use Slink\Shared\Application\Command\CommandBusInterface;
+use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Application\Command\CreateUser\CreateUserCommand;
 use Slink\User\Application\Command\GrantRole\GrantRoleCommand;
 use Slink\User\Domain\Enum\UserStatus;
@@ -519,6 +522,20 @@ abstract class HttpTestCase extends WebTestCase {
       \sprintf('/api/collection/%s/items/%s', $collectionId, $imageId),
       $token,
     );
+  }
+
+  protected function seedCollectionItem(string $collectionId, string $imageId): void {
+    $container = static::getContainer();
+
+    /** @var CollectionStoreRepositoryInterface $store */
+    $store = $container->get(CollectionStoreRepositoryInterface::class);
+    $collection = $store->get(ID::fromString($collectionId));
+    $collection->addItem(ID::fromString($imageId), ItemType::Image);
+    $store->store($collection);
+
+    /** @var EntityManagerInterface $entityManager */
+    $entityManager = $container->get(EntityManagerInterface::class);
+    $entityManager->flush();
   }
 
   protected function createImageShare(string $token, string $imageId): string {

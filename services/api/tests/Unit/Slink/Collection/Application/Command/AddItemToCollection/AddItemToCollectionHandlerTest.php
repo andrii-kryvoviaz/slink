@@ -5,16 +5,23 @@ declare(strict_types=1);
 namespace Tests\Unit\Slink\Collection\Application\Command\AddItemToCollection;
 
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Slink\Collection\Application\Command\AddItemToCollection\AddItemToCollectionCommand;
 use Slink\Collection\Application\Command\AddItemToCollection\AddItemToCollectionHandler;
 use Slink\Collection\Domain\Collection;
+use Slink\Collection\Domain\Enum\CollectionAccess;
 use Slink\Collection\Domain\Enum\ItemType;
 use Slink\Collection\Domain\Exception\CollectionAccessDeniedException;
 use Slink\Collection\Domain\Repository\CollectionStoreRepositoryInterface;
 use Slink\Collection\Domain\ValueObject\CollectionDescription;
 use Slink\Collection\Domain\ValueObject\CollectionName;
+use Slink\Image\Domain\Enum\ImageAccess;
+use Slink\Image\Domain\Image;
+use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
+use Slink\Shared\Domain\Exception\ForbiddenException;
 use Slink\Shared\Domain\ValueObject\ID;
+use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Lock\Store\InMemoryStore;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -25,19 +32,48 @@ final class AddItemToCollectionHandlerTest extends TestCase {
     return new LockFactory(new InMemoryStore());
   }
 
+  private function createImageStore(int $imageVersion = 1): ImageStoreRepositoryInterface&Stub {
+    $image = $this->createStub(Image::class);
+    $image->method('aggregateRootVersion')->willReturn($imageVersion);
+
+    $imageStore = $this->createStub(ImageStoreRepositoryInterface::class);
+    $imageStore->method('get')->willReturn($image);
+
+    return $imageStore;
+  }
+
+  private function createAccess(bool $canManageItems, bool $canEditImage): AuthorizationCheckerInterface&Stub {
+    $access = $this->createStub(AuthorizationCheckerInterface::class);
+    $access
+      ->method('isGranted')
+      ->willReturnCallback(fn (mixed $attribute): bool => match ($attribute) {
+        CollectionAccess::ManageItems => $canManageItems,
+        ImageAccess::Edit => $canEditImage,
+        default => false,
+      });
+
+    return $access;
+  }
+
+  private function createCollection(ID $collectionId, ID $ownerId): Collection {
+    $collection = Collection::create(
+      $collectionId,
+      $ownerId,
+      CollectionName::fromString('Test'),
+      CollectionDescription::fromString('Test')
+    );
+    $collection->releaseEvents();
+
+    return $collection;
+  }
+
   #[Test]
   public function itAddsItemToCollection(): void {
     $userId = ID::generate();
     $collectionId = ID::generate();
     $itemId = ID::generate();
 
-    $collection = Collection::create(
-      $collectionId,
-      $userId,
-      CollectionName::fromString('Test'),
-      CollectionDescription::fromString('Test')
-    );
-    $collection->releaseEvents();
+    $collection = $this->createCollection($collectionId, $userId);
 
     $collectionStore = $this->createMock(CollectionStoreRepositoryInterface::class);
     $collectionStore
@@ -51,10 +87,12 @@ final class AddItemToCollectionHandlerTest extends TestCase {
       ->method('store')
       ->with($collection);
 
-    $access = $this->createStub(AuthorizationCheckerInterface::class);
-    $access->method('isGranted')->willReturn(true);
-
-    $handler = new AddItemToCollectionHandler($collectionStore, $access, $this->createLockFactory());
+    $handler = new AddItemToCollectionHandler(
+      $collectionStore,
+      $this->createImageStore(),
+      $this->createAccess(true, true),
+      $this->createLockFactory(),
+    );
 
     $command = new AddItemToCollectionCommand(
       $collectionId->toString(),
@@ -74,22 +112,17 @@ final class AddItemToCollectionHandlerTest extends TestCase {
     $collectionId = ID::generate();
     $itemId = ID::generate();
 
-    $collection = Collection::create(
-      $collectionId,
-      $ownerId,
-      CollectionName::fromString('Test'),
-      CollectionDescription::fromString('Test')
-    );
-
     $collectionStore = $this->createStub(CollectionStoreRepositoryInterface::class);
     $collectionStore
       ->method('get')
-      ->willReturn($collection);
+      ->willReturn($this->createCollection($collectionId, $ownerId));
 
-    $access = $this->createStub(AuthorizationCheckerInterface::class);
-    $access->method('isGranted')->willReturn(false);
-
-    $handler = new AddItemToCollectionHandler($collectionStore, $access, $this->createLockFactory());
+    $handler = new AddItemToCollectionHandler(
+      $collectionStore,
+      $this->createImageStore(),
+      $this->createAccess(false, true),
+      $this->createLockFactory(),
+    );
 
     $command = new AddItemToCollectionCommand(
       $collectionId->toString(),
@@ -98,5 +131,71 @@ final class AddItemToCollectionHandlerTest extends TestCase {
     );
 
     $handler($command, $differentUserId->toString());
+  }
+
+  #[Test]
+  public function itThrowsForbiddenWhenUserCannotEditImage(): void {
+    $this->expectException(ForbiddenException::class);
+
+    $ownerId = ID::generate();
+    $collectionId = ID::generate();
+    $itemId = ID::generate();
+
+    $collectionStore = $this->createMock(CollectionStoreRepositoryInterface::class);
+    $collectionStore
+      ->method('get')
+      ->willReturn($this->createCollection($collectionId, $ownerId));
+
+    $collectionStore
+      ->expects($this->never())
+      ->method('store');
+
+    $handler = new AddItemToCollectionHandler(
+      $collectionStore,
+      $this->createImageStore(),
+      $this->createAccess(true, false),
+      $this->createLockFactory(),
+    );
+
+    $command = new AddItemToCollectionCommand(
+      $collectionId->toString(),
+      $itemId->toString(),
+      ItemType::Image
+    );
+
+    $handler($command, $ownerId->toString());
+  }
+
+  #[Test]
+  public function itThrowsNotFoundWhenImageIsMissing(): void {
+    $this->expectException(NotFoundException::class);
+
+    $ownerId = ID::generate();
+    $collectionId = ID::generate();
+    $itemId = ID::generate();
+
+    $collectionStore = $this->createMock(CollectionStoreRepositoryInterface::class);
+    $collectionStore
+      ->method('get')
+      ->willReturn($this->createCollection($collectionId, $ownerId));
+
+    $collectionStore
+      ->expects($this->never())
+      ->method('store');
+
+    $handler = new AddItemToCollectionHandler(
+      $collectionStore,
+      $this->createImageStore(0),
+      $this->createAccess(true, true),
+      $this->createLockFactory(),
+    );
+
+    $command = new AddItemToCollectionCommand(
+      $collectionId->toString(),
+      $itemId->toString(),
+      ItemType::Image
+    );
+
+    $handler($command, $ownerId->toString());
   }
 }

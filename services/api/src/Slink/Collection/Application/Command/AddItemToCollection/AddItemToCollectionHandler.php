@@ -7,14 +7,19 @@ namespace Slink\Collection\Application\Command\AddItemToCollection;
 use Slink\Collection\Domain\Enum\CollectionAccess;
 use Slink\Collection\Domain\Exception\CollectionAccessDeniedException;
 use Slink\Collection\Domain\Repository\CollectionStoreRepositoryInterface;
+use Slink\Image\Domain\Enum\ImageAccess;
+use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
 use Slink\Shared\Application\Command\CommandHandlerInterface;
+use Slink\Shared\Domain\Exception\ForbiddenException;
 use Slink\Shared\Domain\ValueObject\ID;
+use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 final readonly class AddItemToCollectionHandler implements CommandHandlerInterface {
   public function __construct(
     private CollectionStoreRepositoryInterface $collectionStore,
+    private ImageStoreRepositoryInterface $imageStore,
     private AuthorizationCheckerInterface $access,
     private LockFactory $lockFactory,
   ) {
@@ -33,10 +38,18 @@ final readonly class AddItemToCollectionHandler implements CommandHandlerInterfa
         throw new CollectionAccessDeniedException();
       }
 
-      $collection->addItem(
-        ID::fromString($command->getItemId()),
-        $command->getItemType(),
-      );
+      $itemId = ID::fromString($command->getItemId());
+      $image = $this->imageStore->get($itemId);
+
+      if (!$image->aggregateRootVersion()) {
+        throw new NotFoundException();
+      }
+
+      if (!$this->access->isGranted(ImageAccess::Edit, $image)) {
+        throw new ForbiddenException();
+      }
+
+      $collection->addItem($itemId, $command->getItemType());
 
       $this->collectionStore->store($collection);
     } finally {

@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 use Slink\Collection\Domain\Enum\CollectionScopedImageAccess;
 use Slink\Collection\Domain\Repository\CollectionItemRepositoryInterface;
 use Slink\Collection\Infrastructure\ReadModel\View\CollectionItemView;
+use Slink\Collection\Infrastructure\ReadModel\View\CollectionView;
 use Slink\Collection\Infrastructure\Security\Voter\CollectionScopedImageVoter;
 use Slink\Comment\Domain\Enum\CommentAccess;
 use Slink\Comment\Infrastructure\Security\Voter\CommentVoter;
@@ -91,6 +92,16 @@ final class CommentVoterTest extends TestCase {
     $this->imageRepository->method('oneById')->willReturn($this->createImageView($ownerId, $isPublic));
   }
 
+  private function createCollectionItem(): CollectionItemView&Stub {
+    $collection = $this->createStub(CollectionView::class);
+    $collection->method('getUserId')->willReturn(self::OWNER_ID);
+
+    $item = $this->createStub(CollectionItemView::class);
+    $item->method('getCollection')->willReturn($collection);
+
+    return $item;
+  }
+
   /**
    * @param string[] $collectionIds
    * @param string[] $sharedCollectionIds
@@ -103,7 +114,7 @@ final class CommentVoterTest extends TestCase {
     bool $requireAuthForCollectionShares = false,
   ): void {
     $this->collectionItemRepository->method('getCollectionIdsByImageIds')->willReturn([self::IMAGE_ID => $collectionIds]);
-    $this->collectionItemRepository->method('findByCollectionAndItemId')->willReturn($this->createStub(CollectionItemView::class));
+    $this->collectionItemRepository->method('findByCollectionAndItemId')->willReturn($this->createCollectionItem());
 
     $shareRepository = $this->createStub(ShareRepositoryInterface::class);
     $shareRepository->method('findByShareable')->willReturnCallback(

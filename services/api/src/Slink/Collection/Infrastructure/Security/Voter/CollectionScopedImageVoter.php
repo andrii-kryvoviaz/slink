@@ -13,6 +13,7 @@ use Slink\Share\Application\Service\ShareAccessGuard;
 use Slink\Share\Domain\Enum\ShareableType;
 use Slink\Share\Domain\Repository\ShareRepositoryInterface;
 use Slink\Shared\Application\Security\Viewer;
+use Slink\Shared\Domain\ValueObject\ID;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -65,9 +66,12 @@ final class CollectionScopedImageVoter extends Voter {
       return false;
     }
 
-    return $this->collectionItemRepository->findByCollectionAndItemId(
-      $subject->collectionId,
-      $subject->itemId,
-    ) !== null;
+    $item = $this->collectionItemRepository->findByCollectionAndItemId($subject->collectionId, $subject->itemId);
+
+    if ($item === null) {
+      return false;
+    }
+
+    return $subject->imageView->isOwnedBy(ID::fromString($item->getCollection()->getUserId()));
   }
 }
