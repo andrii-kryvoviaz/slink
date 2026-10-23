@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Slink\Image\Application\Query\GetImageContent;
 
+use Slink\Image\Domain\Enum\ImageFilter;
 use Slink\Shared\Application\Query\QueryInterface;
 use Slink\Shared\Infrastructure\MessageBus\EnvelopedMessage;
+use Symfony\Component\Validator\Constraints as Assert;
 
 final readonly class GetImageContentQuery implements QueryInterface {
   use EnvelopedMessage;
@@ -16,6 +18,7 @@ final readonly class GetImageContentQuery implements QueryInterface {
     private ?int $quality = null,
     private bool $crop = false,
     private ?string $format = null,
+    #[Assert\Choice(callback: [ImageFilter::class, 'values'], message: 'Invalid filter.')]
     private ?string $filter = null,
     private ?string $s = null,
     private ?string $imageId = null,

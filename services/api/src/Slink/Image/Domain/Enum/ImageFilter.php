@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace Slink\Image\Domain\Enum;
 
+use Slink\Shared\Domain\Enum\ValidatorAwareEnumTrait;
+
 enum ImageFilter: string {
+  use ValidatorAwareEnumTrait;
+
   case Dramatic = 'dramatic';
   case Noir = 'noir';
   case Sepia = 'sepia';

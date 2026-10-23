@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Slink\Image\Application\Query\GetImageContent;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Image\Application\Query\GetImageContent\GetImageContentQuery;
+use Symfony\Component\Validator\Validation;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class GetImageContentQueryTest extends TestCase {
   #[Test]
@@ -59,5 +62,48 @@ final class GetImageContentQueryTest extends TestCase {
       ],
       $query->getTransformParams(),
     );
+  }
+
+  /**
+   * @return array<string, array{string}>
+   */
+  public static function invalidFilters(): array {
+    return [
+      'uppercase filter' => ['NOIR'],
+      'unknown filter' => ['blur'],
+    ];
+  }
+
+  /**
+   * @return array<string, array{?string}>
+   */
+  public static function acceptedFilters(): array {
+    return [
+      'known filter' => ['noir'],
+      'no filter' => [null],
+    ];
+  }
+
+  #[Test]
+  #[DataProvider('invalidFilters')]
+  public function itRejectsFilterOutsideKnownFilters(string $filter): void {
+    $violations = $this->validator()->validate(new GetImageContentQuery(filter: $filter));
+
+    $this->assertCount(1, $violations);
+    $this->assertSame('filter', $violations->get(0)->getPropertyPath());
+  }
+
+  #[Test]
+  #[DataProvider('acceptedFilters')]
+  public function itAcceptsKnownOrAbsentFilter(?string $filter): void {
+    $violations = $this->validator()->validate(new GetImageContentQuery(filter: $filter));
+
+    $this->assertCount(0, $violations);
+  }
+
+  private function validator(): ValidatorInterface {
+    return Validation::createValidatorBuilder()
+      ->enableAttributeMapping()
+      ->getValidator();
   }
 }

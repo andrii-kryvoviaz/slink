@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Slink\Shared\Infrastructure\FileSystem\Storage;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
@@ -233,6 +234,25 @@ final class LocalStorageTest extends TestCase {
     $expected = $this->testDir . '/slink/cache/' . $fileName;
 
     $this->assertSame($expected, $this->storage->cachePath($fileName));
+  }
+
+  /**
+   * @return array<string, array{string}>
+   */
+  public static function nonBasenameCacheFileNames(): array {
+    return [
+      'nested path' => ['nested/abc123.png'],
+      'windows separator' => ['nested\\abc123.png'],
+      'dotted name' => ['abc123..png'],
+    ];
+  }
+
+  #[Test]
+  #[DataProvider('nonBasenameCacheFileNames')]
+  public function itRejectsCachePathThatIsNotAPlainFileName(string $fileName): void {
+    $this->expectException(\InvalidArgumentException::class);
+
+    $this->storage->cachePath($fileName);
   }
 
   private function countTemporaryCopies(): int {

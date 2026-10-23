@@ -177,6 +177,10 @@ abstract class AbstractStorage implements StorageInterface, StorageCacheInterfac
   }
 
   public function cachePath(string $fileName): string {
+    if (strpbrk($fileName, '/\\') !== false || str_contains($fileName, '..')) {
+      throw new \InvalidArgumentException('Cache file name must be a plain file name.');
+    }
+
     return $this->getCacheDirPath() . '/' . $fileName;
   }
 
