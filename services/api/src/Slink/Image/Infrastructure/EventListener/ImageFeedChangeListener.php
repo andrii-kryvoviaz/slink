@@ -10,19 +10,18 @@ use Doctrine\ORM\Event\PostRemoveEventArgs;
 use Doctrine\ORM\Event\PostUpdateEventArgs;
 use Doctrine\ORM\Events;
 use Slink\Image\Domain\Enum\ImageFeedEventType;
+use Slink\Image\Infrastructure\Message\ImageFeedChanged;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
-use Slink\Shared\Domain\Service\ServerSentEventPublisherInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 #[AsEntityListener(event: Events::postPersist, method: 'postPersist', entity: ImageView::class, entityManager: 'read_model')]
 #[AsEntityListener(event: Events::postUpdate, method: 'postUpdate', entity: ImageView::class, entityManager: 'read_model')]
 #[AsEntityListener(event: Events::postRemove, method: 'postRemove', entity: ImageView::class, entityManager: 'read_model')]
 final readonly class ImageFeedChangeListener {
-  private const TOPIC = 'public-feed';
-
   public function __construct(
-    private ServerSentEventPublisherInterface $publisher,
-    private NormalizerInterface $serializer,
+    #[Autowire(service: 'messenger.bus.feed')]
+    private MessageBusInterface $messageBus,
   ) {
   }
 
@@ -31,7 +30,7 @@ final readonly class ImageFeedChangeListener {
       return;
     }
 
-    $this->publish($image, ImageFeedEventType::Added);
+    $this->enqueue($image->getUuid(), ImageFeedEventType::Added);
   }
 
   public function postUpdate(ImageView $image, PostUpdateEventArgs $args): void {
@@ -47,18 +46,18 @@ final readonly class ImageFeedChangeListener {
       [$wasPublic] = $visibilityChange;
 
       if (!$wasPublic && $isPublic) {
-        $this->publish($image, ImageFeedEventType::Added);
+        $this->enqueue($image->getUuid(), ImageFeedEventType::Added);
         return;
       }
 
       if ($wasPublic && !$isPublic) {
-        $this->publishRemoval($image->getUuid());
+        $this->enqueue($image->getUuid(), ImageFeedEventType::Removed);
         return;
       }
     }
 
     if ($isPublic && $this->hasRelevantChanges($changeSet)) {
-      $this->publish($image, ImageFeedEventType::Updated);
+      $this->enqueue($image->getUuid(), ImageFeedEventType::Updated);
     }
   }
 
@@ -67,7 +66,7 @@ final readonly class ImageFeedChangeListener {
       return;
     }
 
-    $this->publishRemoval($image->getUuid());
+    $this->enqueue($image->getUuid(), ImageFeedEventType::Removed);
   }
 
   /**
@@ -96,20 +95,7 @@ final readonly class ImageFeedChangeListener {
     return false;
   }
 
-  private function publish(ImageView $image, ImageFeedEventType $eventType): void {
-    /** @var array<string, mixed> $normalized */
-    $normalized = $this->serializer->normalize($image, context: ['groups' => ['public']]);
-
-    $this->publisher->publish(self::TOPIC, [
-      'event' => $eventType->value,
-      'image' => $normalized,
-    ]);
-  }
-
-  private function publishRemoval(string $imageId): void {
-    $this->publisher->publish(self::TOPIC, [
-      'event' => ImageFeedEventType::Removed->value,
-      'imageId' => $imageId,
-    ]);
+  private function enqueue(string $imageId, ImageFeedEventType $eventType): void {
+    $this->messageBus->dispatch(new ImageFeedChanged($imageId, $eventType));
   }
 }

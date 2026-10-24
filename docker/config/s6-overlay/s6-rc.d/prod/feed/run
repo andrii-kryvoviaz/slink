@@ -1,0 +1,2 @@
+#!/command/with-contenv sh
+exec delegate www-data php /services/api/bin/console messenger:consume feed --time-limit=3600 --memory-limit=128M --keepalive=15 --no-interaction

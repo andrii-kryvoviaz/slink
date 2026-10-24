@@ -5,6 +5,7 @@ imports:
 parameters:
   env(SLINK_VERSION): 'dev'
   slink.runtime_dir: '/app/etc/runtime'
+  slink.message_queue_transport: feed
   image.public_max_width: 1920
 
   exception_to_status:

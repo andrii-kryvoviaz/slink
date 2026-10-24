@@ -13,12 +13,17 @@ final readonly class SubCommandRunner {
   ) {}
 
   /**
-   * @param array<string, mixed> $args
+   * @param array<int|string, mixed> $args
    */
   public function run(string $name, array $args = []): SubCommandResult {
     $command = [PHP_BINARY, $this->consolePath, $name, '--no-ansi'];
 
     foreach ($args as $key => $value) {
+      if (is_int($key)) {
+        $command[] = (string) $value;
+        continue;
+      }
+
       if (is_bool($value)) {
         if ($value) {
           $command[] = $key;

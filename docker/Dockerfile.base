@@ -44,7 +44,7 @@ RUN CGO_ENABLED=1 \
 FROM frankenphp-upstream AS php-extensions
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 RUN install-php-extensions \
-        curl intl mbstring exif ffi redis vips && \
+        curl intl mbstring exif ffi pcntl redis vips && \
     rm -rf /tmp/* /var/cache/apk/*
 
 FROM dhi.io/alpine-base:${ALPINE_VERSION} AS runtime-base

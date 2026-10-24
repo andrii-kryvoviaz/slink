@@ -17,14 +17,36 @@ framework:
             messenger.bus.event:
                 default_middleware: allow_no_handlers
 
+            messenger.bus.feed:
+                middleware:
+                    - doctrine_ping_connection: ['read_model']
+                    - doctrine_close_connection: ['read_model']
+
         transports:
-             # ToDo: add async transport support
-             # async: '%env(MESSENGER_TRANSPORT_DSN)%'
              failed: 'doctrine://event_store?queue_name=failed'
              sync: 'sync://'
+             feed:
+                 dsn: 'doctrine://read_model'
+                 options:
+                     table_name: message_queue
+                     queue_name: feed
+                     auto_setup: false
+                     redeliver_timeout: 60
+                 failure_transport: feed_failed
+                 retry_strategy:
+                     max_retries: 5
+                     delay: 1000
+                     multiplier: 2
+                     max_delay: 30000
+             feed_failed:
+                 dsn: 'doctrine://read_model'
+                 options:
+                     table_name: message_queue
+                     queue_name: feed_failed
+                     auto_setup: false
 
-        routing: ~
-            # Slink\Shared\Application\Command\CommandInterface: async
+        routing:
+            Slink\Image\Infrastructure\Message\ImageFeedChanged: feed
 
 when@test:
     framework:

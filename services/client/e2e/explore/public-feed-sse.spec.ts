@@ -15,6 +15,50 @@ const isRemoved = (imageId: string) => (event: SseEvent) =>
   event.event === 'image_removed' && event.imageId === imageId;
 
 test.describe('Public feed SSE', () => {
+  for (const viewer of [
+    { label: 'anonymous grid', tag: '@anonymous', mode: 'grid' },
+    { label: 'signed-in list', tag: '@authenticated', mode: 'list' },
+  ]) {
+    test(
+      `renders public uploads and restores images made public again without reloading in ${viewer.label}`,
+      { tag: viewer.tag },
+      async ({ page, actor, explorePage, layoutControls }, testInfo) => {
+        const owner = await actor('live-gallery');
+        const existingId = await owner.content.uploadImage({ isPublic: true });
+        await layoutControls.setSettingCookie(
+          'explore',
+          JSON.stringify({ viewMode: viewer.mode }),
+        );
+        await explorePage.goto();
+        await expect(explorePage.mediaFor(existingId)).toBeVisible();
+        const sse = new SseRecorder(page);
+        await sse.subscribe(TOPIC);
+
+        const imageId = await owner.content.uploadImage({ isPublic: true });
+        const added = await sse.waitForEvent(TOPIC, isAdded(imageId));
+        await testInfo.attach('image-added-event', {
+          body: JSON.stringify(added, null, 2),
+          contentType: 'application/json',
+        });
+        await expect(explorePage.mediaFor(imageId)).toBeVisible();
+        await expect
+          .poll(() =>
+            explorePage
+              .mediaFor(imageId)
+              .evaluate((img: HTMLImageElement) => img.naturalWidth > 0),
+          )
+          .toBe(true);
+
+        await owner.content.setMediaVisibility([imageId], false);
+        await sse.waitForEvent(TOPIC, isRemoved(imageId));
+        await expect(explorePage.mediaFor(imageId)).toHaveCount(0);
+
+        await owner.content.setMediaVisibility([imageId], true);
+        await expect(explorePage.mediaFor(imageId)).toBeVisible();
+      },
+    );
+  }
+
   test(
     'anonymous subscriber receives public uploads and never non-public changes',
     { tag: ['@anonymous', '@sc-894'] },

@@ -123,6 +123,12 @@ abstract class HttpTestCase extends WebTestCase {
     ]);
 
     self::runConsole([
+      'command' => 'messenger:setup-transports',
+      'transport' => 'feed',
+      '--no-interaction' => true,
+    ]);
+
+    self::runConsole([
       'command' => 'doctrine:migrations:migrate',
       '--no-interaction' => true,
       '--allow-no-migration' => true,

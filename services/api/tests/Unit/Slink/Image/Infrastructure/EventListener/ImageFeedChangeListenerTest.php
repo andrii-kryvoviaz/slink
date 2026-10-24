@@ -17,14 +17,13 @@ use PHPUnit\Framework\TestCase;
 use Slink\Image\Domain\ValueObject\ImageAttributes;
 use Slink\Image\Infrastructure\EventListener\ImageFeedChangeListener;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
-use Slink\Shared\Domain\Service\ServerSentEventPublisherInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Slink\Image\Infrastructure\Message\ImageFeedChanged;
+use Symfony\Component\Messenger\Envelope;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 #[Group('sc-886')]
 final class ImageFeedChangeListenerTest extends TestCase {
-  private const TOPIC = 'public-feed';
   private const UUID = 'image-uuid-1';
-  private const NORMALIZED = ['id' => self::UUID, 'fileName' => 'normalized.png'];
 
   private function imageView(bool $isPublic): ImageView {
     $image = $this->createStub(ImageView::class);
@@ -34,40 +33,27 @@ final class ImageFeedChangeListenerTest extends TestCase {
     return $image;
   }
 
-  private function normalizer(?ImageView $expected = null): NormalizerInterface {
-    if ($expected === null) {
-      $normalizer = $this->createStub(NormalizerInterface::class);
-      $normalizer->method('normalize')->willReturn(self::NORMALIZED);
+  private function busExpectingNothing(): MockObject&MessageBusInterface {
+    $bus = $this->createMock(MessageBusInterface::class);
+    $bus->expects($this->never())->method('dispatch');
 
-      return $normalizer;
-    }
-
-    $normalizer = $this->createMock(NormalizerInterface::class);
-    $normalizer->expects($this->once())
-      ->method('normalize')
-      ->with($expected, null, ['groups' => ['public']])
-      ->willReturn(self::NORMALIZED);
-
-    return $normalizer;
+    return $bus;
   }
 
-  private function publisherExpectingNothing(): MockObject&ServerSentEventPublisherInterface {
-    $publisher = $this->createMock(ServerSentEventPublisherInterface::class);
-    $publisher->expects($this->never())->method('publish');
+  private function busExpecting(string $eventType): MockObject&MessageBusInterface {
+    $bus = $this->createMock(MessageBusInterface::class);
+    $bus->expects($this->once())
+      ->method('dispatch')
+      ->with($this->callback(static function (ImageFeedChanged $message) use ($eventType): bool {
+        self::assertSame(self::UUID, $message->imageId);
+        self::assertSame($eventType, $message->eventType->value);
+        self::assertSame(['imageId', 'eventType'], array_keys(get_object_vars($message)));
 
-    return $publisher;
-  }
+        return true;
+      }))
+      ->willReturnCallback(static fn (object $message): Envelope => new Envelope($message));
 
-  /**
-   * @param array<string, mixed> $data
-   */
-  private function publisherExpecting(array $data): MockObject&ServerSentEventPublisherInterface {
-    $publisher = $this->createMock(ServerSentEventPublisherInterface::class);
-    $publisher->expects($this->once())
-      ->method('publish')
-      ->with(self::TOPIC, $data, false);
-
-    return $publisher;
+    return $bus;
   }
 
   /**
@@ -84,57 +70,54 @@ final class ImageFeedChangeListenerTest extends TestCase {
   }
 
   #[Test]
-  public function itPublishesImageAddedWhenPublicImageIsPersisted(): void {
+  public function itQueuesImageAddedWhenPublicImageIsPersisted(): void {
     $image = $this->imageView(true);
-    $publisher = $this->publisherExpecting(['event' => 'image_added', 'image' => self::NORMALIZED]);
+    $messageBus = $this->busExpecting('image_added');
 
-    $listener = new ImageFeedChangeListener($publisher, $this->normalizer($image));
+    $listener = new ImageFeedChangeListener($messageBus);
     $listener->postPersist($image, new PostPersistEventArgs($image, $this->createStub(EntityManagerInterface::class)));
   }
 
   #[Test]
-  public function itPublishesNothingWhenNonPublicImageIsPersisted(): void {
+  public function itQueuesNothingWhenNonPublicImageIsPersisted(): void {
     $image = $this->imageView(false);
 
-    $listener = new ImageFeedChangeListener($this->publisherExpectingNothing(), $this->normalizer());
+    $listener = new ImageFeedChangeListener($this->busExpectingNothing());
     $listener->postPersist($image, new PostPersistEventArgs($image, $this->createStub(EntityManagerInterface::class)));
   }
 
   #[Test]
-  public function itPublishesImageRemovedWhenPublicImageIsRemoved(): void {
+  public function itQueuesImageRemovedWhenPublicImageIsRemoved(): void {
     $image = $this->imageView(true);
-    $publisher = $this->publisherExpecting(['event' => 'image_removed', 'imageId' => self::UUID]);
+    $messageBus = $this->busExpecting('image_removed');
 
-    $listener = new ImageFeedChangeListener($publisher, $this->normalizer());
+    $listener = new ImageFeedChangeListener($messageBus);
     $listener->postRemove($image, new PostRemoveEventArgs($image, $this->createStub(EntityManagerInterface::class)));
   }
 
   #[Test]
-  public function itPublishesNothingWhenNonPublicImageIsRemoved(): void {
+  public function itQueuesNothingWhenNonPublicImageIsRemoved(): void {
     $image = $this->imageView(false);
 
-    $listener = new ImageFeedChangeListener($this->publisherExpectingNothing(), $this->normalizer());
+    $listener = new ImageFeedChangeListener($this->busExpectingNothing());
     $listener->postRemove($image, new PostRemoveEventArgs($image, $this->createStub(EntityManagerInterface::class)));
   }
 
   #[Test]
-  public function itPublishesImageAddedWhenImageBecomesPublic(): void {
+  public function itQueuesImageAddedWhenImageBecomesPublic(): void {
     $image = $this->imageView(true);
-    $publisher = $this->publisherExpecting(['event' => 'image_added', 'image' => self::NORMALIZED]);
+    $messageBus = $this->busExpecting('image_added');
 
-    $listener = new ImageFeedChangeListener($publisher, $this->normalizer($image));
+    $listener = new ImageFeedChangeListener($messageBus);
     $listener->postUpdate($image, $this->updateArgs($image, ['attributes.isPublic' => [false, true]]));
   }
 
   #[Test]
-  public function itPublishesImageRemovedWithoutBodyWhenImageBecomesNonPublic(): void {
+  public function itQueuesImageRemovedWithoutBodyWhenImageBecomesNonPublic(): void {
     $image = $this->imageView(false);
-    $publisher = $this->publisherExpecting(['event' => 'image_removed', 'imageId' => self::UUID]);
+    $messageBus = $this->busExpecting('image_removed');
 
-    $normalizer = $this->createMock(NormalizerInterface::class);
-    $normalizer->expects($this->never())->method('normalize');
-
-    $listener = new ImageFeedChangeListener($publisher, $normalizer);
+    $listener = new ImageFeedChangeListener($messageBus);
     $listener->postUpdate($image, $this->updateArgs($image, ['attributes.isPublic' => [true, false]]));
   }
 
@@ -151,28 +134,28 @@ final class ImageFeedChangeListenerTest extends TestCase {
 
   #[Test]
   #[DataProvider('relevantChangeProvider')]
-  public function itPublishesImageUpdatedForRelevantChangeOnPublicImage(string $field): void {
+  public function itQueuesImageUpdatedForRelevantChangeOnPublicImage(string $field): void {
     $image = $this->imageView(true);
-    $publisher = $this->publisherExpecting(['event' => 'image_updated', 'image' => self::NORMALIZED]);
+    $messageBus = $this->busExpecting('image_updated');
 
-    $listener = new ImageFeedChangeListener($publisher, $this->normalizer($image));
+    $listener = new ImageFeedChangeListener($messageBus);
     $listener->postUpdate($image, $this->updateArgs($image, [$field => ['old', 'new']]));
   }
 
   #[Test]
-  public function itPublishesNothingForIrrelevantChangeOnPublicImage(): void {
+  public function itQueuesNothingForIrrelevantChangeOnPublicImage(): void {
     $image = $this->imageView(true);
 
-    $listener = new ImageFeedChangeListener($this->publisherExpectingNothing(), $this->normalizer());
+    $listener = new ImageFeedChangeListener($this->busExpectingNothing());
     $listener->postUpdate($image, $this->updateArgs($image, ['attributes.views' => [1, 2]]));
   }
 
   #[Test]
   #[DataProvider('relevantChangeProvider')]
-  public function itPublishesNothingForRelevantChangeOnNonPublicImage(string $field): void {
+  public function itQueuesNothingForRelevantChangeOnNonPublicImage(string $field): void {
     $image = $this->imageView(false);
 
-    $listener = new ImageFeedChangeListener($this->publisherExpectingNothing(), $this->normalizer());
+    $listener = new ImageFeedChangeListener($this->busExpectingNothing());
     $listener->postUpdate($image, $this->updateArgs($image, [$field => ['old', 'new']]));
   }
 }

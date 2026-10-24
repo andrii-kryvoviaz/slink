@@ -1,6 +1,7 @@
 import { ApiClient } from '@slink/api';
 
 import { browser } from '$app/env';
+import { page } from '$app/state';
 
 import type { ImageListingItem } from '@slink/api/Response';
 
@@ -24,6 +25,7 @@ interface ImageFeedEvent {
 class PublicImagesFeed extends AbstractSearchablePaginatedFeed<ImageListingItem> {
   private static readonly TOPIC = 'public-feed';
   private _unsubscribe: (() => void) | null = null;
+  private _pendingImages = new Map<string, symbol>();
 
   public constructor() {
     super(
@@ -71,23 +73,23 @@ class PublicImagesFeed extends AbstractSearchablePaginatedFeed<ImageListingItem>
   }
 
   public unsubscribe(): void {
+    this._pendingImages.clear();
     this._unsubscribe?.();
     this._unsubscribe = null;
   }
 
-  private handleFeedEvent(event: ImageFeedEvent): void {
-    if (this.isSearching) return;
+  private async handleFeedEvent(event: ImageFeedEvent): Promise<void> {
+    if (this.isSearching) {
+      this._pendingImages.clear();
+      return;
+    }
 
     switch (event.event) {
       case ImageFeedEventType.Added:
-        this.handleImageAdded(event.image);
-        break;
       case ImageFeedEventType.Updated:
-        this.handleImageUpdated(event.image);
-        break;
+        return this.handleImageUpsert(event.event, event.image);
       case ImageFeedEventType.Removed:
-        this.handleImageRemoved(event.imageId);
-        break;
+        return this.handleImageRemoved(event.imageId);
     }
   }
 
@@ -101,6 +103,8 @@ class PublicImagesFeed extends AbstractSearchablePaginatedFeed<ImageListingItem>
   }
 
   private async fetchBookmarkStatus(imageId: string): Promise<boolean> {
+    if (!page.data.user) return false;
+
     try {
       const response = await ApiClient.bookmark.getBookmarkStatus(imageId);
       return response.isBookmarked;
@@ -109,26 +113,48 @@ class PublicImagesFeed extends AbstractSearchablePaginatedFeed<ImageListingItem>
     }
   }
 
-  private async handleImageAdded(image?: ImageListingItem): Promise<void> {
-    if (!this.isValidImage(image) || this.has(image.id)) return;
-    const isBookmarked = await this.fetchBookmarkStatus(image.id);
-    if (this.has(image.id)) return;
-    this.addItem({ ...image, isBookmarked });
-  }
-
-  private async handleImageUpdated(image?: ImageListingItem): Promise<void> {
+  private async handleImageUpsert(
+    event: ImageFeedEventType,
+    image?: ImageListingItem,
+  ): Promise<void> {
     if (!this.isValidImage(image)) return;
-    const existing = this._items.find((item) => item.id === image.id);
+    this._pendingImages.delete(image.id);
+    const existing = this.get(image.id);
     if (existing) {
       this.replaceItem({ ...image, isBookmarked: existing.isBookmarked });
-    } else {
-      const isBookmarked = await this.fetchBookmarkStatus(image.id);
-      this.replaceItem({ ...image, isBookmarked });
+      return;
     }
+
+    const pending = Symbol();
+    this._pendingImages.set(image.id, pending);
+    const isBookmarked = await this.fetchBookmarkStatus(image.id);
+    if (this._pendingImages.get(image.id) !== pending) return;
+    this._pendingImages.delete(image.id);
+    if (this.isSearching || this.has(image.id)) return;
+    if (event === ImageFeedEventType.Added) {
+      this.addItem({ ...image, isBookmarked });
+      return;
+    }
+    this.insertUpdatedImage({ ...image, isBookmarked });
+  }
+
+  private insertUpdatedImage(image: ImageListingItem): void {
+    const items = this.items;
+    const timestamp = image.attributes.createdAt.timestamp;
+    let index = items.findIndex(
+      (item) =>
+        item.attributes.createdAt.timestamp < timestamp ||
+        (item.attributes.createdAt.timestamp === timestamp &&
+          item.id < image.id),
+    );
+    if (index === -1 && this.hasMore && items.length > 0) return;
+    if (index === -1) index = items.length;
+    this._items = items.toSpliced(index, 0, image);
   }
 
   private async handleImageRemoved(imageId?: string): Promise<void> {
     if (!imageId) return;
+    this._pendingImages.delete(imageId);
     await this.removeItems([imageId]);
   }
 }
