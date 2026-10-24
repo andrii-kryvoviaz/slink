@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Integration\Http\Upload;
 
+use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Integration\Http\HttpTestCase;
 
@@ -50,6 +51,44 @@ final class UploadAssociationsTest extends HttpTestCase {
     $payload = \json_decode((string) $this->client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
     return $payload['data'] ?? [];
+  }
+
+  private function imageCreatedEventCount(): int {
+    /** @var Connection $connection */
+    $connection = static::getContainer()->get('doctrine.dbal.event_store_connection');
+
+    return (int) $connection->fetchOne("SELECT COUNT(*) FROM event_store WHERE payload LIKE '%image_was_created%'");
+  }
+
+  private function storedFileCount(): int {
+    $storageDir = \dirname(__DIR__, 4) . '/var/functional-test/storage';
+
+    if (!\is_dir($storageDir)) {
+      return 0;
+    }
+
+    $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($storageDir, \FilesystemIterator::SKIP_DOTS));
+
+    return \iterator_count($files);
+  }
+
+  #[Test]
+  public function uploadIntoAnotherUsersCollectionIsRejectedWithoutSideEffects(): void {
+    $this->bootOwner();
+    $collectionId = $this->createCollection($this->ownerToken);
+
+    $this->createUser('assoc-non-owner@local.test', 'assocnonowner', self::PASSWORD);
+    $nonOwnerToken = $this->login('assocnonowner', self::PASSWORD);
+
+    $eventsBefore = $this->imageCreatedEventCount();
+    $filesBefore = $this->storedFileCount();
+
+    $status = $this->uploadImageWithFields($nonOwnerToken, ['collectionIds' => [$collectionId]]);
+
+    self::assertSame(400, $status, 'Upload into a foreign collection was not rejected: ' . (string) $this->client->getResponse()->getContent());
+    self::assertSame($eventsBefore, $this->imageCreatedEventCount(), 'Rejected upload persisted an image event.');
+    self::assertSame($filesBefore, $this->storedFileCount(), 'Rejected upload left a stored file.');
+    self::assertSame([], $this->listCollectionItems($collectionId));
   }
 
   #[Test]
