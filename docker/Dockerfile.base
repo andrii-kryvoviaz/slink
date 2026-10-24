@@ -2,7 +2,6 @@
 ARG NODE_VERSION
 ARG PHP_VERSION
 ARG FRANKENPHP_VERSION
-ARG MERCURE_VERSION
 ARG ALPINE_VERSION
 ARG MEMORY_LIMIT
 ARG UPLOAD_MAX_FILESIZE_IN_BYTES
@@ -11,7 +10,7 @@ ARG GROUP_ID
 
 FROM node:${NODE_VERSION}-alpine AS node
 
-FROM dunglas/frankenphp:php${PHP_VERSION}-alpine AS frankenphp-upstream
+FROM dunglas/frankenphp:${FRANKENPHP_VERSION}-php${PHP_VERSION}-alpine AS frankenphp-upstream
 
 FROM frankenphp-upstream AS frankenphp
 RUN rm -rf /usr/src/php* \
@@ -21,25 +20,7 @@ RUN rm -rf /usr/src/php* \
         /usr/local/lib/php/build \
         /usr/local/bin/phpdbg \
         /usr/local/bin/php-cgi \
-        /usr/local/bin/frankenphp \
         /tmp/* /var/cache/apk/*
-
-FROM dunglas/frankenphp:${FRANKENPHP_VERSION}-builder-php${PHP_VERSION}-alpine AS frankenphp-build
-ARG MERCURE_VERSION
-ARG GO_VERSION
-ARG X_NET_VERSION
-COPY --from=caddy:builder /usr/bin/xcaddy /usr/bin/xcaddy
-RUN CGO_ENABLED=1 \
-        GOTOOLCHAIN=go${GO_VERSION} \
-        XCADDY_GO_BUILD_FLAGS="-ldflags '-w -s -extldflags \"-Wl,-z,stack-size=0x80000\"' -tags=nobadger,nomysql,nopgx" \
-        CGO_CFLAGS=$(php-config --includes) \
-        CGO_LDFLAGS="$(php-config --ldflags) $(php-config --libs)" \
-    xcaddy build \
-        --output /usr/local/bin/frankenphp \
-        --with github.com/dunglas/frankenphp=./ \
-        --with github.com/dunglas/frankenphp/caddy=./caddy/ \
-        --with github.com/dunglas/mercure/caddy@v${MERCURE_VERSION} \
-        --replace golang.org/x/net=golang.org/x/net@v${X_NET_VERSION}
 
 FROM frankenphp-upstream AS php-extensions
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
@@ -114,8 +95,7 @@ USER root
 COPY --from=php-extensions /usr/local/lib/php/extensions/ /usr/local/lib/php/extensions/
 COPY --from=php-extensions /usr/local/etc/php/conf.d/ /usr/local/etc/php/conf.d/
 
-COPY --link --from=frankenphp-build /usr/local/bin/frankenphp /usr/local/bin/frankenphp
-COPY --link --from=frankenphp /usr/local/bin/php /usr/local/bin/php
+COPY --link --from=frankenphp /usr/local/bin/frankenphp /usr/local/bin/php /usr/local/bin/
 COPY --link --from=frankenphp /usr/local/lib/ /usr/local/lib/
 
 ARG MEMORY_LIMIT

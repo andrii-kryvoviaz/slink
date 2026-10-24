@@ -1,9 +1,6 @@
 variable "NODE_VERSION"                  { default = "24.22.1" }
 variable "PHP_VERSION"                   { default = "8.5.12" }
-variable "FRANKENPHP_VERSION"            { default = "1.13.1" }
-variable "MERCURE_VERSION"               { default = "1.1.1" }
-variable "GO_VERSION"                    { default = "1.27.2" }
-variable "X_NET_VERSION"                 { default = "0.61.0" }
+variable "FRANKENPHP_VERSION"            { default = "1.13.3" }
 variable "ALPINE_VERSION"                { default = "3.24" }
 variable "COMPOSER_VERSION"              { default = "2" }
 variable "VERSION"                       { default = "dev" }
@@ -21,9 +18,6 @@ target "_base" {
     NODE_VERSION                 = NODE_VERSION
     PHP_VERSION                  = PHP_VERSION
     FRANKENPHP_VERSION           = FRANKENPHP_VERSION
-    MERCURE_VERSION              = MERCURE_VERSION
-    GO_VERSION                   = GO_VERSION
-    X_NET_VERSION                = X_NET_VERSION
     ALPINE_VERSION               = ALPINE_VERSION
     MEMORY_LIMIT                 = MEMORY_LIMIT
     UPLOAD_MAX_FILESIZE_IN_BYTES = UPLOAD_MAX_FILESIZE_IN_BYTES
@@ -42,11 +36,6 @@ target "_common" {
   target   = "common"
 }
 
-target "_frankenphp" {
-  inherits = ["_base"]
-  target   = "frankenphp"
-}
-
 target "_staging" {
   inherits = ["_base"]
   target   = "staging"
@@ -56,7 +45,6 @@ target "_contexts" {
   contexts = {
     node         = "target:_node"
     common       = "target:_common"
-    frankenphp   = "target:_frankenphp"
     staging      = "target:_staging"
   }
 }
