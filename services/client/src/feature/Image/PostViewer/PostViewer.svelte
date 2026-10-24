@@ -36,6 +36,10 @@
     viewerState.close();
   });
 
+  $effect(() => {
+    if (viewerState.isOpen && !viewerState.currentItem) handleClose();
+  });
+
   async function handleClose() {
     await viewerState.clearUrlParam();
     viewerState.close();
@@ -140,6 +144,7 @@
     <div
       class="h-full w-full transition-transform duration-500 ease-out"
       style="transform: translateY({translateY}%);"
+      style:transition-property={animatingState.active ? 'transform' : 'none'}
     >
       {#if viewerState.isStandaloneMode && viewerState.currentItem}
         <PostViewerItem

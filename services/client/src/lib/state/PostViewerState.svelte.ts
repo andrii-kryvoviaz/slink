@@ -17,13 +17,16 @@ export type PostViewerSource = 'public' | 'collection';
 
 class PostViewerState {
   private _isOpen: boolean = $state(false);
-  private _currentIndex: number = $state(0);
+  private _currentItemId: string | null = $state(null);
   private _feed: PostViewerFeed | null = $state(null);
   private _standaloneItem: MediaItem | null = $state(null);
   private _lastFetchedPostId: string | null = null;
   private _prefetchThreshold: number = 3;
   private _prefetchCount: number = 2;
   private _source: PostViewerSource = $state('public');
+  private _currentIndex: number = $derived(
+    this.items.findIndex((item) => item.id === this._currentItemId),
+  );
 
   get isOpen(): boolean {
     return this._isOpen;
@@ -55,7 +58,7 @@ class PostViewerState {
   }
 
   get hasNext(): boolean {
-    if (this._standaloneItem) return false;
+    if (this._standaloneItem || this._currentIndex < 0) return false;
     return (
       this._currentIndex < this.items.length - 1 ||
       (this._feed?.hasMore ?? false)
@@ -74,6 +77,7 @@ class PostViewerState {
   setFeed(feed: PostViewerFeed, source: PostViewerSource = 'public'): void {
     if (this._feed === feed) return;
     this._feed = feed;
+    this._currentItemId = null;
     this._lastFetchedPostId = null;
     this._standaloneItem = null;
     this._source = source;
@@ -87,7 +91,8 @@ class PostViewerState {
   open(index: number = 0): void {
     this._standaloneItem = null;
     this._lastFetchedPostId = null;
-    this._currentIndex = Math.max(0, Math.min(index, this.items.length - 1));
+    const currentIndex = Math.max(0, Math.min(index, this.items.length - 1));
+    this._currentItemId = this.items[currentIndex]?.id ?? null;
     this._isOpen = true;
     this.updateUrl();
     this.prefetchAdjacent();
@@ -96,33 +101,25 @@ class PostViewerState {
 
   close(): void {
     this._isOpen = false;
+    this._currentItemId = null;
     this._standaloneItem = null;
     this._lastFetchedPostId = null;
   }
 
   goToIndex(index: number): void {
     if (index < 0 || index >= this.items.length) return;
-    this._currentIndex = index;
+    this._currentItemId = this.items[index].id;
     this.updateUrl();
     this.prefetchAdjacent();
     this.checkAndLoadMore();
   }
 
   next(): void {
-    if (this._currentIndex < this.items.length - 1) {
-      this._currentIndex++;
-      this.updateUrl();
-      this.prefetchAdjacent();
-      this.checkAndLoadMore();
-    }
+    if (this.hasNext) this.goToIndex(this._currentIndex + 1);
   }
 
   prev(): void {
-    if (this._currentIndex > 0) {
-      this._currentIndex--;
-      this.updateUrl();
-      this.prefetchAdjacent();
-    }
+    if (this.hasPrev) this.goToIndex(this._currentIndex - 1);
   }
 
   private updateUrl(): void {
