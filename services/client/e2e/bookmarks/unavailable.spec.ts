@@ -21,6 +21,10 @@ const savedBadge = (scope: Locator) =>
 const settle = () => new Promise((resolve) => setTimeout(resolve, 1100));
 
 test.describe('Bookmarks saved date', () => {
+  test.afterEach(async ({ page }) => {
+    await page.unrouteAll({ behavior: 'wait' });
+  });
+
   test('shows the bookmark date in the badge while the card body keeps the image date', async ({
     page,
     bookmarksPage,

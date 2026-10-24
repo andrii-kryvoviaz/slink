@@ -59,6 +59,40 @@ test.describe('Comment CRUD', () => {
     await expect(comments.root.getByText(original)).toHaveCount(0);
   });
 
+  test('keeps the selected post and comment edit draft when another public image arrives', async ({
+    api,
+    actor,
+    explorePage,
+  }) => {
+    const uploader = await actor('live-feed-uploader');
+    const imageId = await api.content.uploadImage({ isPublic: true });
+    const original = `Original comment ${Date.now()}`;
+    const draft = `Unsaved draft ${Date.now()}`;
+    await api.content.createComment(imageId, original);
+
+    const page = explorePage.page;
+    const subscribed = page.waitForResponse(
+      (response) =>
+        new URL(response.url()).pathname === '/sse' &&
+        new URL(response.url()).searchParams.get('topic') === 'public-feed',
+    );
+    await page.goto(`/explore?post=${imageId}`);
+    await expect(explorePage.viewer).toBeVisible();
+    expect((await subscribed).status()).toBe(200);
+
+    const comments = new CommentSection(page, imageId);
+    await comments.waitForLoaded();
+    await comments.startEdit(original);
+    await comments.editInput.fill(draft);
+
+    const addedId = await uploader.content.uploadImage({ isPublic: true });
+    await expect(page.locator(`[data-post-id="${addedId}"]`)).toBeAttached();
+
+    await expect(comments.editInput).toHaveValue(draft);
+    await expect(comments.root).toBeInViewport();
+    expect(explorePage.currentPost()).toBe(imageId);
+  });
+
   test('owner deletes their own comment through the confirmation dialog', async ({
     api,
     explorePage,

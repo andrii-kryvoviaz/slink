@@ -88,9 +88,9 @@ test.describe('Public feed SSE', () => {
   );
 
   test(
-    'going private emits image_removed and then stays silent',
+    'going private removes the image without publishing private changes',
     { tag: ['@anonymous', '@sc-894'] },
-    async ({ page, actor }) => {
+    async ({ page, actor, explorePage }) => {
       const owner = await actor('owner');
       await page.goto('/explore');
 
@@ -99,10 +99,12 @@ test.describe('Public feed SSE', () => {
 
       const imageId = await owner.content.uploadImage({ isPublic: true });
       await sse.waitForEvent(TOPIC, isAdded(imageId));
+      await expect(explorePage.mediaFor(imageId)).toBeVisible();
 
       await owner.content.setMediaVisibility([imageId], false);
       const removed = await sse.waitForEvent(TOPIC, isRemoved(imageId));
       expect(removed).toEqual({ event: 'image_removed', imageId });
+      await expect(explorePage.mediaFor(imageId)).toHaveCount(0);
 
       await owner.content.updateImage(imageId, {
         description: `Private edit ${Date.now()}`,
@@ -113,7 +115,10 @@ test.describe('Public feed SSE', () => {
       const events = await sse.events(TOPIC);
       const removedIndex = events.findIndex(isRemoved(imageId));
       const after = events.slice(removedIndex + 1).filter(mentions(imageId));
-      expect(after).toEqual([]);
+      for (const event of after) {
+        expect(event).toEqual({ event: 'image_removed', imageId });
+      }
+      await expect(explorePage.mediaFor(imageId)).toHaveCount(0);
     },
   );
 });

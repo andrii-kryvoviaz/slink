@@ -84,10 +84,20 @@ export class ContentApi {
     imageIds: string[],
     isPublic: boolean,
   ): Promise<void> {
-    await this.http.request('PATCH', '/api/images/batch', {
+    const result = await this.http.request('PATCH', '/api/images/batch', {
       imageIds,
       isPublic,
     });
+
+    if (
+      !Array.isArray(result?.processed) ||
+      result.failed?.length !== 0 ||
+      imageIds.some((imageId) => !result.processed.includes(imageId))
+    ) {
+      throw new Error(
+        `Media visibility update failed: ${JSON.stringify(result)}`,
+      );
+    }
   }
 
   async updateImage(

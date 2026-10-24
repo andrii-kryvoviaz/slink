@@ -59,10 +59,14 @@ export class CommentSection extends BasePage {
     return created;
   }
 
-  async edit(content: string, updated: string): Promise<Response> {
+  async startEdit(content: string) {
     await this.openActions(content);
     await this.menu.getByRole('menuitem', { name: 'Edit' }).click();
     await expect(this.editInput).toBeVisible();
+  }
+
+  async edit(content: string, updated: string): Promise<Response> {
+    await this.startEdit(content);
 
     const saved = this.commentWrite('PATCH');
 

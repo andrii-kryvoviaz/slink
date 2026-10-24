@@ -14,9 +14,9 @@ export class AdminUsersPage extends BasePage {
     exact: true,
   });
   readonly listViewButton = this.page.getByRole('radio', { name: 'List' });
-  readonly pageSizeButton = this.page.getByRole('button', {
-    name: /^Limit \d+$/,
-  });
+  readonly pageSizeButton = this.page
+    .getByRole('combobox')
+    .filter({ hasText: /^\s*Limit\s+\d+\s*$/ });
   readonly previousPageButton = this.page.locator(
     'button[title="Previous page"]',
   );

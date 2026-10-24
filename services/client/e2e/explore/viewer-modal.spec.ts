@@ -1,14 +1,14 @@
 import { expect, test } from '../fixtures/auth.fixture';
 
 test.describe('Explore viewer modal', () => {
-  test.beforeEach(async ({ api }) => {
+  test.beforeEach(async ({ api, page, testUser }) => {
     await api.content.uploadImage({ isPublic: true });
     await api.content.uploadImage({ isPublic: true });
     await api.content.uploadImage({ isPublic: true });
+    await page.goto(`/explore?q=${testUser.username}`);
   });
 
   test('opens, navigates with buttons, and closes', async ({ explorePage }) => {
-    await explorePage.goto();
     await explorePage.feedItems.first().waitFor({ state: 'visible' });
 
     await explorePage.openFirstItem();
@@ -36,7 +36,6 @@ test.describe('Explore viewer modal', () => {
   });
 
   test('navigates with arrow keys', async ({ explorePage }) => {
-    await explorePage.goto();
     await explorePage.feedItems.first().waitFor({ state: 'visible' });
 
     await explorePage.openFirstItem();
@@ -61,7 +60,6 @@ test.describe('Explore viewer modal', () => {
   test('navigates with down/up arrow keys, matching left/right', async ({
     explorePage,
   }) => {
-    await explorePage.goto();
     await explorePage.feedItems.first().waitFor({ state: 'visible' });
 
     await explorePage.openFirstItem();
@@ -84,7 +82,6 @@ test.describe('Explore viewer modal', () => {
   });
 
   test('closes with Escape key', async ({ explorePage }) => {
-    await explorePage.goto();
     await explorePage.feedItems.first().waitFor({ state: 'visible' });
 
     await explorePage.openFirstItem();
@@ -101,7 +98,7 @@ test.describe('Explore viewer modal', () => {
     await api.content.uploadImage({ isPublic: true });
     const secondId = await api.content.uploadImage({ isPublic: true });
 
-    await explorePage.goto();
+    await explorePage.page.reload();
     await explorePage.cardFor(secondId).waitFor({ state: 'visible' });
 
     await explorePage.cardFor(secondId).click();

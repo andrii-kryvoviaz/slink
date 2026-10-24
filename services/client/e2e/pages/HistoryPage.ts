@@ -15,6 +15,9 @@ export class HistoryPage extends BasePage {
   readonly deselectCheckboxes = this.page.getByRole('button', {
     name: 'Deselect image',
   });
+  readonly columnsSelect = this.page
+    .getByRole('combobox')
+    .filter({ hasText: /^\s*Columns\s*$/ });
   readonly actionBar = this.page
     .locator('div')
     .filter({
@@ -221,16 +224,17 @@ export class HistoryPage extends BasePage {
   get tablePagination() {
     return this.page
       .locator('main div', {
-        has: this.page.getByRole('button', { name: /^Limit \d+$/ }),
+        has: this.page
+          .getByRole('combobox')
+          .filter({ hasText: /^\s*Limit\s+\d+\s*$/ }),
       })
       .last();
   }
 
   pageSizeButton(pageSize: number) {
-    return this.tablePagination.getByRole('button', {
-      name: `Limit ${pageSize}`,
-      exact: true,
-    });
+    return this.tablePagination
+      .getByRole('combobox')
+      .filter({ hasText: new RegExp(`^\\s*Limit\\s+${pageSize}\\s*$`) });
   }
 
   get nextTablePageButton() {

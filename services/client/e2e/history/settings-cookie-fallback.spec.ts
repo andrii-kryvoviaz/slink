@@ -1,5 +1,4 @@
 import { expect, test } from '../fixtures/auth.fixture';
-import { HistoryPage } from '../pages/HistoryPage';
 
 const malformedCookieCases: Array<{ label: string; value: string }> = [
   { label: 'tree viewMode', value: JSON.stringify({ viewMode: 'tree' }) },
@@ -12,7 +11,6 @@ test.describe('History settings cookie fallback', () => {
       historyPage,
       layoutControls,
       api,
-      page,
     }) => {
       await api.content.uploadImage();
       await layoutControls.setSettingCookie('history', value);
@@ -23,7 +21,7 @@ test.describe('History settings cookie fallback', () => {
         'aria-checked',
         'true',
       );
-      await expect(page.getByRole('button', { name: 'Columns' })).toBeVisible();
+      await expect(historyPage.columnsSelect).toBeVisible();
     });
   }
 });
