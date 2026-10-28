@@ -21,6 +21,7 @@ use Slink\Tag\Domain\Repository\TagRepositoryInterface;
 use Slink\Tag\Infrastructure\ReadModel\View\TagView;
 use Slink\User\Domain\Repository\UserRepositoryInterface;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
+use Slink\Shared\Domain\ValueObject\ID;
 
 final class TagProjection extends AbstractProjection {
   public function __construct(
@@ -96,7 +97,12 @@ final class TagProjection extends AbstractProjection {
     );
 
     $this->tagRepository->add($tagView);
-    $this->tagRepository->updateDescendantPaths($oldPath, $newPath, $event->updatedAt ?? DateTime::now());
+    $this->tagRepository->updateDescendantPaths(
+      $oldPath,
+      $newPath,
+      $event->updatedAt ?? DateTime::now(),
+      ID::fromString($tagView->getUserId()),
+    );
   }
 
   public function handleTagWasDeleted(TagWasDeleted $event): void {

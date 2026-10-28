@@ -188,12 +188,14 @@ final class TagRepository extends AbstractRepository implements TagRepositoryInt
     return array_map(fn(TagView $child) => $child->getUuid(), $children);
   }
 
-  public function updateDescendantPaths(string $oldPath, string $newPath, DateTime $updatedAt): void {
+  public function updateDescendantPaths(string $oldPath, string $newPath, DateTime $updatedAt, ID $userId): void {
     $this->createQueryBuilder('t')
       ->update()
       ->set('t.path', 'CONCAT(:newPrefix, SUBSTRING(t.path, :oldPrefixLen + 1))')
       ->set('t.updatedAt', ':updatedAt')
       ->where('t.path LIKE :pattern')
+      ->andWhere('t.userId = :userId')
+      ->setParameter('userId', $userId->toString())
       ->setParameter('newPrefix', $newPath)
       ->setParameter('oldPrefixLen', strlen($oldPath))
       ->setParameter('updatedAt', $updatedAt)

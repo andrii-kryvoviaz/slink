@@ -80,7 +80,7 @@ interface TagRepositoryInterface extends ServiceEntityRepositoryInterface {
    */
   public function findChildIds(ID $parentId, ID $userId): array;
 
-  public function updateDescendantPaths(string $oldPath, string $newPath, DateTime $updatedAt): void;
+  public function updateDescendantPaths(string $oldPath, string $newPath, DateTime $updatedAt, ID $userId): void;
 
   /**
    * @param ID $userId
