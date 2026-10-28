@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Unit\Slink\User\Domain\ValueObject;
 
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\User\Domain\Exception\InvalidUsernameException;
@@ -39,6 +40,13 @@ final class UsernameTest extends TestCase {
       'Too long - 31 chars' => [str_repeat('a', 31), 'Username must be at most 30 characters long'],
       'Too long - 50 chars' => [str_repeat('x', 50), 'Username must be at most 30 characters long'],
     ];
+  }
+
+  /**
+   * @return array<string, array{string}>
+   */
+  public static function provideInvalidUsernameStrings(): array {
+    return array_map(fn(array $data): array => [$data[0]], self::provideInvalidUsernames());
   }
 
   /**
@@ -131,5 +139,24 @@ final class UsernameTest extends TestCase {
     $this->expectExceptionMessage($expectedMessage);
 
     Username::fromString($invalidUsername);
+  }
+
+  #[Test]
+  #[Group('sc-1129')]
+  public function itCreatesUsernameFromStringOrNull(): void {
+    $this->assertSame('andy', Username::fromStringOrNull('andy')?->toString());
+  }
+
+  #[Test]
+  #[Group('sc-1129')]
+  public function itReturnsNullFromStringOrNullForNull(): void {
+    $this->assertNull(Username::fromStringOrNull(null));
+  }
+
+  #[Test]
+  #[Group('sc-1129')]
+  #[DataProvider('provideInvalidUsernameStrings')]
+  public function itReturnsNullFromStringOrNullForInvalidUsername(string $invalidUsername): void {
+    $this->assertNull(Username::fromStringOrNull($invalidUsername));
   }
 }

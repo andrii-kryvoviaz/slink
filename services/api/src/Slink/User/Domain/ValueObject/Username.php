@@ -27,6 +27,22 @@ final readonly class Username extends AbstractValueObject implements Sanitizable
   public static function fromString(string $username): self {
     return new self($username);
   }
+
+  /**
+   * @param string|null $username
+   * @return self|null
+   */
+  public static function fromStringOrNull(?string $username): ?self {
+    if ($username === null) {
+      return null;
+    }
+
+    try {
+      return new self($username);
+    } catch (InvalidUsernameException) {
+      return null;
+    }
+  }
   
   /**
    * @param DisplayName $displayName

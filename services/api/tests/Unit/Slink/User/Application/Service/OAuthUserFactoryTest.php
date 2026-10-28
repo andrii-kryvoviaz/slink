@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Unit\Slink\User\Application\Service;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
@@ -23,6 +25,8 @@ use Slink\User\Domain\ValueObject\DisplayName;
 use Slink\User\Domain\ValueObject\Email;
 use Slink\User\Domain\ValueObject\OAuth\OAuthIdentity;
 use Slink\User\Domain\ValueObject\OAuth\OAuthSubject;
+use Slink\User\Domain\ValueObject\OAuth\ProviderSlug;
+use Slink\User\Domain\ValueObject\OAuth\TokenClaims;
 use Slink\User\Domain\ValueObject\Username;
 
 final class OAuthUserFactoryTest extends TestCase {
@@ -141,6 +145,142 @@ final class OAuthUserFactoryTest extends TestCase {
     $factory = new OAuthUserFactory($userFactory, $uniqueUsernameSpec);
 
     $factory->create($identity);
+  }
+
+  /**
+   * @return array<string, array{array<string, mixed>}>
+   */
+  public static function provideUnusablePreferredUsernameClaims(): array {
+    return [
+      'claim missing' => [['name' => 'Andrii Kryvoviaz']],
+      'empty' => [['name' => 'Andrii Kryvoviaz', 'preferred_username' => '']],
+      'too short' => [['name' => 'Andrii Kryvoviaz', 'preferred_username' => 'ab']],
+      'too long' => [['name' => 'Andrii Kryvoviaz', 'preferred_username' => str_repeat('a', 31)]],
+      'not a string' => [['name' => 'Andrii Kryvoviaz', 'preferred_username' => 12345]],
+    ];
+  }
+
+  #[Test]
+  #[Group('sc-1129')]
+  public function itTakesUsernameFromPreferredUsernameWhenNameIsAlsoPresent(): void {
+    $identity = $this->createIdentityFromClaims([
+      'name' => 'Andrii Kryvoviaz',
+      'preferred_username' => 'andy',
+    ]);
+
+    $factory = new OAuthUserFactory($this->createRealUserFactory(), $this->usernamesTaken());
+
+    $user = $factory->create($identity);
+
+    $this->assertSame('andy', $user->getUsername()->toString());
+  }
+
+  #[Test]
+  #[Group('sc-1129')]
+  public function itKeepsDisplayNameFromNameWhenPreferredUsernameIsUsed(): void {
+    $identity = $this->createIdentityFromClaims([
+      'name' => 'Andrii Kryvoviaz',
+      'preferred_username' => 'andy',
+    ]);
+
+    $userFactory = $this->createMock(UserFactory::class);
+    $userFactory->expects($this->once())
+      ->method('create')
+      ->with(
+        $this->isInstanceOf(ID::class),
+        $this->callback(fn(Credentials $credentials): bool => $credentials->username->toString() === 'andy'),
+        $this->callback(fn(DisplayName $displayName): bool => $displayName->toString() === 'Andrii Kryvoviaz'),
+      );
+
+    $factory = new OAuthUserFactory($userFactory, $this->usernamesTaken());
+
+    $factory->create($identity);
+  }
+
+  #[Test]
+  #[Group('sc-1129')]
+  public function itPreservesPreferredUsernameCasing(): void {
+    $identity = $this->createIdentityFromClaims([
+      'name' => 'Andrii Kryvoviaz',
+      'preferred_username' => 'Andy',
+    ]);
+
+    $factory = new OAuthUserFactory($this->createRealUserFactory(), $this->usernamesTaken());
+
+    $user = $factory->create($identity);
+
+    $this->assertSame('Andy', $user->getUsername()->toString());
+  }
+
+  /**
+   * @param array<string, mixed> $claims
+   */
+  #[Test]
+  #[Group('sc-1129')]
+  #[DataProvider('provideUnusablePreferredUsernameClaims')]
+  public function itFallsBackToDisplayNameUsernameWhenPreferredUsernameIsUnusable(array $claims): void {
+    $identity = $this->createIdentityFromClaims($claims);
+
+    $factory = new OAuthUserFactory($this->createRealUserFactory(), $this->usernamesTaken());
+
+    $user = $factory->create($identity);
+
+    $this->assertSame('andrii.kryvoviaz', $user->getUsername()->toString());
+  }
+
+  #[Test]
+  #[Group('sc-1129')]
+  public function itSuffixesTakenPreferredUsername(): void {
+    $identity = $this->createIdentityFromClaims([
+      'name' => 'Andrii Kryvoviaz',
+      'preferred_username' => 'andy',
+    ]);
+
+    $factory = new OAuthUserFactory($this->createRealUserFactory(), $this->usernamesTaken('andy'));
+
+    $user = $factory->create($identity);
+
+    $this->assertSame('andy1', $user->getUsername()->toString());
+  }
+
+  #[Test]
+  #[Group('sc-1129')]
+  public function itTruncatesTakenMaxLengthPreferredUsernameWhenSuffixing(): void {
+    $preferredUsername = str_repeat('b', 30);
+    $identity = $this->createIdentityFromClaims([
+      'name' => 'Andrii Kryvoviaz',
+      'preferred_username' => $preferredUsername,
+    ]);
+
+    $factory = new OAuthUserFactory($this->createRealUserFactory(), $this->usernamesTaken($preferredUsername));
+
+    $user = $factory->create($identity);
+
+    $this->assertSame(str_repeat('b', 29) . '1', $user->getUsername()->toString());
+  }
+
+  /**
+   * @param array<string, mixed> $claims
+   */
+  private function createIdentityFromClaims(array $claims): OAuthIdentity {
+    return OAuthIdentity::fromTokenClaims(
+      TokenClaims::fromPayload([
+        'iss' => 'https://id.example.com',
+        'sub' => 'subject-1',
+        'email' => 'andy@example.com',
+        'email_verified' => true,
+        ...$claims,
+      ]),
+      ProviderSlug::fromString('pocket-id'),
+    );
+  }
+
+  private function usernamesTaken(string ...$taken): UniqueUsernameSpecificationInterface {
+    $uniqueUsernameSpec = $this->createStub(UniqueUsernameSpecificationInterface::class);
+    $uniqueUsernameSpec->method('isUnique')
+      ->willReturnCallback(fn(Username $username): bool => !in_array($username->toString(), $taken, true));
+
+    return $uniqueUsernameSpec;
   }
 
   private function createIdentity(string $displayName = 'Test User'): OAuthIdentity {

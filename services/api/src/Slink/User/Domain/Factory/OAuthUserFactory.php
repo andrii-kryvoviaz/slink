@@ -9,14 +9,13 @@ use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Domain\Contracts\OAuthProviderProfile;
 use Slink\User\Domain\Enum\ApprovalPolicy;
 use Slink\User\Domain\Enum\RegistrationPolicy;
+use Slink\User\Domain\Exception\OAuthEmailRequiredException;
+use Slink\User\Domain\Specification\UniqueUsernameSpecificationInterface;
 use Slink\User\Domain\User;
 use Slink\User\Domain\ValueObject\Auth\Credentials;
 use Slink\User\Domain\ValueObject\Auth\HashedPassword;
 use Slink\User\Domain\ValueObject\OAuth\OAuthIdentity;
-use Slink\User\Domain\Exception\OAuthEmailRequiredException;
 use Slink\User\Domain\ValueObject\Username;
-use Slink\User\Domain\Specification\UniqueUsernameSpecificationInterface;
-use Slink\User\Domain\ValueObject\DisplayName;
 
 final readonly class OAuthUserFactory {
   public function __construct(
@@ -25,7 +24,7 @@ final readonly class OAuthUserFactory {
   ) {}
 
   public function create(#[SensitiveParameter] OAuthIdentity $identity, ?OAuthProviderProfile $provider = null): User {
-    $username = $this->resolveUniqueUsername($identity->getDisplayName());
+    $username = $this->resolveUniqueUsername($identity);
     $credentials = Credentials::create(
       $identity->getEmail() ?? throw new OAuthEmailRequiredException(),
       $username,
@@ -41,8 +40,8 @@ final readonly class OAuthUserFactory {
     );
   }
 
-  private function resolveUniqueUsername(DisplayName $displayName): Username {
-    $base = Username::fromDisplayName($displayName);
+  private function resolveUniqueUsername(OAuthIdentity $identity): Username {
+    $base = $identity->getPreferredUsername() ?? Username::fromDisplayName($identity->getDisplayName());
     $candidate = $base;
     $suffix = 1;
 
