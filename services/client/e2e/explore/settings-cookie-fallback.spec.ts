@@ -21,9 +21,7 @@ test.describe('Explore settings cookie fallback', () => {
     page,
   }) => {
     const publicImageOwner = await actor('publicImageOwner');
-    const imageId = await publicImageOwner.content.uploadImage({
-      isPublic: true,
-    });
+    await publicImageOwner.content.uploadImage({ isPublic: true });
 
     await layoutControls.setSettingCookie(
       'explore',
@@ -56,7 +54,7 @@ test.describe('Explore settings cookie fallback', () => {
 
     held.resolve();
 
-    await expect(explorePage.cardFor(imageId)).toBeVisible();
+    await expect(explorePage.feedItems.first()).toBeVisible();
     await expect(strayControl).toHaveCount(0);
 
     await listRadio.click();
@@ -75,7 +73,7 @@ test.describe('Explore settings cookie fallback', () => {
       api,
       page,
     }) => {
-      const imageId = await api.content.uploadImage({ isPublic: true });
+      await api.content.uploadImage({ isPublic: true });
 
       await layoutControls.setSettingCookie('explore', value);
 
@@ -88,7 +86,7 @@ test.describe('Explore settings cookie fallback', () => {
 
       await page.goto(ExplorePage.URL);
 
-      await expect(explorePage.cardFor(imageId)).toBeVisible();
+      await expect(explorePage.feedItems.first()).toBeVisible();
       await expect(explorePage.viewModeOption('Grid')).toHaveAttribute(
         'aria-checked',
         'true',

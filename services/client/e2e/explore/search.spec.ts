@@ -1,5 +1,5 @@
 import { expect, test } from '../fixtures/auth.fixture';
-import { captureListingRequests } from '../helpers/listingRequests';
+import { captureFeedLoads } from '../helpers/listingRequests';
 import type { ExplorePage } from '../pages/ExplorePage';
 
 const HOLD_WINDOW_MS = 5000;
@@ -54,7 +54,7 @@ test.describe('Explore search', () => {
   }) => {
     await api.content.uploadImage({ isPublic: true });
 
-    const listings = captureListingRequests(page);
+    const listings = captureFeedLoads(page);
     await page.goto('/explore?search=zzznonexistentqueryzzz&searchBy=user');
 
     await expect.poll(() => listings.length).toBe(1);
@@ -73,7 +73,7 @@ test.describe('Explore search', () => {
   }) => {
     await api.content.uploadImage({ isPublic: true });
 
-    const listings = captureListingRequests(page);
+    const listings = captureFeedLoads(page);
     await page.goto('/explore');
 
     await expect.poll(() => listings.length).toBe(1);
@@ -91,7 +91,7 @@ test.describe('Explore search', () => {
     await api.content.uploadImage({ isPublic: true });
 
     for (const blank of ['%20%20', '']) {
-      const listings = captureListingRequests(page);
+      const listings = captureFeedLoads(page);
       await page.goto(`/explore?search=${blank}&searchBy=user`);
 
       await expect.poll(() => listings.length).toBe(1);
@@ -125,7 +125,7 @@ test.describe('Explore search', () => {
   }) => {
     await api.content.uploadImage({ isPublic: true });
 
-    const listings = captureListingRequests(page);
+    const listings = captureFeedLoads(page);
     await page.goto('/explore?search=zzznonexistentqueryzzz');
 
     await expect.poll(() => listings.length).toBe(1);
@@ -151,7 +151,7 @@ test.describe('Explore search', () => {
     await page.goto('/explore?search=zzznonexistentqueryzzz&searchBy=user');
     await expect(explorePage.emptyState('no-results')).toBeVisible();
 
-    const listings = captureListingRequests(page);
+    const listings = captureFeedLoads(page);
     await explorePage.clearSearchButton.click();
 
     await expect.poll(() => listings.length).toBe(1);
@@ -179,7 +179,7 @@ test.describe('Explore search', () => {
     await page.goto('/explore?search=zzznonexistentqueryzzz&searchBy=user');
     await expect(explorePage.emptyState('no-results')).toBeVisible();
 
-    const listings = captureListingRequests(page);
+    const listings = captureFeedLoads(page);
     await explorePage.emptyStateClearButton.click();
 
     await expect.poll(() => listings.length).toBe(1);
@@ -216,7 +216,7 @@ test.describe('Explore search', () => {
       await expect(explorePage.feedItems).toHaveCount(0, { timeout: 1000 });
     }).toPass({ timeout: 15000 });
 
-    const listings = captureListingRequests(page);
+    const listings = captureFeedLoads(page);
     await explorePage.clearSearchButton.click();
 
     await expect.poll(() => listings.length).toBe(1);
@@ -267,7 +267,7 @@ test.describe('Explore search', () => {
       await route.continue();
     });
 
-    const listings = captureListingRequests(page);
+    const listings = captureFeedLoads(page);
     await explorePage.goto();
     await expect.poll(() => held).toBeGreaterThan(0);
 
