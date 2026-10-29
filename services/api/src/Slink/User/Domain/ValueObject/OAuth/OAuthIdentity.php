@@ -9,7 +9,6 @@ use Slink\User\Domain\Exception\InvalidCredentialsException;
 use Slink\User\Domain\ValueObject\DisplayName;
 use Slink\User\Domain\ValueObject\Email;
 use Slink\User\Domain\ValueObject\OAuth\ProviderSlug;
-use Slink\User\Domain\ValueObject\Username;
 
 final readonly class OAuthIdentity extends AbstractValueObject {
   public function __construct(
@@ -17,7 +16,7 @@ final readonly class OAuthIdentity extends AbstractValueObject {
     private ?Email $email,
     private DisplayName $displayName,
     private bool $emailVerified,
-    private ?Username $preferredUsername = null,
+    private ?string $preferredUsername = null,
   ) {}
 
   public static function fromTokenClaims(TokenClaims $claims, ProviderSlug $provider): self {
@@ -49,7 +48,7 @@ final readonly class OAuthIdentity extends AbstractValueObject {
     return $this->displayName;
   }
 
-  public function getPreferredUsername(): ?Username {
+  public function getPreferredUsername(): ?string {
     return $this->preferredUsername;
   }
 

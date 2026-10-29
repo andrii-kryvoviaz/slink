@@ -21,7 +21,7 @@ final class OAuthIdentityTest extends TestCase {
   public function itCarriesPreferredUsernameFromTokenClaims(): void {
     $identity = $this->identityFromClaims(['name' => 'Andrii Kryvoviaz', 'preferred_username' => 'andy']);
 
-    $this->assertSame('andy', $identity->getPreferredUsername()?->toString());
+    $this->assertSame('andy', $identity->getPreferredUsername());
   }
 
   #[Test]

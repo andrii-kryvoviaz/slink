@@ -10,6 +10,8 @@ use Slink\User\Domain\Contracts\OAuthProviderProfile;
 use Slink\User\Domain\Enum\ApprovalPolicy;
 use Slink\User\Domain\Enum\RegistrationPolicy;
 use Slink\User\Domain\Exception\OAuthEmailRequiredException;
+use Slink\User\Domain\Service\UsernameGeneratorInterface;
+use Slink\User\Domain\Specification\SignUpUsernameSpecificationInterface;
 use Slink\User\Domain\Specification\UniqueUsernameSpecificationInterface;
 use Slink\User\Domain\User;
 use Slink\User\Domain\ValueObject\Auth\Credentials;
@@ -18,9 +20,13 @@ use Slink\User\Domain\ValueObject\OAuth\OAuthIdentity;
 use Slink\User\Domain\ValueObject\Username;
 
 final readonly class OAuthUserFactory {
+  private const string DEFAULT_USERNAME = 'user';
+
   public function __construct(
     private UserFactory $userFactory,
     private UniqueUsernameSpecificationInterface $uniqueUsernameSpecification,
+    private SignUpUsernameSpecificationInterface $signUpUsernameSpecification,
+    private UsernameGeneratorInterface $usernameGenerator,
   ) {}
 
   public function create(#[SensitiveParameter] OAuthIdentity $identity, ?OAuthProviderProfile $provider = null): User {
@@ -41,7 +47,7 @@ final readonly class OAuthUserFactory {
   }
 
   private function resolveUniqueUsername(OAuthIdentity $identity): Username {
-    $base = $identity->getPreferredUsername() ?? Username::fromDisplayName($identity->getDisplayName());
+    $base = $this->baseUsername($identity);
     $candidate = $base;
     $suffix = 1;
 
@@ -51,5 +57,17 @@ final readonly class OAuthUserFactory {
     }
 
     return $candidate;
+  }
+
+  private function baseUsername(OAuthIdentity $identity): Username {
+    $candidate = array_find(
+      [
+        mb_strtolower($identity->getPreferredUsername() ?? ''),
+        $this->usernameGenerator->generate($identity->getDisplayName())?->toString() ?? '',
+      ],
+      $this->signUpUsernameSpecification->isSatisfiedBy(...),
+    );
+
+    return Username::fromString($candidate ?? self::DEFAULT_USERNAME);
   }
 }

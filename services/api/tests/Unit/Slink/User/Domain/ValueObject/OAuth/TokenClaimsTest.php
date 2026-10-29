@@ -16,7 +16,7 @@ final class TokenClaimsTest extends TestCase {
   public function itExposesPreferredUsernameClaim(): void {
     $claims = TokenClaims::fromPayload(['name' => 'Andrii Kryvoviaz', 'preferred_username' => 'andy']);
 
-    $this->assertSame('andy', $claims->getPreferredUsername()?->toString());
+    $this->assertSame('andy', $claims->getPreferredUsername());
   }
 
   #[Test]
@@ -31,14 +31,6 @@ final class TokenClaimsTest extends TestCase {
   #[Group('sc-1129')]
   public function itReturnsNullPreferredUsernameWhenClaimIsNotAString(): void {
     $claims = TokenClaims::fromPayload(['name' => 'Andrii Kryvoviaz', 'preferred_username' => 12345]);
-
-    $this->assertNull($claims->getPreferredUsername());
-  }
-
-  #[Test]
-  #[Group('sc-1129')]
-  public function itReturnsNullPreferredUsernameWhenClaimIsNotAValidUsername(): void {
-    $claims = TokenClaims::fromPayload(['name' => 'Andrii Kryvoviaz', 'preferred_username' => 'ab']);
 
     $this->assertNull($claims->getPreferredUsername());
   }

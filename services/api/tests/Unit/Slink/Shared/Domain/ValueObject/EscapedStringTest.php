@@ -34,6 +34,13 @@ final class EscapedStringTest extends TestCase {
   }
 
   #[Test]
+  public function itUnescapesItsValue(): void {
+    $escaped = EscapedString::fromString("Siobhan O'Callaghan <b>");
+
+    $this->assertSame("Siobhan O'Callaghan <b>", $escaped->unescaped());
+  }
+
+  #[Test]
   public function itCalculatesLengthCorrectly(): void {
     $escaped = EscapedString::fromString('<script>');
 

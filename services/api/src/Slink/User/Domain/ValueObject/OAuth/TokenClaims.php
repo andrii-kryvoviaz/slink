@@ -7,7 +7,6 @@ namespace Slink\User\Domain\ValueObject\OAuth;
 use Slink\Shared\Domain\ValueObject\AbstractCompoundValueObject;
 use Slink\User\Domain\ValueObject\DisplayName;
 use Slink\User\Domain\ValueObject\Email;
-use Slink\User\Domain\ValueObject\Username;
 
 final readonly class TokenClaims extends AbstractCompoundValueObject {
   /**
@@ -45,8 +44,8 @@ final readonly class TokenClaims extends AbstractCompoundValueObject {
     return DisplayName::fromStringOrNull($this->claims['name'] ?? $this->stringClaim('preferred_username'));
   }
 
-  public function getPreferredUsername(): ?Username {
-    return Username::fromStringOrNull($this->stringClaim('preferred_username'));
+  public function getPreferredUsername(): ?string {
+    return $this->stringClaim('preferred_username');
   }
 
   public function hasAudience(ClientId $clientId): bool {

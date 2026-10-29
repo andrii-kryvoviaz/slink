@@ -66,7 +66,7 @@ final readonly class DisplayName extends AbstractValueObject implements Sanitiza
       return $this;
     }
 
-    return new self(EscapedString::fromString($this->displayName)->getValue());
+    return clone($this, ['displayName' => EscapedString::fromString($this->displayName)->getValue()]);
   }
   
   /**

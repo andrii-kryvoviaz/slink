@@ -16,6 +16,8 @@ use Slink\User\Domain\Enum\ApprovalPolicy;
 use Slink\User\Domain\Enum\RegistrationPolicy;
 use Slink\User\Domain\Factory\OAuthUserFactory;
 use Slink\User\Domain\Factory\UserFactory;
+use Slink\User\Domain\Service\UsernameGeneratorInterface;
+use Slink\User\Domain\Specification\SignUpUsernameSpecification;
 use Slink\User\Domain\Specification\UniqueDisplayNameSpecificationInterface;
 use Slink\User\Domain\Specification\UniqueEmailSpecificationInterface;
 use Slink\User\Domain\Specification\UniqueUsernameSpecificationInterface;
@@ -30,6 +32,7 @@ use Slink\User\Domain\ValueObject\OAuth\TokenClaims;
 use Slink\User\Domain\ValueObject\Username;
 
 final class OAuthUserFactoryTest extends TestCase {
+  private const string GENERATED_USERNAME = 'andrii.kryvoviaz';
 
   #[Test]
   public function itCreatesUserWithClaimsData(): void {
@@ -38,7 +41,7 @@ final class OAuthUserFactoryTest extends TestCase {
     $uniqueUsernameSpec = $this->createStub(UniqueUsernameSpecificationInterface::class);
     $uniqueUsernameSpec->method('isUnique')->willReturn(true);
 
-    $factory = new OAuthUserFactory($this->createRealUserFactory(), $uniqueUsernameSpec);
+    $factory = $this->createFactory($this->createRealUserFactory(), $uniqueUsernameSpec);
 
     $result = $factory->create($identity);
 
@@ -60,7 +63,7 @@ final class OAuthUserFactoryTest extends TestCase {
         return true;
       });
 
-    $factory = new OAuthUserFactory($this->createRealUserFactory(), $uniqueUsernameSpec);
+    $factory = $this->createFactory($this->createRealUserFactory(), $uniqueUsernameSpec);
 
     $result = $factory->create($identity);
 
@@ -90,7 +93,7 @@ final class OAuthUserFactoryTest extends TestCase {
         ),
       );
 
-    $factory = new OAuthUserFactory($userFactory, $uniqueUsernameSpec);
+    $factory = $this->createFactory($userFactory, $uniqueUsernameSpec, $this->generatedUsername(str_repeat('a', 30)));
 
     $factory->create($identity);
   }
@@ -118,7 +121,7 @@ final class OAuthUserFactoryTest extends TestCase {
     $uniqueUsernameSpec = $this->createStub(UniqueUsernameSpecificationInterface::class);
     $uniqueUsernameSpec->method('isUnique')->willReturn(true);
 
-    $factory = new OAuthUserFactory($userFactory, $uniqueUsernameSpec);
+    $factory = $this->createFactory($userFactory, $uniqueUsernameSpec);
 
     $factory->create($identity, $provider);
   }
@@ -142,7 +145,7 @@ final class OAuthUserFactoryTest extends TestCase {
     $uniqueUsernameSpec = $this->createStub(UniqueUsernameSpecificationInterface::class);
     $uniqueUsernameSpec->method('isUnique')->willReturn(true);
 
-    $factory = new OAuthUserFactory($userFactory, $uniqueUsernameSpec);
+    $factory = $this->createFactory($userFactory, $uniqueUsernameSpec);
 
     $factory->create($identity);
   }
@@ -168,7 +171,7 @@ final class OAuthUserFactoryTest extends TestCase {
       'preferred_username' => 'andy',
     ]);
 
-    $factory = new OAuthUserFactory($this->createRealUserFactory(), $this->usernamesTaken());
+    $factory = $this->createFactory($this->createRealUserFactory(), $this->usernamesTaken());
 
     $user = $factory->create($identity);
 
@@ -192,24 +195,142 @@ final class OAuthUserFactoryTest extends TestCase {
         $this->callback(fn(DisplayName $displayName): bool => $displayName->toString() === 'Andrii Kryvoviaz'),
       );
 
-    $factory = new OAuthUserFactory($userFactory, $this->usernamesTaken());
+    $factory = $this->createFactory($userFactory, $this->usernamesTaken());
 
     $factory->create($identity);
   }
 
   #[Test]
   #[Group('sc-1129')]
-  public function itPreservesPreferredUsernameCasing(): void {
+  #[Group('sc-1144')]
+  public function itLowercasesPreferredUsername(): void {
     $identity = $this->createIdentityFromClaims([
       'name' => 'Andrii Kryvoviaz',
       'preferred_username' => 'Andy',
     ]);
 
-    $factory = new OAuthUserFactory($this->createRealUserFactory(), $this->usernamesTaken());
+    $factory = $this->createFactory($this->createRealUserFactory(), $this->usernamesTaken());
 
     $user = $factory->create($identity);
 
-    $this->assertSame('Andy', $user->getUsername()->toString());
+    $this->assertSame('andy', $user->getUsername()->toString());
+    $this->assertSame('Andrii Kryvoviaz', $user->getDisplayName()->toString());
+  }
+
+  #[Test]
+  #[Group('sc-1144')]
+  public function itTakesPreferredUsernameWithSingleSpecialCharacter(): void {
+    $identity = $this->createIdentityFromClaims([
+      'name' => 'Andrii Kryvoviaz',
+      'preferred_username' => 'john.doe',
+    ]);
+
+    $factory = $this->createFactory($this->createRealUserFactory(), $this->usernamesTaken());
+
+    $user = $factory->create($identity);
+
+    $this->assertSame('john.doe', $user->getUsername()->toString());
+  }
+
+  /**
+   * @return array<string, array{string}>
+   */
+  public static function provideSignUpRejectedPreferredUsernames(): array {
+    return [
+      'email-shaped' => ['user@corp.com'],
+      'contains a space' => ['John Doe'],
+      'adjacent special characters' => ['john__doe'],
+      'reserved name in any casing' => ['Anonymous'],
+      'too short' => ['jo'],
+      'too long' => [str_repeat('a', 31)],
+    ];
+  }
+
+  #[Test]
+  #[Group('sc-1144')]
+  #[DataProvider('provideSignUpRejectedPreferredUsernames')]
+  public function itFallsBackToDisplayNameUsernameWhenSignUpRulesRejectPreferredUsername(string $preferredUsername): void {
+    $identity = $this->createIdentityFromClaims([
+      'name' => 'Andrii Kryvoviaz',
+      'preferred_username' => $preferredUsername,
+    ]);
+
+    $factory = $this->createFactory($this->createRealUserFactory(), $this->usernamesTaken());
+
+    $user = $factory->create($identity);
+
+    $this->assertSame('andrii.kryvoviaz', $user->getUsername()->toString());
+  }
+
+  #[Test]
+  #[Group('sc-1144')]
+  public function itSuffixesTakenLowercasedPreferredUsername(): void {
+    $identity = $this->createIdentityFromClaims([
+      'name' => 'Andrii Kryvoviaz',
+      'preferred_username' => 'Andy',
+    ]);
+
+    $factory = $this->createFactory($this->createRealUserFactory(), $this->usernamesTaken('andy'));
+
+    $user = $factory->create($identity);
+
+    $this->assertSame('andy1', $user->getUsername()->toString());
+  }
+
+  #[Test]
+  public function itSuffixesTakenGeneratedUsername(): void {
+    $identity = $this->createIdentityFromClaims(['name' => "O'Neil Smith"]);
+
+    $factory = $this->createFactory(
+      $this->createRealUserFactory(),
+      $this->usernamesTaken('o.neil.smith'),
+      $this->generatedUsername('o.neil.smith'),
+    );
+
+    $user = $factory->create($identity);
+
+    $this->assertSame('o.neil.smith1', $user->getUsername()->toString());
+  }
+
+  #[Test]
+  public function itFallsBackToDefaultUsernameWhenSignUpRulesRejectGeneratedUsername(): void {
+    $identity = $this->createIdentityFromClaims(['name' => 'Anonymous!']);
+
+    $factory = $this->createFactory(
+      $this->createRealUserFactory(),
+      $this->usernamesTaken(),
+      $this->generatedUsername('anonymous'),
+    );
+
+    $user = $factory->create($identity);
+
+    $this->assertSame('user', $user->getUsername()->toString());
+  }
+
+  #[Test]
+  public function itFallsBackToDefaultUsernameWhenDisplayNameLeavesNothingUsable(): void {
+    $identity = $this->createIdentityFromClaims(['name' => '!?!', 'preferred_username' => 'a__b']);
+
+    $factory = $this->createFactory($this->createRealUserFactory(), $this->usernamesTaken(), $this->generatedUsername(null));
+
+    $user = $factory->create($identity);
+
+    $this->assertSame('user', $user->getUsername()->toString());
+  }
+
+  #[Test]
+  public function itSuffixesTakenDefaultUsername(): void {
+    $identity = $this->createIdentityFromClaims(['name' => '!?!']);
+
+    $factory = $this->createFactory(
+      $this->createRealUserFactory(),
+      $this->usernamesTaken('user', 'user1'),
+      $this->generatedUsername(null),
+    );
+
+    $user = $factory->create($identity);
+
+    $this->assertSame('user2', $user->getUsername()->toString());
   }
 
   /**
@@ -221,7 +342,7 @@ final class OAuthUserFactoryTest extends TestCase {
   public function itFallsBackToDisplayNameUsernameWhenPreferredUsernameIsUnusable(array $claims): void {
     $identity = $this->createIdentityFromClaims($claims);
 
-    $factory = new OAuthUserFactory($this->createRealUserFactory(), $this->usernamesTaken());
+    $factory = $this->createFactory($this->createRealUserFactory(), $this->usernamesTaken());
 
     $user = $factory->create($identity);
 
@@ -236,7 +357,7 @@ final class OAuthUserFactoryTest extends TestCase {
       'preferred_username' => 'andy',
     ]);
 
-    $factory = new OAuthUserFactory($this->createRealUserFactory(), $this->usernamesTaken('andy'));
+    $factory = $this->createFactory($this->createRealUserFactory(), $this->usernamesTaken('andy'));
 
     $user = $factory->create($identity);
 
@@ -252,11 +373,31 @@ final class OAuthUserFactoryTest extends TestCase {
       'preferred_username' => $preferredUsername,
     ]);
 
-    $factory = new OAuthUserFactory($this->createRealUserFactory(), $this->usernamesTaken($preferredUsername));
+    $factory = $this->createFactory($this->createRealUserFactory(), $this->usernamesTaken($preferredUsername));
 
     $user = $factory->create($identity);
 
     $this->assertSame(str_repeat('b', 29) . '1', $user->getUsername()->toString());
+  }
+
+  private function createFactory(
+    UserFactory $userFactory,
+    UniqueUsernameSpecificationInterface $uniqueUsernameSpec,
+    ?UsernameGeneratorInterface $usernameGenerator = null,
+  ): OAuthUserFactory {
+    return new OAuthUserFactory(
+      $userFactory,
+      $uniqueUsernameSpec,
+      new SignUpUsernameSpecification(),
+      $usernameGenerator ?? $this->generatedUsername(self::GENERATED_USERNAME),
+    );
+  }
+
+  private function generatedUsername(?string $username): UsernameGeneratorInterface {
+    $usernameGenerator = $this->createStub(UsernameGeneratorInterface::class);
+    $usernameGenerator->method('generate')->willReturn($username === null ? null : Username::fromString($username));
+
+    return $usernameGenerator;
   }
 
   /**

@@ -18,11 +18,14 @@ class UserWasCreatedUpcaster extends AbstractUpcaster {
     
     if (!isset($message['payload']['username']) && isset($message['payload']['displayName'])) {
       $displayName = DisplayName::fromString($message['payload']['displayName']);
-      $username = Username::fromDisplayName($displayName);
       
-      $message['payload']['username'] = $username->toString();
+      $message['payload']['username'] = $this->recordedUsername($displayName)->toString();
     }
     
     return $message;
+  }
+  
+  private function recordedUsername(DisplayName $displayName): Username {
+    return Username::fromString(strtolower(str_replace(' ', '.', trim($displayName->toString()))));
   }
 }

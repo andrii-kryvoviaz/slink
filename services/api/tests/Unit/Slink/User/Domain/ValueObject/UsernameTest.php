@@ -9,25 +9,9 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\User\Domain\Exception\InvalidUsernameException;
-use Slink\User\Domain\ValueObject\DisplayName;
 use Slink\User\Domain\ValueObject\Username;
 
 final class UsernameTest extends TestCase {
-
-  /**
-   * @return array<string, array{string, string}>
-   */
-  public static function provideDisplayNameToUsernameData(): array {
-    return [
-      'Simple name' => ['John Doe', 'john.doe'],
-      'Multiple spaces' => ['  John   Doe  ', 'john...doe'],
-      'With hyphen' => ['Jane Smith-Brown', 'jane.smith-brown'],
-      'Special characters' => ['José María', 'josé.maría'],
-      'Single name' => ['Madonna', 'madonna'],
-      'Numbers in name' => ['User 123', 'user.123'],
-      'Mixed case' => ['CamelCase Name', 'camelcase.name'],
-    ];
-  }
 
   /**
    * @return array<string, array{string, string}>
@@ -40,13 +24,6 @@ final class UsernameTest extends TestCase {
       'Too long - 31 chars' => [str_repeat('a', 31), 'Username must be at most 30 characters long'],
       'Too long - 50 chars' => [str_repeat('x', 50), 'Username must be at most 30 characters long'],
     ];
-  }
-
-  /**
-   * @return array<string, array{string}>
-   */
-  public static function provideInvalidUsernameStrings(): array {
-    return array_map(fn(array $data): array => [$data[0]], self::provideInvalidUsernames());
   }
 
   /**
@@ -77,22 +54,36 @@ final class UsernameTest extends TestCase {
     ];
   }
 
+  /**
+   * @return array<string, array{string}>
+   */
+  public static function provideShortMultibyteValues(): array {
+    return [
+      'two cjk characters' => ['李明'],
+      'two accented characters' => ['Ñø'],
+      'single euro sign' => ['€'],
+    ];
+  }
+
+  /**
+   * @return array<string, array{string}>
+   */
+  public static function provideStoredUsernamesOutsideSignUpRules(): array {
+    return [
+      'Display name with space' => ['John Doe'],
+      'Mixed case' => ['TestUser'],
+      'Email shaped' => ['user@corp.com'],
+      'Consecutive special characters' => ['john__doe'],
+      'Reserved name' => ['Anonymous'],
+    ];
+  }
+
   #[Test]
   #[DataProvider('provideWithSuffixData')]
   public function itAppendsSuffixWithinMaximumLength(string $base, int $suffix, string $expected): void {
     $username = Username::fromString($base)->withSuffix($suffix);
 
     $this->assertSame($expected, $username->toString());
-  }
-
-  #[Test]
-  #[DataProvider('provideDisplayNameToUsernameData')]
-  public function itCreatesUsernameFromDisplayName(string $displayNameString, string $expectedUsername): void {
-    $displayName = DisplayName::fromString($displayNameString);
-    $username = Username::fromDisplayName($displayName);
-
-    $this->assertInstanceOf(Username::class, $username);
-    $this->assertSame($expectedUsername, $username->toString());
   }
 
   #[Test]
@@ -142,21 +133,44 @@ final class UsernameTest extends TestCase {
   }
 
   #[Test]
-  #[Group('sc-1129')]
-  public function itCreatesUsernameFromStringOrNull(): void {
-    $this->assertSame('andy', Username::fromStringOrNull('andy')?->toString());
+  #[Group('sc-1142')]
+  public function itSanitizesMaximumLengthUsernameWithSpecialCharacterToItsEscapedForm(): void {
+    $sanitized = Username::fromString(str_repeat('a', 29) . '<')->sanitize();
+
+    $this->assertInstanceOf(Username::class, $sanitized);
+    $this->assertSame('aaaaaaaaaaaaaaaaaaaaaaaaaaaaa&lt;', $sanitized->toString());
   }
 
   #[Test]
-  #[Group('sc-1129')]
-  public function itReturnsNullFromStringOrNullForNull(): void {
-    $this->assertNull(Username::fromStringOrNull(null));
+  #[Group('sc-1142')]
+  public function itSanitizesUsernameWithoutSpecialCharactersToAnEqualValue(): void {
+    $sanitized = Username::fromString('user_123.test-name')->sanitize();
+
+    $this->assertSame('user_123.test-name', $sanitized->toString());
   }
 
   #[Test]
-  #[Group('sc-1129')]
-  #[DataProvider('provideInvalidUsernameStrings')]
-  public function itReturnsNullFromStringOrNullForInvalidUsername(string $invalidUsername): void {
-    $this->assertNull(Username::fromStringOrNull($invalidUsername));
+  #[Group('sc-1142')]
+  public function itKeepsStrictLengthCheckOnRawInputThatLooksEscaped(): void {
+    $this->expectException(InvalidUsernameException::class);
+    $this->expectExceptionMessage('Username must be at most 30 characters long');
+
+    Username::fromString(str_repeat('a', 29) . '&lt;');
+  }
+
+  #[Test]
+  #[Group('sc-1142')]
+  #[DataProvider('provideShortMultibyteValues')]
+  public function itSanitizesShortMultibyteUsernameToAnEqualValue(string $value): void {
+    $sanitized = Username::fromString($value)->sanitize();
+
+    $this->assertSame($value, $sanitized->toString());
+  }
+
+  #[Test]
+  #[Group('sc-1143')]
+  #[DataProvider('provideStoredUsernamesOutsideSignUpRules')]
+  public function itKeepsAcceptingStoredUsernamesThatPredateSignUpRules(string $value): void {
+    $this->assertSame($value, Username::fromString($value)->toString());
   }
 }

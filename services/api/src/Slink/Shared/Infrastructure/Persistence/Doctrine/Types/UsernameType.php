@@ -7,6 +7,7 @@ namespace Slink\Shared\Infrastructure\Persistence\Doctrine\Types;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\StringType;
+use Slink\Shared\Domain\ValueObject\EscapedString;
 use Slink\User\Domain\ValueObject\Username;
 
 final class UsernameType extends StringType {
@@ -48,7 +49,7 @@ final class UsernameType extends StringType {
     }
     
     try {
-      $username = Username::fromString($value);
+      $username = Username::fromString(EscapedString::fromTrusted($value)->unescaped())->sanitize();
     } catch (\Throwable) {
       throw new \InvalidArgumentException(sprintf('Could not convert database value "%s" to Doctrine Type username. Expected format: string', $value));
     }

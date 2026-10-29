@@ -7,6 +7,7 @@ namespace Slink\Shared\Infrastructure\Persistence\Doctrine\Types;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\StringType;
+use Slink\Shared\Domain\ValueObject\EscapedString;
 use Slink\User\Domain\ValueObject\DisplayName;
 
 final class DisplayNameType extends StringType {
@@ -41,8 +42,12 @@ final class DisplayNameType extends StringType {
       return $value;
     }
     
+    if ($value === null) {
+      return DisplayName::fromNullableString(null);
+    }
+    
     try {
-      $displayName = DisplayName::fromNullableString($value);
+      $displayName = DisplayName::fromString(EscapedString::fromTrusted($value)->unescaped())->sanitize();
     } catch (\Throwable) {
       throw new \InvalidArgumentException(sprintf('Could not convert database value "%s" to Doctrine Type display_name. Expected format: string', $value));
     }

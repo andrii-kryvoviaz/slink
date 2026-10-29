@@ -10,8 +10,8 @@ use Slink\Shared\Domain\ValueObject\SanitizableValueObject;
 use Slink\User\Domain\Exception\InvalidUsernameException;
 
 final readonly class Username extends AbstractValueObject implements SanitizableValueObject {
-  private const int MIN_LENGTH = 3;
-  private const int MAX_LENGTH = 30;
+  public const int MIN_LENGTH = 3;
+  public const int MAX_LENGTH = 30;
 
   /**
    * @param string $username
@@ -26,31 +26,6 @@ final readonly class Username extends AbstractValueObject implements Sanitizable
    */
   public static function fromString(string $username): self {
     return new self($username);
-  }
-
-  /**
-   * @param string|null $username
-   * @return self|null
-   */
-  public static function fromStringOrNull(?string $username): ?self {
-    if ($username === null) {
-      return null;
-    }
-
-    try {
-      return new self($username);
-    } catch (InvalidUsernameException) {
-      return null;
-    }
-  }
-  
-  /**
-   * @param DisplayName $displayName
-   * @return self
-   */
-  public static function fromDisplayName(DisplayName $displayName): self {
-    $username = str_replace(' ', '.', trim($displayName->toString()));
-    return new self(strtolower($username));
   }
   
   /**
@@ -72,7 +47,7 @@ final readonly class Username extends AbstractValueObject implements Sanitizable
   }
 
   public function sanitize(): static {
-    return new self(EscapedString::fromString($this->username)->getValue());
+    return clone($this, ['username' => EscapedString::fromString($this->username)->getValue()]);
   }
   
   /**

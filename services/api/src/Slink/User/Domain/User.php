@@ -92,6 +92,14 @@ final class User extends AbstractAggregateRoot implements UserInterface {
   }
   
   /**
+   * @param DisplayName $displayName
+   * @return void
+   */
+  protected function setDisplayName(DisplayName $displayName): void {
+    $this->displayName = $displayName;
+  }
+  
+  /**
    * @param HashedPassword $hashedPassword
    * @return void
    */
@@ -192,6 +200,7 @@ final class User extends AbstractAggregateRoot implements UserInterface {
   public function applyUserWasCreated(UserWasCreated $event): void {
     $this->setEmail($event->credentials->email);
     $this->setUsername($event->credentials->username);
+    $this->setDisplayName($event->displayName);
     $this->setHashedPassword($event->credentials->password);
     $this->setStatus($event->status);
   }
@@ -336,7 +345,7 @@ final class User extends AbstractAggregateRoot implements UserInterface {
   }
   
   public function applyUserDisplayNameWasChanged(UserDisplayNameWasChanged $event): void {
-    $this->displayName = $event->displayName;
+    $this->setDisplayName($event->displayName);
   }
   
   public function getPreferences(): UserPreferences {

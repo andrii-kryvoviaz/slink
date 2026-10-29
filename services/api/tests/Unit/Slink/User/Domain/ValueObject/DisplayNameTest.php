@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Unit\Slink\User\Domain\ValueObject;
 
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\User\Domain\Exception\InvalidDisplayNameException;
@@ -58,6 +59,17 @@ final class DisplayNameTest extends TestCase {
       'Maximum length' => [str_repeat('a', 30)],
       'Mixed case' => ['CamelCase Name'],
       'With dots' => ['Mr. John Doe Jr.'],
+    ];
+  }
+
+  /**
+   * @return array<string, array{string}>
+   */
+  public static function provideShortMultibyteValues(): array {
+    return [
+      'two cjk characters' => ['李明'],
+      'two accented characters' => ['Ñø'],
+      'single euro sign' => ['€'],
     ];
   }
 
@@ -140,5 +152,40 @@ final class DisplayNameTest extends TestCase {
     $this->expectExceptionMessage("`{$expectedReservedName}` is a reserved display name");
 
     DisplayName::fromString($reservedName);
+  }
+
+  #[Test]
+  #[Group('sc-1142')]
+  public function itSanitizesMaximumLengthDisplayNameWithApostropheToItsEscapedForm(): void {
+    $sanitized = DisplayName::fromString("Siobhan O'Callaghan-Fitzgerald")->sanitize();
+
+    $this->assertInstanceOf(DisplayName::class, $sanitized);
+    $this->assertSame('Siobhan O&apos;Callaghan-Fitzgerald', $sanitized->toString());
+  }
+
+  #[Test]
+  #[Group('sc-1142')]
+  public function itSanitizesDisplayNameWithoutSpecialCharactersToAnEqualValue(): void {
+    $sanitized = DisplayName::fromString('Jean-Claude Van Damme')->sanitize();
+
+    $this->assertSame('Jean-Claude Van Damme', $sanitized->toString());
+  }
+
+  #[Test]
+  #[Group('sc-1142')]
+  public function itKeepsStrictLengthCheckOnRawInputThatLooksEscaped(): void {
+    $this->expectException(InvalidDisplayNameException::class);
+    $this->expectExceptionMessage('Display name must be at most 30 characters long');
+
+    DisplayName::fromString('Siobhan O&apos;Callaghan-Fitzgerald');
+  }
+
+  #[Test]
+  #[Group('sc-1142')]
+  #[DataProvider('provideShortMultibyteValues')]
+  public function itSanitizesShortMultibyteDisplayNameToAnEqualValue(string $value): void {
+    $sanitized = DisplayName::fromString($value)->sanitize();
+
+    $this->assertSame($value, $sanitized->toString());
   }
 }
