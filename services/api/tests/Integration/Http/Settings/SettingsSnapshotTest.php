@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Integration\Http\Settings;
 
 use EventSauce\EventSourcing\Snapshotting\SnapshotRepository;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Slink\Settings\Domain\Enum\ConfigurationProvider;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
@@ -23,12 +24,14 @@ final class SettingsSnapshotTest extends HttpTestCase {
   private const array UNTOUCHED_CATEGORY_KEYS = [
     'storage.provider',
     'user.allowRegistration',
+    'user.localAuthEnabled',
     'user.password.minLength',
     'image.maxSize',
     'share.enableUrlShortening',
   ];
 
   #[Test]
+  #[Group('sc-1131')]
   public function itPersistsSnapshotWhenCrossingThresholdAndResolvesUntouchedCategoriesFromConfiguredDefaults(): void {
     $lastWrittenValue = false;
 

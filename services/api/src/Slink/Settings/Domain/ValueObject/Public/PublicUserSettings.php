@@ -12,6 +12,8 @@ final readonly class PublicUserSettings {
     #[Groups(['public'])]
     public bool $allowRegistration,
     #[Groups(['public'])]
+    public bool $localAuthEnabled,
+    #[Groups(['public'])]
     public ?string $autoRedirectProviderId,
   ) {}
   
@@ -21,6 +23,7 @@ final readonly class PublicUserSettings {
   public static function fromArray(array $settings): self {
     return new self(
       $settings['allowRegistration'] ?? false,
+      $settings['localAuthEnabled'] ?? true,
       $settings['autoRedirectProviderId'] ?? null,
     );
   }

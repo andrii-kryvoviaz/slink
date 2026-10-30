@@ -21,6 +21,7 @@ parameters:
         useIamRole: '%env(bool:default::AMAZON_S3_USE_IAM_ROLE)%'
   user:
     allowRegistration: '%env(bool:USER_ALLOW_REGISTRATION)%'
+    localAuthEnabled: '%env(bool:USER_LOCAL_AUTH_ENABLED)%'
     approvalRequired: '%env(bool:USER_APPROVAL_REQUIRED)%'
     autoRedirectProviderId: ~
     password:

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Unit\Slink\Settings\Domain\ValueObject\User;
 
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
@@ -116,6 +117,34 @@ final class UserSettingsTest extends TestCase {
 
       throw $exception;
     }
+  }
+
+  #[Test]
+  #[Group('sc-1131')]
+  public function itDefaultsLocalAuthEnabledToTrueWhenKeyMissing(): void {
+    $settings = UserSettings::fromPayload(self::BASE_PAYLOAD);
+
+    $this->assertTrue($settings->isLocalAuthEnabled());
+    $this->assertTrue($settings->toPayload()['localAuthEnabled']);
+  }
+
+  #[Test]
+  #[Group('sc-1131')]
+  public function itRoundTripsDisabledLocalAuthThroughPayload(): void {
+    $settings = UserSettings::fromPayload([...self::BASE_PAYLOAD, 'localAuthEnabled' => false]);
+
+    $this->assertFalse($settings->isLocalAuthEnabled());
+    $this->assertFalse($settings->toPayload()['localAuthEnabled']);
+    $this->assertFalse(UserSettings::fromPayload($settings->toPayload())->isLocalAuthEnabled());
+  }
+
+  #[Test]
+  #[Group('sc-1131')]
+  public function itRoundTripsDisabledLocalAuthThroughNormalizedPayload(): void {
+    $normalized = UserSettings::fromPayload([...self::BASE_PAYLOAD, 'localAuthEnabled' => false])->toNormalizedPayload();
+
+    $this->assertFalse($normalized['user.localAuthEnabled']);
+    $this->assertFalse(UserSettings::fromNormalizedPayload($normalized, 'user')->isLocalAuthEnabled());
   }
 
   /**
