@@ -188,4 +188,40 @@ final class DisplayNameTest extends TestCase {
 
     $this->assertSame($value, $sanitized->toString());
   }
+
+  /**
+   * @return array<string, array{string, int, string}>
+   */
+  public static function provideWithSuffixData(): array {
+    return [
+      'short name' => ['Anna Smith', 2, 'Anna Smith 2'],
+      'two digit suffix' => ['Anna Smith', 12, 'Anna Smith 12'],
+      'maximum length trims the base' => [str_repeat('a', 30), 2, str_repeat('a', 28) . ' 2'],
+      'maximum length with a wider suffix' => [str_repeat('a', 30), 10, str_repeat('a', 27) . ' 10'],
+      'cut right after a space drops the dangling space' => [
+        str_repeat('a', 27) . ' bc',
+        2,
+        str_repeat('a', 27) . ' 2',
+      ],
+      'multibyte base is never cut inside a character' => [str_repeat('é', 15), 10, str_repeat('é', 13) . ' 10'],
+    ];
+  }
+
+  #[Test]
+  #[DataProvider('provideWithSuffixData')]
+  public function itAppendsSuffixWithinMaximumLength(string $base, int $suffix, string $expected): void {
+    $displayName = DisplayName::fromString($base)->withSuffix($suffix);
+
+    $this->assertSame($expected, $displayName->toString());
+    $this->assertLessThanOrEqual(DisplayName::MAX_LENGTH, strlen($displayName->toString()));
+  }
+
+  #[Test]
+  public function itLeavesTheOriginalDisplayNameUntouchedWhenSuffixing(): void {
+    $original = DisplayName::fromString('Anna Smith');
+
+    $original->withSuffix(2);
+
+    $this->assertSame('Anna Smith', $original->toString());
+  }
 }

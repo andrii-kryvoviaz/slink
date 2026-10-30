@@ -43,7 +43,7 @@ function deepMerge(
   return result;
 }
 
-type SettingsApi = {
+export type SettingsApi = {
   set: (category: string, settings: Record<string, unknown>) => Promise<void>;
 };
 

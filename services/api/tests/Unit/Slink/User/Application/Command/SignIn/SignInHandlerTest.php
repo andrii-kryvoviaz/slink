@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Unit\Slink\User\Application\Command\SignIn;
 
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Shared\Domain\Exception\Date\DateTimeException;
@@ -20,6 +21,7 @@ use Slink\User\Domain\ValueObject\Email;
 use Slink\User\Domain\ValueObject\Username;
 use Tests\Traits\PrivatePropertyTrait;
 
+#[Group('sc-1186')]
 final class SignInHandlerTest extends TestCase {
   use PrivatePropertyTrait;
 

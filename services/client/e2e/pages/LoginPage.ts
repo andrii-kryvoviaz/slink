@@ -10,6 +10,9 @@ export class LoginPage extends BasePage {
   );
   readonly passwordInput = this.page.getByPlaceholder('Enter your password');
   readonly submitButton = this.page.getByRole('button', { name: 'Sign In' });
+  readonly demoBanner = this.page.getByText('Demo Mode', { exact: true });
+  readonly demoGetInButton = this.page.getByRole('button', { name: 'Get In' });
+  readonly noSignInMethodNotice = this.page.getByText(/no sign-in method/i);
 
   constructor(page: Page) {
     super(page);
@@ -17,6 +20,10 @@ export class LoginPage extends BasePage {
 
   get heading() {
     return this.page.getByRole('heading', { name: 'Welcome back' });
+  }
+
+  ssoProviderLink(slug: string) {
+    return this.page.locator(`a[href="/profile/sso/login/${slug}"]`);
   }
 
   async goto() {

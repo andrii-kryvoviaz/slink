@@ -13,7 +13,7 @@ import type { PageServerLoad } from './$types';
 export const load: PageServerLoad = async ({ locals, parent }) => {
   await parent();
 
-  const { user } = locals;
+  const { user, globalSettings } = locals;
 
   if (!user) {
     return locals.gateway.redirect();
@@ -21,6 +21,7 @@ export const load: PageServerLoad = async ({ locals, parent }) => {
 
   return {
     user,
+    globalSettings,
   };
 };
 

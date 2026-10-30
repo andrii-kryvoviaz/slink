@@ -95,6 +95,28 @@ async function expectFullLoginPage(loginPage: LoginPage) {
   await expect(loginPage.submitButton).toBeVisible();
 }
 
+function continueWithDivider(page: Page) {
+  return page.getByText('or continue with');
+}
+
+function signupBanner(page: Page) {
+  return page.getByText('Need an account?');
+}
+
+async function expectSsoOnlyLoginPage(
+  page: Page,
+  loginPage: LoginPage,
+  provider: Provider,
+) {
+  await expect(providerLink(page, provider.slug)).toBeVisible();
+  await expect(loginPage.usernameInput).toHaveCount(0);
+  await expect(loginPage.passwordInput).toHaveCount(0);
+  await expect(loginPage.submitButton).toHaveCount(0);
+  await expect(continueWithDivider(page)).toHaveCount(0);
+  await expect(signupBanner(page)).toHaveCount(0);
+  await expect(signUpLink(page)).toHaveCount(0);
+}
+
 async function signIn(
   page: Page,
   loginPage: LoginPage,
@@ -735,3 +757,179 @@ test.describe('Login gateway for a signed-in user', { tag: '@serial' }, () => {
     });
   }
 });
+
+test.describe(
+  'Login gateway and the local auth switch',
+  { tag: ['@serial', '@anonymous', '@sc-1134'] },
+  () => {
+    test.afterEach(({ api }) => deleteSsoProviders(api, PREFIX));
+
+    test('local auth on keeps the form, divider and signup banner', async ({
+      page,
+      api,
+      settingsApi,
+      loginPage,
+    }) => {
+      const provider = await createSsoProvider(api, PREFIX);
+      await settingsApi.set('user', {
+        allowRegistration: true,
+        localAuthEnabled: true,
+      });
+
+      await page.goto('/profile/login');
+
+      await expectFullLoginPage(loginPage);
+      await expect(providerLink(page, provider.slug)).toBeVisible();
+      await expect(continueWithDivider(page)).toBeVisible();
+      await expect(signupBanner(page)).toBeVisible();
+      await expect(signUpLink(page)).toBeVisible();
+    });
+
+    for (const row of settingRows) {
+      test(`local auth off leaves only the enabled provider on the login page (${row.name})`, async ({
+        page,
+        api,
+        settingsApi,
+        loginPage,
+      }) => {
+        const disabled = await createSsoProvider(api, PREFIX, {
+          enabled: false,
+        });
+        const chosen = await createSsoProvider(api, PREFIX);
+        await settingsApi.set('user', {
+          allowRegistration: true,
+          autoRedirectProviderId: row.autoRedirectProviderId(chosen),
+          localAuthEnabled: false,
+        });
+
+        const response = await probe(page, '/profile/login');
+
+        expect(response.status()).toBe(200);
+
+        await page.goto('/profile/login');
+
+        await expect(page).toHaveURL(isBareLoginUrl);
+        await expectSsoOnlyLoginPage(page, loginPage, chosen);
+        await expect(providerLink(page, disabled.slug)).toHaveCount(0);
+      });
+
+      test(`local auth off applies to the signed-out landing and its reload (${row.name})`, async ({
+        page,
+        api,
+        settingsApi,
+        loginPage,
+        testUser,
+      }) => {
+        await signIn(page, loginPage, testUser);
+
+        const chosen = await createSsoProvider(api, PREFIX);
+        await settingsApi.set('user', {
+          allowRegistration: true,
+          autoRedirectProviderId: row.autoRedirectProviderId(chosen),
+          localAuthEnabled: false,
+        });
+
+        const ssoHits = recordSsoNavigations(page);
+
+        await logOut(page);
+
+        await expect(page).toHaveURL(isBareLoginUrl);
+        await expectSsoOnlyLoginPage(page, loginPage, chosen);
+
+        await page.reload();
+
+        await expect(page).toHaveURL(isBareLoginUrl);
+        await expectSsoOnlyLoginPage(page, loginPage, chosen);
+        expect(ssoHits).toEqual([]);
+      });
+
+      test(`local auth off sends signup to the gateway with registration open (${row.name})`, async ({
+        page,
+        api,
+        settingsApi,
+        baseURL,
+      }) => {
+        const chosen = await createSsoProvider(api, PREFIX);
+        await settingsApi.set('user', {
+          allowRegistration: true,
+          autoRedirectProviderId: row.autoRedirectProviderId(chosen),
+          localAuthEnabled: false,
+        });
+
+        const response = await probe(page, '/profile/signup');
+
+        expect(response.status()).toBe(302);
+        expect(locationPath(response, baseURL)).toBe(
+          expectedGatewayPath(row, chosen),
+        );
+      });
+    }
+
+    test('local auth off shows the SSO-only login page instead of the signup form', async ({
+      page,
+      api,
+      settingsApi,
+      loginPage,
+      signupPage,
+    }) => {
+      const provider = await createSsoProvider(api, PREFIX);
+      await settingsApi.set('user', {
+        allowRegistration: true,
+        autoRedirectProviderId: null,
+        localAuthEnabled: false,
+      });
+
+      await page.goto('/profile/signup');
+
+      await expect(page).toHaveURL(isBareLoginUrl);
+      await expectSsoOnlyLoginPage(page, loginPage, provider);
+      await expect(signupPage.heading).toHaveCount(0);
+    });
+
+    test('local auth off keeps the SSO error and shows no form', async ({
+      page,
+      api,
+      settingsApi,
+      loginPage,
+    }) => {
+      test.setTimeout(120_000);
+
+      const provider = await createSsoProvider(api, PREFIX);
+      await settingsApi.set('user', {
+        autoRedirectProviderId: null,
+        localAuthEnabled: false,
+      });
+
+      await page.goto('/profile/login');
+      await providerLink(page, provider.slug).click();
+
+      await expect(page.getByText(SSO_UNAVAILABLE)).toBeVisible({
+        timeout: 90_000,
+      });
+      expect(new URL(page.url()).pathname).toBe('/profile/login');
+      await expectSsoOnlyLoginPage(page, loginPage, provider);
+    });
+
+    test('local auth off keeps the auto-redirect from guarded pages', async ({
+      page,
+      api,
+      settingsApi,
+      baseURL,
+    }) => {
+      const chosen = await createSsoProvider(api, PREFIX);
+      await settingsApi.set('user', {
+        autoRedirectProviderId: chosen.id,
+        localAuthEnabled: false,
+      });
+
+      for (const route of ['/history', '/profile']) {
+        const response = await probe(page, route);
+
+        expect(response.status(), route).toBe(302);
+        expect(locationPath(response, baseURL), route).toBe(
+          `${SSO_LOGIN_PATH}${chosen.slug}`,
+        );
+      }
+    });
+  },
+);

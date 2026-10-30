@@ -380,17 +380,103 @@ final class OAuthUserFactoryTest extends TestCase {
     $this->assertSame(str_repeat('b', 29) . '1', $user->getUsername()->toString());
   }
 
+  #[Test]
+  public function itKeepsUntakenDisplayNameAsIs(): void {
+    $identity = $this->createIdentityFromClaims(['name' => 'Anna Smith']);
+
+    $factory = $this->createFactory(
+      $this->createRealUserFactory('Someone Else'),
+      $this->usernamesTaken(),
+      displayNameSpec: $this->displayNamesTaken('Someone Else'),
+    );
+
+    $user = $factory->create($identity);
+
+    $this->assertSame('Anna Smith', $user->getDisplayName()->toString());
+  }
+
+  #[Test]
+  public function itSuffixesTakenDisplayNameWithTwo(): void {
+    $identity = $this->createIdentityFromClaims(['name' => 'Anna Smith']);
+
+    $factory = $this->createFactory(
+      $this->createRealUserFactory('Anna Smith'),
+      $this->usernamesTaken(),
+      displayNameSpec: $this->displayNamesTaken('Anna Smith'),
+    );
+
+    $user = $factory->create($identity);
+
+    $this->assertSame('Anna Smith 2', $user->getDisplayName()->toString());
+  }
+
+  #[Test]
+  public function itSuffixesTakenDisplayNameWithTheNextFreeNumber(): void {
+    $identity = $this->createIdentityFromClaims(['name' => 'Anna Smith']);
+
+    $factory = $this->createFactory(
+      $this->createRealUserFactory('Anna Smith', 'Anna Smith 2'),
+      $this->usernamesTaken(),
+      displayNameSpec: $this->displayNamesTaken('Anna Smith', 'Anna Smith 2'),
+    );
+
+    $user = $factory->create($identity);
+
+    $this->assertSame('Anna Smith 3', $user->getDisplayName()->toString());
+  }
+
+  #[Test]
+  public function itTrimsMaxLengthDisplayNameSoTheSuffixFits(): void {
+    $name = str_repeat('a', 30);
+    $identity = $this->createIdentityFromClaims(['name' => $name]);
+
+    $factory = $this->createFactory(
+      $this->createRealUserFactory($name),
+      $this->usernamesTaken(),
+      displayNameSpec: $this->displayNamesTaken($name),
+    );
+
+    $user = $factory->create($identity);
+
+    $this->assertSame(str_repeat('a', 28) . ' 2', $user->getDisplayName()->toString());
+  }
+
+  #[Test]
+  public function itSuffixesTakenDisplayNameDerivedFromEmailWhenNameClaimIsMissing(): void {
+    $identity = $this->createIdentityFromClaims(['email' => 'anna@example.com']);
+
+    $factory = $this->createFactory(
+      $this->createRealUserFactory('anna@example.com'),
+      $this->usernamesTaken(),
+      displayNameSpec: $this->displayNamesTaken('anna@example.com'),
+    );
+
+    $user = $factory->create($identity);
+
+    $this->assertSame('anna@example.com 2', $user->getDisplayName()->toString());
+  }
+
   private function createFactory(
     UserFactory $userFactory,
     UniqueUsernameSpecificationInterface $uniqueUsernameSpec,
     ?UsernameGeneratorInterface $usernameGenerator = null,
+    ?UniqueDisplayNameSpecificationInterface $displayNameSpec = null,
   ): OAuthUserFactory {
     return new OAuthUserFactory(
       $userFactory,
       $uniqueUsernameSpec,
       new SignUpUsernameSpecification(),
       $usernameGenerator ?? $this->generatedUsername(self::GENERATED_USERNAME),
+      $displayNameSpec ?? $this->displayNamesTaken(),
     );
+  }
+
+  private function displayNamesTaken(string ...$taken): UniqueDisplayNameSpecificationInterface {
+    $uniqueDisplayNameSpec = $this->createStub(UniqueDisplayNameSpecificationInterface::class);
+    $uniqueDisplayNameSpec->method('isUnique')
+      ->willReturnCallback(fn(DisplayName $displayName): bool => !in_array($displayName->toString(), $taken, true));
+
+    return $uniqueDisplayNameSpec;
   }
 
   private function generatedUsername(?string $username): UsernameGeneratorInterface {
@@ -433,7 +519,7 @@ final class OAuthUserFactoryTest extends TestCase {
     return $identity;
   }
 
-  private function createRealUserFactory(): UserFactory {
+  private function createRealUserFactory(string ...$takenDisplayNames): UserFactory {
     $configProvider = $this->createStub(ConfigurationProviderInterface::class);
     $configProvider->method('get')->willReturnCallback(fn(string $key) => match ($key) {
       'user.allowRegistration' => true,
@@ -447,10 +533,11 @@ final class OAuthUserFactoryTest extends TestCase {
     $uniqueUsernameSpec = $this->createStub(UniqueUsernameSpecificationInterface::class);
     $uniqueUsernameSpec->method('isUnique')->willReturn(true);
 
-    $uniqueDisplayNameSpec = $this->createStub(UniqueDisplayNameSpecificationInterface::class);
-    $uniqueDisplayNameSpec->method('isUnique')->willReturn(true);
-
-    $context = new UserCreationContext($uniqueEmailSpec, $uniqueUsernameSpec, $uniqueDisplayNameSpec);
+    $context = new UserCreationContext(
+      $uniqueEmailSpec,
+      $uniqueUsernameSpec,
+      $this->displayNamesTaken(...$takenDisplayNames),
+    );
 
     return new UserFactory($configProvider, $context);
   }

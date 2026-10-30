@@ -124,6 +124,10 @@ final class ConsoleBootReporter implements BootReporterInterface {
 
     $this->output->writeln(sprintf('%s%s:', $prefix, $step->label()));
 
+    if ($result->detail !== null) {
+      $this->output->writeln(self::SETTING_INDENT_PREFIX . $this->colorize($result->detail, $result->status));
+    }
+
     foreach ($result->settings as [$key, $value]) {
       $paddedKey = str_pad($key, $keyWidth, ' ', STR_PAD_RIGHT);
       $coloredValue = $this->colorizeSettingValue($value);

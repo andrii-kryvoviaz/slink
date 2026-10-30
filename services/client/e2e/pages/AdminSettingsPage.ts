@@ -6,6 +6,7 @@ export class AdminSettingsPage extends BasePage {
   static readonly SECURITY_URL = '/admin/settings/security';
 
   readonly allowRegistrationSwitch = this.switchByName('allowRegistration');
+  readonly localAuthEnabledSwitch = this.switchByName('localAuthEnabled');
   readonly approvalRequiredSwitch = this.switchByName('approvalRequired');
 
   readonly allowGuestUploadsSwitch = this.switchByName(
@@ -80,13 +81,13 @@ export class AdminSettingsPage extends BasePage {
     await this.saveSettings(this.allowGuestUploadsSwitch);
   }
 
-  private settingRow(name: string): Locator {
+  settingRow(name: string): Locator {
     return this.page
       .locator('div.flex-col', { has: this.switchByName(name) })
       .last();
   }
 
-  async resetAccessSetting(name: string) {
+  async resetSetting(name: string) {
     const row = this.settingRow(name);
     const resetTrigger = row.getByLabel('Reset to default value');
     const confirmButton = row.getByRole('button', { name: 'Confirm' });

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Integration\Http\Settings;
 
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Slink\Media\Domain\Enum\MediaFormat;
 use Slink\Settings\Domain\Enum\SettingCategory;
@@ -100,6 +101,30 @@ final class RetrieveGlobalSettingsTest extends HttpTestCase {
 
     self::assertArrayHasKey('image', $payload);
     self::assertArrayNotHasKey('mediaFormats', $payload['image'] ?? []);
+  }
+
+  #[Test]
+  #[Group('sc-1131')]
+  public function itIncludesLocalAuthEnabledInUserSettings(): void {
+    $adminId = $this->createUser('admin@example.com', 'admin', self::PASSWORD);
+    $this->grantAdmin($adminId);
+    $token = $this->login('admin', self::PASSWORD);
+
+    $this->client->request(
+      'GET',
+      '/api/settings/global',
+      [],
+      [],
+      ['HTTP_AUTHORIZATION' => 'Bearer ' . $token],
+    );
+
+    $response = $this->client->getResponse();
+    self::assertSame(200, $response->getStatusCode(), (string) $response->getContent());
+
+    /** @var array{user?: array<string, mixed>} $payload */
+    $payload = \json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+    self::assertTrue($payload['user']['localAuthEnabled'] ?? null);
   }
 
   private function seedLegacyStorageSettings(): void {

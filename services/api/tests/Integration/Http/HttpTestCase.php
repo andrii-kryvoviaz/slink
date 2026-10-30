@@ -10,6 +10,7 @@ use Slink\Collection\Domain\Repository\CollectionStoreRepositoryInterface;
 use Slink\Settings\Application\Command\SaveSettings\SaveSettingsCommand;
 use Slink\Shared\Application\Command\CommandBusInterface;
 use Slink\Shared\Domain\ValueObject\ID;
+use Slink\User\Application\Command\CreateOAuthProvider\CreateOAuthProviderCommand;
 use Slink\User\Application\Command\CreateUser\CreateUserCommand;
 use Slink\User\Application\Command\GrantRole\GrantRoleCommand;
 use Slink\User\Domain\Enum\UserStatus;
@@ -31,6 +32,9 @@ abstract class HttpTestCase extends WebTestCase {
   private static bool $schemaProvisioned = false;
 
   protected KernelBrowser $client;
+
+  /** @var array<string, string|null> */
+  private array $originalEnv = [];
 
   #[\Override]
   protected static function getKernelClass(): string {
@@ -67,8 +71,45 @@ abstract class HttpTestCase extends WebTestCase {
   }
 
   protected function tearDown(): void {
+    foreach ($this->originalEnv as $name => $value) {
+      self::writeEnv($name, $value);
+    }
+
+    $this->originalEnv = [];
+
     parent::tearDown();
     self::ensureKernelShutdown();
+  }
+
+  /**
+   * @param array<string, string> $variables
+   */
+  protected function useEnv(array $variables): void {
+    foreach ($variables as $name => $value) {
+      if (!\array_key_exists($name, $this->originalEnv)) {
+        $this->originalEnv[$name] = $_ENV[$name] ?? null;
+      }
+
+      self::writeEnv($name, $value);
+    }
+
+    self::ensureKernelShutdown();
+    $this->client = static::createClient();
+    $this->client->disableReboot();
+    $this->client->catchExceptions(true);
+  }
+
+  private static function writeEnv(string $name, ?string $value): void {
+    if ($value === null) {
+      unset($_ENV[$name], $_SERVER[$name]);
+      \putenv($name);
+
+      return;
+    }
+
+    $_ENV[$name] = $value;
+    $_SERVER[$name] = $value;
+    \putenv($name . '=' . $value);
   }
 
   private static function applyDatabaseEnv(): void {
@@ -215,6 +256,20 @@ abstract class HttpTestCase extends WebTestCase {
    */
   protected function saveSettings(string $category, array $settings): void {
     $this->commandBus()->handle(new SaveSettingsCommand($category, $settings));
+  }
+
+  protected function createOAuthProvider(string $slug, bool $enabled = true): string {
+    /** @var string $providerId */
+    $providerId = $this->commandBus()->handleSync(new CreateOAuthProviderCommand(
+      name: 'SSO ' . $slug,
+      slug: $slug,
+      clientId: 'client-id-123',
+      discoveryUrl: 'https://sso.local.test/.well-known/openid-configuration',
+      clientSecret: 'client-secret-456',
+      enabled: $enabled,
+    ));
+
+    return $providerId;
   }
 
   protected function createUser(

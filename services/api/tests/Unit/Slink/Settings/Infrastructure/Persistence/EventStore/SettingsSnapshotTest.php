@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Slink\Settings\Infrastructure\Persistence\EventStore;
 
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Settings\Domain\Event\SettingsChanged;
@@ -141,6 +142,36 @@ final class SettingsSnapshotTest extends TestCase {
   }
 
   #[Test]
+  #[Group('sc-1131')]
+  public function itKeepsDisabledLocalAuthThroughSnapshotCycle(): void {
+    $settings = $this->createSettings();
+    $settings->initialize([
+      UserSettings::fromPayload([
+        'approvalRequired' => true,
+        'allowRegistration' => true,
+        'localAuthEnabled' => false,
+        'password' => [
+          'minLength' => 8,
+          'requirements' => 0
+        ]
+      ]),
+      $this->createImageSettings(),
+      $this->createStorageSettings(),
+      $this->createAccessSettings(),
+      $this->createShareSettings(),
+    ]);
+
+    $reflection = new \ReflectionClass($settings);
+    $snapshot = $reflection->getMethod('createSnapshotState')->invoke($settings);
+    $restoredSettings = $reflection
+      ->getMethod('reconstituteFromSnapshotState')
+      ->invoke(null, ID::fromString(Settings::getIdReference()), $snapshot);
+
+    $this->assertFalse($restoredSettings->get('user.localAuthEnabled'));
+  }
+
+  #[Test]
+  #[Group('sc-1131')]
   public function itHandlesPartialSettingsInSnapshot(): void {
     $snapshot = [
       'user' => [
@@ -188,6 +219,7 @@ final class SettingsSnapshotTest extends TestCase {
     
     $this->assertFalse($settings->get('user.approvalRequired'));
     $this->assertTrue($settings->get('user.allowRegistration'));
+    $this->assertTrue($settings->get('user.localAuthEnabled'));
     $this->assertTrue($settings->get('access.allowUnauthenticatedAccess'));
     
     $this->assertEquals('5M', $settings->get('image.maxSize'));

@@ -8,13 +8,16 @@ use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Application\Boot\BootCategory;
 use Slink\Shared\Application\Boot\BootContext;
 use Slink\Shared\Application\Boot\BootResult;
+use Slink\Shared\Application\Boot\BootStatus;
 use Slink\Shared\Application\Boot\BootStepInterface;
+use Slink\User\Domain\Specification\EnabledSsoProviderSpecificationInterface;
 use Symfony\Component\DependencyInjection\Attribute\AsTaggedItem;
 
 #[AsTaggedItem(priority: 70)]
 final readonly class AuthInfoStep implements BootStepInterface {
   public function __construct(
     private ConfigurationProviderInterface $config,
+    private EnabledSsoProviderSpecificationInterface $enabledSsoProviderSpecification,
   ) {}
 
   public function label(): string {
@@ -29,7 +32,7 @@ final readonly class AuthInfoStep implements BootStepInterface {
     $approval = (bool) $this->config->get('user.approvalRequired');
     $minLength = (int) $this->config->get('user.password.minLength');
 
-    return BootResult::settings([
+    $settings = [
       ['Public User Registration', $this->boolLabel('user.allowRegistration')],
       ['New Account Approval', $approval ? 'Required' : 'Not Required'],
       ['Unauthenticated Access', $this->boolLabel('access.allowUnauthenticatedAccess')],
@@ -38,7 +41,25 @@ final readonly class AuthInfoStep implements BootStepInterface {
       ['Auth Required for Collection Shares', $this->boolLabel('access.requireAuthForCollectionShares')],
       ['Force HTTPS Connections', $this->boolLabel('access.requireSsl')],
       ['Minimum Password Length', sprintf('%d characters', $minLength)],
-    ]);
+    ];
+
+    if (!$this->isLockedOut()) {
+      return BootResult::settings($settings);
+    }
+
+    return new BootResult(
+      BootStatus::Warn,
+      'Local authentication is disabled and no SSO provider is enabled, so nobody can sign in',
+      settings: $settings,
+    );
+  }
+
+  private function isLockedOut(): bool {
+    if ((bool) $this->config->get('user.localAuthEnabled')) {
+      return false;
+    }
+
+    return !$this->enabledSsoProviderSpecification->isSatisfied();
   }
 
   private function boolLabel(string $key): string {

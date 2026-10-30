@@ -13,12 +13,14 @@ final readonly class UserSettings extends AbstractSettingsValueObject {
   /**
    * @param bool $approvalRequired
    * @param bool $allowRegistration
+   * @param bool $localAuthEnabled
    * @param PasswordSettings $password
    * @param string|null $autoRedirectProviderId
    */
   private function __construct(
     private bool $approvalRequired,
     private bool $allowRegistration,
+    private bool $localAuthEnabled,
     private PasswordSettings $password,
     private ?string $autoRedirectProviderId,
   ) {}
@@ -31,6 +33,7 @@ final readonly class UserSettings extends AbstractSettingsValueObject {
     return [
       'approvalRequired' => $this->approvalRequired,
       'allowRegistration' => $this->allowRegistration,
+      'localAuthEnabled' => $this->localAuthEnabled,
       'password' => $this->password->toPayload(),
       'autoRedirectProviderId' => $this->autoRedirectProviderId,
     ];
@@ -45,6 +48,7 @@ final readonly class UserSettings extends AbstractSettingsValueObject {
     return new self(
       $payload['approvalRequired'] ?? true,
       $payload['allowRegistration'] ?? true,
+      $payload['localAuthEnabled'] ?? true,
       PasswordSettings::fromPayload($payload['password']),
       self::normalizeAutoRedirectProviderId($payload['autoRedirectProviderId'] ?? null),
     );
@@ -89,6 +93,10 @@ final readonly class UserSettings extends AbstractSettingsValueObject {
   
   public function isAllowRegistration(): bool {
     return $this->allowRegistration;
+  }
+  
+  public function isLocalAuthEnabled(): bool {
+    return $this->localAuthEnabled;
   }
   
   public function getPassword(): PasswordSettings {

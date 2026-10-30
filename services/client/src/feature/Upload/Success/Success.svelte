@@ -6,10 +6,15 @@
 
   interface Props {
     isGuestUser?: boolean;
+    canSignUp?: boolean;
     onUploadAnother?: () => void;
   }
 
-  let { isGuestUser = false, onUploadAnother }: Props = $props();
+  let {
+    isGuestUser = false,
+    canSignUp = false,
+    onUploadAnother,
+  }: Props = $props();
 </script>
 
 <div
@@ -29,7 +34,7 @@
       Your image has been successfully uploaded to Slink.
     </p>
 
-    {#if isGuestUser}
+    {#if isGuestUser && canSignUp}
       <div
         class="bg-info-wash dark:bg-info-wash/20 border border-info-border dark:border-info-border/30 rounded-lg p-4 mb-6"
       >
@@ -61,15 +66,17 @@
     </Button>
 
     {#if isGuestUser}
-      <Button
-        href="/profile/signup"
-        variant="outline"
-        size="md"
-        class="inline-flex items-center justify-center"
-      >
-        <Icon icon="ph:user-plus" class="h-4 w-4 mr-2" />
-        Create Account
-      </Button>
+      {#if canSignUp}
+        <Button
+          href="/profile/signup"
+          variant="outline"
+          size="md"
+          class="inline-flex items-center justify-center"
+        >
+          <Icon icon="ph:user-plus" class="h-4 w-4 mr-2" />
+          Create Account
+        </Button>
+      {/if}
     {:else}
       <Button
         href="/history"

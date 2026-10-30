@@ -7,9 +7,15 @@ namespace Slink\User\Domain\ValueObject;
 use Slink\Shared\Domain\ValueObject\AbstractValueObject;
 use Slink\Shared\Domain\ValueObject\EscapedString;
 use Slink\Shared\Domain\ValueObject\SanitizableValueObject;
+use Slink\User\Domain\Contracts\SuffixableName;
 use Slink\User\Domain\Exception\InvalidDisplayNameException;
 
-final readonly class DisplayName extends AbstractValueObject implements SanitizableValueObject {
+final readonly class DisplayName extends AbstractValueObject implements SanitizableValueObject, SuffixableName {
+  use FitsNumericSuffix;
+
+  public const int MIN_LENGTH = 3;
+  public const int MAX_LENGTH = 30;
+
   /**
    * @return string
    */
@@ -55,6 +61,14 @@ final readonly class DisplayName extends AbstractValueObject implements Sanitiza
   }
   
   /**
+   * @param int $suffix
+   * @return static
+   */
+  public function withSuffix(int $suffix): static {
+    return new self($this->fitSuffix($this->toString(), $suffix, self::MAX_LENGTH, ' '));
+  }
+
+  /**
    * @return string
    */
   public function toString(): string {
@@ -74,12 +88,12 @@ final readonly class DisplayName extends AbstractValueObject implements Sanitiza
    * @return void
    */
   private function validate(string $displayName): void {
-    if (strlen($displayName) < 3) {
-      throw new InvalidDisplayNameException('Display name must be at least 3 characters long');
+    if (strlen($displayName) < self::MIN_LENGTH) {
+      throw new InvalidDisplayNameException(sprintf('Display name must be at least %d characters long', self::MIN_LENGTH));
     }
     
-    if (strlen($displayName) > 30) {
-      throw new InvalidDisplayNameException('Display name must be at most 30 characters long');
+    if (strlen($displayName) > self::MAX_LENGTH) {
+      throw new InvalidDisplayNameException(sprintf('Display name must be at most %d characters long', self::MAX_LENGTH));
     }
     
     $reservedNames = ['Anonymous', 'Guest'];

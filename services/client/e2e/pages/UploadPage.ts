@@ -65,6 +65,19 @@ export class UploadPage extends BasePage {
   });
   readonly tagsPicker = this.collectionsPicker;
   readonly tagsSearchInput = this.tagsPicker.getByPlaceholder('Search');
+  readonly uploadAnotherButton = this.page.getByRole('button', {
+    name: 'Upload Another Image',
+  });
+  readonly createAccountLink = this.page.getByRole('link', {
+    name: 'Create Account',
+  });
+  readonly viewHistoryAction = this.page.getByText('View History');
+  readonly guestNoticeHeading = this.page.getByRole('heading', {
+    name: 'Guest Upload Notice',
+  });
+  readonly guestNoticeBody = this.page.getByText(
+    'consider creating an account',
+  );
 
   constructor(page: Page) {
     super(page);

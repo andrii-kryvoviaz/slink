@@ -5227,3 +5227,15 @@ msgstr "シングルサインオン"
 #: src/routes/admin/settings/sso/+page.svelte
 msgid "Identity providers your users can sign in with"
 msgstr "ユーザーがサインインに使用できるアイデンティティプロバイダー"
+
+#: src/feature/Settings/UserSettings/UserSettings.svelte
+msgid "Local Authentication"
+msgstr "ローカル認証"
+
+#: src/feature/Settings/UserSettings/UserSettings.svelte
+msgid "Allow sign-in with email and password. Turning it off leaves sign-in to SSO providers only"
+msgstr "メールアドレスとパスワードによるサインインを許可します。オフにすると、サインインは SSO プロバイダーのみになります"
+
+#: src/routes/profile/(auth)/login/+page.svelte
+msgid "No sign-in method is configured."
+msgstr "サインイン方法が設定されていません。"

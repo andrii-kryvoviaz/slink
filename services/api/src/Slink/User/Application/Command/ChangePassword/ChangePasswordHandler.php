@@ -14,7 +14,7 @@ use Slink\User\Domain\ValueObject\Auth\HashedPassword;
 final readonly class ChangePasswordHandler implements CommandHandlerInterface {
   
   public function __construct(
-    private UserStoreRepositoryInterface $store
+    private UserStoreRepositoryInterface $store,
   ) {}
   
   /**
