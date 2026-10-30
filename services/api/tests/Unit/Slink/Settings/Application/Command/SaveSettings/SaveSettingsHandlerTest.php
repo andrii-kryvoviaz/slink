@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Unit\Slink\Settings\Application\Command\SaveSettings;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Settings\Application\Command\SaveSettings\SaveSettingsCommand;
 use Slink\Settings\Application\Command\SaveSettings\SaveSettingsHandler;
 use Slink\Settings\Domain\Enum\SettingCategory;
+use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Settings\Domain\Repository\SettingStoreRepositoryInterface;
 use Slink\Settings\Domain\Settings;
 use Slink\Settings\Domain\ValueObject\Storage\StorageSettings;
@@ -53,7 +55,7 @@ final class SaveSettingsHandlerTest extends TestCase {
             ->method('store')
             ->with($settings);
 
-        $handler = new SaveSettingsHandler($store);
+        $handler = new SaveSettingsHandler($store, $this->createStub(ConfigurationProviderInterface::class));
         $handler->__invoke($command);
     }
 
@@ -89,7 +91,7 @@ final class SaveSettingsHandlerTest extends TestCase {
             ->method('store')
             ->with($settings);
 
-        $handler = new SaveSettingsHandler($store);
+        $handler = new SaveSettingsHandler($store, $this->createStub(ConfigurationProviderInterface::class));
         $handler->__invoke($command);
     }
 
@@ -114,7 +116,7 @@ final class SaveSettingsHandlerTest extends TestCase {
         $store = $this->createStub(SettingStoreRepositoryInterface::class);
         $store->method('get')->willReturn($settings);
 
-        (new SaveSettingsHandler($store))->__invoke($command);
+        (new SaveSettingsHandler($store, $this->createStub(ConfigurationProviderInterface::class)))->__invoke($command);
 
         $this->assertInstanceOf(StorageSettings::class, $captured);
         $this->assertSame(SettingCategory::Storage, $captured->getSettingsCategory());
@@ -160,8 +162,64 @@ final class SaveSettingsHandlerTest extends TestCase {
             ->method('store')
             ->with($settings);
 
-        $handler = new SaveSettingsHandler($store);
+        $handler = new SaveSettingsHandler($store, $this->createStub(ConfigurationProviderInterface::class));
         $handler->__invoke($command);
+    }
+
+    /**
+     * @return iterable<string, array{array<string, mixed>, mixed, bool}>
+     */
+    public static function localAuthEnabledProvider(): iterable {
+        yield 'omitted takes the effective false' => [[], false, false];
+        yield 'null takes the effective false' => [['localAuthEnabled' => null], false, false];
+        yield 'omitted takes the effective true' => [[], true, true];
+        yield 'explicit true wins over effective false' => [['localAuthEnabled' => true], false, true];
+        yield 'explicit false wins over effective true' => [['localAuthEnabled' => false], true, false];
+    }
+
+    /**
+     * @param array<string, mixed> $overrides
+     */
+    #[Test]
+    #[DataProvider('localAuthEnabledProvider')]
+    public function itResolvesLocalAuthEnabledAgainstTheEffectiveValue(array $overrides, bool $effective, bool $expected): void {
+        $command = new SaveSettingsCommand('user', [
+            'approvalRequired' => false,
+            'allowRegistration' => true,
+            'password' => ['minLength' => 8, 'requirements' => 0],
+            ...$overrides,
+        ]);
+
+        $captured = null;
+        $settings = $this->createStub(Settings::class);
+        $settings->method('setSettings')->willReturnCallback(function ($value) use (&$captured) {
+            $captured = $value;
+        });
+
+        $store = $this->createStub(SettingStoreRepositoryInterface::class);
+        $store->method('get')->willReturn($settings);
+
+        $provider = $this->createStub(ConfigurationProviderInterface::class);
+        $provider->method('get')->willReturnMap([['user.localAuthEnabled', $effective]]);
+
+        (new SaveSettingsHandler($store, $provider))->__invoke($command);
+
+        $this->assertInstanceOf(UserSettings::class, $captured);
+        $this->assertSame($expected, $captured->isLocalAuthEnabled());
+    }
+
+    #[Test]
+    public function itDoesNotConsultTheEffectiveLocalAuthForOtherCategories(): void {
+        $command = new SaveSettingsCommand('image', ['maxSize' => '10M', 'stripExifMetadata' => false]);
+
+        $settings = $this->createStub(Settings::class);
+        $store = $this->createStub(SettingStoreRepositoryInterface::class);
+        $store->method('get')->willReturn($settings);
+
+        $provider = $this->createMock(ConfigurationProviderInterface::class);
+        $provider->expects($this->never())->method('get');
+
+        (new SaveSettingsHandler($store, $provider))->__invoke($command);
     }
 
     #[Test]
@@ -177,7 +235,7 @@ final class SaveSettingsHandlerTest extends TestCase {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Store error');
 
-        $handler = new SaveSettingsHandler($store);
+        $handler = new SaveSettingsHandler($store, $this->createStub(ConfigurationProviderInterface::class));
         $handler->__invoke($command);
     }
 
@@ -207,7 +265,7 @@ final class SaveSettingsHandlerTest extends TestCase {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Settings error');
 
-        $handler = new SaveSettingsHandler($store);
+        $handler = new SaveSettingsHandler($store, $this->createStub(ConfigurationProviderInterface::class));
         $handler->__invoke($command);
     }
 
@@ -248,7 +306,7 @@ final class SaveSettingsHandlerTest extends TestCase {
                 $callOrder[] = 'store';
             });
 
-        $handler = new SaveSettingsHandler($store);
+        $handler = new SaveSettingsHandler($store, $this->createStub(ConfigurationProviderInterface::class));
         $handler->__invoke($command);
 
         $this->assertSame(['get', 'setSettings', 'store'], $callOrder);

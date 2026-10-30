@@ -32,6 +32,9 @@ abstract class HttpTestCase extends WebTestCase {
 
   protected KernelBrowser $client;
 
+  /** @var array<string, string|null> */
+  private array $originalEnv = [];
+
   #[\Override]
   protected static function getKernelClass(): string {
     return HttpTestKernel::class;
@@ -67,8 +70,45 @@ abstract class HttpTestCase extends WebTestCase {
   }
 
   protected function tearDown(): void {
+    foreach ($this->originalEnv as $name => $value) {
+      self::writeEnv($name, $value);
+    }
+
+    $this->originalEnv = [];
+
     parent::tearDown();
     self::ensureKernelShutdown();
+  }
+
+  /**
+   * @param array<string, string> $variables
+   */
+  protected function useEnv(array $variables): void {
+    foreach ($variables as $name => $value) {
+      if (!\array_key_exists($name, $this->originalEnv)) {
+        $this->originalEnv[$name] = $_ENV[$name] ?? null;
+      }
+
+      self::writeEnv($name, $value);
+    }
+
+    self::ensureKernelShutdown();
+    $this->client = static::createClient();
+    $this->client->disableReboot();
+    $this->client->catchExceptions(true);
+  }
+
+  private static function writeEnv(string $name, ?string $value): void {
+    if ($value === null) {
+      unset($_ENV[$name], $_SERVER[$name]);
+      \putenv($name);
+
+      return;
+    }
+
+    $_ENV[$name] = $value;
+    $_SERVER[$name] = $value;
+    \putenv($name . '=' . $value);
   }
 
   private static function applyDatabaseEnv(): void {

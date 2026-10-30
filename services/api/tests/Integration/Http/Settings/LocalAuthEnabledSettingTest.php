@@ -16,20 +16,6 @@ use Tests\Integration\Http\HttpTestCase;
 final class LocalAuthEnabledSettingTest extends HttpTestCase {
   private const string ENV_DEFAULT = 'USER_LOCAL_AUTH_ENABLED';
 
-  private ?string $originalEnvDefault = null;
-
-  protected function setUp(): void {
-    parent::setUp();
-
-    $this->originalEnvDefault = $_ENV[self::ENV_DEFAULT] ?? null;
-  }
-
-  protected function tearDown(): void {
-    $this->writeEnvDefault($this->originalEnvDefault);
-
-    parent::tearDown();
-  }
-
   /**
    * @return iterable<string, array{string, bool}>
    */
@@ -46,6 +32,27 @@ final class LocalAuthEnabledSettingTest extends HttpTestCase {
     yield 'saved true over env false' => ['false', true];
   }
 
+  /**
+   * @return iterable<string, array{string, bool, array<string, mixed>}>
+   */
+  public static function absentLocalAuthEnabledProvider(): iterable {
+    yield 'saved false omitted, env true' => ['true', false, []];
+    yield 'saved false null, env true' => ['true', false, ['localAuthEnabled' => null]];
+    yield 'saved false omitted, env false' => ['false', false, []];
+    yield 'saved true omitted, env false' => ['false', true, []];
+    yield 'saved true null, env false' => ['false', true, ['localAuthEnabled' => null]];
+  }
+
+  /**
+   * @return iterable<string, array{string, bool, array<string, mixed>}>
+   */
+  public static function absentLocalAuthEnabledWithoutSavedRowProvider(): iterable {
+    yield 'env false omitted' => ['false', false, []];
+    yield 'env false null' => ['false', false, ['localAuthEnabled' => null]];
+    yield 'env true omitted' => ['true', true, []];
+    yield 'env true null' => ['true', true, ['localAuthEnabled' => null]];
+  }
+
   #[Test]
   #[DataProvider('envDefaultProvider')]
   public function itResolvesPublicLocalAuthEnabledFromEnvDefaultWhenNothingIsSaved(string $envDefault, bool $expected): void {
@@ -57,8 +64,8 @@ final class LocalAuthEnabledSettingTest extends HttpTestCase {
   #[Test]
   #[DataProvider('envDefaultProvider')]
   public function itIncludesLocalAuthEnabledInAdminSettingsBeforeAnySave(string $envDefault, bool $expected): void {
-    $this->useEnvDefault($envDefault);
     $token = $this->bootAdmin();
+    $this->useEnvDefault($envDefault);
 
     $status = $this->apiRequest('GET', '/api/settings', $token);
     self::assertSame(200, $status, (string) $this->client->getResponse()->getContent());
@@ -73,33 +80,69 @@ final class LocalAuthEnabledSettingTest extends HttpTestCase {
   #[Test]
   #[DataProvider('savedOverEnvDefaultProvider')]
   public function itPrefersTheAdminSavedValueOverTheEnvDefault(string $envDefault, bool $saved): void {
-    $this->useEnvDefault($envDefault);
     $token = $this->bootAdmin();
+    $this->useEnvDefault($envDefault);
 
     self::assertSame(204, $this->saveUserSettings($token, $this->userPayload(['localAuthEnabled' => $saved])));
 
     self::assertSame($saved, $this->publicLocalAuthEnabled());
   }
 
+  /**
+   * @param array<string, mixed> $overrides
+   */
   #[Test]
-  public function itResetsSavedLocalAuthEnabledToTrueWhenOmittedFromSave(): void {
-    $this->useEnvDefault('true');
+  #[DataProvider('absentLocalAuthEnabledProvider')]
+  public function itKeepsTheSavedLocalAuthEnabledWhenTheSaveDoesNotCarryIt(string $envDefault, bool $saved, array $overrides): void {
     $token = $this->bootAdmin();
+    $this->useEnvDefault($envDefault);
+
+    self::assertSame(204, $this->saveUserSettings($token, $this->userPayload(['localAuthEnabled' => $saved])));
+    self::assertSame(204, $this->saveUserSettings($token, $this->userPayload($overrides)));
+
+    self::assertSame($saved, $this->publicLocalAuthEnabled());
+  }
+
+  /**
+   * @param array<string, mixed> $overrides
+   */
+  #[Test]
+  #[DataProvider('absentLocalAuthEnabledWithoutSavedRowProvider')]
+  public function itKeepsTheEnvDefaultWhenNothingWasSavedAndTheSaveDoesNotCarryLocalAuthEnabled(string $envDefault, bool $expected, array $overrides): void {
+    $token = $this->bootAdmin();
+    $this->useEnvDefault($envDefault);
+
+    self::assertSame(204, $this->saveUserSettings($token, $this->userPayload($overrides)));
+
+    self::assertSame($expected, $this->publicLocalAuthEnabled());
+  }
+
+  #[Test]
+  public function itStillSavesAnExplicitLocalAuthEnabledOverASavedValue(): void {
+    $token = $this->bootAdmin();
+    $this->useEnvDefault('true');
 
     self::assertSame(204, $this->saveUserSettings($token, $this->userPayload(['localAuthEnabled' => false])));
-    self::assertSame(204, $this->saveUserSettings($token, $this->userPayload()));
+    self::assertSame(204, $this->saveUserSettings($token, $this->userPayload(['localAuthEnabled' => true])));
 
     self::assertTrue($this->publicLocalAuthEnabled());
   }
 
   #[Test]
-  public function itStoresTrueOverADisabledEnvDefaultWhenOmittedFromSave(): void {
-    $this->useEnvDefault('false');
+  public function itStillDefaultsOtherUserFlagsWhenTheyAreOmittedFromSave(): void {
     $token = $this->bootAdmin();
+    $this->useEnvDefault('true');
 
-    self::assertSame(204, $this->saveUserSettings($token, $this->userPayload()));
+    self::assertSame(204, $this->saveUserSettings($token, $this->userPayload(['allowRegistration' => false])));
+    self::assertSame(204, $this->saveUserSettings($token, ['approvalRequired' => false, 'password' => ['minLength' => 8, 'requirements' => 0]]));
 
-    self::assertTrue($this->publicLocalAuthEnabled());
+    $this->client->request('GET', '/api/settings/public');
+    /** @var array{data?: array{user?: array<string, mixed>}, user?: array<string, mixed>} $payload */
+    $payload = \json_decode((string) $this->client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
+    $user = $payload['data']['user'] ?? $payload['user'] ?? null;
+
+    self::assertIsArray($user);
+    self::assertTrue($user['allowRegistration'] ?? null);
   }
 
   #[Test]
@@ -119,25 +162,7 @@ final class LocalAuthEnabledSettingTest extends HttpTestCase {
   }
 
   private function useEnvDefault(string $value): void {
-    $this->writeEnvDefault($value);
-
-    self::ensureKernelShutdown();
-    $this->client = static::createClient();
-    $this->client->disableReboot();
-    $this->client->catchExceptions(true);
-  }
-
-  private function writeEnvDefault(?string $value): void {
-    if ($value === null) {
-      unset($_ENV[self::ENV_DEFAULT], $_SERVER[self::ENV_DEFAULT]);
-      \putenv(self::ENV_DEFAULT);
-
-      return;
-    }
-
-    $_ENV[self::ENV_DEFAULT] = $value;
-    $_SERVER[self::ENV_DEFAULT] = $value;
-    \putenv(self::ENV_DEFAULT . '=' . $value);
+    $this->useEnv([self::ENV_DEFAULT => $value]);
   }
 
   private function seedLegacyUserSettings(): void {
