@@ -107,7 +107,7 @@ test.describe('Admin access settings', { tag: '@serial' }, () => {
       'true',
     );
 
-    await adminSettingsPage.resetAccessSetting('accessAllowGuestUploads');
+    await adminSettingsPage.resetSetting('accessAllowGuestUploads');
 
     await expect(adminSettingsPage.allowGuestUploadsSwitch).toHaveAttribute(
       'aria-checked',

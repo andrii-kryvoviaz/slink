@@ -5263,3 +5263,11 @@ msgstr "Authentification unique"
 #: src/routes/admin/settings/sso/+page.svelte
 msgid "Identity providers your users can sign in with"
 msgstr "Fournisseurs d'identité avec lesquels vos utilisateurs peuvent se connecter"
+
+#: src/feature/Settings/UserSettings/UserSettings.svelte
+msgid "Local Authentication"
+msgstr "Authentification locale"
+
+#: src/feature/Settings/UserSettings/UserSettings.svelte
+msgid "Allow sign-in with email and password. Turning it off leaves sign-in to SSO providers only"
+msgstr "Autoriser la connexion par e-mail et mot de passe. Si elle est désactivée, la connexion est réservée aux fournisseurs SSO"

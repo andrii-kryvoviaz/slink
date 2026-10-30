@@ -5314,3 +5314,11 @@ msgstr "Single sign-on"
 #: src/routes/admin/settings/sso/+page.svelte
 msgid "Identity providers your users can sign in with"
 msgstr "Dostawcy tożsamości, przez których twoi użytkownicy mogą się logować"
+
+#: src/feature/Settings/UserSettings/UserSettings.svelte
+msgid "Local Authentication"
+msgstr "Uwierzytelnianie lokalne"
+
+#: src/feature/Settings/UserSettings/UserSettings.svelte
+msgid "Allow sign-in with email and password. Turning it off leaves sign-in to SSO providers only"
+msgstr "Zezwalaj na logowanie za pomocą adresu e-mail i hasła. Po wyłączeniu logowanie jest możliwe tylko przez dostawców SSO"

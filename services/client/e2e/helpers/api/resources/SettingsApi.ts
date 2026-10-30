@@ -7,6 +7,11 @@ export class SettingsApi {
     return this.http.request('GET', '/api/settings/global');
   }
 
+  async getPublicSettings() {
+    const { data } = await this.http.request('GET', '/api/settings/public');
+    return data;
+  }
+
   async getDefaultSettings() {
     return this.http.request('GET', '/api/settings?provider=default');
   }

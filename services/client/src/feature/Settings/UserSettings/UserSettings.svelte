@@ -1,5 +1,6 @@
 <script lang="ts">
   import { SettingItem, SettingsPane } from '@slink/feature/Settings';
+  import { Notice } from '@slink/feature/Text';
   import { Select } from '@slink/ui/components';
   import { NumberInput } from '@slink/ui/components/input';
   import { Switch } from '@slink/ui/components/switch';
@@ -34,6 +35,34 @@
   {/snippet}
 
   {#snippet children(errors)}
+    <SettingItem
+      defaultValue={defaultSettings?.localAuthEnabled}
+      currentValue={settings.localAuthEnabled}
+      reset={(value) => {
+        settings.localAuthEnabled = value;
+      }}
+    >
+      {#snippet label()}
+        Local Authentication
+      {/snippet}
+      {#snippet hint()}
+        Allow sign-in with email and password. Turning it off leaves sign-in to
+        SSO providers only
+      {/snippet}
+      <Switch
+        name="localAuthEnabled"
+        bind:checked={settings.localAuthEnabled}
+      />
+
+      {#snippet footer()}
+        {#if errors['localAuthEnabled']}
+          <Notice variant="error" appearance="subtle" size="sm" class="px-4">
+            {errors['localAuthEnabled']}
+          </Notice>
+        {/if}
+      {/snippet}
+    </SettingItem>
+
     <SettingItem
       defaultValue={defaultSettings?.allowRegistration}
       currentValue={settings.allowRegistration}

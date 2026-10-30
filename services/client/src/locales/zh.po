@@ -5227,3 +5227,11 @@ msgstr "单点登录"
 #: src/routes/admin/settings/sso/+page.svelte
 msgid "Identity providers your users can sign in with"
 msgstr "用户可用于登录的身份提供方"
+
+#: src/feature/Settings/UserSettings/UserSettings.svelte
+msgid "Local Authentication"
+msgstr "本地身份验证"
+
+#: src/feature/Settings/UserSettings/UserSettings.svelte
+msgid "Allow sign-in with email and password. Turning it off leaves sign-in to SSO providers only"
+msgstr "允许使用电子邮件和密码登录。关闭后，仅可通过 SSO 提供商登录"
