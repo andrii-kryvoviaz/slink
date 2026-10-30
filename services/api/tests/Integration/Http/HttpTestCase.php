@@ -20,6 +20,7 @@ use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 abstract class HttpTestCase extends WebTestCase {
@@ -105,6 +106,7 @@ abstract class HttpTestCase extends WebTestCase {
 
     @\unlink(self::$readModelDb);
     @\unlink(self::$eventStoreDb);
+    new Filesystem()->remove($projectDir . '/var/functional-test/storage');
 
     $eventStoreConfig = self::$readModelDb . '.es_migrations.yaml';
     $migrationsPath = $projectDir . '/src/Slink/Shared/Infrastructure/Persistence/EventStore/Migrations';

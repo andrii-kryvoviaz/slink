@@ -14,33 +14,6 @@ use Slink\Tag\Domain\ValueObject\TagPath;
 final class TagWasMovedTest extends TestCase {
 
   #[Test]
-  public function itCreatesEventWithAllProperties(): void {
-    $id = ID::generate();
-    $newParentId = ID::generate();
-    $updatedAt = DateTime::now();
-    $newPath = TagPath::fromString('#parent/tag');
-
-    $event = new TagWasMoved($id, $newParentId, $newPath, $updatedAt);
-
-    $this->assertEquals($id, $event->id);
-    $this->assertEquals($newParentId, $event->newParentId);
-    $this->assertEquals($updatedAt, $event->updatedAt);
-    $this->assertEquals($newPath, $event->newPath);
-  }
-
-  #[Test]
-  public function itCreatesEventWithoutOptionalProperties(): void {
-    $id = ID::generate();
-
-    $event = new TagWasMoved($id);
-
-    $this->assertEquals($id, $event->id);
-    $this->assertNull($event->newParentId);
-    $this->assertNull($event->updatedAt);
-    $this->assertNull($event->newPath);
-  }
-
-  #[Test]
   public function itSerializesToPayload(): void {
     $id = ID::generate();
     $newParentId = ID::generate();

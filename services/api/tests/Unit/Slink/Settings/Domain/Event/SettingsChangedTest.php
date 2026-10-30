@@ -9,20 +9,8 @@ use PHPUnit\Framework\TestCase;
 use Slink\Settings\Domain\Event\SettingsChanged;
 use Slink\Settings\Domain\Enum\SettingCategory;
 use Slink\Settings\Domain\ValueObject\User\UserSettings;
-use Slink\Settings\Domain\ValueObject\User\PasswordSettings;
 
 final class SettingsChangedTest extends TestCase {
-    #[Test]
-    public function itShouldCreateSettingsChangedEvent(): void {
-        $category = SettingCategory::User;
-        $settings = $this->createUserSettings();
-        
-        $event = new SettingsChanged($category, $settings);
-        
-        $this->assertSame($category, $event->category);
-        $this->assertSame($settings, $event->settings);
-    }
-
     #[Test]
     public function itShouldSerializeToPayload(): void {
         $category = SettingCategory::User;

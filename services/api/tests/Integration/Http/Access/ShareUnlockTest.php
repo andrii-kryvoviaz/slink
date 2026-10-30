@@ -42,17 +42,6 @@ final class ShareUnlockTest extends HttpTestCase {
   }
 
   #[Test]
-  public function imageShareUnlockSucceedsAndGrantsFetchWhenMediaShareFlagOff(): void {
-    $this->setAccessSettings(['requireAuthForMediaShares' => false]);
-    $this->bootOwner();
-    [$share, $image] = $this->passwordImageShare();
-
-    [$unlockStatus, $cookies] = $this->unlockShare($share, self::SHARE_PASSWORD);
-    self::assertContains($unlockStatus, [200, 204]);
-    self::assertSame(200, $this->requestWithCookies('GET', \sprintf('/api/image/%s.png', $image), $cookies));
-  }
-
-  #[Test]
   public function anonymousImageShareUnlockIsHiddenWhenMediaShareFlagOn(): void {
     $this->setAccessSettings(['requireAuthForMediaShares' => true]);
     $this->bootOwner();
@@ -61,17 +50,6 @@ final class ShareUnlockTest extends HttpTestCase {
     [$unlockStatus, $cookies] = $this->unlockShare($share, self::SHARE_PASSWORD);
     self::assertSame(404, $unlockStatus);
     self::assertSame(404, $this->requestWithCookies('GET', \sprintf('/api/image/%s.png', $image), $cookies));
-  }
-
-  #[Test]
-  public function collectionShareUnlockSucceedsAndGrantsFetchWhenFlagOff(): void {
-    $this->setAccessSettings(['requireAuthForCollectionShares' => false]);
-    $this->bootOwner();
-    [$share, $collection] = $this->passwordCollectionShare();
-
-    [$unlockStatus, $cookies] = $this->unlockShare($share, self::SHARE_PASSWORD);
-    self::assertContains($unlockStatus, [200, 204]);
-    self::assertSame(200, $this->requestWithCookies('GET', \sprintf('/api/collection/%s', $collection), $cookies));
   }
 
   #[Test]

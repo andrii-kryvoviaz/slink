@@ -27,6 +27,7 @@ var/data/keys/
 
 # Testing
 .phpunit.result.cache
+.phpunit.cache/
 
 # Build outputs
 public/bundles/

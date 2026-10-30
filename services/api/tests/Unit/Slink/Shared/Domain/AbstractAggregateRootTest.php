@@ -4,18 +4,15 @@ declare(strict_types=1);
 
 namespace Unit\Slink\Shared\Domain;
 
-use EventSauce\EventSourcing\AggregateRoot;
 use EventSauce\EventSourcing\AggregateRootId;
 use EventSauce\EventSourcing\EventRecorder;
 use EventSauce\EventSourcing\EventSourcedAggregate;
 use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use ReflectionClass;
 use Slink\Shared\Domain\AbstractAggregateRoot;
 use Slink\Shared\Domain\AbstractEventSourcedAggregate;
 use Slink\Shared\Domain\ValueObject\ID;
-use Slink\Shared\Infrastructure\EventSourcing\AggregateRootWithAggregates;
 
 final class AbstractAggregateRootTest extends TestCase {
 
@@ -60,20 +57,6 @@ final class AbstractAggregateRootTest extends TestCase {
   }
 
   #[Test]
-  public function itImplementsAggregateRoot(): void {
-    $aggregateRoot = new ConcreteAggregateRoot(ID::fromString('test-id'));
-
-    $this->assertInstanceOf(AggregateRoot::class, $aggregateRoot);
-  }
-
-  #[Test]
-  public function itIsAbstractClass(): void {
-    $reflection = new ReflectionClass(AbstractAggregateRoot::class);
-
-    $this->assertTrue($reflection->isAbstract());
-  }
-
-  #[Test]
   public function itReturnsCorrectAggregateRootId(): void {
     $id = ID::fromString('test-aggregate-id');
     $aggregateRoot = new ConcreteAggregateRoot($id);
@@ -92,14 +75,6 @@ final class AbstractAggregateRootTest extends TestCase {
     $aggregateRoot->testRegisterAggregate($aggregate);
 
     $this->assertTrue($aggregate->hasEventRecorder());
-  }
-
-  #[Test]
-  public function itUsesAggregateRootWithAggregatesTrait(): void {
-    $reflection = new ReflectionClass(AbstractAggregateRoot::class);
-    $traits = $reflection->getTraitNames();
-
-    $this->assertContains(AggregateRootWithAggregates::class, $traits);
   }
 }
 

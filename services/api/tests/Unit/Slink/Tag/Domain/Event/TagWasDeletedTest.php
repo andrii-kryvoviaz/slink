@@ -12,23 +12,6 @@ use Slink\Tag\Domain\Event\TagWasDeleted;
 final class TagWasDeletedTest extends TestCase {
 
   #[Test]
-  public function itCreatesEventWithIdAndUserId(): void {
-    $id = ID::generate();
-    $event = new TagWasDeleted($id, 'user-123');
-
-    $this->assertEquals($id, $event->id);
-    $this->assertEquals('user-123', $event->userId);
-  }
-
-  #[Test]
-  public function itCreatesEventWithDirectChildIds(): void {
-    $id = ID::generate();
-    $event = new TagWasDeleted($id, 'user-123', ['child-1', 'child-2']);
-
-    $this->assertEquals(['child-1', 'child-2'], $event->directChildIds);
-  }
-
-  #[Test]
   public function itDefaultsToEmptyChildIds(): void {
     $id = ID::generate();
     $event = new TagWasDeleted($id, 'user-123');

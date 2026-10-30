@@ -4,13 +4,10 @@ declare(strict_types=1);
 
 namespace Slink\User\Domain\ValueObject\Auth;
 
-use RuntimeException;
 use Slink\Shared\Domain\ValueObject\AbstractValueObject;
-use Slink\User\Domain\Exception\InvalidPasswordException;
+use Slink\User\Domain\Service\BcryptHasher;
 
 final readonly class HashedPassword extends AbstractValueObject {
-  private const int COST = 12;
-  
   /**
    * @param string $hashedPassword
    */
@@ -22,7 +19,7 @@ final readonly class HashedPassword extends AbstractValueObject {
    * @return self
    */
   public static function encode(#[\SensitiveParameter] string $plainPassword): self {
-    return new self(self::hash($plainPassword));
+    return new self(BcryptHasher::hash($plainPassword));
   }
   
   /**
@@ -39,24 +36,6 @@ final readonly class HashedPassword extends AbstractValueObject {
    */
   public function match(#[\SensitiveParameter] string $plainPassword): bool {
     return \password_verify($plainPassword, $this->hashedPassword);
-  }
-  
-  /**
-   * @param string $plainPassword
-   * @return string
-   */
-  private static function hash(#[\SensitiveParameter] string $plainPassword): string {
-    if (\mb_strlen($plainPassword) < 6) {
-      throw new InvalidPasswordException('Min 6 characters password');
-    }
-    
-    $hashedPassword = \password_hash($plainPassword, PASSWORD_BCRYPT, ['cost' => self::COST]);
-
-    if (!$hashedPassword) {
-      throw new RuntimeException('Server error hashing password');
-    }
-
-    return (string) $hashedPassword;
   }
   
   /**

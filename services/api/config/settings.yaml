@@ -58,7 +58,7 @@ parameters:
     siteDescription: '%env(string:default::CUSTOMIZATION_SITE_DESCRIPTION)%'
     logoUrl: '%env(string:default::CUSTOMIZATION_LOGO_URL)%'
 
-when@prod:
+when@prod: &prod_storage
   parameters:
     storage:
       provider: '%env(string:STORAGE_PROVIDER)%'
@@ -80,3 +80,5 @@ when@prod:
           useCustomProvider: '%env(bool:default::AMAZON_S3_USE_CUSTOM_PROVIDER)%'
           forcePathStyle: '%env(bool:default::AMAZON_S3_FORCE_PATH_STYLE)%'
           useIamRole: '%env(bool:default::AMAZON_S3_USE_IAM_ROLE)%'
+
+when@test: *prod_storage

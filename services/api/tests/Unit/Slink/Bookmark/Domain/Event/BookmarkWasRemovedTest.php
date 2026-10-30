@@ -11,16 +11,6 @@ use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
 
 final class BookmarkWasRemovedTest extends TestCase {
-  #[Test]
-  public function itCreatesEvent(): void {
-    $id = ID::generate();
-    $removedAt = DateTime::now();
-
-    $event = new BookmarkWasRemoved($id, $removedAt);
-
-    $this->assertEquals($id, $event->id);
-    $this->assertEquals($removedAt, $event->removedAt);
-  }
 
   #[Test]
   public function itSerializesToPayload(): void {

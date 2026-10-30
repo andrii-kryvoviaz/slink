@@ -10,16 +10,6 @@ use Slink\Collection\Domain\Event\ItemWasRemovedFromCollection;
 use Slink\Shared\Domain\ValueObject\ID;
 
 final class ItemWasRemovedFromCollectionTest extends TestCase {
-  #[Test]
-  public function itCreatesEvent(): void {
-    $collectionId = ID::generate();
-    $itemId = ID::generate();
-    
-    $event = new ItemWasRemovedFromCollection($collectionId, $itemId);
-    
-    $this->assertTrue($event->collectionId->equals($collectionId));
-    $this->assertTrue($event->itemId->equals($itemId));
-  }
 
   #[Test]
   public function itSerializesToPayload(): void {

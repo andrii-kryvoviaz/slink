@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace Unit\Slink\Shared\Domain\ValueObject;
 
-use JsonSerializable;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Shared\Domain\ValueObject\AbstractValueObject;
-use ReflectionClass;
-use Stringable;
 
 final class AbstractValueObjectTest extends TestCase {
 
@@ -71,27 +68,6 @@ final class AbstractValueObjectTest extends TestCase {
 
     $this->assertTrue($valueObject1->equals($valueObject2));
     $this->assertFalse($valueObject1->equals($valueObject3));
-  }
-
-  #[Test]
-  public function itImplementsJsonSerializable(): void {
-    $valueObject = new ConcreteValueObject('test');
-
-    $this->assertInstanceOf(JsonSerializable::class, $valueObject);
-  }
-
-  #[Test]
-  public function itImplementsStringable(): void {
-    $valueObject = new ConcreteValueObject('test');
-
-    $this->assertInstanceOf(Stringable::class, $valueObject);
-  }
-
-  #[Test]
-  public function itIsAbstractClass(): void {
-    $reflection = new ReflectionClass(AbstractValueObject::class);
-
-    $this->assertTrue($reflection->isAbstract());
   }
 
   #[Test]

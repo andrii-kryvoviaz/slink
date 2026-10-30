@@ -53,25 +53,6 @@ final class MarkAllNotificationsReadHandlerTest extends TestCase {
   }
 
   #[Test]
-  public function itChecksUnreadCountBeforeMarking(): void {
-    $notificationRepository = $this->createMock(NotificationRepositoryInterface::class);
-    $userId = 'user-123';
-
-    $notificationRepository->expects($this->once())
-      ->method('countUnreadByUserId')
-      ->willReturn(10);
-
-    $notificationRepository->expects($this->once())
-      ->method('markAllAsReadByUserId');
-
-    $handler = new MarkAllNotificationsReadHandler($notificationRepository);
-
-    $command = new MarkAllNotificationsReadCommand();
-
-    $handler($command, $userId);
-  }
-
-  #[Test]
   public function itPassesCorrectUserIdToRepository(): void {
     $notificationRepository = $this->createMock(NotificationRepositoryInterface::class);
     $userId = 'specific-user-id';

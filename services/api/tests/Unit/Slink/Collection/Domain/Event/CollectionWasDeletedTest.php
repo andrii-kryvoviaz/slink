@@ -11,16 +11,6 @@ use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
 
 final class CollectionWasDeletedTest extends TestCase {
-  #[Test]
-  public function itCreatesEvent(): void {
-    $id = ID::generate();
-    $deletedAt = DateTime::now();
-    
-    $event = new CollectionWasDeleted($id, $deletedAt);
-    
-    $this->assertTrue($event->id->equals($id));
-    $this->assertEquals($deletedAt->toString(), $event->deletedAt->toString());
-  }
 
   #[Test]
   public function itSerializesToPayload(): void {

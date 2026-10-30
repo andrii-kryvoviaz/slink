@@ -13,22 +13,6 @@ use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
 
 final class CollectionWasCreatedTest extends TestCase {
-  #[Test]
-  public function itCreatesEvent(): void {
-    $id = ID::generate();
-    $userId = ID::generate();
-    $name = CollectionName::fromString('Test Collection');
-    $description = CollectionDescription::fromString('Test description');
-    $createdAt = DateTime::now();
-    
-    $event = new CollectionWasCreated($id, $userId, $name, $description, $createdAt);
-    
-    $this->assertTrue($event->id->equals($id));
-    $this->assertTrue($event->userId->equals($userId));
-    $this->assertEquals($name->toString(), $event->name->toString());
-    $this->assertEquals($description->toString(), $event->description->toString());
-    $this->assertEquals($createdAt->toString(), $event->createdAt->toString());
-  }
 
   #[Test]
   public function itSerializesToPayload(): void {

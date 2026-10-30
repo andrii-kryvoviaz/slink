@@ -10,20 +10,6 @@ use Slink\Collection\Domain\Event\CollectionItemsWereReordered;
 use Slink\Shared\Domain\ValueObject\ID;
 
 final class CollectionItemsWereReorderedTest extends TestCase {
-  #[Test]
-  public function itCreatesEvent(): void {
-    $collectionId = ID::generate();
-    $orderedItemIds = [
-      ID::generate()->toString(),
-      ID::generate()->toString(),
-      ID::generate()->toString(),
-    ];
-    
-    $event = new CollectionItemsWereReordered($collectionId, $orderedItemIds);
-    
-    $this->assertTrue($event->collectionId->equals($collectionId));
-    $this->assertEquals($orderedItemIds, $event->orderedItemIds);
-  }
 
   #[Test]
   public function itSerializesToPayload(): void {

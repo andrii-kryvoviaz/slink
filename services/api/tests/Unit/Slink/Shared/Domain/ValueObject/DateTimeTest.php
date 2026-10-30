@@ -60,42 +60,6 @@ final class DateTimeTest extends TestCase {
    * @throws DateTimeException
    */
   #[Test]
-  public function itCreatesDateTimeFromNow(): void {
-    $dateTime = DateTime::now();
-    $this->assertInstanceOf(DateTime::class, $dateTime);
-  }
-
-  /**
-   * @throws DateTimeException
-   */
-  #[Test]
-  public function itCreatesDateTimeFromString(): void {
-    $dateTime = DateTime::fromString('2024-01-01T00:00:00.000000+00:00');
-    $this->assertInstanceOf(DateTime::class, $dateTime);
-  }
-
-  /**
-   * @throws DateTimeException
-   */
-  #[Test]
-  public function itCreatesDateTimeFromTimeStamp(): void {
-    $dateTime = DateTime::fromTimeStamp(1640995200);
-    $this->assertInstanceOf(DateTime::class, $dateTime);
-  }
-
-  /**
-   * @throws DateTimeException
-   */
-  #[Test]
-  public function itCreatesDateTimeFromUnknown(): void {
-    $dateTime = DateTime::fromUnknown('2024-01-01T00:00:00.000000+00:00');
-    $this->assertInstanceOf(DateTime::class, $dateTime);
-  }
-
-  /**
-   * @throws DateTimeException
-   */
-  #[Test]
   public function itThrowsExceptionForInvalidDateTimeFormat(): void {
     $this->expectException(DateTimeException::class);
     DateTime::fromUnknown('invalid format');

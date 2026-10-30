@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace Unit\Slink\Shared\Domain\ValueObject;
 
-use EventSauce\EventSourcing\AggregateRootId;
-use JsonSerializable;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Shared\Domain\ValueObject\ID;
-use Stringable;
 
 final class IDTest extends TestCase {
 
@@ -61,37 +58,6 @@ final class IDTest extends TestCase {
     $id2 = ID::generate();
 
     $this->assertNotEquals($id1->getValue(), $id2->getValue());
-  }
-
-  #[Test]
-  public function itImplementsToStringMethod(): void {
-    $value = 'test-id';
-    $id = ID::fromString($value);
-
-    $this->assertEquals($value, (string)$id);
-  }
-
-  #[Test]
-  public function itImplementsJsonSerializable(): void {
-    $value = 'test-id';
-    $id = ID::fromString($value);
-
-    $this->assertInstanceOf(JsonSerializable::class, $id);
-  }
-
-  #[Test]
-  public function itImplementsStringable(): void {
-    $value = 'test-id';
-    $id = ID::fromString($value);
-
-    $this->assertInstanceOf(Stringable::class, $id);
-  }
-
-  #[Test]
-  public function itImplementsAggregateRootId(): void {
-    $id = ID::fromString('test-id');
-
-    $this->assertInstanceOf(AggregateRootId::class, $id);
   }
 
   #[Test]

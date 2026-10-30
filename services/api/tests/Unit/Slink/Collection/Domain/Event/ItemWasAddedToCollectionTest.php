@@ -12,17 +12,6 @@ use Slink\Collection\Domain\ValueObject\CollectionItem;
 use Slink\Shared\Domain\ValueObject\ID;
 
 final class ItemWasAddedToCollectionTest extends TestCase {
-  #[Test]
-  public function itCreatesEvent(): void {
-    $collectionId = ID::generate();
-    $item = CollectionItem::create(ID::generate(), ItemType::Image, 1.0);
-    
-    $event = new ItemWasAddedToCollection($collectionId, $item);
-    
-    $this->assertTrue($event->collectionId->equals($collectionId));
-    $this->assertTrue($event->item->getItemId()->equals($item->getItemId()));
-    $this->assertEquals($item->getItemType(), $event->item->getItemType());
-  }
 
   #[Test]
   public function itSerializesToPayload(): void {

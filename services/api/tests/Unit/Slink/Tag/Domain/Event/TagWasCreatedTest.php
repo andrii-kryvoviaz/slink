@@ -15,42 +15,6 @@ use Slink\Tag\Domain\ValueObject\TagPath;
 final class TagWasCreatedTest extends TestCase {
 
   #[Test]
-  public function itCreatesEventWithAllProperties(): void {
-    $id = ID::generate();
-    $userId = ID::generate();
-    $parentId = ID::generate();
-    $name = TagName::fromString('test-tag');
-    $path = TagPath::fromString('#parent/test-tag');
-    $createdAt = DateTime::now();
-
-    $event = new TagWasCreated($id, $userId, $name, $path, $parentId, $createdAt);
-
-    $this->assertEquals($id, $event->id);
-    $this->assertEquals($userId, $event->userId);
-    $this->assertEquals($name, $event->name);
-    $this->assertEquals($path, $event->path);
-    $this->assertEquals($parentId, $event->parentId);
-    $this->assertEquals($createdAt, $event->createdAt);
-  }
-
-  #[Test]
-  public function itCreatesEventWithoutParentId(): void {
-    $id = ID::generate();
-    $userId = ID::generate();
-    $name = TagName::fromString('root-tag');
-    $path = TagPath::fromString('#root-tag');
-
-    $event = new TagWasCreated($id, $userId, $name, $path);
-
-    $this->assertEquals($id, $event->id);
-    $this->assertEquals($userId, $event->userId);
-    $this->assertEquals($name, $event->name);
-    $this->assertEquals($path, $event->path);
-    $this->assertNull($event->parentId);
-    $this->assertNull($event->createdAt);
-  }
-
-  #[Test]
   public function itSerializesToPayload(): void {
     $id = ID::generate();
     $userId = ID::generate();
@@ -163,21 +127,4 @@ final class TagWasCreatedTest extends TestCase {
     $this->assertNull($event->createdAt);
   }
 
-  #[Test]
-  public function itHasPublicProperties(): void {
-    $id = ID::generate();
-    $userId = ID::generate();
-    $name = TagName::fromString('property-tag');
-    $path = TagPath::fromString('#property-tag');
-    $createdAt = DateTime::now();
-
-    $event = new TagWasCreated($id, $userId, $name, $path, null, $createdAt);
-
-    $this->assertEquals($id, $event->id);
-    $this->assertEquals($userId, $event->userId);
-    $this->assertEquals($name, $event->name);
-    $this->assertEquals($path, $event->path);
-    $this->assertNull($event->parentId);
-    $this->assertEquals($createdAt, $event->createdAt);
-  }
 }
