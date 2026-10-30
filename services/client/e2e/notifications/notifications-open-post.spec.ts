@@ -32,14 +32,11 @@ async function hideImage(api: ApiClient, imageId: string): Promise<void> {
   expect(response.ok).toBe(true);
 }
 
-async function seedBookmarkedImage(): Promise<{
-  owner: Account;
-  ownerApi: ApiClient;
-  imageId: string;
-}> {
+async function seedBookmarkedImage(
+  readerApi: ApiClient,
+): Promise<BookmarkedImage & { ownerApi: ApiClient }> {
   const owner = unique('notif-owner');
   const ownerApi = await provisionUser(owner);
-  const readerApi = await provisionUser(unique('notif-reader'));
 
   const imageId = await ownerApi.content.uploadImage({ isPublic: true });
   await readerApi.content.bookmarkImage(imageId);
@@ -47,22 +44,21 @@ async function seedBookmarkedImage(): Promise<{
   return { owner, ownerApi, imageId };
 }
 
-async function seedOwnedNonPublicImage(): Promise<BookmarkedImage> {
-  const { owner, ownerApi, imageId } = await seedBookmarkedImage();
+async function seedOwnedNonPublicImage(
+  readerApi: ApiClient,
+): Promise<BookmarkedImage> {
+  const { owner, ownerApi, imageId } = await seedBookmarkedImage(readerApi);
   await hideImage(ownerApi, imageId);
 
   return { owner, imageId };
 }
 
-async function seedPublicImageOffFirstPage(): Promise<BookmarkedImage> {
-  const { owner, imageId } = await seedBookmarkedImage();
+async function pushOffFirstExplorePage(): Promise<void> {
   const fillerApi = await provisionUser(unique('notif-filler'));
 
   for (let i = 0; i < FILLER_COUNT; i++) {
     await fillerApi.content.uploadImage({ isPublic: true });
   }
-
-  return { owner, imageId };
 }
 
 function isPublicImageRequest(response: Response, imageId: string): boolean {
@@ -136,10 +132,26 @@ async function expectCleanExploreFallback(page: Page, errors: string[]) {
 }
 
 test.describe('Notifications open post', () => {
+  let nonPublic: BookmarkedImage;
+  let offFirstPage: BookmarkedImage;
+  let reopened: BookmarkedImage;
+  let visitor: Account;
+
+  test.beforeAll(async () => {
+    const readerApi = await provisionUser(unique('notif-reader'));
+    nonPublic = await seedOwnedNonPublicImage(readerApi);
+    offFirstPage = await seedBookmarkedImage(readerApi);
+    reopened = await seedBookmarkedImage(readerApi);
+    await pushOffFirstExplorePage();
+
+    visitor = unique('notif-visitor');
+    await provisionUser(visitor);
+  });
+
   test("falls back to explore when the owner's non-public image is opened from a notification", async ({
     browser,
   }) => {
-    const { owner, imageId } = await seedOwnedNonPublicImage();
+    const { owner, imageId } = nonPublic;
 
     await withSignedInPage(browser, owner, async (page) => {
       const errors = collectPageErrors(page);
@@ -157,7 +169,7 @@ test.describe('Notifications open post', () => {
   test('opens a public image outside the first explore page', async ({
     browser,
   }) => {
-    const { owner, imageId } = await seedPublicImageOffFirstPage();
+    const { owner, imageId } = offFirstPage;
 
     await withSignedInPage(browser, owner, async (page) => {
       const explorePage = new ExplorePage(page);
@@ -174,7 +186,7 @@ test.describe('Notifications open post', () => {
   test('reopens a standalone post from the notification after closing it', async ({
     browser,
   }) => {
-    const { owner, imageId } = await seedPublicImageOffFirstPage();
+    const { owner, imageId } = reopened;
 
     await withSignedInPage(browser, owner, async (page) => {
       const explorePage = new ExplorePage(page);
@@ -195,11 +207,9 @@ test.describe('Notifications open post', () => {
   test('clears the url without errors when the post cannot be opened', async ({
     browser,
   }) => {
-    const { imageId } = await seedOwnedNonPublicImage();
-    const nonOwner = unique('notif-other');
-    await provisionUser(nonOwner);
+    const { imageId } = nonPublic;
 
-    await withSignedInPage(browser, nonOwner, async (page) => {
+    await withSignedInPage(browser, visitor, async (page) => {
       const errors = collectPageErrors(page);
       const fetched = page.waitForResponse((response) =>
         isPublicImageRequest(response, imageId),
@@ -215,10 +225,7 @@ test.describe('Notifications open post', () => {
   test('clears the url without errors when the post does not exist', async ({
     browser,
   }) => {
-    const account = unique('notif-unknown');
-    await provisionUser(account);
-
-    await withSignedInPage(browser, account, async (page) => {
+    await withSignedInPage(browser, visitor, async (page) => {
       const errors = collectPageErrors(page);
       const fetched = page.waitForResponse((response) =>
         isPublicImageRequest(response, UNKNOWN_IMAGE_ID),

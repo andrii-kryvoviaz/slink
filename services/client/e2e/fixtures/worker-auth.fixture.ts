@@ -2,6 +2,7 @@ import { test as base, expect } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
 
+import { IconifyCache } from '../helpers/IconifyCache';
 import { type Account, admin, worker } from '../helpers/accounts';
 import { ApiClient } from '../helpers/api';
 import { provisionUser } from '../helpers/provisioning';
@@ -64,6 +65,11 @@ export const test = base.extend<{}, WorkerAuthFixtures>({
     },
     { scope: 'worker' },
   ],
+
+  context: async ({ context }, use) => {
+    await IconifyCache.attach(context);
+    await use(context);
+  },
 
   storageState: async ({ workerStorageState }, use) => {
     const anonymous = test.info().tags.includes('@anonymous');

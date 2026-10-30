@@ -7,7 +7,7 @@ import { provisionUser } from '../helpers/provisioning';
 import { signInContext } from '../helpers/session';
 import { PreferencesPage } from '../pages/PreferencesPage';
 
-test.describe('Locale preference', { tag: '@serial' }, () => {
+test.describe('Locale preference', () => {
   let context: BrowserContext;
   let page: Page;
   let preferencesPage: PreferencesPage;

@@ -6,6 +6,8 @@ import { isChunkedUploadCompletionResponse } from '../helpers/chunkedUpload';
 import { createUniquePng } from '../helpers/uniqueImage';
 import { BasePage } from './BasePage';
 
+type UploadFile = { name: string; mimeType: string; buffer: Buffer };
+
 export class UploadPage extends BasePage {
   static readonly URL = '/upload';
 
@@ -85,8 +87,7 @@ export class UploadPage extends BasePage {
   }
 
   async uploadNonImageFile() {
-    await this.heading.waitFor({ state: 'visible' });
-    await this.fileInput.setInputFiles({
+    await this.chooseFiles({
       name: `e2e-${Date.now()}.txt`,
       mimeType: 'text/plain',
       buffer: Buffer.from('not an image'),
@@ -94,21 +95,12 @@ export class UploadPage extends BasePage {
   }
 
   async uploadMultipleImages(count: number) {
-    await this.heading.waitFor({ state: 'visible' });
-
     const files = Array.from({ length: count }, () => {
       const { buffer, name } = createUniquePng();
       return { name, mimeType: 'image/png', buffer };
     });
 
-    await expect(async () => {
-      const responsePromise = this.page.waitForResponse(
-        isChunkedUploadCompletionResponse,
-        { timeout: 1500 },
-      );
-      await this.fileInput.setInputFiles(files);
-      await responsePromise;
-    }).toPass({ timeout: 15000 });
+    await this.uploadExpectingCompletion(files);
   }
 
   async uploadFiles(paths: string[]) {
@@ -122,89 +114,62 @@ export class UploadPage extends BasePage {
     return this.uploadBuffer({ name, mimeType, buffer });
   }
 
-  async uploadBuffer(file: {
-    name: string;
-    mimeType: string;
-    buffer: Buffer;
-  }): Promise<Response> {
-    await this.heading.waitFor({ state: 'visible' });
+  async uploadBuffer(file: UploadFile): Promise<Response> {
+    return this.uploadExpectingCompletion(file, 30000);
+  }
 
-    let completion: Response | undefined;
+  async uploadSingleImage() {
+    const { buffer, name } = createUniquePng();
 
-    await expect(async () => {
-      if (!/\/upload(\/|$|\?)/.test(this.page.url())) {
-        return;
-      }
-      const responsePromise = this.page.waitForResponse(
-        isChunkedUploadCompletionResponse,
-        { timeout: 10000 },
-      );
-      await this.fileInput.setInputFiles(file);
-      completion = await responsePromise;
-    }).toPass({ timeout: 30000 });
+    await this.uploadFilesExpectingRequest([
+      { name, mimeType: 'image/png', buffer },
+    ]);
+  }
 
-    if (!completion) {
-      throw new Error('Chunked upload did not complete');
-    }
+  async uploadFilesExpectingRequest(files: UploadFile[]) {
+    await Promise.all([
+      this.page.waitForRequest(
+        (request) =>
+          /\/api\/upload\/chunked$/.test(request.url()) &&
+          request.method() === 'POST',
+        { timeout: 15000 },
+      ),
+      this.chooseFiles(files),
+    ]);
+  }
+
+  async uploadUniqueImage() {
+    const { buffer, name } = createUniquePng();
+
+    await this.uploadExpectingCompletion({
+      name,
+      mimeType: 'image/png',
+      buffer,
+    });
+  }
+
+  private async uploadExpectingCompletion(
+    files: UploadFile | UploadFile[],
+    timeout = 15000,
+  ): Promise<Response> {
+    const [completion] = await Promise.all([
+      this.page.waitForResponse(isChunkedUploadCompletionResponse, {
+        timeout,
+      }),
+      this.chooseFiles(files),
+    ]);
 
     return completion;
   }
 
-  async uploadSingleImage() {
-    await this.heading.waitFor({ state: 'visible' });
-
-    const { buffer, name } = createUniquePng();
-
+  private async chooseFiles(files: UploadFile | UploadFile[]) {
     await expect(async () => {
-      const requestPromise = this.page.waitForRequest(
-        (request) =>
-          /\/api\/upload\/chunked$/.test(request.url()) &&
-          request.method() === 'POST',
-        { timeout: 1500 },
-      );
-      await this.fileInput.setInputFiles({
-        name,
-        mimeType: 'image/png',
-        buffer,
-      });
-      await requestPromise;
-    }).toPass({ timeout: 15000 });
-  }
-
-  async uploadFilesExpectingRequest(
-    files: { name: string; mimeType: string; buffer: Buffer }[],
-  ) {
-    await this.heading.waitFor({ state: 'visible' });
-
-    await expect(async () => {
-      const requestPromise = this.page.waitForRequest(
-        (request) =>
-          /\/api\/upload\/chunked$/.test(request.url()) &&
-          request.method() === 'POST',
-        { timeout: 1500 },
-      );
-      await this.fileInput.setInputFiles(files);
-      await requestPromise;
-    }).toPass({ timeout: 15000 });
-  }
-
-  async uploadUniqueImage() {
-    await this.heading.waitFor({ state: 'visible' });
-
-    const { buffer, name } = createUniquePng();
-
-    await expect(async () => {
-      const responsePromise = this.page.waitForResponse(
-        isChunkedUploadCompletionResponse,
-        { timeout: 1500 },
-      );
-      await this.fileInput.setInputFiles({
-        name,
-        mimeType: 'image/png',
-        buffer,
-      });
-      await responsePromise;
-    }).toPass({ timeout: 15000 });
+      const [chooser] = await Promise.all([
+        this.page.waitForEvent('filechooser', { timeout: 500 }),
+        this.dropzone.press('Space', { timeout: 500 }),
+      ]);
+      await chooser.setFiles(files);
+    }).toPass({ timeout: 15000, intervals: [100] });
   }
 
   async setVisibilityPublic() {

@@ -94,12 +94,16 @@ function entries(notificationsPage: NotificationsPage) {
 }
 
 test.describe('Notification filters', () => {
+  let mixed: Account;
+
+  test.beforeAll(async () => {
+    mixed = await seedMixed();
+  });
+
   test('narrows the list per chip and restores everything under All', async ({
     browser,
   }) => {
-    const owner = await seedMixed();
-
-    await withFiltersPage(browser, owner, async (notificationsPage, page) => {
+    await withFiltersPage(browser, mixed, async (notificationsPage, page) => {
       const errors = collectPageErrors(page);
       const failed: string[] = [];
       page.on('response', (response) => {
@@ -156,31 +160,30 @@ test.describe('Notification filters', () => {
   });
 
   test('ignores a click on the already selected chip', async ({ browser }) => {
-    const owner = await seedMixed();
-
-    await withFiltersPage(browser, owner, async (notificationsPage, page) => {
+    await withFiltersPage(browser, mixed, async (notificationsPage, page) => {
       await notificationsPage.selectFilter('Comments');
-      const listRequests: string[] = [];
+      const listedTypes: Array<string | null> = [];
       page.on('request', (request) => {
-        if (new URL(request.url()).pathname.endsWith('/notifications')) {
-          listRequests.push(request.url());
+        const url = new URL(request.url());
+        if (url.pathname.endsWith('/notifications')) {
+          listedTypes.push(url.searchParams.get('type'));
         }
       });
 
       await notificationsPage.filterChip('Comments').click();
-      await page.waitForTimeout(500);
-
-      expect(listRequests).toEqual([]);
       await expect(entries(notificationsPage).comment).toHaveCount(1);
+      await expectOnlySelected(notificationsPage, 'Comments');
+
+      await notificationsPage.selectFilter('Replies');
+
+      expect(listedTypes).toEqual(['comment_reply']);
     });
   });
 
   test('applies a chip from the keyboard with a visible focus ring', async ({
     browser,
   }) => {
-    const owner = await seedMixed();
-
-    await withFiltersPage(browser, owner, async (notificationsPage, page) => {
+    await withFiltersPage(browser, mixed, async (notificationsPage, page) => {
       const allChip = notificationsPage.filterChip('All');
       const unreadChip = notificationsPage.filterChip('Unread');
 
@@ -203,15 +206,14 @@ test.describe('Notification filters', () => {
   test('drops a stale response when the chip changes mid-flight', async ({
     browser,
   }) => {
-    const owner = await seedMixed();
-
-    await withFiltersPage(browser, owner, async (notificationsPage, page) => {
+    await withFiltersPage(browser, mixed, async (notificationsPage, page) => {
       await expect(notificationsPage.unreadSubtitle).toHaveText('3 unread');
 
+      const staleGate = Promise.withResolvers<void>();
       await page.route(
         /\/notifications\?.*type=added_to_bookmarks/,
         async (route) => {
-          await new Promise((resolve) => setTimeout(resolve, 1500));
+          await staleGate.promise;
           await route.continue();
         },
       );
@@ -228,6 +230,7 @@ test.describe('Notification filters', () => {
       await expect(reply).toHaveCount(0);
 
       await notificationsPage.selectFilter('Replies');
+      staleGate.resolve();
       const stale = await staleLanded;
       await stale.finished();
 

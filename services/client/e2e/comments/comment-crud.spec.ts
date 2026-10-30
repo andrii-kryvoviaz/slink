@@ -1,5 +1,9 @@
 import { expect, test } from '../fixtures/auth.fixture';
+import { SseRecorder } from '../helpers/SseRecorder';
 import { CommentSection } from '../pages/CommentSection';
+
+const FEED_TOPIC = 'public-feed';
+const FEED_DELIVERY_TIMEOUT = 30_000;
 
 test.describe('Comment CRUD', () => {
   test('owner posts a comment from the form and it survives a reload', async ({
@@ -74,11 +78,14 @@ test.describe('Comment CRUD', () => {
     const subscribed = page.waitForResponse(
       (response) =>
         new URL(response.url()).pathname === '/sse' &&
-        new URL(response.url()).searchParams.get('topic') === 'public-feed',
+        new URL(response.url()).searchParams.get('topic') === FEED_TOPIC,
     );
     await page.goto(`/explore?post=${imageId}`);
     await expect(explorePage.viewer).toBeVisible();
     expect((await subscribed).status()).toBe(200);
+
+    const sse = new SseRecorder(page);
+    await sse.subscribe(FEED_TOPIC);
 
     const comments = new CommentSection(page, imageId);
     await comments.waitForLoaded();
@@ -86,6 +93,11 @@ test.describe('Comment CRUD', () => {
     await comments.editInput.fill(draft);
 
     const addedId = await uploader.content.uploadImage({ isPublic: true });
+    await sse.waitForEvent(
+      FEED_TOPIC,
+      (event) => event.event === 'image_added' && event.image?.id === addedId,
+      FEED_DELIVERY_TIMEOUT,
+    );
     await expect(page.locator(`[data-post-id="${addedId}"]`)).toBeAttached();
 
     await expect(comments.editInput).toHaveValue(draft);

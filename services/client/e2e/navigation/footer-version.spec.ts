@@ -1,11 +1,31 @@
-import type { Page } from '@playwright/test';
+import type { Page, PlaywrightWorkerArgs } from '@playwright/test';
 
 import { expect, test } from '../fixtures/auth.fixture';
 
 const GITHUB_API = 'https://api.github.com/**';
 const SEMVER = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$/;
-const stackVersion = process.env.E2E_SLINK_VERSION || 'dev';
-const isSemverStack = SEMVER.test(stackVersion);
+const ROOT_LAYOUT_DATA = '/explore/__data.json';
+
+let stackVersion = 'dev';
+let isSemverStack = false;
+
+async function resolveStackVersion(
+  playwright: PlaywrightWorkerArgs['playwright'],
+): Promise<string> {
+  const context = await playwright.request.newContext({
+    baseURL: test.info().project.use.baseURL,
+  });
+
+  try {
+    const response = await context.get(ROOT_LAYOUT_DATA);
+    const [rootLayoutNode] = (await response.json()).nodes;
+    const data = rootLayoutNode.data;
+
+    return data[data[0].version];
+  } finally {
+    await context.dispose();
+  }
+}
 
 async function stubLatestRelease(page: Page, version: string) {
   const requests: string[] = [];
@@ -31,6 +51,11 @@ async function stubLatestRelease(page: Page, version: string) {
 test.describe('Footer version', { tag: ['@anonymous', '@sc-901'] }, () => {
   test.use({ serviceWorkers: 'block' });
 
+  test.beforeAll(async ({ playwright }) => {
+    stackVersion = await resolveStackVersion(playwright);
+    isSemverStack = SEMVER.test(stackVersion);
+  });
+
   test('shows a non-semver build name without a v and never contacts GitHub', async ({
     page,
   }) => {
@@ -51,7 +76,7 @@ test.describe('Footer version', { tag: ['@anonymous', '@sc-901'] }, () => {
   test('shows a semver version with a v and checks the latest GitHub release', async ({
     page,
   }) => {
-    test.skip(!isSemverStack, 'needs E2E_SLINK_VERSION=<semver>');
+    test.skip(!isSemverStack, 'needs a semver SLINK_VERSION');
     const requests = await stubLatestRelease(page, stackVersion);
     const footer = page.locator('footer');
 

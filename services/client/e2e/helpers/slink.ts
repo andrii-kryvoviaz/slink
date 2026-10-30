@@ -6,6 +6,8 @@ const DOCKER_ARGS = [
   'slink-e2e',
   'exec',
   '-T',
+  '-u',
+  'www-data',
   'slink',
   'slink',
 ];

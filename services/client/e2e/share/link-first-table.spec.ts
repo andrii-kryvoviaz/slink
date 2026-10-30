@@ -4,7 +4,7 @@ const EXPIRY_LABEL = /^\s*(\d+h|\d+d|\d+w|\d+mo|\d+y|Expired|—)\s*$/;
 
 const TWELVE_DAYS_MS = 12 * 24 * 60 * 60 * 1000;
 const THREE_HOURS_MS = 3 * 60 * 60 * 1000;
-const SHORT_EXPIRY_MS = 10 * 1000;
+const SHORT_EXPIRY_MS = 3 * 1000;
 
 test.use({
   permissions: ['clipboard-read', 'clipboard-write'],

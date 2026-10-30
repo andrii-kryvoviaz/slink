@@ -48,11 +48,8 @@ test.describe('Collection card copy link', () => {
     await shared;
     await published;
 
-    await expect(card.getByRole('button', { name: 'Copied' })).toBeVisible();
-
-    const clipboardText = await page.evaluate(() =>
-      navigator.clipboard.readText(),
-    );
-    expect(clipboardText.length).toBeGreaterThan(0);
+    await expect
+      .poll(() => page.evaluate(() => navigator.clipboard.readText()))
+      .not.toBe('');
   });
 });

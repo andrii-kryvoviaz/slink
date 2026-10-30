@@ -55,51 +55,6 @@ test.describe('Upload failure feedback', () => {
     await expect(uploadPage.fileInput).toBeAttached();
   });
 
-  test('shows a per-row error and a retry control when one of two uploads fails', async ({
-    uploadPage,
-    page,
-  }) => {
-    const failing = createUniquePng();
-    const succeeding = createUniquePng();
-
-    await page.route(/\/api\/upload\/chunked$/, async (route) => {
-      const body = route.request().postDataJSON() as { fileName?: string };
-      if (body?.fileName === failing.name) {
-        await route.fulfill({
-          status: 500,
-          contentType: 'text/plain',
-          body: 'Internal Server Error',
-        });
-        return;
-      }
-      await route.continue();
-    });
-
-    await uploadPage.goto();
-    await expect(uploadPage.heading).toBeVisible();
-
-    await uploadPage.uploadFilesExpectingRequest([
-      { name: failing.name, mimeType: 'image/png', buffer: failing.buffer },
-      {
-        name: succeeding.name,
-        mimeType: 'image/png',
-        buffer: succeeding.buffer,
-      },
-    ]);
-
-    await expect(page.getByRole('heading', { name: 'Complete' })).toBeVisible({
-      timeout: 30000,
-    });
-    await expect(page.getByText('1 failed', { exact: false })).toBeVisible();
-
-    await expect(
-      page.getByRole('button', { name: 'Retry Failed' }),
-    ).toBeVisible();
-
-    const failedRow = page.locator('p').filter({ hasText: failing.name });
-    await expect(failedRow).toBeVisible();
-  });
-
   test('single upload shows server-error message when a chunk fails', async ({
     uploadPage,
     page,

@@ -6,6 +6,7 @@ import {
 } from '@playwright/test';
 
 import { LoginPage } from '../pages/LoginPage';
+import { IconifyCache } from './IconifyCache';
 import type { Account } from './accounts';
 
 export function resolveBaseURLFromEnv(): string {
@@ -20,21 +21,21 @@ export async function signInContext(
   browser: Browser,
   account: Account,
 ): Promise<BrowserContext> {
+  const baseURL = resolveBaseURL();
   const context = await browser.newContext({
     storageState: undefined,
-    baseURL: resolveBaseURL(),
+    baseURL,
   });
-  const page = await context.newPage();
-  const loginPage = new LoginPage(page);
+  await IconifyCache.attach(context);
 
-  await expect(async () => {
-    await loginPage.login(account.username, account.password);
-    await page.waitForURL((url) => !url.pathname.includes('/profile/login'), {
-      timeout: 15000,
-    });
-  }).toPass({ timeout: 45000, intervals: [1000, 2000] });
+  await context.request.post(LoginPage.URL, {
+    form: { username: account.username, password: account.password },
+    headers: { origin: new URL(baseURL).origin, accept: 'text/html' },
+    maxRedirects: 0,
+  });
 
-  await page.close();
+  const cookieNames = (await context.cookies()).map((cookie) => cookie.name);
+  expect(cookieNames, `sign-in of ${account.username}`).toContain('sessionId');
 
   return context;
 }

@@ -749,7 +749,7 @@ test.describe('Admin SSO auto-redirect setting', { tag: '@serial' }, () => {
     expect(payload.settings.autoRedirectProviderId).toBe(picked.id);
 
     await expect(trigger).toContainText(picked.name);
-    await page.waitForTimeout(1000);
+    await expect(trigger).not.toHaveAttribute('aria-disabled', 'true');
     await expect(trigger).toContainText(picked.name);
     await expect.poll(() => storedAutoRedirectProviderId(api)).toBe(picked.id);
   });

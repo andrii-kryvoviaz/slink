@@ -20,7 +20,7 @@ export class HttpClient {
     return this._accessToken;
   }
 
-  async login(username: string, password: string, retries = 3) {
+  async login(username: string, password: string, retries = 5) {
     for (let attempt = 1; attempt <= retries; attempt++) {
       const res = await fetch(`${API_URL}/api/auth/login`, {
         method: 'POST',
@@ -38,8 +38,19 @@ export class HttpClient {
         throw new Error(`Login failed: ${res.status}`);
       }
 
-      await new Promise((r) => setTimeout(r, 1000 * attempt));
+      await new Promise((r) => setTimeout(r, 1000 * attempt * Math.random()));
     }
+  }
+
+  async serverTime(): Promise<number> {
+    const res = await fetch(`${API_URL}/api/health`);
+    const date = res.headers.get('date');
+
+    if (!date) {
+      throw new Error('API response carries no Date header');
+    }
+
+    return Date.parse(date);
   }
 
   async request(method: string, path: string, body?: object) {

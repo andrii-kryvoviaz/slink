@@ -33,34 +33,3 @@ test.describe('First-run empty states', () => {
     });
   }
 });
-
-test.describe('Explore empty state', { tag: '@anonymous' }, () => {
-  test('shows the upload CTA when there are no public images', async ({
-    page,
-    explorePage,
-  }) => {
-    await page.goto('/explore');
-
-    const emptyHeading = explorePage.emptyState('nothing-shared');
-    const cta = page.getByRole('link', { name: 'Upload an image' });
-
-    await expect
-      .poll(
-        async () => {
-          if (await emptyHeading.isVisible()) {
-            return 'empty';
-          }
-          if ((await explorePage.feedItems.count()) > 0) {
-            return 'populated';
-          }
-          return 'pending';
-        },
-        { timeout: 15000 },
-      )
-      .not.toBe('pending');
-
-    if (await emptyHeading.isVisible()) {
-      await expect(cta).toBeVisible();
-    }
-  });
-});

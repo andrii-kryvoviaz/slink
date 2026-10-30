@@ -1,7 +1,7 @@
 import type { Browser, BrowserContext, Page } from '@playwright/test';
 
 import { expect, test } from '../fixtures/auth.fixture';
-import { unique } from '../helpers/accounts';
+import { type Account, unique } from '../helpers/accounts';
 import type { ApiClient } from '../helpers/api';
 import { provisionUser } from '../helpers/provisioning';
 import { signInContext } from '../helpers/session';
@@ -13,29 +13,49 @@ const TARGET_TAG = 'tv';
 const FEW_FILLERS = 3;
 const PAST_FIRST_PAGE_FILLERS = 55;
 
-type Scene = {
+const REMOVABLE_TAG = 'a00';
+
+type Catalogue = {
+  account: Account;
   api: ApiClient;
+  targetTagId: string;
+};
+
+type Scene = Catalogue & {
   page: Page;
   imageId: string;
-  targetTagId: string;
+};
+
+const seedCatalogue = async (fillerCount: number): Promise<Catalogue> => {
+  const account = unique('imgtagsrch');
+  const api = await provisionUser(account);
+  const targetTagId = await seedTags(api, fillerCount, TARGET_TAG);
+
+  return { account, api, targetTagId };
 };
 
 test.describe('Single-image tag picker search', { tag: '@sc-998' }, () => {
   let context: BrowserContext | undefined;
+  let fewTags: Catalogue;
+  let manyTags: Catalogue;
+  let removableTagId: string;
+
+  test.beforeAll(async () => {
+    fewTags = await seedCatalogue(FEW_FILLERS);
+    manyTags = await seedCatalogue(PAST_FIRST_PAGE_FILLERS);
+    removableTagId = await manyTags.api.content.createTag(REMOVABLE_TAG);
+  });
 
   const openScene = async (
     browser: Browser,
-    fillerCount: number,
+    catalogue: Catalogue,
   ): Promise<Scene> => {
-    const account = unique('imgtagsrch');
-    const api = await provisionUser(account);
-    const imageId = await api.content.uploadImage();
-    const targetTagId = await seedTags(api, fillerCount, TARGET_TAG);
+    const imageId = await catalogue.api.content.uploadImage();
 
-    context = await signInContext(browser, account);
+    context = await signInContext(browser, catalogue.account);
     const page = await context.newPage();
 
-    return { api, page, imageId, targetTagId };
+    return { ...catalogue, page, imageId };
   };
 
   test.afterEach(async () => {
@@ -48,7 +68,7 @@ test.describe('Single-image tag picker search', { tag: '@sc-998' }, () => {
   }) => {
     const { api, page, imageId, targetTagId } = await openScene(
       browser,
-      PAST_FIRST_PAGE_FILLERS,
+      manyTags,
     );
     const imageInfoPage = new ImageInfoPage(page);
     await imageInfoPage.goto(imageId);
@@ -72,7 +92,7 @@ test.describe('Single-image tag picker search', { tag: '@sc-998' }, () => {
   test('shows the search input on the info page when the user has only a few tags', async ({
     browser,
   }) => {
-    const { page, imageId } = await openScene(browser, FEW_FILLERS);
+    const { page, imageId } = await openScene(browser, fewTags);
     const imageInfoPage = new ImageInfoPage(page);
     await imageInfoPage.goto(imageId);
 
@@ -85,7 +105,7 @@ test.describe('Single-image tag picker search', { tag: '@sc-998' }, () => {
   test('lists a searched tag in the history row after assigning it from the row menu', async ({
     browser,
   }) => {
-    const { page, imageId } = await openScene(browser, PAST_FIRST_PAGE_FILLERS);
+    const { page, imageId } = await openScene(browser, manyTags);
     const historyPage = new HistoryPage(page);
     await historyPage.useTableView();
     await historyPage.goto();
@@ -112,7 +132,7 @@ test.describe('Single-image tag picker search', { tag: '@sc-998' }, () => {
       }) => {
         const { api, page, imageId, targetTagId } = await openScene(
           browser,
-          PAST_FIRST_PAGE_FILLERS,
+          manyTags,
         );
         await api.content.tagImage(imageId, targetTagId);
         const historyPage = new HistoryPage(page);
@@ -139,7 +159,7 @@ test.describe('Single-image tag picker search', { tag: '@sc-998' }, () => {
       }) => {
         const { api, page, imageId, targetTagId } = await openScene(
           browser,
-          PAST_FIRST_PAGE_FILLERS,
+          manyTags,
         );
         await api.content.tagImage(imageId, targetTagId);
         const imageInfoPage = new ImageInfoPage(page);
@@ -165,21 +185,22 @@ test.describe('Single-image tag picker search', { tag: '@sc-998' }, () => {
       }) => {
         const { api, page, imageId, targetTagId } = await openScene(
           browser,
-          PAST_FIRST_PAGE_FILLERS,
+          manyTags,
         );
-        const removedTagId = await api.content.createTag('a00');
-        await api.content.tagImage(imageId, removedTagId);
+        await api.content.tagImage(imageId, removableTagId);
         await api.content.tagImage(imageId, targetTagId);
         const historyPage = new HistoryPage(page);
         await historyPage.useTableView();
         await historyPage.goto();
-        await expect(historyPage.tableRowTagLink(imageId, 'a00')).toBeVisible();
+        await expect(
+          historyPage.tableRowTagLink(imageId, REMOVABLE_TAG),
+        ).toBeVisible();
         await expect(
           historyPage.tableRowTagLink(imageId, TARGET_TAG),
         ).toBeVisible();
 
-        await historyPage.searchRowTags(imageId, 'a00');
-        await historyPage.rowTagPickerItem('a00').click();
+        await historyPage.searchRowTags(imageId, REMOVABLE_TAG);
+        await historyPage.rowTagPickerItem(REMOVABLE_TAG).click();
 
         await expect
           .poll(() => api.content.getImageTagIds(imageId), { timeout: 15000 })
@@ -187,9 +208,9 @@ test.describe('Single-image tag picker search', { tag: '@sc-998' }, () => {
         await expect(
           historyPage.tableRowTagLink(imageId, TARGET_TAG),
         ).toBeVisible();
-        await expect(historyPage.tableRowTagLink(imageId, 'a00')).toHaveCount(
-          0,
-        );
+        await expect(
+          historyPage.tableRowTagLink(imageId, REMOVABLE_TAG),
+        ).toHaveCount(0);
       });
     },
   );

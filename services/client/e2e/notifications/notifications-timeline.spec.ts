@@ -117,11 +117,16 @@ function otherReply(label: ReplyLabel): ReplyLabel {
 }
 
 test.describe('Notifications timeline', () => {
+  let shared: Timeline;
+
+  test.beforeAll(async () => {
+    shared = await seedTimeline();
+  });
+
   test('groups bookmarks, replies and comments into timeline entries', async ({
     browser,
   }) => {
-    const { owner, firstReader, secondReader, thirdReader } =
-      await seedTimeline();
+    const { owner, firstReader, secondReader, thirdReader } = shared;
     const readers = [firstReader, secondReader, thirdReader]
       .map((reader) => reader.username)
       .join('|');
@@ -184,8 +189,7 @@ test.describe('Notifications timeline', () => {
   test('completes the bookmark sentence and lists every bookmarker in the actor card', async ({
     browser,
   }) => {
-    const { owner, firstReader, secondReader, thirdReader } =
-      await seedTimeline();
+    const { owner, firstReader, secondReader, thirdReader } = shared;
     const usernames = [firstReader, secondReader, thirdReader].map(
       (reader) => reader.username,
     );
@@ -233,7 +237,7 @@ test.describe('Notifications timeline', () => {
   test('opens the bookmark actor card on hover and from the keyboard', async ({
     browser,
   }) => {
-    const { owner } = await seedTimeline();
+    const { owner } = shared;
 
     await withTimelinePage(browser, owner, async (notificationsPage, page) => {
       const bookmarkEntry = notificationsPage.entryByText(/bookmarked/);
@@ -280,7 +284,7 @@ test.describe('Notifications timeline', () => {
   test('toggles the reply disclosure from the keyboard', async ({
     browser,
   }) => {
-    const { owner } = await seedTimeline();
+    const { owner } = shared;
 
     await withTimelinePage(browser, owner, async (notificationsPage) => {
       const replyEntry = notificationsPage.entryByText(
@@ -304,7 +308,7 @@ test.describe('Notifications timeline', () => {
   test('shows each comment time once across the entry and its thread rows', async ({
     browser,
   }) => {
-    const { owner, firstReader, secondReader } = await seedTimeline();
+    const { owner, firstReader, secondReader } = shared;
     const replyAuthors: Record<ReplyLabel, Account> = {
       'first reply': firstReader,
       'second reply': secondReader,
@@ -706,10 +710,16 @@ function daysLater(days: number): (createdAt: Date) => Date {
 }
 
 test.describe('Notifications relative times', () => {
+  let shared: Timeline;
+
+  test.beforeAll(async () => {
+    shared = await seedTimeline();
+  });
+
   test('shows today times relative to now and advances them every minute', async ({
     browser,
   }) => {
-    const { owner } = await seedTimeline();
+    const { owner } = shared;
 
     await withTimelinePage(browser, owner, async (notificationsPage, page) => {
       await pinClock(notificationsPage, page, sameMoment);
@@ -740,7 +750,7 @@ test.describe('Notifications relative times', () => {
   });
 
   test('advances thread row times with the entry time', async ({ browser }) => {
-    const { owner } = await seedTimeline();
+    const { owner } = shared;
 
     await withTimelinePage(browser, owner, async (notificationsPage, page) => {
       await pinClock(notificationsPage, page, sameMoment);
@@ -764,7 +774,7 @@ test.describe('Notifications relative times', () => {
   });
 
   test('keeps the clock time for yesterday', async ({ browser }) => {
-    const { owner } = await seedTimeline();
+    const { owner } = shared;
 
     await withTimelinePage(browser, owner, async (notificationsPage, page) => {
       await pinClock(notificationsPage, page, daysLater(1));
@@ -779,7 +789,7 @@ test.describe('Notifications relative times', () => {
   });
 
   test('keeps the short date for older days', async ({ browser }) => {
-    const { owner } = await seedTimeline();
+    const { owner } = shared;
 
     await withTimelinePage(browser, owner, async (notificationsPage, page) => {
       await pinClock(notificationsPage, page, daysLater(8));
@@ -823,7 +833,7 @@ test.describe('Notifications relative times', () => {
   test('keeps a single entry time while the bookmark actor card is open', async ({
     browser,
   }) => {
-    const { owner } = await seedTimeline();
+    const { owner } = shared;
 
     await withTimelinePage(browser, owner, async (notificationsPage, page) => {
       await pinClock(notificationsPage, page, sameMoment);

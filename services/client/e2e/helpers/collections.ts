@@ -1,3 +1,5 @@
+import { expect } from '@playwright/test';
+
 import type { ApiClient } from './api';
 
 export const COLLECTIONS_AHEAD = 55;
@@ -9,8 +11,13 @@ export const FILLER_PATTERN = /^Filler \d+$/;
 export const fillerCollectionName = (index: number) =>
   `Filler ${String(index).padStart(2, '0')}`;
 
-const nextServerSecond = () =>
-  new Promise((resolve) => setTimeout(resolve, 1100));
+const nextServerSecond = async (api: ApiClient) => {
+  const current = await api.serverTime();
+
+  await expect
+    .poll(() => api.serverTime(), { intervals: [100] })
+    .toBeGreaterThan(current);
+};
 
 export const seedCollectionsAhead = async (
   api: ApiClient,
@@ -21,7 +28,7 @@ export const seedCollectionsAhead = async (
   const olderId = await api.content.createCollection({
     name: OLDER_COLLECTION,
   });
-  await nextServerSecond();
+  await nextServerSecond(api);
 
   const fillerIds: string[] = [];
   for (let index = 1; index <= count; index++) {

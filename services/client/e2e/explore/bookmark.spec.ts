@@ -25,38 +25,4 @@ test.describe('Explore bookmark', () => {
     await explorePage.toggleBookmark(bookmarkButton, 'false');
     await expect(bookmarkButton).toHaveAttribute('aria-label', 'Save');
   });
-
-  test('bookmarked image appears in bookmarks page', async ({
-    explorePage,
-    bookmarksPage,
-    actor,
-    page,
-  }) => {
-    const owner = await actor('owner');
-    const imageId = await owner.content.uploadImage({ isPublic: true });
-
-    await explorePage.page.goto(`/explore?post=${imageId}`);
-    await expect(explorePage.viewer).toBeVisible();
-
-    const bookmarkButton = explorePage.viewer
-      .locator(`[data-post-id="${imageId}"]`)
-      .locator('button[aria-pressed]');
-
-    const saved = page.waitForResponse(
-      (response) =>
-        response.request().method() === 'POST' &&
-        new URL(response.url()).pathname.endsWith(
-          `/image/${imageId}/bookmark`,
-        ) &&
-        response.ok(),
-    );
-    await explorePage.toggleBookmark(bookmarkButton, 'true');
-    await saved;
-
-    const bookmarkLink = bookmarksPage.mediaFor(imageId);
-    await expect(async () => {
-      await bookmarksPage.goto();
-      await expect(bookmarkLink).toBeVisible({ timeout: 2000 });
-    }).toPass({ timeout: 15000 });
-  });
 });

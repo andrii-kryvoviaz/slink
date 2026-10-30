@@ -1,7 +1,7 @@
 import type { Browser, BrowserContext, Page, Request } from '@playwright/test';
 
 import { expect, test } from '../fixtures/auth.fixture';
-import { unique } from '../helpers/accounts';
+import { type Account, unique } from '../helpers/accounts';
 import type { ApiClient } from '../helpers/api';
 import { provisionUser } from '../helpers/provisioning';
 import { signInContext } from '../helpers/session';
@@ -12,12 +12,24 @@ const TARGET_TAG = 'tv';
 const FEW_FILLERS = 3;
 const PAST_FIRST_PAGE_FILLERS = 55;
 
-type Scene = {
+type Catalogue = {
+  account: Account;
   api: ApiClient;
+  targetTagId: string;
+};
+
+type Scene = Catalogue & {
   page: Page;
   historyPage: HistoryPage;
   imageId: string;
-  targetTagId: string;
+};
+
+const seedCatalogue = async (fillerCount: number): Promise<Catalogue> => {
+  const account = unique('tagsrch');
+  const api = await provisionUser(account);
+  const targetTagId = await seedTags(api, fillerCount, TARGET_TAG);
+
+  return { account, api, targetTagId };
 };
 
 const searchTermOf = (request: Request) =>
@@ -66,27 +78,33 @@ const waitForReassign = (page: Page) =>
 
 test.describe('History batch tag picker search', { tag: '@sc-997' }, () => {
   let context: BrowserContext | undefined;
+  let fewTags: Catalogue;
+  let manyTags: Catalogue;
+
+  test.beforeAll(async () => {
+    fewTags = await seedCatalogue(FEW_FILLERS);
+    manyTags = await seedCatalogue(PAST_FIRST_PAGE_FILLERS);
+  });
 
   const openScene = async (
     browser: Browser,
-    fillerCount: number,
+    catalogue: Catalogue,
   ): Promise<Scene> => {
-    const account = unique('tagsrch');
-    const api = await provisionUser(account);
-    const imageId = await api.content.uploadImage();
-    const targetTagId = await seedTags(api, fillerCount, TARGET_TAG);
+    const imageId = await catalogue.api.content.uploadImage();
 
-    context = await signInContext(browser, account);
+    context = await signInContext(browser, catalogue.account);
     const page = await context.newPage();
     const historyPage = new HistoryPage(page);
     await historyPage.useGridView();
 
-    return { api, page, historyPage, imageId, targetTagId };
+    return { ...catalogue, page, historyPage, imageId };
   };
 
-  const selectOnlyImage = async (historyPage: HistoryPage) => {
+  const selectOwnImage = async ({ historyPage, imageId }: Scene) => {
     await historyPage.goto();
-    await expect(historyPage.gridCards).toHaveCount(1);
+    await expect
+      .poll(async () => (await historyPage.visibleImageIds())[0])
+      .toBe(imageId);
     await historyPage.selectImages(1);
     await expect(historyPage.actionBar).toBeVisible();
   };
@@ -99,8 +117,9 @@ test.describe('History batch tag picker search', { tag: '@sc-997' }, () => {
   test('finds an existing tag when the user has a few tags', async ({
     browser,
   }) => {
-    const { historyPage } = await openScene(browser, FEW_FILLERS);
-    await selectOnlyImage(historyPage);
+    const scene = await openScene(browser, fewTags);
+    const { historyPage } = scene;
+    await selectOwnImage(scene);
 
     await historyPage.searchTagPicker(TARGET_TAG);
 
@@ -115,8 +134,9 @@ test.describe('History batch tag picker search', { tag: '@sc-997' }, () => {
   test('finds an existing tag that sorts after the first fifty tags', async ({
     browser,
   }) => {
-    const { historyPage } = await openScene(browser, PAST_FIRST_PAGE_FILLERS);
-    await selectOnlyImage(historyPage);
+    const scene = await openScene(browser, manyTags);
+    const { historyPage } = scene;
+    await selectOwnImage(scene);
 
     await historyPage.searchTagPicker(TARGET_TAG);
 
@@ -129,11 +149,9 @@ test.describe('History batch tag picker search', { tag: '@sc-997' }, () => {
   test('applies a searched tag after the search is cleared', async ({
     browser,
   }) => {
-    const { api, page, historyPage, imageId, targetTagId } = await openScene(
-      browser,
-      PAST_FIRST_PAGE_FILLERS,
-    );
-    await selectOnlyImage(historyPage);
+    const scene = await openScene(browser, manyTags);
+    const { api, page, historyPage, imageId, targetTagId } = scene;
+    await selectOwnImage(scene);
 
     await historyPage.searchTagPicker(TARGET_TAG);
     const row = historyPage.tagPickerItem(TARGET_TAG);
@@ -154,13 +172,11 @@ test.describe('History batch tag picker search', { tag: '@sc-997' }, () => {
   test('shows a late tag already on the image as checked', async ({
     browser,
   }) => {
-    const { api, page, historyPage, imageId, targetTagId } = await openScene(
-      browser,
-      PAST_FIRST_PAGE_FILLERS,
-    );
+    const scene = await openScene(browser, manyTags);
+    const { api, page, historyPage, imageId, targetTagId } = scene;
     await api.content.tagImage(imageId, targetTagId);
     expect(await api.content.getImageTagIds(imageId)).toContain(targetTagId);
-    await selectOnlyImage(historyPage);
+    await selectOwnImage(scene);
 
     await historyPage.searchTagPicker(TARGET_TAG);
     const row = historyPage.tagPickerItem(TARGET_TAG);
@@ -181,9 +197,10 @@ test.describe('History batch tag picker search', { tag: '@sc-997' }, () => {
   test('sends one search for a fast-typed term and restores the default list without a request', async ({
     browser,
   }) => {
-    const { page, historyPage } = await openScene(browser, FEW_FILLERS);
+    const scene = await openScene(browser, fewTags);
+    const { page, historyPage } = scene;
     const terms = captureTagListTerms(page);
-    await selectOnlyImage(historyPage);
+    await selectOwnImage(scene);
 
     await historyPage.searchTagPicker('');
     await historyPage.tagPickerSearchInput.pressSequentially(TARGET_TAG);
@@ -206,8 +223,9 @@ test.describe('History batch tag picker search', { tag: '@sc-997' }, () => {
   test('keeps newer results when the same search is cleared and repeated before an older response arrives', async ({
     browser,
   }) => {
-    const { api, page, historyPage } = await openScene(browser, FEW_FILLERS);
-    await selectOnlyImage(historyPage);
+    const scene = await openScene(browser, fewTags);
+    const { api, page, historyPage } = scene;
+    await selectOwnImage(scene);
 
     let staleCaptured = false;
     let releaseStale: () => void = () => {};
@@ -230,7 +248,7 @@ test.describe('History batch tag picker search', { tag: '@sc-997' }, () => {
     await historyPage.searchTagPicker(TARGET_TAG);
     await expect.poll(() => staleCaptured).toBe(true);
 
-    const newTag = `${TARGET_TAG}-new`;
+    const newTag = `${TARGET_TAG}-new-${Date.now().toString(36)}`;
     await api.content.createTag(newTag);
     await historyPage.searchTagPicker('');
     await historyPage.searchTagPicker(TARGET_TAG);
@@ -248,8 +266,9 @@ test.describe('History batch tag picker search', { tag: '@sc-997' }, () => {
   test('keeps the newer result when an older search answers late and shows no stale list meanwhile', async ({
     browser,
   }) => {
-    const { page, historyPage } = await openScene(browser, FEW_FILLERS);
-    await selectOnlyImage(historyPage);
+    const scene = await openScene(browser, fewTags);
+    const { page, historyPage } = scene;
+    await selectOwnImage(scene);
 
     let staleRequested = false;
     let releaseStale: () => void = () => {};

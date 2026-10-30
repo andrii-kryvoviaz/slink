@@ -16,7 +16,7 @@ const waitForVisibility = (page: Page) =>
       response.request().method() === 'PATCH',
   );
 
-test.describe('History batch visibility @serial', () => {
+test.describe('History batch visibility', () => {
   test.describe.configure({ mode: 'serial' });
 
   let context: BrowserContext;

@@ -3,6 +3,8 @@ import { ServiceWorkerProbe } from '../helpers/ServiceWorkerProbe';
 
 const ASSET_CACHE = /^slink-assets-/;
 
+test.use({ serviceWorkers: 'allow' });
+
 test.describe('Service worker', { tag: '@anonymous' }, () => {
   test('registers the worker and takes control of the page', async ({
     page,

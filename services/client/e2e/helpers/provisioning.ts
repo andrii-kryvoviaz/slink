@@ -1,6 +1,10 @@
-import type { Account } from './accounts';
+import { type Account, admin } from './accounts';
 import { ApiClient } from './api';
 import { slink } from './slink';
+
+const ADMIN_ROLE = 'ROLE_ADMIN';
+
+type UserRecord = { id: string; status: string; roles: string[] };
 
 export function ensureUser(user: {
   email: string;
@@ -28,14 +32,40 @@ export function grantRole(email: string, role: string): void {
   slink('user:grant:role', `--email=${email}`, role);
 }
 
+async function registerUser(
+  moderator: ApiClient,
+  account: Account,
+): Promise<UserRecord> {
+  const signUp = await moderator.users.signUp(account);
+  const user: UserRecord | null = await moderator.users.findUserByEmail(
+    account.email,
+  );
+
+  if (!user) {
+    throw new Error(
+      `Sign-up of ${account.username} failed: ${signUp.status} ${JSON.stringify(signUp.data)}`,
+    );
+  }
+
+  return user;
+}
+
 export async function provisionUser(
   account: Account,
   opts?: { admin?: boolean },
 ): Promise<ApiClient> {
-  ensureUser({ ...account, active: true });
+  const moderator = await ApiClient.createForUser(
+    admin.username,
+    admin.password,
+  );
+  const user = await registerUser(moderator, account);
 
-  if (opts?.admin) {
-    grantRole(account.email, 'ROLE_ADMIN');
+  if (user.status !== 'active') {
+    await moderator.users.changeUserStatus(user.id, 'active');
+  }
+
+  if (opts?.admin && !user.roles.includes(ADMIN_ROLE)) {
+    await moderator.users.grantRole(user.id, ADMIN_ROLE);
   }
 
   const api = await ApiClient.createForUser(account.username, account.password);

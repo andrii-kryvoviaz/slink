@@ -1,7 +1,7 @@
 import type { Browser, BrowserContext, Page } from '@playwright/test';
 
 import { expect, test } from '../fixtures/auth.fixture';
-import { unique } from '../helpers/accounts';
+import { type Account, unique } from '../helpers/accounts';
 import type { ApiClient } from '../helpers/api';
 import { FILLER_PATTERN, seedCollectionsAhead } from '../helpers/collections';
 import { provisionUser } from '../helpers/provisioning';
@@ -11,12 +11,9 @@ import { HistoryPage } from '../pages/HistoryPage';
 const TARGET_COLLECTION = 'Harbor Archive';
 
 type Scene = {
-  api: ApiClient;
   page: Page;
   historyPage: HistoryPage;
   imageId: string;
-  targetId: string;
-  olderId: string;
 };
 
 const waitForReassign = (page: Page) =>
@@ -33,21 +30,28 @@ const collectionItemIds = async (api: ApiClient, collectionId: string) =>
 
 test.describe('History collection picker search', { tag: '@sc-1000' }, () => {
   let context: BrowserContext | undefined;
+  let account: Account;
+  let api: ApiClient;
+  let targetId: string;
+  let olderId: string;
 
-  const openScene = async (browser: Browser): Promise<Scene> => {
-    const account = unique('colsrch');
-    const api = await provisionUser(account);
-    const imageId = await api.content.uploadImage();
-    const { targetId, olderId } = await seedCollectionsAhead(
+  test.beforeAll(async () => {
+    account = unique('colsrch');
+    api = await provisionUser(account);
+    ({ targetId, olderId } = await seedCollectionsAhead(
       api,
       TARGET_COLLECTION,
-    );
+    ));
+  });
+
+  const openScene = async (browser: Browser): Promise<Scene> => {
+    const imageId = await api.content.uploadImage();
 
     context = await signInContext(browser, account);
     const page = await context.newPage();
     const historyPage = new HistoryPage(page);
 
-    return { api, page, historyPage, imageId, targetId, olderId };
+    return { page, historyPage, imageId };
   };
 
   test.afterEach(async () => {
@@ -58,11 +62,12 @@ test.describe('History collection picker search', { tag: '@sc-1000' }, () => {
   test('adds the selected image to a collection found past the first fifty', async ({
     browser,
   }) => {
-    const { api, page, historyPage, imageId, targetId } =
-      await openScene(browser);
+    const { page, historyPage, imageId } = await openScene(browser);
     await historyPage.useGridView();
     await historyPage.goto();
-    await expect(historyPage.gridCards).toHaveCount(1);
+    await expect
+      .poll(async () => (await historyPage.visibleImageIds())[0])
+      .toBe(imageId);
     await historyPage.selectImages(1);
     await expect(historyPage.actionBar).toBeVisible();
 
@@ -97,8 +102,7 @@ test.describe('History collection picker search', { tag: '@sc-1000' }, () => {
   test('lists every collection of the image in the history row after adding a searched one from the row menu', async ({
     browser,
   }) => {
-    const { api, historyPage, imageId, targetId, olderId } =
-      await openScene(browser);
+    const { historyPage, imageId } = await openScene(browser);
     await api.content.addImageToCollection(olderId, imageId);
 
     await historyPage.useTableView();

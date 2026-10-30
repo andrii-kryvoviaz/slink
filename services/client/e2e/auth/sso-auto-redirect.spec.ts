@@ -18,6 +18,7 @@ const SSO_LOGIN_PATH = '/profile/sso/login/';
 const SSO_UNAVAILABLE =
   'SSO provider is currently unavailable. Please try again later.';
 const LOGOUT_PATH = '/profile/logout';
+const UNREACHABLE_DISCOVERY_URL = 'http://127.0.0.1:9';
 
 type Provider = { id: string; slug: string; name: string };
 
@@ -376,9 +377,9 @@ test.describe('Login gateway', { tag: ['@serial', '@anonymous'] }, () => {
     settingsApi,
     loginPage,
   }) => {
-    test.setTimeout(120_000);
-
-    const chosen = await createSsoProvider(api, PREFIX);
+    const chosen = await createSsoProvider(api, PREFIX, {
+      discoveryUrl: UNREACHABLE_DISCOVERY_URL,
+    });
     const other = await createSsoProvider(api, PREFIX);
     await settingsApi.set('user', { autoRedirectProviderId: chosen.id });
 
@@ -389,7 +390,7 @@ test.describe('Login gateway', { tag: ['@serial', '@anonymous'] }, () => {
     await providerLink(page, chosen.slug).click();
 
     await expect(page.getByText(SSO_UNAVAILABLE)).toBeVisible({
-      timeout: 90_000,
+      timeout: 15_000,
     });
     expect(new URL(page.url()).pathname).toBe('/profile/login');
     expect(ssoHits).toEqual([`${SSO_LOGIN_PATH}${chosen.slug}`]);

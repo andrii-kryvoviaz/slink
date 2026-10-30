@@ -5,6 +5,7 @@ import { resolveBaseURLFromEnv } from './e2e/helpers/session';
 export default defineConfig({
   testDir: './e2e',
   fullyParallel: true,
+  workers: '100%',
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   reporter: process.env.CI ? [['html'], ['github']] : 'html',
@@ -12,6 +13,7 @@ export default defineConfig({
     baseURL: resolveBaseURLFromEnv(),
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
+    serviceWorkers: 'block',
   },
   projects: [
     {

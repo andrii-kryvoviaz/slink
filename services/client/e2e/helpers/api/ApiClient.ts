@@ -7,6 +7,8 @@ import { SharesApi } from './resources/SharesApi';
 import { UsersApi } from './resources/UsersApi';
 
 export class ApiClient {
+  private static readonly _clients = new Map<string, Promise<ApiClient>>();
+
   readonly settings: SettingsApi;
   readonly users: UsersApi;
   readonly preferences: PreferencesApi;
@@ -27,7 +29,23 @@ export class ApiClient {
     return this.http.token;
   }
 
-  static async createForUser(username: string, password: string) {
-    return new ApiClient(await HttpClient.createForUser(username, password));
+  async serverTime(): Promise<number> {
+    return this.http.serverTime();
+  }
+
+  static createForUser(username: string, password: string): Promise<ApiClient> {
+    const cached = ApiClient._clients.get(username);
+
+    if (cached) {
+      return cached;
+    }
+
+    const client = HttpClient.createForUser(username, password).then(
+      (http) => new ApiClient(http),
+    );
+    ApiClient._clients.set(username, client);
+    client.catch(() => ApiClient._clients.delete(username));
+
+    return client;
   }
 }

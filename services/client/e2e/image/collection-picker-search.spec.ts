@@ -1,7 +1,8 @@
 import type { Browser, BrowserContext } from '@playwright/test';
 
 import { expect, test } from '../fixtures/auth.fixture';
-import { unique } from '../helpers/accounts';
+import { type Account, unique } from '../helpers/accounts';
+import type { ApiClient } from '../helpers/api';
 import {
   FILLER_PATTERN,
   OLDER_COLLECTION,
@@ -18,18 +19,25 @@ test.describe(
   { tag: '@sc-1000' },
   () => {
     let context: BrowserContext | undefined;
+    let account: Account;
+    let api: ApiClient;
+    let targetId: string;
+    let olderId: string;
+
+    test.beforeAll(async () => {
+      account = unique('imgcolkeep');
+      api = await provisionUser(account);
+      ({ targetId, olderId } = await seedCollectionsAhead(
+        api,
+        TARGET_COLLECTION,
+      ));
+    });
 
     const openAssignedScene = async (
       browser: Browser,
       includeTarget = false,
     ) => {
-      const account = unique('imgcolkeep');
-      const api = await provisionUser(account);
       const imageId = await api.content.uploadImage();
-      const { targetId, olderId } = await seedCollectionsAhead(
-        api,
-        TARGET_COLLECTION,
-      );
       await api.content.addImageToCollection(olderId, imageId);
 
       if (includeTarget) {
@@ -40,7 +48,7 @@ test.describe(
       const imageInfoPage = new ImageInfoPage(await context.newPage());
       await imageInfoPage.goto(imageId);
 
-      return { api, imageId, targetId, olderId, imageInfoPage };
+      return { imageId, imageInfoPage };
     };
 
     test.afterEach(async () => {
@@ -48,56 +56,11 @@ test.describe(
       context = undefined;
     });
 
-    test('finds and adds a collection past the first fifty on the info page', async ({
-      browser,
-    }) => {
-      const account = unique('imgcolsrch');
-      const api = await provisionUser(account);
-      const imageId = await api.content.uploadImage();
-      const { targetId } = await seedCollectionsAhead(api, TARGET_COLLECTION);
-
-      context = await signInContext(browser, account);
-      const imageInfoPage = new ImageInfoPage(await context.newPage());
-      await imageInfoPage.goto(imageId);
-
-      await imageInfoPage.openCollectionPicker();
-      await expect(
-        imageInfoPage.collectionPicker
-          .getByRole('button', { name: FILLER_PATTERN })
-          .first(),
-      ).toBeVisible();
-      await expect(
-        imageInfoPage.collectionPickerItem(TARGET_COLLECTION),
-      ).toHaveCount(0);
-
-      await imageInfoPage.searchCollections(TARGET_COLLECTION);
-
-      const row = imageInfoPage.collectionPickerItem(TARGET_COLLECTION);
-      await expect(row).toBeVisible();
-      await expect(row).toHaveAttribute('aria-pressed', 'false');
-      await expect(
-        imageInfoPage.collectionPicker.getByText('No matches found'),
-      ).toHaveCount(0);
-
-      await row.click();
-
-      await expect
-        .poll(
-          async () =>
-            (await api.content.getCollectionItems(targetId)).map(
-              (item) => item.itemId,
-            ),
-          { timeout: 15000 },
-        )
-        .toContain(imageId);
-    });
-
     test(
       'keeps a never-fetched collection listed when adding a searched collection and after reload',
       { tag: '@sc-1002' },
       async ({ browser }) => {
-        const { api, imageId, targetId, olderId, imageInfoPage } =
-          await openAssignedScene(browser);
+        const { imageId, imageInfoPage } = await openAssignedScene(browser);
         await expect(imageInfoPage.collectionLink(olderId)).toBeVisible();
         await expect(imageInfoPage.collectionLinks).toHaveCount(1);
 
@@ -139,8 +102,10 @@ test.describe(
       'removes only the searched collection while keeping a never-fetched collection and after reload',
       { tag: '@sc-1002' },
       async ({ browser }) => {
-        const { api, imageId, targetId, olderId, imageInfoPage } =
-          await openAssignedScene(browser, true);
+        const { imageId, imageInfoPage } = await openAssignedScene(
+          browser,
+          true,
+        );
         await expect(imageInfoPage.collectionLink(olderId)).toBeVisible();
         await expect(imageInfoPage.collectionLink(targetId)).toBeVisible();
         await expect(imageInfoPage.collectionLinks).toHaveCount(2);

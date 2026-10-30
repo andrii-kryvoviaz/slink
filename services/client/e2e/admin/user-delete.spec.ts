@@ -125,6 +125,9 @@ test.describe('Admin user deletion', { tag: '@serial' }, () => {
 
     await adminUsersPage.openDeleteConfirmation(row);
     await expect(adminUsersPage.purgeOption).toBeVisible();
+    await adminUsersPage.menu.evaluate((el) =>
+      Promise.all(el.getAnimations({ subtree: true }).map((a) => a.finished)),
+    );
 
     const before = await adminUsersPage.confirmDeleteButton.boundingBox();
 
@@ -185,11 +188,9 @@ test.describe('Admin user deletion', { tag: '@serial' }, () => {
   test(
     'frees the email of a purged user for a new signup',
     { tag: '@anonymous' },
-    async ({ api, settingsApi, signupPage }) => {
+    async ({ api, signupPage }) => {
       const target = await createTarget(api, 'mail');
       await api.users.purgeUser(target.id);
-
-      await settingsApi.set('user', { allowRegistration: true });
 
       const username = `e2email${Date.now().toString(36)}`;
 

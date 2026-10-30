@@ -1,7 +1,7 @@
 import type { BrowserContext, Request } from '@playwright/test';
 
 import { expect, test } from '../fixtures/auth.fixture';
-import { unique } from '../helpers/accounts';
+import { type Account, unique } from '../helpers/accounts';
 import { seedCollectionsAhead } from '../helpers/collections';
 import { provisionUser } from '../helpers/provisioning';
 import { signInContext } from '../helpers/session';
@@ -21,6 +21,13 @@ const isCollectionSearchFor = (term: string) => (request: Request) => {
 
 test.describe('Upload collections option search', { tag: '@sc-1000' }, () => {
   let context: BrowserContext | undefined;
+  let account: Account;
+
+  test.beforeAll(async () => {
+    account = unique('upcolsrch');
+    const api = await provisionUser(account);
+    await seedCollectionsAhead(api, TARGET_COLLECTION);
+  });
 
   test.afterEach(async () => {
     await context?.close();
@@ -30,10 +37,6 @@ test.describe('Upload collections option search', { tag: '@sc-1000' }, () => {
   test('finds a collection past the first fifty by searching on the server', async ({
     browser,
   }) => {
-    const account = unique('upcolsrch');
-    const api = await provisionUser(account);
-    await seedCollectionsAhead(api, TARGET_COLLECTION);
-
     context = await signInContext(browser, account);
     const page = await context.newPage();
     const uploadPage = new UploadPage(page);
@@ -55,10 +58,6 @@ test.describe('Upload collections option search', { tag: '@sc-1000' }, () => {
   test('does not offer to create a collection that is already listed', async ({
     browser,
   }) => {
-    const account = unique('upcolexist');
-    const api = await provisionUser(account);
-    await api.content.createCollection({ name: TARGET_COLLECTION });
-
     context = await signInContext(browser, account);
     const page = await context.newPage();
     const uploadPage = new UploadPage(page);

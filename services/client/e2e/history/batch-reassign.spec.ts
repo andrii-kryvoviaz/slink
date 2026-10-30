@@ -24,7 +24,7 @@ const waitForReassign = (page: Page) =>
       response.request().method() === 'PUT',
   );
 
-test.describe('History batch reassign on a table page @serial', () => {
+test.describe('History batch reassign on a table page', () => {
   test.describe.configure({ mode: 'serial' });
 
   let context: BrowserContext;
@@ -136,7 +136,7 @@ test.describe('History batch reassign on a table page @serial', () => {
   });
 });
 
-test.describe('History batch reassign deduplicates an already-applied tag @serial', () => {
+test.describe('History batch reassign deduplicates an already-applied tag', () => {
   test.describe.configure({ mode: 'serial' });
 
   let context: BrowserContext;
@@ -205,7 +205,7 @@ test.describe('History batch reassign deduplicates an already-applied tag @seria
   });
 });
 
-test.describe('History batch reassign in accumulating grid view @serial', () => {
+test.describe('History batch reassign in accumulating grid view', () => {
   test.describe.configure({ mode: 'serial' });
 
   let context: BrowserContext;

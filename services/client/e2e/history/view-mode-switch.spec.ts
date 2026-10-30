@@ -17,7 +17,7 @@ const seedUploads = async (api: ApiClient, prefix: string) => {
   }
 };
 
-test.describe('History view mode switch resets pagination @serial', () => {
+test.describe('History view mode switch resets pagination', () => {
   test.describe.configure({ mode: 'serial' });
 
   let context: BrowserContext;

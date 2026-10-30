@@ -1,3 +1,4 @@
+import type { Account } from '../../accounts';
 import type { HttpClient } from '../HttpClient';
 
 export class UsersApi {
@@ -13,6 +14,19 @@ export class UsersApi {
       `/api/users/1?search=${encodeURIComponent(email)}`,
     );
     return data?.data?.[0] ?? null;
+  }
+
+  async signUp(account: Account) {
+    return this.http.requestRaw('POST', '/api/auth/signup', {
+      email: account.email,
+      username: account.username,
+      password: account.password,
+      confirm: account.password,
+    });
+  }
+
+  async grantRole(id: string, role: string) {
+    return this.http.request('POST', '/api/user/role', { id, role });
   }
 
   async changeUserStatus(id: string, status: string) {

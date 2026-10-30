@@ -11,7 +11,7 @@ const makeAccount = (email: string, username: string): Account => ({
 export const admin: Account = makeAccount('e2e@test.local', 'e2e');
 
 export function worker(index: number): Account {
-  return makeAccount(`e2e-worker-${index}@test.local`, `e2eWorker${index}`);
+  return makeAccount(`e2e-worker-${index}@test.local`, `e2eworker${index}`);
 }
 
 const USERNAME_MAX_LENGTH = 30;
@@ -23,7 +23,8 @@ export function unique(prefix: string): Account {
 
   const room = USERNAME_MAX_LENGTH - USERNAME_NAMESPACE.length - suffix.length;
   const usernamePrefix = prefix.slice(0, Math.max(0, room));
-  const username = `${USERNAME_NAMESPACE}${usernamePrefix}${suffix}`;
+  const username =
+    `${USERNAME_NAMESPACE}${usernamePrefix}${suffix}`.toLowerCase();
 
   return makeAccount(`e2e-${prefix}-${suffix}@test.local`, username);
 }

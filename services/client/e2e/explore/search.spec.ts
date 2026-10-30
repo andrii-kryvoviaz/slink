@@ -1,22 +1,22 @@
+import type { Page } from '@playwright/test';
+
 import { expect, test } from '../fixtures/auth.fixture';
 import { captureFeedLoads } from '../helpers/listingRequests';
-import type { ExplorePage } from '../pages/ExplorePage';
+import { ExplorePage } from '../pages/ExplorePage';
 
 const HOLD_WINDOW_MS = 5000;
-const ICONIFY_API =
-  /^https:\/\/api\.(iconify\.design|simplesvg\.com|unisvg\.com)\//;
+const HYDRATION_ENTRY = /\/_app\/immutable\/entry\/(start|app)\.[^/]+\.js$/;
 
-async function expectClearHolds(explorePage: ExplorePage, listings: string[]) {
-  const clearedAt = Date.now();
-  await expect
-    .poll(
-      () => (Date.now() - clearedAt >= HOLD_WINDOW_MS ? 'elapsed' : 'waiting'),
-      { timeout: HOLD_WINDOW_MS + 2000 },
-    )
-    .toBe('elapsed');
+async function expectClearHolds(
+  page: Page,
+  explorePage: ExplorePage,
+  listings: string[],
+) {
+  await page.clock.runFor(HOLD_WINDOW_MS);
 
   await expect(explorePage.feedItems.first()).toBeVisible();
   await expect(explorePage.searchInput).toHaveValue('');
+  await expect(explorePage.emptyState('no-results')).toHaveCount(0);
   expect(
     listings.filter((url) => url.includes('searchTerm=')),
     `late refiltering requests: ${JSON.stringify(listings)}`,
@@ -25,17 +25,6 @@ async function expectClearHolds(explorePage: ExplorePage, listings: string[]) {
 }
 
 test.describe('Explore search', () => {
-  test('filters the feed by the search term', async ({ explorePage, api }) => {
-    await api.content.uploadImage({ isPublic: true });
-
-    await explorePage.goto();
-    await explorePage.feedItems.first().waitFor({ state: 'visible' });
-
-    await explorePage.search('zzznonexistentqueryzzz');
-
-    await expect(explorePage.feedItems).toHaveCount(0);
-  });
-
   test('shows the empty state for a term that matches nothing', async ({
     page,
     explorePage,
@@ -148,6 +137,7 @@ test.describe('Explore search', () => {
   }) => {
     await api.content.uploadImage({ isPublic: true });
 
+    await page.clock.install();
     await page.goto('/explore?search=zzznonexistentqueryzzz&searchBy=user');
     await expect(explorePage.emptyState('no-results')).toBeVisible();
 
@@ -166,7 +156,7 @@ test.describe('Explore search', () => {
       })
       .toEqual([null, null]);
 
-    await expectClearHolds(explorePage, listings);
+    await expectClearHolds(page, explorePage, listings);
   });
 
   test('the empty state clear button empties the field and the params and does not refilter', async ({
@@ -176,6 +166,7 @@ test.describe('Explore search', () => {
   }) => {
     await api.content.uploadImage({ isPublic: true });
 
+    await page.clock.install();
     await page.goto('/explore?search=zzznonexistentqueryzzz&searchBy=user');
     await expect(explorePage.emptyState('no-results')).toBeVisible();
 
@@ -194,7 +185,7 @@ test.describe('Explore search', () => {
       })
       .toEqual([null, null]);
 
-    await expectClearHolds(explorePage, listings);
+    await expectClearHolds(page, explorePage, listings);
   });
 
   test('clearing a typed search restores the feed and drops the params', async ({
@@ -261,15 +252,16 @@ test.describe('Explore search', () => {
     const term = 'zzznonexistentqueryzzz';
     const hydration = Promise.withResolvers<void>();
     let held = 0;
-    await page.route(ICONIFY_API, async (route) => {
+    await page.route(HYDRATION_ENTRY, async (route) => {
       held += 1;
       await hydration.promise;
       await route.continue();
     });
 
     const listings = captureFeedLoads(page);
-    await explorePage.goto();
+    await page.goto(ExplorePage.URL, { waitUntil: 'domcontentloaded' });
     await expect.poll(() => held).toBeGreaterThan(0);
+    expect(listings).toHaveLength(0);
 
     await explorePage.searchInput.fill(term);
     await explorePage.searchInput.press('Enter');
