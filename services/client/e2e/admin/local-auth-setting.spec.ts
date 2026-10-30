@@ -1,17 +1,31 @@
 import { expect, test } from '../fixtures/auth.fixture';
 import type { ApiClient } from '../helpers/api';
-import { createSsoProvider, deleteSsoProviders } from '../helpers/ssoProviders';
+import {
+  createSsoProvider,
+  deleteSsoProviders,
+  removeEverySsoProvider,
+} from '../helpers/ssoProviders';
 import type { AdminSettingsPage } from '../pages/AdminSettingsPage';
 
 const SLUG_PREFIX = 'e2e-local-auth-switch';
 const LOCAL_AUTH = 'localAuthEnabled';
 const ENV_DEFAULT = 'true';
 const VIOLATION_MESSAGE = 'Local authentication cannot be changed right now';
+const MISSING_PROVIDER_MESSAGE = /enabled SSO provider/i;
 
 const openLocalAuthSwitch = async (adminSettingsPage: AdminSettingsPage) => {
   await adminSettingsPage.gotoSecurity();
   await expect(adminSettingsPage.heading).toBeVisible();
   await expect(adminSettingsPage.localAuthEnabledSwitch).toBeVisible();
+};
+
+const restoreLocalAuth = async (api: ApiClient) => {
+  const { user } = await api.settings.getSettings();
+
+  await api.settings.updateSettings('user', {
+    ...user,
+    localAuthEnabled: true,
+  });
 };
 
 const expectPublicLocalAuth = (api: ApiClient, expected: boolean) =>
@@ -29,12 +43,7 @@ test.describe(
     test.beforeEach(({ api }) => createSsoProvider(api, SLUG_PREFIX));
 
     test.afterEach(async ({ api }) => {
-      const { user } = await api.settings.getSettings();
-
-      await api.settings.updateSettings('user', {
-        ...user,
-        localAuthEnabled: true,
-      });
+      await restoreLocalAuth(api);
       await deleteSsoProviders(api, SLUG_PREFIX);
     });
 
@@ -146,6 +155,33 @@ test.describe(
       await expect(
         adminSettingsPage.settingRow('allowRegistration'),
       ).not.toContainText(VIOLATION_MESSAGE);
+    });
+  },
+);
+
+test.describe(
+  'Admin local authentication switch without an enabled SSO provider',
+  { tag: ['@serial', '@sc-1136'] },
+  () => {
+    test.beforeEach(({ api }) => removeEverySsoProvider(api));
+
+    test.afterEach(({ api }) => restoreLocalAuth(api));
+
+    test('refuses the save with the API violation on the switch row and keeps local auth on', async ({
+      api,
+      adminSettingsPage,
+    }) => {
+      await openLocalAuthSwitch(adminSettingsPage);
+      await adminSettingsPage.setSwitch(LOCAL_AUTH, false);
+      await adminSettingsPage.saveUserSettings();
+
+      await expect(adminSettingsPage.settingRow(LOCAL_AUTH)).toContainText(
+        MISSING_PROVIDER_MESSAGE,
+      );
+      await expect(
+        adminSettingsPage.settingRow('allowRegistration'),
+      ).not.toContainText(MISSING_PROVIDER_MESSAGE);
+      await expectPublicLocalAuth(api, true);
     });
   },
 );

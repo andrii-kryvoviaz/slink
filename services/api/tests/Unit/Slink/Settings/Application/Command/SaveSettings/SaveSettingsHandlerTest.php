@@ -10,9 +10,12 @@ use PHPUnit\Framework\TestCase;
 use Slink\Settings\Application\Command\SaveSettings\SaveSettingsCommand;
 use Slink\Settings\Application\Command\SaveSettings\SaveSettingsHandler;
 use Slink\Settings\Domain\Enum\SettingCategory;
+use Slink\Settings\Domain\Exception\SsoProviderRequiredException;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Settings\Domain\Repository\SettingStoreRepositoryInterface;
 use Slink\Settings\Domain\Settings;
+use Slink\Settings\Domain\Specification\SignInMethodSpecificationInterface;
+use Slink\Settings\Domain\ValueObject\Image\ImageSettings;
 use Slink\Settings\Domain\ValueObject\Storage\StorageSettings;
 use Slink\Settings\Domain\ValueObject\User\UserSettings;
 use Slink\Shared\Domain\Enum\StorageProvider;
@@ -55,7 +58,7 @@ final class SaveSettingsHandlerTest extends TestCase {
             ->method('store')
             ->with($settings);
 
-        $handler = new SaveSettingsHandler($store, $this->createStub(ConfigurationProviderInterface::class));
+        $handler = new SaveSettingsHandler($store, $this->createStub(ConfigurationProviderInterface::class), $this->signInMethodSpecification(true));
         $handler->__invoke($command);
     }
 
@@ -91,7 +94,7 @@ final class SaveSettingsHandlerTest extends TestCase {
             ->method('store')
             ->with($settings);
 
-        $handler = new SaveSettingsHandler($store, $this->createStub(ConfigurationProviderInterface::class));
+        $handler = new SaveSettingsHandler($store, $this->createStub(ConfigurationProviderInterface::class), $this->signInMethodSpecification(true));
         $handler->__invoke($command);
     }
 
@@ -116,7 +119,7 @@ final class SaveSettingsHandlerTest extends TestCase {
         $store = $this->createStub(SettingStoreRepositoryInterface::class);
         $store->method('get')->willReturn($settings);
 
-        (new SaveSettingsHandler($store, $this->createStub(ConfigurationProviderInterface::class)))->__invoke($command);
+        (new SaveSettingsHandler($store, $this->createStub(ConfigurationProviderInterface::class), $this->signInMethodSpecification(true)))->__invoke($command);
 
         $this->assertInstanceOf(StorageSettings::class, $captured);
         $this->assertSame(SettingCategory::Storage, $captured->getSettingsCategory());
@@ -162,7 +165,7 @@ final class SaveSettingsHandlerTest extends TestCase {
             ->method('store')
             ->with($settings);
 
-        $handler = new SaveSettingsHandler($store, $this->createStub(ConfigurationProviderInterface::class));
+        $handler = new SaveSettingsHandler($store, $this->createStub(ConfigurationProviderInterface::class), $this->signInMethodSpecification(true));
         $handler->__invoke($command);
     }
 
@@ -202,10 +205,96 @@ final class SaveSettingsHandlerTest extends TestCase {
         $provider = $this->createStub(ConfigurationProviderInterface::class);
         $provider->method('get')->willReturnMap([['user.localAuthEnabled', $effective]]);
 
-        (new SaveSettingsHandler($store, $provider))->__invoke($command);
+        (new SaveSettingsHandler($store, $provider, $this->signInMethodSpecification(true)))->__invoke($command);
 
         $this->assertInstanceOf(UserSettings::class, $captured);
         $this->assertSame($expected, $captured->isLocalAuthEnabled());
+    }
+
+    /**
+     * @return iterable<string, array{array<string, mixed>}>
+     */
+    public static function refusedLocalAuthProvider(): iterable {
+        yield 'explicit false' => [['localAuthEnabled' => false]];
+        yield 'omitted with effective false' => [[]];
+        yield 'null with effective false' => [['localAuthEnabled' => null]];
+    }
+
+    /**
+     * @param array<string, mixed> $overrides
+     */
+    #[Test]
+    #[DataProvider('refusedLocalAuthProvider')]
+    public function itRefusesSettingsTheSignInMethodSpecificationRejectsAndStoresNothing(array $overrides): void {
+        $command = new SaveSettingsCommand('user', [
+            'approvalRequired' => false,
+            'allowRegistration' => true,
+            'password' => ['minLength' => 8, 'requirements' => 0],
+            ...$overrides,
+        ]);
+
+        $settings = $this->createMock(Settings::class);
+        $settings->expects($this->never())->method('setSettings');
+
+        $store = $this->createMock(SettingStoreRepositoryInterface::class);
+        $store->method('get')->willReturn($settings);
+        $store->expects($this->never())->method('store');
+
+        $provider = $this->createStub(ConfigurationProviderInterface::class);
+        $provider->method('get')->willReturn(false);
+
+        $specification = $this->createMock(SignInMethodSpecificationInterface::class);
+        $specification->expects($this->once())
+            ->method('isSatisfiedBy')
+            ->with($this->callback(fn ($data): bool => $data instanceof UserSettings && !$data->isLocalAuthEnabled()))
+            ->willReturn(false);
+
+        try {
+            (new SaveSettingsHandler($store, $provider, $specification))->__invoke($command);
+            $this->fail('Expected SsoProviderRequiredException');
+        } catch (SsoProviderRequiredException $exception) {
+            $this->assertSame('localAuthEnabled', $exception->getProperty());
+        }
+    }
+
+    /**
+     * @return iterable<string, array{string, array<string, mixed>, bool, class-string}>
+     */
+    public static function acceptedSaveProvider(): iterable {
+        yield 'user omitted with effective true' => ['user', [], true, UserSettings::class];
+        yield 'user null with effective true' => ['user', ['localAuthEnabled' => null], true, UserSettings::class];
+        yield 'user true with effective false' => ['user', ['localAuthEnabled' => true], false, UserSettings::class];
+        yield 'other category' => ['image', ['maxSize' => '10M', 'localAuthEnabled' => false], false, ImageSettings::class];
+    }
+
+    /**
+     * @param array<string, mixed> $overrides
+     */
+    #[Test]
+    #[DataProvider('acceptedSaveProvider')]
+    public function itSavesWhatTheSignInMethodSpecificationAccepts(string $category, array $overrides, bool $effective, string $expectedClass): void {
+        $command = new SaveSettingsCommand($category, [
+            'approvalRequired' => false,
+            'allowRegistration' => true,
+            'password' => ['minLength' => 8, 'requirements' => 0],
+            ...$overrides,
+        ]);
+
+        $settings = $this->createStub(Settings::class);
+        $store = $this->createMock(SettingStoreRepositoryInterface::class);
+        $store->method('get')->willReturn($settings);
+        $store->expects($this->once())->method('store')->with($settings);
+
+        $provider = $this->createStub(ConfigurationProviderInterface::class);
+        $provider->method('get')->willReturn($effective);
+
+        $specification = $this->createMock(SignInMethodSpecificationInterface::class);
+        $specification->expects($this->once())
+            ->method('isSatisfiedBy')
+            ->with($this->isInstanceOf($expectedClass))
+            ->willReturn(true);
+
+        (new SaveSettingsHandler($store, $provider, $specification))->__invoke($command);
     }
 
     #[Test]
@@ -219,7 +308,7 @@ final class SaveSettingsHandlerTest extends TestCase {
         $provider = $this->createMock(ConfigurationProviderInterface::class);
         $provider->expects($this->never())->method('get');
 
-        (new SaveSettingsHandler($store, $provider))->__invoke($command);
+        (new SaveSettingsHandler($store, $provider, $this->signInMethodSpecification(true)))->__invoke($command);
     }
 
     #[Test]
@@ -235,7 +324,7 @@ final class SaveSettingsHandlerTest extends TestCase {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Store error');
 
-        $handler = new SaveSettingsHandler($store, $this->createStub(ConfigurationProviderInterface::class));
+        $handler = new SaveSettingsHandler($store, $this->createStub(ConfigurationProviderInterface::class), $this->signInMethodSpecification(true));
         $handler->__invoke($command);
     }
 
@@ -265,7 +354,7 @@ final class SaveSettingsHandlerTest extends TestCase {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Settings error');
 
-        $handler = new SaveSettingsHandler($store, $this->createStub(ConfigurationProviderInterface::class));
+        $handler = new SaveSettingsHandler($store, $this->createStub(ConfigurationProviderInterface::class), $this->signInMethodSpecification(true));
         $handler->__invoke($command);
     }
 
@@ -306,9 +395,16 @@ final class SaveSettingsHandlerTest extends TestCase {
                 $callOrder[] = 'store';
             });
 
-        $handler = new SaveSettingsHandler($store, $this->createStub(ConfigurationProviderInterface::class));
+        $handler = new SaveSettingsHandler($store, $this->createStub(ConfigurationProviderInterface::class), $this->signInMethodSpecification(true));
         $handler->__invoke($command);
 
         $this->assertSame(['get', 'setSettings', 'store'], $callOrder);
+    }
+
+    private function signInMethodSpecification(bool $satisfied): SignInMethodSpecificationInterface {
+        $specification = $this->createStub(SignInMethodSpecificationInterface::class);
+        $specification->method('isSatisfiedBy')->willReturn($satisfied);
+
+        return $specification;
     }
 }

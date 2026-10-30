@@ -57,3 +57,9 @@ export async function deleteSsoProviders(
     await api.oauth.deleteProvider(provider.id);
   }
 }
+
+export async function removeEverySsoProvider(api: ApiClient): Promise<void> {
+  for (const provider of await api.oauth.listProviders()) {
+    await api.oauth.deleteProvider(provider.id);
+  }
+}

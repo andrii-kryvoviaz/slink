@@ -6,8 +6,10 @@ namespace Slink\Settings\Application\Command\SaveSettings;
 
 use Slink\Settings\Application\Service\SettingsService;
 use Slink\Settings\Domain\Enum\SettingCategory;
+use Slink\Settings\Domain\Exception\SsoProviderRequiredException;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Settings\Domain\Repository\SettingStoreRepositoryInterface;
+use Slink\Settings\Domain\Specification\SignInMethodSpecificationInterface;
 use Slink\Shared\Application\Command\CommandHandlerInterface;
 
 final readonly class SaveSettingsHandler implements CommandHandlerInterface {
@@ -20,6 +22,7 @@ final readonly class SaveSettingsHandler implements CommandHandlerInterface {
   public function __construct(
     private SettingStoreRepositoryInterface $store,
     private ConfigurationProviderInterface $configurationProvider,
+    private SignInMethodSpecificationInterface $signInMethodSpecification,
   ) {
   }
   
@@ -27,7 +30,12 @@ final readonly class SaveSettingsHandler implements CommandHandlerInterface {
     $settings = $this->store->get();
     
     $category = SettingCategory::from($command->getCategory());
+    
     $data = $category->createSettingsCategoryRoot($this->withEffectiveLocalAuth($category, $command->getSettings()));
+    
+    if (!$this->signInMethodSpecification->isSatisfiedBy($data)) {
+      throw new SsoProviderRequiredException();
+    }
     
     $settings->setSettings($data);
     

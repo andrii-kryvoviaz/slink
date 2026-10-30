@@ -10,6 +10,7 @@ use Slink\Collection\Domain\Repository\CollectionStoreRepositoryInterface;
 use Slink\Settings\Application\Command\SaveSettings\SaveSettingsCommand;
 use Slink\Shared\Application\Command\CommandBusInterface;
 use Slink\Shared\Domain\ValueObject\ID;
+use Slink\User\Application\Command\CreateOAuthProvider\CreateOAuthProviderCommand;
 use Slink\User\Application\Command\CreateUser\CreateUserCommand;
 use Slink\User\Application\Command\GrantRole\GrantRoleCommand;
 use Slink\User\Domain\Enum\UserStatus;
@@ -255,6 +256,20 @@ abstract class HttpTestCase extends WebTestCase {
    */
   protected function saveSettings(string $category, array $settings): void {
     $this->commandBus()->handle(new SaveSettingsCommand($category, $settings));
+  }
+
+  protected function createOAuthProvider(string $slug, bool $enabled = true): string {
+    /** @var string $providerId */
+    $providerId = $this->commandBus()->handleSync(new CreateOAuthProviderCommand(
+      name: 'SSO ' . $slug,
+      slug: $slug,
+      clientId: 'client-id-123',
+      discoveryUrl: 'https://sso.local.test/.well-known/openid-configuration',
+      clientSecret: 'client-secret-456',
+      enabled: $enabled,
+    ));
+
+    return $providerId;
   }
 
   protected function createUser(

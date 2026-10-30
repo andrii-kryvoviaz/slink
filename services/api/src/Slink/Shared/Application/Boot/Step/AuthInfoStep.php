@@ -10,15 +10,14 @@ use Slink\Shared\Application\Boot\BootContext;
 use Slink\Shared\Application\Boot\BootResult;
 use Slink\Shared\Application\Boot\BootStatus;
 use Slink\Shared\Application\Boot\BootStepInterface;
-use Slink\User\Domain\Filter\OAuthProviderFilter;
-use Slink\User\Domain\Repository\OAuthProviderRepositoryInterface;
+use Slink\User\Domain\Specification\EnabledSsoProviderSpecificationInterface;
 use Symfony\Component\DependencyInjection\Attribute\AsTaggedItem;
 
 #[AsTaggedItem(priority: 70)]
 final readonly class AuthInfoStep implements BootStepInterface {
   public function __construct(
     private ConfigurationProviderInterface $config,
-    private OAuthProviderRepositoryInterface $providers,
+    private EnabledSsoProviderSpecificationInterface $enabledSsoProviderSpecification,
   ) {}
 
   public function label(): string {
@@ -60,7 +59,7 @@ final readonly class AuthInfoStep implements BootStepInterface {
       return false;
     }
 
-    return $this->providers->getProviders(new OAuthProviderFilter(enabledOnly: true)) === [];
+    return !$this->enabledSsoProviderSpecification->isSatisfied();
   }
 
   private function boolLabel(string $key): string {

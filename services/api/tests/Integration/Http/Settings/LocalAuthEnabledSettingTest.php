@@ -82,6 +82,7 @@ final class LocalAuthEnabledSettingTest extends HttpTestCase {
   public function itPrefersTheAdminSavedValueOverTheEnvDefault(string $envDefault, bool $saved): void {
     $token = $this->bootAdmin();
     $this->useEnvDefault($envDefault);
+    $this->createOAuthProvider('acme');
 
     self::assertSame(204, $this->saveUserSettings($token, $this->userPayload(['localAuthEnabled' => $saved])));
 
@@ -96,6 +97,7 @@ final class LocalAuthEnabledSettingTest extends HttpTestCase {
   public function itKeepsTheSavedLocalAuthEnabledWhenTheSaveDoesNotCarryIt(string $envDefault, bool $saved, array $overrides): void {
     $token = $this->bootAdmin();
     $this->useEnvDefault($envDefault);
+    $this->createOAuthProvider('acme');
 
     self::assertSame(204, $this->saveUserSettings($token, $this->userPayload(['localAuthEnabled' => $saved])));
     self::assertSame(204, $this->saveUserSettings($token, $this->userPayload($overrides)));
@@ -111,6 +113,7 @@ final class LocalAuthEnabledSettingTest extends HttpTestCase {
   public function itKeepsTheEnvDefaultWhenNothingWasSavedAndTheSaveDoesNotCarryLocalAuthEnabled(string $envDefault, bool $expected, array $overrides): void {
     $token = $this->bootAdmin();
     $this->useEnvDefault($envDefault);
+    $this->createOAuthProvider('acme');
 
     self::assertSame(204, $this->saveUserSettings($token, $this->userPayload($overrides)));
 
@@ -121,6 +124,7 @@ final class LocalAuthEnabledSettingTest extends HttpTestCase {
   public function itStillSavesAnExplicitLocalAuthEnabledOverASavedValue(): void {
     $token = $this->bootAdmin();
     $this->useEnvDefault('true');
+    $this->createOAuthProvider('acme');
 
     self::assertSame(204, $this->saveUserSettings($token, $this->userPayload(['localAuthEnabled' => false])));
     self::assertSame(204, $this->saveUserSettings($token, $this->userPayload(['localAuthEnabled' => true])));

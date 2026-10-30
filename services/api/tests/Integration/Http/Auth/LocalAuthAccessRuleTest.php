@@ -26,6 +26,12 @@ final class LocalAuthAccessRuleTest extends HttpTestCase {
   private const string MEMBER_EMAIL = 'member@local.test';
   private const string MEMBER_NAME = 'memberuser';
 
+  protected function setUp(): void {
+    parent::setUp();
+
+    $this->createOAuthProvider('acme');
+  }
+
   /**
    * @return iterable<string, array{string}>
    */

@@ -3,10 +3,14 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-import { expect, test } from '../fixtures/auth.fixture';
+import { type SettingsApi, expect, test } from '../fixtures/auth.fixture';
 import type { ApiClient } from '../helpers/api';
 import { stageDemoMode } from '../helpers/demoMode';
-import { createSsoProvider, deleteSsoProviders } from '../helpers/ssoProviders';
+import {
+  createSsoProvider,
+  deleteSsoProviders,
+  removeEverySsoProvider,
+} from '../helpers/ssoProviders';
 import type { LoginPage } from '../pages/LoginPage';
 
 const PREFIX = 'e2e-login-states';
@@ -42,10 +46,14 @@ function noticeEntries(locale: string): CatalogEntry[] {
   );
 }
 
-async function removeEverySsoProvider(api: ApiClient) {
-  for (const provider of await api.oauth.listProviders()) {
-    await api.oauth.deleteProvider(provider.id);
-  }
+async function switchLocalAuthOffAndLoseTheEnabledProvider(
+  api: ApiClient,
+  settingsApi: SettingsApi,
+) {
+  const provider = await createSsoProvider(api, PREFIX);
+
+  await settingsApi.set('user', { localAuthEnabled: false });
+  await api.oauth.deleteProvider(provider.id);
 }
 
 async function expectNoLocalLogin(loginPage: LoginPage) {
@@ -78,11 +86,12 @@ test.describe(
 
     test('demo mode with local auth off and no provider shows the notice, not the banner', async ({
       page,
+      api,
       settingsApi,
       testUser,
       loginPage,
     }) => {
-      await settingsApi.set('user', { localAuthEnabled: false });
+      await switchLocalAuthOffAndLoseTheEnabledProvider(api, settingsApi);
       await stageDemoMode(page, testUser);
 
       await gotoHydratedDemoLogin(page, loginPage);
@@ -135,10 +144,11 @@ test.describe(
 
     test('local auth off and no provider shows the notice instead of an empty card', async ({
       page,
+      api,
       settingsApi,
       loginPage,
     }) => {
-      await settingsApi.set('user', { localAuthEnabled: false });
+      await switchLocalAuthOffAndLoseTheEnabledProvider(api, settingsApi);
 
       await page.goto('/profile/login');
 
@@ -156,7 +166,7 @@ test.describe(
       const disabled = await createSsoProvider(api, PREFIX, {
         enabled: false,
       });
-      await settingsApi.set('user', { localAuthEnabled: false });
+      await switchLocalAuthOffAndLoseTheEnabledProvider(api, settingsApi);
 
       await page.goto('/profile/login');
 
@@ -239,6 +249,7 @@ test.describe(
       for (const locale of TRANSLATED_LOCALES) {
         test(`the ${locale} catalog translates the notice and the page renders it`, async ({
           page,
+          api,
           settingsApi,
           localeHelper,
         }) => {
@@ -251,7 +262,7 @@ test.describe(
           expect(msgstr).not.toBe('');
           expect(msgstr).not.toBe(msgid);
 
-          await settingsApi.set('user', { localAuthEnabled: false });
+          await switchLocalAuthOffAndLoseTheEnabledProvider(api, settingsApi);
           await localeHelper.set(locale);
 
           await page.goto('/profile/login');
