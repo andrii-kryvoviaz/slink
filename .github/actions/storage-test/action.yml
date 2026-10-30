@@ -4,7 +4,7 @@ description: 'Run storage integration tests on the test Docker image'
 runs:
   using: 'composite'
   steps:
-    - uses: ./.github/actions/build-test-image
+    - uses: ./.github/actions/load-test-image
 
     - shell: bash
       run: docker compose -f docker/docker-compose.storage-test.yaml -p slink-storage-test up -d --wait

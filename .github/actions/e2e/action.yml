@@ -1,5 +1,5 @@
 name: 'E2E Tests'
-description: 'Build E2E image, start services, and run Playwright tests'
+description: 'Load E2E image from the CI build cache, start services, and run Playwright tests'
 
 runs:
   using: 'composite'
@@ -7,7 +7,7 @@ runs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v4
 
-    - name: Build E2E image
+    - name: Load E2E image
       uses: docker/bake-action@v7
       with:
         source: .
@@ -15,7 +15,6 @@ runs:
         load: true
         set: |
           *.cache-from=type=gha,scope=e2e
-          *.cache-to=type=gha,scope=e2e,mode=max
 
     - name: Setup Node.js
       uses: actions/setup-node@v5

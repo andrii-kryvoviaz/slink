@@ -4,7 +4,7 @@ description: 'Run PHPUnit tests'
 runs:
   using: 'composite'
   steps:
-    - uses: ./.github/actions/build-test-image
+    - uses: ./.github/actions/load-test-image
 
     - shell: bash
       run: |

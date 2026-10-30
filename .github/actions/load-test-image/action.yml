@@ -1,5 +1,5 @@
-name: 'Build Test Docker Image'
-description: 'Builds a Docker image for testing and linting'
+name: 'Load Test Docker Image'
+description: 'Loads the test Docker image from the CI build cache'
 
 runs:
   using: 'composite'
@@ -7,7 +7,7 @@ runs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v4
 
-    - name: Build and Load Test Docker image
+    - name: Load Test Docker image
       uses: docker/bake-action@v7
       with:
         source: .
@@ -16,4 +16,3 @@ runs:
         set: |
           test.tags=slink-test:${{ github.sha }}
           *.cache-from=type=gha,scope=test-build
-          *.cache-to=type=gha,scope=test-build

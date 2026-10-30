@@ -26,7 +26,7 @@ WORKDIR /services/api
 COPY --from=test-rootfs /rootfs/ /
 
 COPY services/api/composer.json services/api/composer.lock ./
-RUN composer install --ignore-platform-reqs --no-interaction --no-scripts
+RUN composer install --ignore-platform-reqs --no-interaction --no-scripts --optimize-autoloader
 
 COPY --chown=www-data:www-data ./services/api .
 RUN mv .env.example .env && \
