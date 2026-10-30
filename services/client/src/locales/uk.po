@@ -5300,3 +5300,7 @@ msgstr "Локальна автентифікація"
 #: src/feature/Settings/UserSettings/UserSettings.svelte
 msgid "Allow sign-in with email and password. Turning it off leaves sign-in to SSO providers only"
 msgstr "Дозволити вхід за допомогою електронної пошти та пароля. Якщо вимкнути, вхід залишається лише через SSO-провайдерів"
+
+#: src/routes/profile/(auth)/login/+page.svelte
+msgid "No sign-in method is configured."
+msgstr "Жоден спосіб входу не налаштований."

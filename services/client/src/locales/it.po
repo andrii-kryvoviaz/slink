@@ -5271,3 +5271,7 @@ msgstr "Autenticazione locale"
 #: src/feature/Settings/UserSettings/UserSettings.svelte
 msgid "Allow sign-in with email and password. Turning it off leaves sign-in to SSO providers only"
 msgstr "Consenti l'accesso con email e password. Se disattivata, l'accesso è riservato ai provider SSO"
+
+#: src/routes/profile/(auth)/login/+page.svelte
+msgid "No sign-in method is configured."
+msgstr "Nessun metodo di accesso è configurato."

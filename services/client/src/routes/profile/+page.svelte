@@ -25,6 +25,9 @@
   let { data, form }: Props = $props();
 
   let user = $derived(data.user);
+  let localAuthEnabled = $derived(
+    data.globalSettings?.user?.localAuthEnabled !== false,
+  );
 
   let isPasswordFormLoading = useWritable(
     'changePasswordFormLoadingState',
@@ -151,106 +154,108 @@
       </div>
     </section>
 
-    <section class="space-y-1">
-      <div class="flex items-center justify-between gap-4 pb-3">
-        <h2
-          class="text-sm font-medium text-foreground-muted uppercase tracking-wider"
-        >
-          Security
-        </h2>
-      </div>
+    {#if localAuthEnabled}
+      <section class="space-y-1">
+        <div class="flex items-center justify-between gap-4 pb-3">
+          <h2
+            class="text-sm font-medium text-foreground-muted uppercase tracking-wider"
+          >
+            Security
+          </h2>
+        </div>
 
-      {#if passwordError}
-        <Notice variant="error" class="mb-3">
-          {passwordError}
-        </Notice>
-      {/if}
-
-      <div
-        class="divide-y divide-muted rounded-xl bg-muted-soft/50 dark:bg-muted-soft/30 border border-muted overflow-hidden"
-      >
-        <form
-          id="password-form"
-          action="?/changePassword"
-          method="POST"
-          use:enhance={withLoadingState(isPasswordFormLoading, {
-            onSubmit: () => {
-              passwordError = null;
-            },
-            onError: (data) => {
-              passwordError = readErrorMessage(data);
-            },
-          })}
-        >
-          <SettingItem>
-            {#snippet label()}
-              Current Password
-            {/snippet}
-            {#snippet hint()}
-              Enter your current password to verify your identity
-            {/snippet}
-            <Input
-              name="old_password"
-              type="password"
-              placeholder="Current password"
-              error={form?.errors?.old_password}
-              class="w-full max-w-md"
-            />
-          </SettingItem>
-
-          <SettingItem>
-            {#snippet label()}
-              New Password
-            {/snippet}
-            {#snippet hint()}
-              Choose a new password
-            {/snippet}
-            <Input
-              name="password"
-              type="password"
-              placeholder="New password"
-              error={form?.errors?.password}
-              class="w-full max-w-md"
-            />
-          </SettingItem>
-
-          <SettingItem>
-            {#snippet label()}
-              Confirm Password
-            {/snippet}
-            {#snippet hint()}
-              Re-enter your new password
-            {/snippet}
-            <Input
-              name="confirm"
-              type="password"
-              placeholder="Confirm password"
-              error={form?.errors?.confirm}
-              class="w-full max-w-md"
-            />
-          </SettingItem>
-        </form>
-      </div>
-
-      <div class="flex items-center justify-end gap-3 pt-4">
-        {#if $isPasswordFormLoading}
-          <div class="flex items-center gap-2 text-sm text-foreground-muted">
-            <Loader variant="minimal" size="xs" />
-            <span>Updating...</span>
-          </div>
+        {#if passwordError}
+          <Notice variant="error" class="mb-3">
+            {passwordError}
+          </Notice>
         {/if}
 
-        <Button
-          type="submit"
-          form="password-form"
-          variant="soft-blue"
-          rounded="full"
-          size="sm"
-          disabled={$isPasswordFormLoading}
+        <div
+          class="divide-y divide-muted rounded-xl bg-muted-soft/50 dark:bg-muted-soft/30 border border-muted overflow-hidden"
         >
-          Update Password
-        </Button>
-      </div>
-    </section>
+          <form
+            id="password-form"
+            action="?/changePassword"
+            method="POST"
+            use:enhance={withLoadingState(isPasswordFormLoading, {
+              onSubmit: () => {
+                passwordError = null;
+              },
+              onError: (data) => {
+                passwordError = readErrorMessage(data);
+              },
+            })}
+          >
+            <SettingItem>
+              {#snippet label()}
+                Current Password
+              {/snippet}
+              {#snippet hint()}
+                Enter your current password to verify your identity
+              {/snippet}
+              <Input
+                name="old_password"
+                type="password"
+                placeholder="Current password"
+                error={form?.errors?.old_password}
+                class="w-full max-w-md"
+              />
+            </SettingItem>
+
+            <SettingItem>
+              {#snippet label()}
+                New Password
+              {/snippet}
+              {#snippet hint()}
+                Choose a new password
+              {/snippet}
+              <Input
+                name="password"
+                type="password"
+                placeholder="New password"
+                error={form?.errors?.password}
+                class="w-full max-w-md"
+              />
+            </SettingItem>
+
+            <SettingItem>
+              {#snippet label()}
+                Confirm Password
+              {/snippet}
+              {#snippet hint()}
+                Re-enter your new password
+              {/snippet}
+              <Input
+                name="confirm"
+                type="password"
+                placeholder="Confirm password"
+                error={form?.errors?.confirm}
+                class="w-full max-w-md"
+              />
+            </SettingItem>
+          </form>
+        </div>
+
+        <div class="flex items-center justify-end gap-3 pt-4">
+          {#if $isPasswordFormLoading}
+            <div class="flex items-center gap-2 text-sm text-foreground-muted">
+              <Loader variant="minimal" size="xs" />
+              <span>Updating...</span>
+            </div>
+          {/if}
+
+          <Button
+            type="submit"
+            form="password-form"
+            variant="soft-blue"
+            rounded="full"
+            size="sm"
+            disabled={$isPasswordFormLoading}
+          >
+            Update Password
+          </Button>
+        </div>
+      </section>
+    {/if}
   </div>
 </div>

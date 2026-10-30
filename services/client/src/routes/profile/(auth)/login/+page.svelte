@@ -45,12 +45,22 @@
   let showPassword = $state(false);
   let formElement = $state<HTMLFormElement>();
 
+  let localAuthEnabled = $derived(
+    data.globalSettings?.user?.localAuthEnabled !== false,
+  );
+
   let providers = $derived(
     (data.sso?.providers ?? []).map((p) => ({
       ...OAuthProviderConfig.resolve(p.slug),
       name: p.name,
     })),
   );
+
+  let showDemoBanner = $derived(
+    localAuthEnabled && data.globalSettings?.demo?.enabled === true,
+  );
+
+  let noSignInMethod = $derived(!localAuthEnabled && providers.length === 0);
 
   function fillDemoCredentials() {
     if (
@@ -109,85 +119,94 @@
       </Notice>
     {/if}
 
-    <form
-      bind:this={formElement}
-      class="space-y-5"
-      method="POST"
-      use:enhance={withLoadingState(isLoading)}
-      in:fade={{ duration: 400, delay: 200 }}
-    >
-      <Input
-        label="Email or Username"
-        name="username"
-        type="text"
-        autocomplete="username"
-        placeholder="Enter your email or username"
-        bind:value={usernameValue}
-        error={typeof form?.errors === 'object' && 'username' in form.errors
-          ? form.errors.username
-          : undefined}
-        variant="modern"
-        size="lg"
-        rounded="lg"
-      >
-        {#snippet leftIcon()}
-          <Icon icon="ph:user" class="text-ring" />
-        {/snippet}
-      </Input>
+    {#if noSignInMethod}
+      <Notice variant="warning">No sign-in method is configured.</Notice>
+    {/if}
 
-      <div class="space-y-2">
+    {#if localAuthEnabled}
+      <form
+        bind:this={formElement}
+        class="space-y-5"
+        method="POST"
+        use:enhance={withLoadingState(isLoading)}
+        in:fade={{ duration: 400, delay: 200 }}
+      >
         <Input
-          label="Password"
-          name="password"
-          type={showPassword ? 'text' : 'password'}
-          autocomplete="current-password"
-          placeholder="Enter your password"
-          bind:value={passwordValue}
-          error={typeof form?.errors === 'object' && 'password' in form.errors
-            ? form.errors.password
+          label="Email or Username"
+          name="username"
+          type="text"
+          autocomplete="username"
+          placeholder="Enter your email or username"
+          bind:value={usernameValue}
+          error={typeof form?.errors === 'object' && 'username' in form.errors
+            ? form.errors.username
             : undefined}
           variant="modern"
           size="lg"
           rounded="lg"
         >
           {#snippet leftIcon()}
-            <Icon icon="ph:lock-simple" class="text-ring" />
+            <Icon icon="ph:user" class="text-ring" />
           {/snippet}
-          <PasswordToggle
-            visible={showPassword}
-            onclick={() => (showPassword = !showPassword)}
-          />
         </Input>
-      </div>
 
-      <Button
-        variant="cta"
-        size="lg"
-        class="w-full mt-2 group"
-        type="submit"
-        loading={$isLoading}
-      >
-        Sign In
-        {#snippet rightIcon()}
-          <Icon
-            icon="ph:arrow-right"
-            class="w-5 h-5 ml-1 transition-transform duration-200 group-hover:translate-x-1"
-          />
-        {/snippet}
-      </Button>
-    </form>
-
-    {#if providers.length > 0}
-      <div class="mt-5">
-        <div class="relative flex items-center">
-          <div class="flex-grow border-t border-border/60"></div>
-          <span class="mx-4 shrink-0 text-xs text-ring uppercase tracking-wide"
-            >or continue with</span
+        <div class="space-y-2">
+          <Input
+            label="Password"
+            name="password"
+            type={showPassword ? 'text' : 'password'}
+            autocomplete="current-password"
+            placeholder="Enter your password"
+            bind:value={passwordValue}
+            error={typeof form?.errors === 'object' && 'password' in form.errors
+              ? form.errors.password
+              : undefined}
+            variant="modern"
+            size="lg"
+            rounded="lg"
           >
-          <div class="flex-grow border-t border-border/60"></div>
+            {#snippet leftIcon()}
+              <Icon icon="ph:lock-simple" class="text-ring" />
+            {/snippet}
+            <PasswordToggle
+              visible={showPassword}
+              onclick={() => (showPassword = !showPassword)}
+            />
+          </Input>
         </div>
 
-        <div class="mt-4 space-y-3">
+        <Button
+          variant="cta"
+          size="lg"
+          class="w-full mt-2 group"
+          type="submit"
+          loading={$isLoading}
+        >
+          Sign In
+          {#snippet rightIcon()}
+            <Icon
+              icon="ph:arrow-right"
+              class="w-5 h-5 ml-1 transition-transform duration-200 group-hover:translate-x-1"
+            />
+          {/snippet}
+        </Button>
+      </form>
+    {/if}
+
+    {#if providers.length > 0}
+      <div class={localAuthEnabled ? 'mt-5' : ''}>
+        {#if localAuthEnabled}
+          <div class="relative flex items-center">
+            <div class="flex-grow border-t border-border/60"></div>
+            <span
+              class="mx-4 shrink-0 text-xs text-ring uppercase tracking-wide"
+              >or continue with</span
+            >
+            <div class="flex-grow border-t border-border/60"></div>
+          </div>
+        {/if}
+
+        <div class={['space-y-3', localAuthEnabled && 'mt-4']}>
           {#each providers as provider (provider.slug)}
             <SsoProviderButton {provider} />
           {/each}
@@ -197,7 +216,7 @@
   </div>
 
   <BannerContainer class="mt-6">
-    {#if data.globalSettings?.demo?.enabled}
+    {#if showDemoBanner}
       <Banner variant="violet">
         {#snippet icon()}
           <BannerIcon variant="violet" icon="ph:flask" />
@@ -226,7 +245,7 @@
       </Banner>
     {/if}
 
-    {#if data.globalSettings?.user?.allowRegistration}
+    {#if localAuthEnabled && data.globalSettings?.user?.allowRegistration}
       <Banner variant="info">
         {#snippet icon()}
           <BannerIcon variant="info" icon="ph:user-plus" />

@@ -4,10 +4,12 @@ import { expect, test } from '../fixtures/auth.fixture';
 import { type Account, unique } from '../helpers/accounts';
 import { provisionUser } from '../helpers/provisioning';
 import { signInContext } from '../helpers/session';
+import { createSsoProvider, deleteSsoProviders } from '../helpers/ssoProviders';
 import { LoginPage } from '../pages/LoginPage';
 import { ProfilePage } from '../pages/ProfilePage';
 
 const NEW_PASSWORD = 'NewE2ePass456!';
+const PREFIX = 'e2e-pwd-local-auth';
 
 test.describe('Change password', { tag: '@anonymous' }, () => {
   test.describe.configure({ mode: 'serial' });
@@ -75,3 +77,38 @@ test.describe('Change password', { tag: '@anonymous' }, () => {
     await staleContext.close();
   });
 });
+
+test.describe(
+  'Change password with local auth off',
+  { tag: ['@serial', '@anonymous', '@sc-1134'] },
+  () => {
+    test.afterEach(({ api }) => deleteSsoProviders(api, PREFIX));
+
+    test('the profile keeps its settings and offers no password change', async ({
+      browser,
+      api,
+      settingsApi,
+    }) => {
+      const user = unique('pwd-sso-only');
+      await provisionUser(user);
+      const context = await signInContext(browser, user);
+      const page = await context.newPage();
+
+      await createSsoProvider(api, PREFIX);
+      await settingsApi.set('user', { localAuthEnabled: false });
+
+      const profilePage = new ProfilePage(page);
+      await page.goto(ProfilePage.URL);
+
+      await expect(
+        page.getByRole('heading', { name: 'Profile Settings' }),
+      ).toBeVisible();
+      await expect(profilePage.oldPasswordInput).toHaveCount(0);
+      await expect(profilePage.newPasswordInput).toHaveCount(0);
+      await expect(profilePage.confirmPasswordInput).toHaveCount(0);
+      await expect(profilePage.updatePasswordButton).toHaveCount(0);
+
+      await context.close();
+    });
+  },
+);
