@@ -29,6 +29,11 @@
 
   let { data }: Props = $props();
 
+  let canSignUp = $derived(
+    !!data.globalSettings?.user?.allowRegistration &&
+      !!data.globalSettings?.user?.localAuthEnabled,
+  );
+
   const uploadState = useUploadPageState(data, new URL(page.url.href));
 
   const exifNotice = useExifNotice();
@@ -84,6 +89,7 @@
         <Success
           onUploadAnother={() => uploadState.dismissSuccess()}
           isGuestUser={!data.user}
+          {canSignUp}
         />
       {:else}
         {@const showGuestNotice = !data.user}
