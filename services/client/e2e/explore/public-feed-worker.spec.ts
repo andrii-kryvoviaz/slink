@@ -2,6 +2,7 @@ import { execFileSync } from 'child_process';
 
 import { expect, test } from '../fixtures/auth.fixture';
 import { SseRecorder } from '../helpers/SseRecorder';
+import { COMPOSE_PROJECT } from '../helpers/slink';
 
 const TOPIC = 'public-feed';
 const WORKER = '/run/service/feed';
@@ -9,7 +10,7 @@ const WORKER = '/run/service/feed';
 function inContainer(...args: string[]): string {
   return execFileSync(
     'docker',
-    ['compose', '-p', 'slink-e2e', 'exec', '-T', 'slink', ...args],
+    ['compose', '-p', COMPOSE_PROJECT, 'exec', '-T', 'slink', ...args],
     { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] },
   ).trim();
 }

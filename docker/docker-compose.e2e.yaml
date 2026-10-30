@@ -1,13 +1,13 @@
 services:
   slink:
-    image: slink:e2e
-    container_name: slink-e2e
+    image: ${E2E_IMAGE:-slink:e2e}
+    container_name: ${COMPOSE_PROJECT_NAME:-slink-e2e}
     ports:
-      - "3100:3000"
-      - "8180:8080"
+      - "${E2E_WEB_PORT:-3100}:3000"
+      - "${E2E_API_PORT:-8180}:8080"
     environment:
       - APP_ENV=test
       - APP_DEBUG=0
-      - ORIGIN=http://localhost:3100
+      - ORIGIN=http://localhost:${E2E_WEB_PORT:-3100}
       - SESSION_TTL_SECONDS=1209600
       - SLINK_VERSION=${E2E_SLINK_VERSION:-dev}

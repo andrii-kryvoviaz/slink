@@ -1,9 +1,11 @@
 import { execFileSync } from 'child_process';
 
+export const COMPOSE_PROJECT = process.env.COMPOSE_PROJECT_NAME ?? 'slink-e2e';
+
 const DOCKER_ARGS = [
   'compose',
   '-p',
-  'slink-e2e',
+  COMPOSE_PROJECT,
   'exec',
   '-T',
   '-u',

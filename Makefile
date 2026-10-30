@@ -1,15 +1,33 @@
+LANE ?=
+E2E_PROJECT := slink-e2e$(if $(LANE),-$(LANE))
+E2E_WEB_PORT := $(if $(LANE),$(shell expr 3100 + $(LANE)),3100)
+E2E_API_PORT := $(if $(LANE),$(shell expr 8180 + $(LANE)),8180)
+E2E_IMAGE ?= slink:e2e
+E2E_COMPOSE := COMPOSE_PROJECT_NAME=$(E2E_PROJECT) E2E_WEB_PORT=$(E2E_WEB_PORT) E2E_API_PORT=$(E2E_API_PORT) E2E_IMAGE=$(E2E_IMAGE) docker compose -f docker/docker-compose.yaml -f docker/docker-compose.e2e.yaml
+E2E_HEALTH_WAIT := exec slink sh -c 'until wget -qO- http://localhost:8080/api/health > /dev/null 2>&1; do sleep 1; done'
+
 run:
 	docker buildx bake -f docker-bake.hcl prod --load
 	docker compose -p slink -f docker/docker-compose.yaml -f docker/docker-compose.prod.yaml up -d
 
 test-e2e:
-	docker buildx bake -f docker-bake.hcl e2e --load
-	docker compose -p slink-e2e -f docker/docker-compose.yaml -f docker/docker-compose.e2e.yaml up -d
-	@docker compose -p slink-e2e -f docker/docker-compose.yaml -f docker/docker-compose.e2e.yaml exec slink sh -c 'until wget -qO- http://localhost:8080/api/health > /dev/null 2>&1; do sleep 1; done'
-	cd services/client && E2E_BASE_URL=http://localhost:3100 E2E_API_URL=http://localhost:8180 yarn e2e; \
+	docker buildx bake -f docker-bake.hcl e2e --load$(if $(filter-out slink:e2e,$(E2E_IMAGE)), --set e2e.tags=$(E2E_IMAGE))
+	$(E2E_COMPOSE) up -d
+	@$(E2E_COMPOSE) $(E2E_HEALTH_WAIT)
+	cd services/client && COMPOSE_PROJECT_NAME=$(E2E_PROJECT) E2E_BASE_URL=http://localhost:$(E2E_WEB_PORT) E2E_API_URL=http://localhost:$(E2E_API_PORT) yarn e2e; \
 	rc=$$?; \
-	cd ../.. && docker compose -p slink-e2e -f docker/docker-compose.yaml -f docker/docker-compose.e2e.yaml down --volumes; \
+	cd ../.. && $(E2E_COMPOSE) down --volumes; \
 	exit $$rc
+
+e2e-up:
+	$(E2E_COMPOSE) up -d
+	@$(E2E_COMPOSE) $(E2E_HEALTH_WAIT)
+	@echo "project $(E2E_PROJECT)"
+	@echo "web     http://localhost:$(E2E_WEB_PORT)"
+	@echo "api     http://localhost:$(E2E_API_PORT)"
+
+e2e-down:
+	$(E2E_COMPOSE) down --volumes
 
 test-storage:
 	docker compose -p slink-storage-test -f docker/docker-compose.storage-test.yaml up -d --wait
