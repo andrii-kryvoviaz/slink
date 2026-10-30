@@ -87,6 +87,14 @@ final class UsernameTest extends TestCase {
   }
 
   #[Test]
+  public function itDoesNotSplitAMultibyteCharacterWhenTruncatingForSuffix(): void {
+    $username = Username::fromString(str_repeat('a', 24) . '€bb')->withSuffix(1234);
+
+    $this->assertTrue(mb_check_encoding($username->toString(), 'UTF-8'));
+    $this->assertSame(str_repeat('a', 24) . '1234', $username->toString());
+  }
+
+  #[Test]
   public function itCreatesValidUsername(): void {
     $usernameString = 'testuser';
     $username = Username::fromString($usernameString);

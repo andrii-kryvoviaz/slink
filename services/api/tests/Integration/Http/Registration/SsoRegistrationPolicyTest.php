@@ -84,6 +84,27 @@ final class SsoRegistrationPolicyTest extends HttpTestCase {
     ));
   }
 
+  private function stubIdentityNamed(string $slug, string $email, string $displayName): void {
+    StubOAuthAdapter::setIdentity(new OAuthIdentity(
+      OAuthSubject::fromPrimitives($slug, 'subject-' . \md5($email)),
+      Email::fromString($email),
+      DisplayName::fromString($displayName),
+      true,
+    ));
+  }
+
+  private function displayNameByEmail(string $email): ?string {
+    /** @var EntityManagerInterface $entityManager */
+    $entityManager = static::getContainer()->get(EntityManagerInterface::class);
+
+    $displayName = $entityManager->getConnection()->fetchOne(
+      'SELECT display_name FROM "user" WHERE email = :email',
+      ['email' => $email],
+    );
+
+    return $displayName === false ? null : (string) $displayName;
+  }
+
   private function ssoToken(): int {
     return $this->apiRequest(
       'POST',
@@ -92,6 +113,10 @@ final class SsoRegistrationPolicyTest extends HttpTestCase {
       ['CONTENT_TYPE' => 'application/json'],
       \json_encode(['code' => 'auth-code-123', 'state' => 'state-123'], JSON_THROW_ON_ERROR),
     );
+  }
+
+  private function assertSsoSignIn(): void {
+    self::assertSame(200, $this->ssoToken(), (string) $this->client->getResponse()->getContent());
   }
 
   /**
@@ -238,5 +263,46 @@ final class SsoRegistrationPolicyTest extends HttpTestCase {
     $accessToken = $payload['accessToken'] ?? $payload['access_token'] ?? '';
 
     self::assertNotSame('', $accessToken);
+  }
+
+  #[Test]
+  public function itSuffixesTakenDisplayNameForEachNewSsoUser(): void {
+    $this->configureUserSettings(allowRegistration: true);
+    $this->createProvider('acme');
+    $this->createUserWithDisplayName('local-anna@local.test', 'localanna', 'Anna Smith');
+
+    $this->stubIdentityNamed('acme', 'sso-anna-2@local.test', 'Anna Smith');
+    $this->assertSsoSignIn();
+    $this->stubIdentityNamed('acme', 'sso-anna-3@local.test', 'Anna Smith');
+    $this->assertSsoSignIn();
+
+    self::assertSame('Anna Smith', $this->displayNameByEmail('local-anna@local.test'));
+    self::assertSame('Anna Smith 2', $this->displayNameByEmail('sso-anna-2@local.test'));
+    self::assertSame('Anna Smith 3', $this->displayNameByEmail('sso-anna-3@local.test'));
+  }
+
+  #[Test]
+  public function itKeepsUntakenDisplayNameForNewSsoUser(): void {
+    $this->configureUserSettings(allowRegistration: true);
+    $this->createProvider('acme');
+
+    $this->stubIdentityNamed('acme', 'sso-unique@local.test', 'Anna Smith');
+    $this->assertSsoSignIn();
+
+    self::assertSame('Anna Smith', $this->displayNameByEmail('sso-unique@local.test'));
+  }
+
+  #[Test]
+  public function itKeepsSameAccountAndDisplayNameWhenSuffixedSsoUserSignsInAgain(): void {
+    $this->configureUserSettings(allowRegistration: true);
+    $this->createProvider('acme');
+    $this->createUserWithDisplayName('local-anna@local.test', 'localanna', 'Anna Smith');
+    $this->stubIdentityNamed('acme', 'sso-anna-2@local.test', 'Anna Smith');
+
+    $this->assertSsoSignIn();
+    $this->assertSsoSignIn();
+
+    self::assertSame(1, $this->countUsersByEmail('sso-anna-2@local.test'));
+    self::assertSame('Anna Smith 2', $this->displayNameByEmail('sso-anna-2@local.test'));
   }
 }
