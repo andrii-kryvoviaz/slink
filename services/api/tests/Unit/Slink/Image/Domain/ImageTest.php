@@ -48,16 +48,6 @@ final class ImageTest extends TestCase {
   }
 
   #[Test]
-  public function itAddsView(): void {
-    $image = $this->createTestImage();
-    $originalViews = $image->getAttributes()->getViews();
-
-    $image->addView();
-
-    $this->assertEquals(($originalViews ?? 0) + 1, $image->getAttributes()->getViews());
-  }
-
-  #[Test]
   public function itDeletesImage(): void {
     $userId = ID::generate();
     $image = $this->createTestImage($userId);

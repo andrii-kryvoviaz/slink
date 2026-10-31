@@ -312,6 +312,12 @@ function errors(): ApiError[] {
         localize('File too large. Please choose a smaller file and try again.'),
     },
     {
+      match:
+        /* @wc-ignore */ 'This was changed by someone else. Reload and try again.',
+      translate: () =>
+        localize('This was changed by someone else. Reload and try again.'),
+    },
+    {
       match: /* @wc-ignore */ 'Max size cannot be less than 0',
       translate: () => localize('Max size cannot be less than 0'),
     },

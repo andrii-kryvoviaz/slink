@@ -67,6 +67,17 @@ final class ImageStoreUpgradeTest extends HttpTestCase {
   }
 
   #[Test]
+  #[Group('sc-1203')]
+  public function aViewOfAnImageFromThePreviousReleaseAddsToItsStoredCountAndAWriteKeepsIt(): void {
+    $this->doctrine()->getConnection()->executeStatement('UPDATE "image" SET views = 41 WHERE uuid = ?', [$this->imageId]);
+
+    self::assertSame(200, $this->viewImage($this->imageId));
+    self::assertWriteSucceeded($this->updateImage($this->imageId, ['description' => null, 'isPublic' => true]));
+
+    self::assertSame(42, (int) $this->imageColumn($this->imageId, 'views'));
+  }
+
+  #[Test]
   public function anUpdateOfAnImageFromThePreviousReleaseKeepsTheDescriptionEscapedOnce(): void {
     self::assertWriteSucceeded($this->updateImage($this->imageId, ['description' => null, 'isPublic' => false]));
 

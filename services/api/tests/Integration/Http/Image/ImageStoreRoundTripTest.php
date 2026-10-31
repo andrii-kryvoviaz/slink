@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace Tests\Integration\Http\Image;
 
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\OptimisticLockException;
 use EventSauce\EventSourcing\Header;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Slink\Image\Application\Command\AddImageViewCount\AddImageViewCountCommand;
 use Slink\Image\Domain\Enum\License;
 use Slink\Image\Domain\Event\ImageWasCreated;
 use Slink\Image\Domain\Image;
 use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
 use Slink\Image\Domain\ValueObject\ImageAttributes;
 use Slink\Image\Domain\ValueObject\ImageMetadata;
+use Slink\Shared\Application\Command\CommandBusInterface;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\Shared\Infrastructure\MessageBus\Event\EventDispatcher;
@@ -290,28 +290,24 @@ final class ImageStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
   }
 
   #[Test]
-  public function theSecondOfTwoConcurrentViewsFailsAndTheFirstViewCounts(): void {
+  #[Group('sc-1203')]
+  public function bothOfTwoConcurrentViewsCount(): void {
     $id = $this->createAggregate();
     $firstContainer = $this->independentContainer();
     $secondContainer = $this->independentContainer();
-    $firstLoad = $this->imageStoreOf($firstContainer)->get($id);
-    $secondLoad = $this->imageStoreOf($secondContainer)->get($id);
+    $this->imageStoreOf($firstContainer)->get($id);
+    $this->imageStoreOf($secondContainer)->get($id);
 
-    $this->addViewAndStore($firstContainer, $firstLoad);
+    $this->countViewIn($firstContainer, $id);
+    $this->countViewIn($secondContainer, $id);
 
-    self::assertCausedBy(OptimisticLockException::class, $this->failureOf(
-      fn () => $this->addViewAndStore($secondContainer, $secondLoad),
-    ));
-    self::assertSame(1, (int) $this->imageColumn($id->toString(), 'views'));
+    self::assertSame(2, (int) $this->imageColumn($id->toString(), 'views'));
   }
 
-  private function addViewAndStore(ContainerInterface $container, Image $image): void {
-    $image->addView();
-    $this->imageStoreOf($container)->store($image);
-
-    /** @var EntityManagerInterface $entityManager */
-    $entityManager = $container->get(EntityManagerInterface::class);
-    $entityManager->flush();
+  private function countViewIn(ContainerInterface $container, ID $id): void {
+    /** @var CommandBusInterface $commandBus */
+    $commandBus = $container->get(CommandBusInterface::class);
+    $commandBus->handle(new AddImageViewCountCommand($id->toString()));
   }
 
   /**

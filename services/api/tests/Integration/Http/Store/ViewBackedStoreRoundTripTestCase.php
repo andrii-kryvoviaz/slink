@@ -9,16 +9,13 @@ use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\Test;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Tests\Integration\Http\HttpTestCase;
 
 /**
  * @template TAggregate of object
  */
 abstract class ViewBackedStoreRoundTripTestCase extends HttpTestCase {
-  /** @var list<KernelInterface> */
-  private array $independentKernels = [];
+  use BootsIndependentKernels;
 
   abstract protected function createAggregate(): ID;
 
@@ -61,11 +58,7 @@ abstract class ViewBackedStoreRoundTripTestCase extends HttpTestCase {
   }
 
   protected function tearDown(): void {
-    foreach ($this->independentKernels as $kernel) {
-      $kernel->shutdown();
-    }
-
-    $this->independentKernels = [];
+    $this->shutDownIndependentKernels();
 
     parent::tearDown();
   }
@@ -108,17 +101,6 @@ abstract class ViewBackedStoreRoundTripTestCase extends HttpTestCase {
 
   protected function readModel(): Connection {
     return $this->entityManager()->getConnection();
-  }
-
-  protected function independentContainer(): ContainerInterface {
-    $kernel = static::createKernel();
-    $kernel->boot();
-    $this->independentKernels[] = $kernel;
-
-    /** @var ContainerInterface $container */
-    $container = $kernel->getContainer()->get('test.service_container');
-
-    return $container;
   }
 
   /**

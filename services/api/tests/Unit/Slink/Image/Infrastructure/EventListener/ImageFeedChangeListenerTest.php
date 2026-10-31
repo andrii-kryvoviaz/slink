@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Slink\Image\Infrastructure\EventListener;
 
+use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostPersistEventArgs;
-use Doctrine\ORM\Event\PostRemoveEventArgs;
 use Doctrine\ORM\Event\PostUpdateEventArgs;
 use Doctrine\ORM\UnitOfWork;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -86,21 +87,36 @@ final class ImageFeedChangeListenerTest extends TestCase {
     $listener->postPersist($image, new PostPersistEventArgs($image, $this->createStub(EntityManagerInterface::class)));
   }
 
-  #[Test]
-  public function itQueuesImageRemovedWhenPublicImageIsRemoved(): void {
-    $image = $this->imageView(true);
-    $messageBus = $this->busExpecting('image_removed');
+  private function flushDeleting(ImageView $image, int $claimedRows): OnFlushEventArgs {
+    $connection = $this->createStub(Connection::class);
+    $connection->method('quoteIdentifier')->willReturnArgument(0);
+    $connection->method('update')->willReturn($claimedRows);
 
-    $listener = new ImageFeedChangeListener($messageBus);
-    $listener->postRemove($image, new PostRemoveEventArgs($image, $this->createStub(EntityManagerInterface::class)));
+    $unitOfWork = $this->createStub(UnitOfWork::class);
+    $unitOfWork->method('getScheduledEntityDeletions')->willReturn([$image]);
+
+    $em = $this->createStub(EntityManagerInterface::class);
+    $em->method('getConnection')->willReturn($connection);
+    $em->method('getUnitOfWork')->willReturn($unitOfWork);
+
+    return new OnFlushEventArgs($em);
   }
 
   #[Test]
-  public function itQueuesNothingWhenNonPublicImageIsRemoved(): void {
+  public function itQueuesImageRemovedWhenTheDeletedRowWasStillPublic(): void {
     $image = $this->imageView(false);
+    $messageBus = $this->busExpecting('image_removed');
+
+    $listener = new ImageFeedChangeListener($messageBus);
+    $listener->onFlush($this->flushDeleting($image, 1));
+  }
+
+  #[Test]
+  public function itQueuesNothingWhenTheDeletedRowWasAlreadyHidden(): void {
+    $image = $this->imageView(true);
 
     $listener = new ImageFeedChangeListener($this->busExpectingNothing());
-    $listener->postRemove($image, new PostRemoveEventArgs($image, $this->createStub(EntityManagerInterface::class)));
+    $listener->onFlush($this->flushDeleting($image, 0));
   }
 
   #[Test]

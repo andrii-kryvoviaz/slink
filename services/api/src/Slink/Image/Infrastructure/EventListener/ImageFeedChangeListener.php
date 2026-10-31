@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Slink\Image\Infrastructure\EventListener;
 
+use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
+use Doctrine\DBAL\ParameterType;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostPersistEventArgs;
-use Doctrine\ORM\Event\PostRemoveEventArgs;
 use Doctrine\ORM\Event\PostUpdateEventArgs;
 use Doctrine\ORM\Events;
 use Slink\Image\Domain\Enum\ImageFeedEventType;
@@ -17,7 +20,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 #[AsEntityListener(event: Events::postPersist, method: 'postPersist', entity: ImageView::class, entityManager: 'read_model')]
 #[AsEntityListener(event: Events::postUpdate, method: 'postUpdate', entity: ImageView::class, entityManager: 'read_model')]
-#[AsEntityListener(event: Events::postRemove, method: 'postRemove', entity: ImageView::class, entityManager: 'read_model')]
+#[AsDoctrineListener(event: Events::onFlush, connection: 'read_model')]
 final readonly class ImageFeedChangeListener {
   public function __construct(
     #[Autowire(service: 'messenger.bus.feed')]
@@ -61,12 +64,27 @@ final readonly class ImageFeedChangeListener {
     }
   }
 
-  public function postRemove(ImageView $image, PostRemoveEventArgs $args): void {
-    if (!$image->getAttributes()->isPublic()) {
-      return;
-    }
+  public function onFlush(OnFlushEventArgs $args): void {
+    $em = $args->getObjectManager();
 
-    $this->enqueue($image->getUuid(), ImageFeedEventType::Removed);
+    foreach ($em->getUnitOfWork()->getScheduledEntityDeletions() as $entity) {
+      if ($entity instanceof ImageView && $this->claimsHide($em, $entity->getUuid())) {
+        $this->enqueue($entity->getUuid(), ImageFeedEventType::Removed);
+      }
+    }
+  }
+
+  private function claimsHide(EntityManagerInterface $em, string $imageId): bool {
+    $connection = $em->getConnection();
+
+    $claimed = $connection->update(
+      $connection->quoteIdentifier('image'),
+      ['is_public' => false],
+      ['uuid' => $imageId, 'is_public' => true],
+      ['is_public' => ParameterType::BOOLEAN],
+    );
+
+    return (int) $claimed > 0;
   }
 
   /**

@@ -199,15 +199,6 @@ final class Image extends AbstractAggregateRoot implements OwnerAwareInterface {
   }
 
   /**
-   * @return void
-   */
-  public function addView(): void {
-    $attributes = $this->getAttributes()->addView();
-
-    $this->recordThat(new ImageAttributesWasUpdated($this->aggregateRootId(), $attributes));
-  }
-
-  /**
    * @param ImageAttributes $attributes
    * @return void
    */

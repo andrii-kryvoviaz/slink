@@ -243,6 +243,22 @@ final class ImageRepository extends AbstractRepository implements ImageRepositor
   }
 
   #[Override]
+  public function incrementViews(ID $imageId, ?ID $viewerId = null): void {
+    $qb = $this->createQueryBuilder('image')
+      ->update()
+      ->set('image.attributes.views', 'image.attributes.views + 1')
+      ->where('image.uuid = :imageId')
+      ->setParameter('imageId', $imageId->toString());
+
+    if ($viewerId !== null) {
+      $qb->andWhere('image.user IS NULL OR IDENTITY(image.user) != :viewerId')
+        ->setParameter('viewerId', $viewerId->toString());
+    }
+
+    $qb->getQuery()->execute();
+  }
+
+  #[Override]
   public function findByIds(array $ids): array {
     if ($ids === []) {
       return [];

@@ -119,17 +119,6 @@ final readonly class ImageAttributes extends AbstractCompoundValueObject impleme
     return pathinfo($this->fileName, PATHINFO_EXTENSION);
   }
   
-  public function addView(): self {
-    return new self(
-      $this->fileName,
-      $this->description,
-      $this->isPublic,
-      $this->createdAt,
-      $this->updatedAt,
-      $this->views + 1,
-    );
-  }
-
   public function sanitize(): static {
     return new self(
       $this->fileName,

@@ -22,6 +22,7 @@ parameters:
     Slink\Image\Infrastructure\ChunkedUpload\Exception\ExpiredUploadTokenException: 410
     Slink\Image\Infrastructure\ChunkedUpload\Exception\ChunkIndexOutOfRangeException: 422
     Slink\Image\Infrastructure\ChunkedUpload\Exception\ChunkTooLargeException: 413
+    Doctrine\ORM\OptimisticLockException: 409
     LogicException: 400
     InvalidArgumentException: 400
 
@@ -30,6 +31,7 @@ parameters:
     401: 'Unauthorized'
     403: 'Forbidden'
     404: 'Not Found'
+    409: 'Conflict'
     410: 'Gone'
     413: 'Payload Too Large'
     422: 'Unprocessable Entity'
