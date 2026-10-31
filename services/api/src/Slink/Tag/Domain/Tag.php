@@ -14,6 +14,7 @@ use Slink\Tag\Domain\Event\TagWasDeleted;
 use Slink\Tag\Domain\Event\TagWasMoved;
 use Slink\Tag\Domain\ValueObject\TagName;
 use Slink\Tag\Domain\ValueObject\TagPath;
+use Slink\Tag\Infrastructure\ReadModel\View\TagView;
 
 final class Tag extends AbstractAggregateRoot {
   private ID $userId;
@@ -22,7 +23,6 @@ final class Tag extends AbstractAggregateRoot {
   private ?ID $parentId;
   private ?DateTime $createdAt = null;
   private ?DateTime $updatedAt = null;
-  private bool $deleted = false;
 
   public static function create(
     ID       $id,
@@ -42,6 +42,18 @@ final class Tag extends AbstractAggregateRoot {
     return $tag;
   }
 
+  public static function fromView(TagView $view): self {
+    $tag = new self(ID::fromString($view->getUuid()));
+    $tag->userId = ID::fromString($view->getUserId());
+    $tag->name = TagName::fromString($view->getName());
+    $tag->path = TagPath::fromString($view->getPath());
+    $tag->parentId = ID::fromUnknown($view->getParentId());
+    $tag->createdAt = $view->getCreatedAt();
+    $tag->updatedAt = $view->getUpdatedAt();
+
+    return $tag;
+  }
+
   public function move(?ID $newParentId, TagPath $newPath): void {
     $now = DateTime::now();
     $this->recordThat(new TagWasMoved(
@@ -56,10 +68,6 @@ final class Tag extends AbstractAggregateRoot {
    * @param array<string> $directChildIds
    */
   public function delete(array $directChildIds = []): void {
-    if ($this->deleted) {
-      return;
-    }
-
     $this->recordThat(new TagWasDeleted($this->aggregateRootId(), $this->userId->toString(), $directChildIds));
   }
 
@@ -78,10 +86,6 @@ final class Tag extends AbstractAggregateRoot {
     $this->updatedAt = $event->updatedAt ?? DateTime::now();
   }
 
-  public function applyTagWasDeleted(TagWasDeleted $event): void {
-    $this->deleted = true;
-  }
-
   public function getUserId(): ID {
     return $this->userId;
   }
@@ -96,10 +100,6 @@ final class Tag extends AbstractAggregateRoot {
 
   public function getParentId(): ?ID {
     return $this->parentId;
-  }
-
-  public function isDeleted(): bool {
-    return $this->deleted;
   }
 
   public function hasParent(): bool {
@@ -129,7 +129,6 @@ final class Tag extends AbstractAggregateRoot {
       'parentId' => $this->parentId?->toString(),
       'createdAt' => $this->createdAt?->toString(),
       'updatedAt' => $this->updatedAt?->toString(),
-      'deleted' => $this->deleted,
     ];
   }
 
@@ -145,7 +144,6 @@ final class Tag extends AbstractAggregateRoot {
     $tag->parentId = $state['parentId'] ? ID::fromString($state['parentId']) : null;
     $tag->createdAt = isset($state['createdAt']) ? DateTime::fromString($state['createdAt']) : null;
     $tag->updatedAt = isset($state['updatedAt']) ? DateTime::fromString($state['updatedAt']) : null;
-    $tag->deleted = $state['deleted'];
 
     return $tag;
   }

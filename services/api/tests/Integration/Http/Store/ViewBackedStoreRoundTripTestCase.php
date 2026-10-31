@@ -1,0 +1,172 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Tests\Integration\Http\Store;
+
+use Doctrine\DBAL\Connection;
+use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
+use Slink\Shared\Domain\ValueObject\ID;
+use Slink\Shared\Infrastructure\Exception\NotFoundException;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\KernelInterface;
+use Tests\Integration\Http\HttpTestCase;
+
+/**
+ * @template TAggregate of object
+ */
+#[Group('sc-1175')]
+abstract class ViewBackedStoreRoundTripTestCase extends HttpTestCase {
+  /** @var list<KernelInterface> */
+  private array $independentKernels = [];
+
+  abstract protected function createAggregate(): ID;
+
+  /**
+   * @return TAggregate
+   */
+  abstract protected function fetch(ID $id): object;
+
+  /**
+   * @param TAggregate $aggregate
+   * @return array<string, mixed>
+   */
+  abstract protected function aggregateState(object $aggregate): array;
+
+  /**
+   * @return array<string, mixed>
+   */
+  abstract protected function storedState(ID $id): array;
+
+  abstract protected function rootTable(): string;
+
+  protected function tearDown(): void {
+    foreach ($this->independentKernels as $kernel) {
+      $kernel->shutdown();
+    }
+
+    $this->independentKernels = [];
+
+    parent::tearDown();
+  }
+
+  #[Test]
+  public function creatingTheAggregateAppendsNothingToTheEventLog(): void {
+    $id = $this->createAggregate();
+
+    self::assertSame(0, $this->loggedEvents($id));
+    self::assertSame(0, $this->snapshots($id));
+  }
+
+  #[Test]
+  public function reloadedAggregateHoldsTheStoredState(): void {
+    $id = $this->createAggregate();
+
+    self::assertSame($this->storedState($id), $this->aggregateState($this->reload($id)));
+  }
+
+  #[Test]
+  public function reloadingAfterTheRootRowIsDeletedThrowsNotFound(): void {
+    $id = $this->createAggregate();
+    $this->readModel()->executeStatement(
+      \sprintf('DELETE FROM "%s" WHERE uuid = ?', $this->rootTable()),
+      [$id->toString()],
+    );
+
+    $this->expectException(NotFoundException::class);
+
+    $this->reload($id);
+  }
+
+  /**
+   * @return TAggregate
+   */
+  protected function reload(ID $id): object {
+    $this->entityManager()->clear();
+
+    return $this->fetch($id);
+  }
+
+  protected function entityManager(): EntityManagerInterface {
+    /** @var EntityManagerInterface $entityManager */
+    $entityManager = static::getContainer()->get(EntityManagerInterface::class);
+
+    return $entityManager;
+  }
+
+  protected function readModel(): Connection {
+    return $this->entityManager()->getConnection();
+  }
+
+  protected function loggedEvents(ID $id): int {
+    return $this->eventStoreRows('SELECT COUNT(*) FROM event_store WHERE aggregate_root_id = ?', $id);
+  }
+
+  protected function snapshots(ID $id): int {
+    return $this->eventStoreRows('SELECT COUNT(*) FROM snapshots WHERE aggregate_root_id = ?', $id);
+  }
+
+  /**
+   * @return array{event_store: int, snapshots: int}
+   */
+  protected function eventLogSize(): array {
+    return [
+      'event_store' => (int) $this->eventStore()->fetchOne('SELECT COUNT(*) FROM event_store'),
+      'snapshots' => (int) $this->eventStore()->fetchOne('SELECT COUNT(*) FROM snapshots'),
+    ];
+  }
+
+  protected function independentContainer(): ContainerInterface {
+    $kernel = static::createKernel();
+    $kernel->boot();
+    $this->independentKernels[] = $kernel;
+
+    /** @var ContainerInterface $container */
+    $container = $kernel->getContainer()->get('test.service_container');
+
+    return $container;
+  }
+
+  /**
+   * @param callable(): void $action
+   */
+  protected function failureOf(callable $action): ?\Throwable {
+    try {
+      $action();
+    } catch (\Throwable $failure) {
+      return $failure;
+    }
+
+    return null;
+  }
+
+  /**
+   * @param class-string<\Throwable> $expected
+   */
+  protected static function assertCausedBy(string $expected, ?\Throwable $failure): void {
+    $causes = [];
+
+    for ($cause = $failure; $cause !== null; $cause = $cause->getPrevious()) {
+      if ($cause instanceof $expected) {
+        return;
+      }
+
+      $causes[] = $cause::class . ': ' . $cause->getMessage();
+    }
+
+    self::fail(\sprintf('Expected %s, got: %s', $expected, \implode(' <- ', $causes) ?: 'no failure'));
+  }
+
+  private function eventStoreRows(string $sql, ID $id): int {
+    return (int) $this->eventStore()->fetchOne($sql, [$id->toString()]);
+  }
+
+  private function eventStore(): Connection {
+    /** @var Connection $connection */
+    $connection = static::getContainer()->get('doctrine.dbal.event_store_connection');
+
+    return $connection;
+  }
+}

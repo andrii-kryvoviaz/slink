@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Slink\Tag\Domain;
 
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
@@ -14,6 +15,7 @@ use Slink\Tag\Domain\Event\TagWasMoved;
 use Slink\Tag\Domain\Tag;
 use Slink\Tag\Domain\ValueObject\TagName;
 use Slink\Tag\Domain\ValueObject\TagPath;
+use Slink\Tag\Infrastructure\ReadModel\View\TagView;
 
 
 
@@ -76,20 +78,6 @@ final class TagTest extends TestCase {
     $deleteEvent = $events[1];
     $this->assertInstanceOf(TagWasDeleted::class, $deleteEvent);
     $this->assertEquals($tagId, $deleteEvent->id);
-  }
-
-  #[Test]
-  public function itDoesNotDeleteAlreadyDeletedTag(): void {
-    $tagId = ID::generate();
-    $userId = ID::generate();
-    $tagName = TagName::fromString('already-deleted');
-
-    $tag = Tag::create($tagId, $userId, $tagName);
-    $tag->delete();
-    $tag->delete();
-
-    $events = $tag->releaseEvents();
-    $this->assertCount(2, $events);
   }
 
   #[Test]
@@ -196,5 +184,97 @@ final class TagTest extends TestCase {
     $this->assertInstanceOf(TagWasMoved::class, $moveEvent);
     $this->assertNull($moveEvent->newParentId);
     $this->assertEquals($newPath, $moveEvent->newPath);
+  }
+
+  #[Test]
+  #[Group('sc-1175')]
+  public function itHydratesEveryFieldFromItsView(): void {
+    $tagId = ID::generate();
+    $ownerId = ID::generate();
+    $parentId = ID::generate();
+    $createdAt = DateTime::fromString('2021-02-03 04:05:06');
+    $updatedAt = DateTime::fromString('2022-03-04 05:06:07');
+
+    $tag = Tag::fromView(new TagView(
+      $tagId->toString(),
+      'child',
+      '#parent/child',
+      $ownerId->toString(),
+      $parentId->toString(),
+      $createdAt,
+      $updatedAt,
+    ));
+
+    $this->assertTrue($tagId->equals($tag->aggregateRootId()));
+    $this->assertSame('child', $tag->getName()->getValue());
+    $this->assertSame('#parent/child', $tag->getPath()->getValue());
+    $this->assertSame($ownerId->toString(), $tag->getUserId()->toString());
+    $this->assertSame($parentId->toString(), $tag->getParentId()?->toString());
+    $this->assertTrue($createdAt->equals($tag->getCreatedAt()));
+    $this->assertTrue($updatedAt->equals($tag->getUpdatedAt()));
+  }
+
+  #[Test]
+  #[Group('sc-1175')]
+  public function itHydratesARootTagWithoutParentOrTimestamps(): void {
+    $tag = Tag::fromView(new TagView(ID::generate()->toString(), 'root', '#root', ID::generate()->toString()));
+
+    $this->assertNull($tag->getParentId());
+    $this->assertFalse($tag->hasParent());
+    $this->assertNull($tag->getCreatedAt());
+    $this->assertNull($tag->getUpdatedAt());
+  }
+
+  #[Test]
+  #[Group('sc-1175')]
+  public function itRecordsNoEventsWhenHydrated(): void {
+    $tag = Tag::fromView(new TagView(ID::generate()->toString(), 'root', '#root', ID::generate()->toString()));
+
+    $this->assertSame([], $tag->releaseEvents());
+  }
+
+  #[Test]
+  #[Group('sc-1175')]
+  public function itDeletesAHydratedTagInTheNameOfItsOwner(): void {
+    $tagId = ID::generate();
+    $ownerId = ID::generate();
+    $tag = Tag::fromView(new TagView($tagId->toString(), 'root', '#root', $ownerId->toString()));
+
+    $tag->delete(['child-1']);
+
+    $events = $tag->releaseEvents();
+    $this->assertCount(1, $events);
+    $this->assertInstanceOf(TagWasDeleted::class, $events[0]);
+    $this->assertSame($tagId->toString(), $events[0]->id->toString());
+    $this->assertSame($ownerId->toString(), $events[0]->userId);
+    $this->assertSame(['child-1'], $events[0]->directChildIds);
+  }
+
+  #[Test]
+  #[Group('sc-1175')]
+  public function itMovesAHydratedTag(): void {
+    $tag = Tag::fromView(new TagView(ID::generate()->toString(), 'root', '#root', ID::generate()->toString()));
+    $newParentId = ID::generate();
+    $newPath = TagPath::fromString('#bucket/root');
+
+    $tag->move($newParentId, $newPath);
+
+    $this->assertSame('#bucket/root', $tag->getPath()->getValue());
+    $this->assertSame($newParentId->toString(), $tag->getParentId()?->toString());
+    $events = $tag->releaseEvents();
+    $this->assertCount(1, $events);
+    $this->assertInstanceOf(TagWasMoved::class, $events[0]);
+  }
+
+  #[Test]
+  #[Group('sc-1175')]
+  public function itRecordsEveryDeleteSinceTheStoreGuardsMissingTags(): void {
+    $tag = Tag::create(ID::generate(), ID::generate(), TagName::fromString('deleted-twice'));
+    $tag->releaseEvents();
+
+    $tag->delete();
+    $tag->delete();
+
+    $this->assertCount(2, $tag->releaseEvents());
   }
 }

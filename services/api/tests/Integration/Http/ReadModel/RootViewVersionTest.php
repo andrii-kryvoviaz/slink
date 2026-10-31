@@ -17,19 +17,16 @@ use Slink\Image\Infrastructure\ReadModel\View\ImageView;
 use Slink\Notification\Domain\Enum\NotificationType;
 use Slink\Notification\Infrastructure\ReadModel\View\NotificationView;
 use Slink\Share\Infrastructure\ReadModel\View\ShareView;
-use Slink\Shared\Infrastructure\DataMigration\DataMigrationRunner;
 use Slink\Tag\Infrastructure\ReadModel\View\TagView;
 use Slink\User\Application\Command\UpdateOAuthProvider\UpdateOAuthProviderCommand;
 use Slink\User\Infrastructure\ReadModel\View\OAuthProviderView;
 use Slink\User\Infrastructure\ReadModel\View\UserView;
-use Tests\Integration\Console\Boot\RunsBootCommand;
+use Tests\Integration\Console\Boot\RollsBackToPreviousRelease;
 use Tests\Integration\Http\HttpTestCase;
 
 #[Group('sc-1174')]
 final class RootViewVersionTest extends HttpTestCase {
-  use RunsBootCommand;
-
-  private const string LAST_MIGRATION_OF_PREVIOUS_RELEASE = 'Slink\\Shared\\Infrastructure\\Persistence\\Doctrine\\Migrations\\Version20260725154530';
+  use RollsBackToPreviousRelease;
 
   /** @var list<string> */
   private const array ROOT_TABLES = [
@@ -44,8 +41,6 @@ final class RootViewVersionTest extends HttpTestCase {
     'user',
   ];
 
-  private ?string $previousSchemaBackup = null;
-
   private string $ownerId = '';
   private string $ownerToken = '';
   private string $nonOwnerToken = '';
@@ -57,9 +52,7 @@ final class RootViewVersionTest extends HttpTestCase {
   private string $providerId = '';
 
   protected function tearDown(): void {
-    if ($this->previousSchemaBackup !== null) {
-      $this->restoreDatabaseFromBackup($this->previousSchemaBackup);
-    }
+    $this->restorePreviousReleaseBackup();
 
     parent::tearDown();
   }
@@ -267,8 +260,7 @@ final class RootViewVersionTest extends HttpTestCase {
     $this->seedOneRowPerRootTable();
     $rowsBeforeUpgrade = $this->rootRows();
 
-    $this->rollBackToPreviousRelease();
-    $this->bootApplicationOnPreviousReleaseDatabase();
+    $this->upgradeFromPreviousRelease();
 
     self::assertSame($rowsBeforeUpgrade, $this->rootRows());
 
@@ -284,8 +276,7 @@ final class RootViewVersionTest extends HttpTestCase {
   #[Test]
   public function rowsFromAPreviousReleaseKeepUpdatingThroughTheirProjections(): void {
     $this->seedOneRowPerRootTable();
-    $this->rollBackToPreviousRelease();
-    $this->bootApplicationOnPreviousReleaseDatabase();
+    $this->upgradeFromPreviousRelease();
 
     $this->captionImage($this->ownerToken, $this->imageId, 'caption after upgrade');
     self::assertSame(2, $this->versionOf(ImageView::class, $this->imageId));
@@ -320,8 +311,7 @@ final class RootViewVersionTest extends HttpTestCase {
   #[Test]
   public function requestsOverAPreviousReleaseDatabaseKeepSucceedingAfterBoot(): void {
     $this->seedOneRowPerRootTable();
-    $this->rollBackToPreviousRelease();
-    $this->bootApplicationOnPreviousReleaseDatabase();
+    $this->upgradeFromPreviousRelease();
 
     self::assertSame(200, $this->apiRequest('GET', \sprintf('/api/image/%s/detail', $this->imageId), $this->ownerToken));
     self::assertSame(200, $this->apiRequest('GET', \sprintf('/api/image/%s/comments', $this->imageId), $this->ownerToken));
@@ -482,64 +472,11 @@ final class RootViewVersionTest extends HttpTestCase {
     $this->providerId = $this->createOAuthProvider('version-sso');
   }
 
-  private function rollBackToPreviousRelease(): void {
-    $this->entityManager()->clear();
-    $database = $this->databasePath();
-    $this->previousSchemaBackup = $database . '.before-version-rollback';
-    \copy($database, $this->previousSchemaBackup);
+  private function upgradeFromPreviousRelease(): void {
+    $this->rollBackToPreviousRelease();
+    $this->bootApplicationOnPreviousReleaseDatabase();
 
-    foreach ($this->tablesWithVersionColumn() as $table) {
-      $this->connection()->executeStatement(\sprintf('ALTER TABLE "%s" DROP COLUMN version', $table));
-    }
-
-    $this->connection()->executeStatement(
-      <<<'SQL'
-        DELETE FROM doctrine_migration_versions
-        WHERE version = (SELECT MIN(version) FROM doctrine_migration_versions WHERE version > ?)
-        SQL,
-      [self::LAST_MIGRATION_OF_PREVIOUS_RELEASE],
-    );
-  }
-
-  private function bootApplicationOnPreviousReleaseDatabase(): void {
-    $dataMigrations = $this->createStub(DataMigrationRunner::class);
-    $dataMigrations->method('getPending')->willReturn([]);
-    static::getContainer()->set(DataMigrationRunner::class, $dataMigrations);
-
-    [$status, $output] = $this->bootResult();
-
-    self::assertSame(0, $status, $output);
     self::assertSame(self::ROOT_TABLES, $this->tablesWithVersionColumn());
-  }
-
-  private function restoreDatabaseFromBackup(string $backup): void {
-    $database = $this->databasePath();
-    $this->connection()->close();
-    \rename($backup, $database);
-  }
-
-  private function databasePath(): string {
-    $path = $this->connection()->getParams()['path'] ?? null;
-    self::assertIsString($path);
-
-    return $path;
-  }
-
-  /**
-   * @return list<string>
-   */
-  private function tablesWithVersionColumn(): array {
-    /** @var list<string> $tables */
-    $tables = $this->connection()->fetchFirstColumn(
-      <<<'SQL'
-        SELECT t.name
-        FROM sqlite_master t, pragma_table_info(t.name) c
-        WHERE t.type = 'table' AND c.name = 'version' AND t.name NOT LIKE 'doctrine_migration%'
-        ORDER BY t.name
-        SQL,
-    );
-
-    return $tables;
   }
 
   /**
