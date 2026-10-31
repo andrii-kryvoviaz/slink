@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Slink\Settings\Domain;
 
-use EventSauce\EventSourcing\AggregateRootId;
-use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
 use Slink\Settings\Domain\Event\SettingsChanged;
 use Slink\Settings\Domain\Exception\InvalidSettingsException;
 use Slink\Settings\Domain\ValueObject\AbstractSettingsValueObject;
@@ -148,35 +146,5 @@ final class Settings extends AbstractAggregateRoot {
   public function applySettingsChanged(SettingsChanged $event): void {
     $categoryKey = $event->category->getCategoryKey();
     $this->{$categoryKey} = $event->settings;
-  }
-
-  /**
-   * @return array<string, mixed>
-   */
-  protected function createSnapshotState(): array {
-    return [
-      'storage' => $this->storage?->toPayload(),
-      'user' => $this->user?->toPayload(),
-      'image' => $this->image?->toPayload(),
-      'access' => $this->access?->toPayload(),
-      'share' => $this->share?->toPayload(),
-      'customization' => $this->customization?->toPayload(),
-    ];
-  }
-
-  /**
-   * @param array<string, mixed> $state
-   */
-  protected static function reconstituteFromSnapshotState(AggregateRootId $id, $state): AggregateRootWithSnapshotting {
-    $settings = new static();
-
-    $settings->storage = isset($state['storage']) ? StorageSettings::fromPayload($state['storage']) : null;
-    $settings->user = isset($state['user']) ? UserSettings::fromPayload($state['user']) : null;
-    $settings->image = isset($state['image']) ? ImageSettings::fromPayload($state['image']) : null;
-    $settings->access = isset($state['access']) ? AccessSettings::fromPayload($state['access']) : null;
-    $settings->share = isset($state['share']) ? ShareSettings::fromPayload($state['share']) : null;
-    $settings->customization = isset($state['customization']) ? CustomizationSettings::fromPayload($state['customization']) : null;
-
-    return $settings;
   }
 }

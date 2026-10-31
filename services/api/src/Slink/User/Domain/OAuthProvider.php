@@ -4,14 +4,11 @@ declare(strict_types=1);
 
 namespace Slink\User\Domain;
 
-use EventSauce\EventSourcing\AggregateRootId;
-use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
 use Slink\Shared\Domain\AbstractAggregateRoot;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Domain\Event\OAuthProvider\OAuthProviderWasCreated;
 use Slink\User\Domain\Event\OAuthProvider\OAuthProviderWasUpdated;
 use Slink\User\Domain\Event\OAuthProvider\OAuthProviderWasRemoved;
-use Slink\Shared\Infrastructure\Encryption\EncryptionRegistry;
 use Slink\User\Domain\Enum\ApprovalPolicy;
 use Slink\User\Domain\Enum\RegistrationPolicy;
 use Slink\User\Domain\ValueObject\OAuth\ClientId;
@@ -154,45 +151,5 @@ final class OAuthProvider extends AbstractAggregateRoot {
   }
 
   public function applyOAuthProviderWasRemoved(OAuthProviderWasRemoved $event): void {
-  }
-
-  /**
-   * @return array<string, mixed>
-   */
-  protected function createSnapshotState(): array {
-    return [
-      'name' => $this->name->toString(),
-      'slug' => $this->slug->toString(),
-      'type' => $this->type->toString(),
-      'clientId' => EncryptionRegistry::encrypt($this->clientId->toString()),
-      'clientSecret' => EncryptionRegistry::encrypt($this->clientSecret->toString()),
-      'discoveryUrl' => $this->discoveryUrl->toString(),
-      'scopes' => $this->scopes->toString(),
-      'enabled' => $this->enabled,
-      'sortOrder' => $this->sortOrder,
-      'registrationPolicy' => $this->registrationPolicy->value,
-      'approvalPolicy' => $this->approvalPolicy->value,
-    ];
-  }
-
-  /**
-   * @param array<string, mixed> $state
-   */
-  protected static function reconstituteFromSnapshotState(AggregateRootId $id, $state): AggregateRootWithSnapshotting {
-    $provider = new static(ID::fromString($id->toString()));
-
-    $provider->name = ProviderName::fromString($state['name']);
-    $provider->slug = ProviderSlug::fromString($state['slug']);
-    $provider->type = OAuthType::fromString($state['type']);
-    $provider->clientId = ClientId::fromString(EncryptionRegistry::decrypt($state['clientId']));
-    $provider->clientSecret = ClientSecret::fromString(EncryptionRegistry::decrypt($state['clientSecret']));
-    $provider->discoveryUrl = DiscoveryUrl::fromString($state['discoveryUrl']);
-    $provider->scopes = OAuthScopes::fromString($state['scopes']);
-    $provider->enabled = $state['enabled'];
-    $provider->sortOrder = $state['sortOrder'] ?? 0.0;
-    $provider->registrationPolicy = RegistrationPolicy::from($state['registrationPolicy'] ?? 'inherit');
-    $provider->approvalPolicy = ApprovalPolicy::from($state['approvalPolicy'] ?? 'inherit');
-
-    return $provider;
   }
 }

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Slink\User\Domain;
 
-use EventSauce\EventSourcing\AggregateRootId;
-use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
 use Slink\Shared\Domain\AbstractAggregateRoot;
 use Slink\Shared\Domain\Exception\Date\DateTimeException;
 use Slink\Shared\Domain\Exception\InvalidArgumentException;
@@ -505,45 +503,5 @@ final class User extends AbstractAggregateRoot implements UserInterface {
     $this->recordThat(new OAuthAccountWasUnlinked(
       $this->aggregateRootId(), $linkId, $provider, $sub,
     ));
-  }
-
-  /**
-   * @return array<string, mixed>
-   */
-  protected function createSnapshotState(): array {
-    return [
-      'email' => $this->email?->toString(),
-      'username' => $this->username?->toString(),
-      'displayName' => $this->displayName->toString(),
-      'hashedPassword' => $this->hashedPassword->toString(),
-      'status' => $this->status->value,
-      'roles' => $this->roles->toArray(),
-      'linkedOAuthSubjects' => $this->linkedOAuthSubjects->toArray(),
-      'preferences' => $this->preferences->toPayload(),
-    ];
-  }
-
-  /**
-   * @param array<string, mixed> $state
-   */
-  protected static function reconstituteFromSnapshotState(AggregateRootId $id, $state): AggregateRootWithSnapshotting {
-    $user = new static(ID::fromString($id->toString()));
-
-    $user->email = Email::fromStringOrNull($state['email']);
-    $user->username = $state['username'] === null ? null : Username::fromString($state['username']);
-    $user->displayName = DisplayName::fromString($state['displayName']);
-    $user->hashedPassword = HashedPassword::fromHash($state['hashedPassword']);
-    $user->status = UserStatus::from($state['status']);
-
-    $roles = array_map(fn(string $roleString) => Role::fromString($roleString), $state['roles']);
-    $user->roles = RoleSet::create($roles);
-    
-    $user->linkedOAuthSubjects = OAuthSubjectSet::fromArray($state['linkedOAuthSubjects'] ?? []);
-
-    $user->preferences = isset($state['preferences'])
-      ? UserPreferences::fromPayload($state['preferences'])
-      : UserPreferences::empty();
-
-    return $user;
   }
 }

@@ -1,6 +1,5 @@
 parameters:
   event_sauce.table_name: 'event_store'
-  event_sauce.snapshot_frequency: 50
 
 services:
   EventSauce\EventSourcing\Serialization\MessageSerializer:
@@ -35,10 +34,3 @@ services:
 
   EventSauce\EventSourcing\MessageDispatcher:
     alias: Slink\Shared\Infrastructure\MessageBus\Event\EventDispatcher
-
-  event_sauce.snapshot_repository:
-    class: Slink\Shared\Infrastructure\Persistence\EventStore\Repository\DoctrineSnapshotRepository
-    arguments:
-      $entityManager: '@doctrine.orm.event_store_entity_manager'
-
-  EventSauce\EventSourcing\Snapshotting\SnapshotRepository: '@event_sauce.snapshot_repository'

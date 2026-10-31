@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Slink\Notification\Domain;
 
-use EventSauce\EventSourcing\AggregateRootId;
-use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
 use Slink\Notification\Domain\Enum\NotificationType;
 use Slink\Notification\Domain\Event\NotificationWasCreated;
 use Slink\Notification\Domain\Event\NotificationWasRead;
@@ -114,42 +112,5 @@ final class Notification extends AbstractAggregateRoot {
 
   public function isRead(): bool {
     return $this->readAt !== null;
-  }
-
-  /**
-   * @return array<string, mixed>
-   */
-  protected function createSnapshotState(): array {
-    return [
-      'userId' => $this->userId->toString(),
-      'type' => $this->type->value,
-      'referenceId' => $this->referenceId->toString(),
-      'relatedCommentId' => $this->relatedCommentId?->toString(),
-      'actorId' => $this->actorId?->toString(),
-      'createdAt' => $this->createdAt->toString(),
-      'readAt' => $this->readAt?->toString(),
-    ];
-  }
-
-  /**
-   * @param array<string, mixed> $state
-   */
-  protected static function reconstituteFromSnapshotState(AggregateRootId $id, mixed $state): AggregateRootWithSnapshotting {
-    $notification = new self(ID::fromString($id->toString()));
-    $notification->userId = ID::fromString($state['userId']);
-    $notification->type = NotificationType::from($state['type']);
-    $notification->referenceId = ID::fromString($state['referenceId']);
-    $notification->relatedCommentId = isset($state['relatedCommentId'])
-      ? ID::fromString($state['relatedCommentId'])
-      : null;
-    $notification->actorId = isset($state['actorId'])
-      ? ID::fromString($state['actorId'])
-      : null;
-    $notification->createdAt = DateTime::fromString($state['createdAt']);
-    $notification->readAt = isset($state['readAt'])
-      ? DateTime::fromString($state['readAt'])
-      : null;
-
-    return $notification;
   }
 }

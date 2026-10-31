@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Slink\Comment\Domain;
 
-use EventSauce\EventSourcing\AggregateRootId;
-use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
 use Slink\Comment\Domain\Event\CommentWasCreated;
 use Slink\Comment\Domain\Event\CommentWasDeleted;
 use Slink\Comment\Domain\Event\CommentWasEdited;
@@ -139,42 +137,5 @@ final class Comment extends AbstractAggregateRoot {
 
   public function isOwnedBy(ID $userId): bool {
     return $this->userId->equals($userId);
-  }
-
-  /**
-   * @return array<string, mixed>
-   */
-  protected function createSnapshotState(): array {
-    return [
-      'imageId' => $this->imageId->toString(),
-      'userId' => $this->userId->toString(),
-      'referencedCommentId' => $this->referencedCommentId?->toString(),
-      'content' => $this->content->toString(),
-      'createdAt' => $this->createdAt->toString(),
-      'updatedAt' => $this->updatedAt?->toString(),
-      'deletedAt' => $this->deletedAt?->toString(),
-    ];
-  }
-
-  /**
-   * @param array<string, mixed> $state
-   */
-  protected static function reconstituteFromSnapshotState(AggregateRootId $id, mixed $state): AggregateRootWithSnapshotting {
-    $comment = new self(ID::fromString($id->toString()));
-    $comment->imageId = ID::fromString($state['imageId']);
-    $comment->userId = ID::fromString($state['userId']);
-    $comment->referencedCommentId = isset($state['referencedCommentId'])
-      ? ID::fromString($state['referencedCommentId'])
-      : null;
-    $comment->content = CommentContent::fromString($state['content']);
-    $comment->createdAt = DateTime::fromString($state['createdAt']);
-    $comment->updatedAt = isset($state['updatedAt'])
-      ? DateTime::fromString($state['updatedAt'])
-      : null;
-    $comment->deletedAt = isset($state['deletedAt'])
-      ? DateTime::fromString($state['deletedAt'])
-      : null;
-
-    return $comment;
   }
 }

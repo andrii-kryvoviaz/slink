@@ -161,11 +161,11 @@ final class CollectionStoreUpgradeTest extends HttpTestCase {
   }
 
   #[Test]
-  public function viewBackedCollectionsAndReplayedUsersWorkSideBySideAfterBoot(): void {
+  public function viewBackedCollectionsAndUsersWorkSideBySideAfterBoot(): void {
     $streamBeforeRename = $this->loggedEvents(ID::fromString($this->ownerId));
 
     self::assertSame(204, $this->updateDisplayName($this->ownerToken, 'Renamed Owner'));
-    self::assertGreaterThan($streamBeforeRename, $this->loggedEvents(ID::fromString($this->ownerId)));
+    self::assertSame($streamBeforeRename, $this->loggedEvents(ID::fromString($this->ownerId)));
 
     $newCollectionId = $this->createCollection($this->ownerToken);
 

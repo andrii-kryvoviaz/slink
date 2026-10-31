@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Slink\Tag\Domain;
 
-use EventSauce\EventSourcing\AggregateRootId;
-use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
 use Slink\Shared\Domain\AbstractAggregateRoot;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
@@ -116,35 +114,5 @@ final class Tag extends AbstractAggregateRoot {
 
   public function getUpdatedAt(): ?DateTime {
     return $this->updatedAt;
-  }
-
-  /**
-   * @return array<string, mixed>
-   */
-  protected function createSnapshotState(): array {
-    return [
-      'userId' => $this->userId->toString(),
-      'name' => $this->name->toPayload(),
-      'path' => ($this->path?->toPayload()) ?? ['value' => '#'],
-      'parentId' => $this->parentId?->toString(),
-      'createdAt' => $this->createdAt?->toString(),
-      'updatedAt' => $this->updatedAt?->toString(),
-    ];
-  }
-
-  /**
-   * @param array<string, mixed> $state
-   */
-  protected static function reconstituteFromSnapshotState(AggregateRootId $id, $state): AggregateRootWithSnapshotting {
-    $tag = new static($id);
-
-    $tag->userId = ID::fromString($state['userId']);
-    $tag->name = TagName::fromPayload($state['name']);
-    $tag->path = TagPath::fromPayload($state['path']);
-    $tag->parentId = $state['parentId'] ? ID::fromString($state['parentId']) : null;
-    $tag->createdAt = isset($state['createdAt']) ? DateTime::fromString($state['createdAt']) : null;
-    $tag->updatedAt = isset($state['updatedAt']) ? DateTime::fromString($state['updatedAt']) : null;
-
-    return $tag;
   }
 }

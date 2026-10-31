@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Slink\Shared\Domain;
 
-use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
-use EventSauce\EventSourcing\Snapshotting\SnapshottingBehaviour;
 use EventSauce\EventSourcing\AggregateRoot;
 use EventSauce\EventSourcing\AggregateRootId;
 use EventSauce\EventSourcing\EventSourcedAggregate;
@@ -15,9 +13,7 @@ use Slink\Shared\Infrastructure\EventSourcing\AggregateRootWithAggregates;
 /**
  * @implements AggregateRoot<ID>
  */
-abstract class AbstractAggregateRoot implements AggregateRoot, AggregateRootWithSnapshotting {
-  use SnapshottingBehaviour;
-
+abstract class AbstractAggregateRoot implements AggregateRoot {
   use AggregateRootWithAggregates {
     AggregateRootWithAggregates::registerAggregate as registerAggregateInstance;
   }

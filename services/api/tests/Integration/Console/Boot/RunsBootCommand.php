@@ -6,8 +6,8 @@ namespace Tests\Integration\Console\Boot;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Slink\Shared\Application\Boot\Step\EventStoreSchemaStep;
-use Slink\Shared\Application\Boot\SubCommandRunner;
 use Slink\Shared\Application\Service\ProjectMetadataExtractor;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -23,11 +23,11 @@ trait RunsBootCommand {
 
   /** @return array{int, string} */
   private function bootResult(): array {
-    $runner = static::getContainer()->get(SubCommandRunner::class);
-    self::assertInstanceOf(SubCommandRunner::class, $runner);
+    $registry = static::getContainer()->get('doctrine');
+    self::assertInstanceOf(ManagerRegistry::class, $registry);
     $path = $this->connection()->getParams()['path'] ?? null;
     self::assertIsString($path);
-    static::getContainer()->set(EventStoreSchemaStep::class, new EventStoreSchemaStep($runner, $path . '.es_migrations.yaml'));
+    static::getContainer()->set(EventStoreSchemaStep::class, new EventStoreSchemaStep($registry, $path . '.es_migrations.yaml'));
     $metadata = $this->createStub(ProjectMetadataExtractor::class);
     $metadata->method('version')->willReturn('test');
     static::getContainer()->set(ProjectMetadataExtractor::class, $metadata);

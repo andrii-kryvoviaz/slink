@@ -236,24 +236,6 @@ final class CollectionTest extends TestCase {
   }
 
   #[Test]
-  public function itCreatesSnapshot(): void {
-    $collection = $this->createCollection();
-    $collection->addItem(ID::generate(), ItemType::Image);
-    
-    $snapshot = $collection->createSnapshot();
-    
-    $this->assertEquals(2, $snapshot->aggregateRootVersion());
-  }
-
-  #[Test]
-  #[Group('sc-1178')]
-  public function itLeavesTheDeletedFlagOutOfTheSnapshotState(): void {
-    $collection = $this->createCollection();
-
-    $this->assertArrayNotHasKey('deleted', $collection->createSnapshot()->state());
-  }
-
-  #[Test]
   #[Group('sc-1178')]
   public function itHydratesEveryFieldFromItsViews(): void {
     $id = ID::generate();

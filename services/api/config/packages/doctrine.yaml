@@ -28,12 +28,6 @@ doctrine:
     controller_resolver:
       auto_mapping: false
     entity_managers:
-      event_store:
-        connection: event_store
-        mappings:
-          Snapshot:
-            dir: '%kernel.project_dir%/src/Slink/Shared/Infrastructure/Persistence/EventStore/Entity'
-            prefix: 'Slink\Shared\Infrastructure\Persistence\EventStore\Entity'
       read_model:
         connection: read_model
         validate_xml_mapping: true

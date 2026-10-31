@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Slink\Collection\Domain;
 
-use EventSauce\EventSourcing\AggregateRootId;
-use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
 use Slink\Collection\Domain\Enum\ItemType;
 use Slink\Collection\Domain\Event\CollectionItemsWereReordered;
 use Slink\Collection\Domain\Event\CollectionWasCreated;
@@ -186,31 +184,5 @@ final class Collection extends AbstractAggregateRoot implements OwnerAwareInterf
 
   public function isOwnedBy(?ID $userId): bool {
     return $this->userId->equals($userId);
-  }
-
-  /**
-   * @return array<string, mixed>
-   */
-  protected function createSnapshotState(): array {
-    return [
-      'userId' => $this->userId->toString(),
-      'name' => $this->name->toString(),
-      'description' => $this->description->toString(),
-      'items' => $this->items->toPayload(),
-      'createdAt' => $this->createdAt->toString(),
-      'updatedAt' => $this->updatedAt?->toString(),
-    ];
-  }
-
-  protected static function reconstituteFromSnapshotState(AggregateRootId $id, mixed $state): AggregateRootWithSnapshotting {
-    $collection = new self(ID::fromString($id->toString()));
-    $collection->userId = ID::fromString($state['userId']);
-    $collection->name = CollectionName::fromString($state['name']);
-    $collection->description = CollectionDescription::fromString($state['description']);
-    $collection->items = CollectionItemSet::fromPayload($state['items'] ?? []);
-    $collection->createdAt = DateTime::fromString($state['createdAt']);
-    $collection->updatedAt = isset($state['updatedAt']) ? DateTime::fromString($state['updatedAt']) : null;
-
-    return $collection;
   }
 }

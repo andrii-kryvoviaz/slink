@@ -275,13 +275,13 @@ final class TagStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
   }
 
   #[Test]
-  public function viewBackedTagsAndReplayedUsersWorkSideBySide(): void {
+  public function viewBackedTagsAndUsersWorkSideBySide(): void {
     $this->bootOwner();
 
     $tagId = $this->createRootTag('side-by-side');
 
     self::assertSame(0, $this->loggedEvents(ID::fromString($tagId)));
-    self::assertGreaterThan(0, $this->loggedEvents(ID::fromString($this->ownerId)));
+    self::assertSame(0, $this->loggedEvents(ID::fromString($this->ownerId)));
     self::assertSame('side-by-side', $this->reload(ID::fromString($tagId))->getName()->getValue());
 
     /** @var UserStoreRepositoryInterface $users */

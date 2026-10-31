@@ -5,9 +5,13 @@ declare(strict_types=1);
 namespace Tests\Integration\Http;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Slink\Collection\Domain\Enum\ItemType;
 use Slink\Collection\Domain\Repository\CollectionStoreRepositoryInterface;
 use Slink\Settings\Application\Command\SaveSettings\SaveSettingsCommand;
+use Slink\Shared\Application\Boot\BootContext;
+use Slink\Shared\Application\Boot\BootStatus;
+use Slink\Shared\Application\Boot\Step\EventStoreSchemaStep;
 use Slink\Shared\Application\Command\CommandBusInterface;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Application\Command\CreateOAuthProvider\CreateOAuthProviderCommand;
@@ -171,13 +175,14 @@ abstract class HttpTestCase extends WebTestCase {
       '--no-interaction' => true,
     ]);
 
-    self::runConsole([
-      'command' => 'doctrine:migrations:migrate',
-      '--no-interaction' => true,
-      '--allow-no-migration' => true,
-      '--em' => 'event_store',
-      '--configuration' => $eventStoreConfig,
-    ]);
+    $registry = self::getContainer()->get('doctrine');
+    \assert($registry instanceof ManagerRegistry);
+    $kernel = self::$kernel;
+    \assert($kernel !== null);
+    $result = new EventStoreSchemaStep($registry, $eventStoreConfig)->run(new BootContext(new Application($kernel)));
+    if ($result->status === BootStatus::Fail) {
+      throw new \RuntimeException('Event store migration failed: ' . $result->verboseOutput);
+    }
 
     self::ensureKernelShutdown();
     self::$schemaProvisioned = true;

@@ -70,7 +70,7 @@ trait RollsBackToPreviousRelease {
       <<<'SQL'
         SELECT t.name
         FROM sqlite_master t, pragma_table_info(t.name) c
-        WHERE t.type = 'table' AND c.name = 'version' AND t.name NOT LIKE 'doctrine_migration%'
+        WHERE t.type = 'table' AND c.name = 'version' AND t.name NOT LIKE '%migration%'
         ORDER BY t.name
         SQL,
     );

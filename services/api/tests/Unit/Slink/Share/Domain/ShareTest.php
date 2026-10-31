@@ -108,32 +108,6 @@ final class ShareTest extends TestCase {
   }
 
   #[Test]
-  public function itRoundTripsSnapshotWithExpirationAndPublication(): void {
-    $share = $this->createShare();
-    $expiresAt = DateTime::fromString('2099-12-31T23:59:59+00:00');
-    $share->setExpiration($expiresAt);
-    $share->releaseEvents();
-
-    $reflection = new \ReflectionClass($share);
-    $createMethod = $reflection->getMethod('createSnapshotState');
-
-    /** @var array<string, mixed> $snapshot */
-    $snapshot = $createMethod->invoke($share);
-
-    $this->assertArrayHasKey('accessControl', $snapshot);
-
-    $restoreMethod = $reflection->getMethod('reconstituteFromSnapshotState');
-    /** @var Share $restored */
-    $restored = $restoreMethod->invoke(null, $share->aggregateRootId(), $snapshot);
-
-    $this->assertEquals(
-      $expiresAt->toString(),
-      $restored->getExpiresAt()?->toString()
-    );
-    $this->assertSame($share->isPublished(), $restored->isPublished());
-  }
-
-  #[Test]
   public function itRecordsEventWhenSettingPassword(): void {
     $share = $this->createShare();
     $share->releaseEvents();
@@ -230,30 +204,6 @@ final class ShareTest extends TestCase {
     $this->assertArrayHasKey('passwordHash', $payload);
     $this->assertNotSame($plaintext, $payload['passwordHash']);
     $this->assertStringNotContainsString($plaintext, json_encode($payload, JSON_THROW_ON_ERROR));
-  }
-
-  #[Test]
-  public function itRoundTripsSnapshotWithPassword(): void {
-    $share = $this->createShare();
-    $share->setPassword('hunter2');
-    $original = $share->getPassword();
-    $this->assertNotNull($original);
-    $share->releaseEvents();
-
-    $reflection = new \ReflectionClass($share);
-    $createMethod = $reflection->getMethod('createSnapshotState');
-
-    /** @var array<string, mixed> $snapshot */
-    $snapshot = $createMethod->invoke($share);
-
-    $restoreMethod = $reflection->getMethod('reconstituteFromSnapshotState');
-    /** @var Share $restored */
-    $restored = $restoreMethod->invoke(null, $share->aggregateRootId(), $snapshot);
-
-    $restoredPassword = $restored->getPassword();
-    $this->assertNotNull($restoredPassword);
-    $this->assertSame($original->toString(), $restoredPassword->toString());
-    $this->assertTrue($restoredPassword->match('hunter2'));
   }
 
   #[Test]

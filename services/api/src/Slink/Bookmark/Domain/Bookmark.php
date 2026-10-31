@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Slink\Bookmark\Domain;
 
-use EventSauce\EventSourcing\AggregateRootId;
-use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
 use Slink\Bookmark\Domain\Context\BookmarkCreationContext;
 use Slink\Bookmark\Domain\Event\BookmarkWasCreated;
 use Slink\Bookmark\Domain\Event\BookmarkWasRemoved;
@@ -73,25 +71,5 @@ final class Bookmark extends AbstractAggregateRoot {
 
   public function getCreatedAt(): DateTime {
     return $this->createdAt;
-  }
-
-  /**
-   * @return array{imageId: string, userId: string, createdAt: string}
-   */
-  protected function createSnapshotState(): array {
-    return [
-      'imageId' => $this->imageId->toString(),
-      'userId' => $this->userId->toString(),
-      'createdAt' => $this->createdAt->toString(),
-    ];
-  }
-
-  protected static function reconstituteFromSnapshotState(AggregateRootId $id, mixed $state): AggregateRootWithSnapshotting {
-    $bookmark = new self(ID::fromString($id->toString()));
-    $bookmark->imageId = ID::fromString($state['imageId']);
-    $bookmark->userId = ID::fromString($state['userId']);
-    $bookmark->createdAt = DateTime::fromString($state['createdAt']);
-
-    return $bookmark;
   }
 }

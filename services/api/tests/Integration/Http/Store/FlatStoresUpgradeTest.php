@@ -172,14 +172,14 @@ final class FlatStoresUpgradeTest extends HttpTestCase {
   }
 
   #[Test]
-  public function viewBackedStoresAndReplayedUsersWorkSideBySideAfterBoot(): void {
+  public function everyStoreWorksSideBySideAfterBootWithoutLoggingEvents(): void {
     $owner = ID::fromString($this->ownerId);
     $streamBeforeRename = $this->loggedEvents($owner);
 
     self::assertSame(204, $this->updateDisplayName($this->ownerToken, 'Renamed Owner'));
     $newCommentId = $this->postComment($this->readerToken, $this->imageId, 'after the upgrade');
 
-    self::assertGreaterThan($streamBeforeRename, $this->loggedEvents($owner));
+    self::assertSame($streamBeforeRename, $this->loggedEvents($owner));
     self::assertSame(0, $this->loggedEvents(ID::fromString($newCommentId)));
   }
 

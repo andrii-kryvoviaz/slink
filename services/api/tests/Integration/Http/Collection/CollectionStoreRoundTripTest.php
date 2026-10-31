@@ -373,13 +373,13 @@ final class CollectionStoreRoundTripTest extends ViewBackedStoreRoundTripTestCas
   }
 
   #[Test]
-  public function viewBackedCollectionsAndReplayedUsersWorkSideBySide(): void {
+  public function viewBackedCollectionsAndUsersWorkSideBySide(): void {
     $this->bootOwner();
 
     $collectionId = $this->createCollection($this->ownerToken);
 
     self::assertSame(0, $this->loggedEvents(ID::fromString($collectionId)));
-    self::assertGreaterThan(0, $this->loggedEvents(ID::fromString($this->ownerId)));
+    self::assertSame(0, $this->loggedEvents(ID::fromString($this->ownerId)));
     self::assertSame('functional-collection', $this->reload(ID::fromString($collectionId))->getName()->toString());
 
     /** @var UserStoreRepositoryInterface $users */

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Slink\Image\Domain;
 
-use EventSauce\EventSourcing\AggregateRootId;
-use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
 use Slink\Image\Domain\Context\ImageCreationContext;
 use Slink\Image\Domain\Enum\License;
 use Slink\Image\Domain\Event\ImageAttributesWasUpdated;
@@ -316,33 +314,5 @@ final class Image extends AbstractAggregateRoot implements OwnerAwareInterface {
 
   public function applyImageTagsWereReassigned(ImageTagsWereReassigned $event): void {
     $this->tags = $event->tags;
-  }
-
-  /**
-   * @return array<string, mixed>
-   */
-  protected function createSnapshotState(): array {
-    return [
-      'userId' => $this->userId?->toString(),
-      'attributes' => $this->attributes->toPayload(),
-      'metadata' => $this->metadata->toPayload(),
-      'tags' => $this->tags->toPayload(),
-      'license' => $this->license?->value,
-    ];
-  }
-
-  /**
-   * @param array<string, mixed> $state
-   */
-  protected static function reconstituteFromSnapshotState(AggregateRootId $id, $state): AggregateRootWithSnapshotting {
-    $image = new static(ID::fromString($id->toString()));
-
-    $image->userId = $state['userId'] ? ID::fromString($state['userId']) : null;
-    $image->attributes = ImageAttributes::fromPayload($state['attributes']);
-    $image->metadata = ImageMetadata::fromPayload($state['metadata']);
-    $image->tags = TagSet::fromPayload($state['tags'] ?? ['tags' => []]);
-    $image->license = isset($state['license']) ? License::tryFrom($state['license']) : null;
-
-    return $image;
   }
 }

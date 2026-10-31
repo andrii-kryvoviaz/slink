@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Slink\Share\Domain;
 
-use EventSauce\EventSourcing\AggregateRootId;
-use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
 use Slink\Share\Domain\AccessRule\ExpirationAware;
 use Slink\Share\Domain\AccessRule\PasswordProtected;
 use Slink\Share\Domain\AccessRule\PublicationAware;
@@ -243,33 +241,5 @@ final class Share extends AbstractAggregateRoot implements PublicationAware, Exp
 
   public function getShortCode(): ?string {
     return $this->context->getShortCode();
-  }
-
-  /**
-   * @return array<string, mixed>
-   */
-  protected function createSnapshotState(): array {
-    return [
-      'shareable' => $this->shareable->toPayload(),
-      'targetUrl' => $this->targetPath->toString(),
-      'createdAt' => $this->createdAt->toString(),
-      'context' => $this->context->toPayload(),
-      'accessControl' => $this->accessControl->toPayload(),
-    ];
-  }
-
-  /**
-   * @param mixed $state
-   */
-  protected static function reconstituteFromSnapshotState(AggregateRootId $id, $state): AggregateRootWithSnapshotting {
-    $share = new self(ID::fromString($id->toString()));
-
-    $share->shareable = ShareableReference::fromPayload($state['shareable']);
-    $share->targetPath = TargetPath::fromString($state['targetUrl']);
-    $share->createdAt = DateTime::fromString($state['createdAt']);
-    $share->context = ShareContext::fromPayload($state['context'] ?? [], $share->shareable);
-    $share->accessControl = AccessControl::fromPayload($state['accessControl'] ?? []);
-
-    return $share;
   }
 }

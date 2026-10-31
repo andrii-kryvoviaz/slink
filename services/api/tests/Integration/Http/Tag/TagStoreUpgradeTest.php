@@ -84,7 +84,7 @@ final class TagStoreUpgradeTest extends HttpTestCase {
   }
 
   #[Test]
-  public function viewBackedTagsAndReplayedUsersWorkSideBySideAfterBoot(): void {
+  public function viewBackedTagsAndUsersWorkSideBySideAfterBoot(): void {
     $owner = ID::fromString($this->ownerId);
     $streamBeforeRename = $this->loggedEvents($owner);
 
@@ -93,7 +93,7 @@ final class TagStoreUpgradeTest extends HttpTestCase {
     self::assertSame(204, $this->updateDisplayName($this->ownerToken, 'Renamed Owner'));
     $newTagId = $this->createTag('after-upgrade');
 
-    self::assertGreaterThan($streamBeforeRename, $this->loggedEvents($owner));
+    self::assertSame($streamBeforeRename, $this->loggedEvents($owner));
     self::assertSame(0, $this->loggedEvents(ID::fromString($newTagId)));
   }
 
