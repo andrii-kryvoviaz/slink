@@ -267,7 +267,7 @@ final class ImageFeedDeliveryTest extends HttpTestCase {
     $this->consumeOne();
     $this->publisher->messages = [];
     $connection = $this->connection();
-    $connection->executeStatement('CREATE TRIGGER fail_second_feed_delete BEFORE DELETE ON image WHEN OLD.uuid = ' . $connection->quote($secondId) . " BEGIN SELECT RAISE(ABORT, 'injected nested delete failure'); END");
+    $connection->executeStatement('CREATE TRIGGER fail_second_feed_delete BEFORE DELETE ON image WHEN (SELECT COUNT(*) FROM image WHERE uuid IN (' . $connection->quote($firstId) . ', ' . $connection->quote($secondId) . ")) = 1 BEGIN SELECT RAISE(ABORT, 'injected nested delete failure'); END");
     if ($outerTransaction) {
       $connection->beginTransaction();
     }
@@ -291,12 +291,13 @@ final class ImageFeedDeliveryTest extends HttpTestCase {
       self::assertSame(0, $this->visiblePending());
       return;
     }
-    self::assertSame(0, (int) $connection->fetchOne('SELECT COUNT(*) FROM image WHERE uuid = ?', [$firstId]));
-    self::assertSame(1, (int) $connection->fetchOne('SELECT COUNT(*) FROM image WHERE uuid = ?', [$secondId]));
+    $remaining = $connection->fetchFirstColumn('SELECT uuid FROM image WHERE uuid IN (?, ?)', [$firstId, $secondId]);
+    $removed = array_values(array_diff([$firstId, $secondId], $remaining));
+    self::assertCount(1, $removed);
     self::assertSame(1, $this->visiblePending());
     $this->restartKernel();
     $this->consumeOne();
-    $this->assertPublished('image_removed', $firstId);
+    $this->assertPublished('image_removed', $removed[0]);
   }
 
   /** @return array<string, array{bool}> */
