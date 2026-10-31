@@ -4,24 +4,47 @@ declare(strict_types=1);
 
 namespace Slink\Image\Infrastructure\Repository;
 
+use EventSauce\EventSourcing\MessageDispatcher;
 use Slink\Image\Domain\Image;
+use Slink\Image\Domain\Repository\ImageRepositoryInterface;
 use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
+use Slink\Image\Infrastructure\ReadModel\View\ImageView;
 use Slink\Shared\Domain\ValueObject\ID;
-use Slink\Shared\Infrastructure\Persistence\EventStore\AbstractSnapshotStoreRepository;
+use Slink\Shared\Infrastructure\Persistence\EventStore\AbstractViewBackedStore;
+use Slink\Tag\Infrastructure\ReadModel\View\TagView;
 
-final class ImageStore extends AbstractSnapshotStoreRepository implements ImageStoreRepositoryInterface {
+/**
+ * @extends AbstractViewBackedStore<Image, ImageView>
+ */
+final class ImageStore extends AbstractViewBackedStore implements ImageStoreRepositoryInterface {
+  public function __construct(
+    MessageDispatcher $messageDispatcher,
+    private readonly ImageRepositoryInterface $imageRepository,
+  ) {
+    parent::__construct($messageDispatcher);
+  }
+
   protected static function getAggregateRootClass(): string {
     return Image::class;
   }
-  
-  public function get(ID $id): Image {
-    $image = $this->retrieve($id);
-    if (!$image instanceof Image) {
-      throw new \RuntimeException('Expected instance of Image, got ' . get_class($image));
-    }
-    return $image;
+
+  protected function findRootView(ID $id): object {
+    return $this->imageRepository->oneById($id->toString());
   }
-  
+
+  protected function hydrate(object $view): object {
+    $tagIds = array_map(
+      static fn(TagView $tag): ID => ID::fromString($tag->getUuid()),
+      $view->getTags()->toArray(),
+    );
+
+    return Image::fromView($view, $tagIds, $view->getLicense());
+  }
+
+  public function get(ID $id): Image {
+    return $this->retrieve($id);
+  }
+
   public function store(Image $image): void {
     $this->persist($image);
   }

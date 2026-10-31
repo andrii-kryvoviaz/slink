@@ -12,7 +12,6 @@ use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
 use Slink\Shared\Application\Command\CommandHandlerInterface;
 use Slink\Shared\Domain\Exception\ForbiddenException;
 use Slink\Shared\Domain\ValueObject\ID;
-use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
@@ -40,10 +39,6 @@ final readonly class AddItemToCollectionHandler implements CommandHandlerInterfa
 
       $itemId = ID::fromString($command->getItemId());
       $image = $this->imageStore->get($itemId);
-
-      if (!$image->aggregateRootVersion()) {
-        throw new NotFoundException();
-      }
 
       if (!$this->access->isGranted(ImageAccess::Edit, $image)) {
         throw new ForbiddenException();

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Slink\Collection\Application\Command\AddItemToCollection;
 
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
@@ -26,18 +27,23 @@ use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Lock\Store\InMemoryStore;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
+#[Group('sc-1179')]
 final class AddItemToCollectionHandlerTest extends TestCase {
 
   private function createLockFactory(): LockFactory {
     return new LockFactory(new InMemoryStore());
   }
 
-  private function createImageStore(int $imageVersion = 1): ImageStoreRepositoryInterface&Stub {
-    $image = $this->createStub(Image::class);
-    $image->method('aggregateRootVersion')->willReturn($imageVersion);
-
+  private function createImageStore(): ImageStoreRepositoryInterface&Stub {
     $imageStore = $this->createStub(ImageStoreRepositoryInterface::class);
-    $imageStore->method('get')->willReturn($image);
+    $imageStore->method('get')->willReturn($this->createStub(Image::class));
+
+    return $imageStore;
+  }
+
+  private function createMissingImageStore(): ImageStoreRepositoryInterface&Stub {
+    $imageStore = $this->createStub(ImageStoreRepositoryInterface::class);
+    $imageStore->method('get')->willThrowException(new NotFoundException());
 
     return $imageStore;
   }
@@ -185,7 +191,7 @@ final class AddItemToCollectionHandlerTest extends TestCase {
 
     $handler = new AddItemToCollectionHandler(
       $collectionStore,
-      $this->createImageStore(0),
+      $this->createMissingImageStore(),
       $this->createAccess(true, true),
       $this->createLockFactory(),
     );

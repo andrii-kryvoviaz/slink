@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Slink\Image\Application\Service\Upload\Stage;
 
+use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
@@ -77,7 +78,7 @@ class CommitUploadStageTest extends TestCase {
       $calls[] = 'collections';
     });
 
-    $stage = new CommitUploadStage($creationContext, $tagAssigner, $storage, $imageRepository, $collectionAssigner);
+    $stage = new CommitUploadStage($creationContext, $tagAssigner, $storage, $imageRepository, $collectionAssigner, $this->createStub(EntityManagerInterface::class));
 
     $stage->process($this->describedContext());
 
@@ -108,7 +109,7 @@ class CommitUploadStageTest extends TestCase {
     $collectionAssigner = $this->createMock(CollectionMembershipAssigner::class);
     $collectionAssigner->expects($this->never())->method('assign');
 
-    $stage = new CommitUploadStage($creationContext, $tagAssigner, $storage, $imageRepository, $collectionAssigner);
+    $stage = new CommitUploadStage($creationContext, $tagAssigner, $storage, $imageRepository, $collectionAssigner, $this->createStub(EntityManagerInterface::class));
 
     $this->expectException(UnauthorizedTagAccessException::class);
 
@@ -135,7 +136,7 @@ class CommitUploadStageTest extends TestCase {
     $collectionAssigner = $this->createMock(CollectionMembershipAssigner::class);
     $collectionAssigner->expects($this->never())->method('assign');
 
-    $stage = new CommitUploadStage($creationContext, $tagAssigner, $storage, $imageRepository, $collectionAssigner);
+    $stage = new CommitUploadStage($creationContext, $tagAssigner, $storage, $imageRepository, $collectionAssigner, $this->createStub(EntityManagerInterface::class));
 
     $this->expectException(\RuntimeException::class);
 
@@ -167,7 +168,7 @@ class CommitUploadStageTest extends TestCase {
     $collectionAssigner = $this->createMock(CollectionMembershipAssigner::class);
     $collectionAssigner->expects($this->never())->method('assign');
 
-    $stage = new CommitUploadStage($creationContext, $tagAssigner, $storage, $imageRepository, $collectionAssigner);
+    $stage = new CommitUploadStage($creationContext, $tagAssigner, $storage, $imageRepository, $collectionAssigner, $this->createStub(EntityManagerInterface::class));
 
     $this->expectException(DuplicateImageException::class);
 

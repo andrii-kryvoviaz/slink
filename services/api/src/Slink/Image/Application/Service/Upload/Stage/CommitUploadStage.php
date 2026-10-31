@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Slink\Image\Application\Service\Upload\Stage;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Slink\Image\Application\Service\CollectionMembershipAssigner;
 use Slink\Image\Application\Service\ImageTagAssigner;
 use Slink\Image\Application\Service\Upload\UploadContext;
@@ -23,6 +24,7 @@ final readonly class CommitUploadStage implements UploadStageInterface {
     private StorageInterface $storage,
     private ImageStoreRepositoryInterface $imageRepository,
     private CollectionMembershipAssigner $collectionAssigner,
+    private EntityManagerInterface $entityManager,
   ) {
   }
 
@@ -42,6 +44,7 @@ final readonly class CommitUploadStage implements UploadStageInterface {
     $this->storage->upload($context->file(), $context->fileName());
 
     $this->imageRepository->store($image);
+    $this->entityManager->flush();
 
     $this->collectionAssigner->assign($context->id(), $context->collectionIds(), $context->userId());
 

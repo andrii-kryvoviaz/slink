@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Slink\Image\Infrastructure\Persistence\EventStore;
 
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Image\Domain\Image;
@@ -15,6 +16,7 @@ use Slink\Shared\Domain\ValueObject\ID;
 final class ImageSnapshotTest extends TestCase {
 
   #[Test]
+  #[Group('sc-1179')]
   public function itCreatesSnapshotFromImage(): void {
     $imageId = ID::generate();
     $userId = ID::generate();
@@ -31,7 +33,7 @@ final class ImageSnapshotTest extends TestCase {
     $this->assertEquals($userId->toString(), $snapshot['userId']);
     $this->assertEquals($attributes->toPayload(), $snapshot['attributes']);
     $this->assertEquals($metadata->toPayload(), $snapshot['metadata']);
-    $this->assertFalse($snapshot['deleted']);
+    $this->assertArrayNotHasKey('deleted', $snapshot);
   }
 
   #[Test]
@@ -57,7 +59,6 @@ final class ImageSnapshotTest extends TestCase {
       'userId' => $userId->toString(),
       'attributes' => $attributesPayload,
       'metadata' => $metadataPayload,
-      'deleted' => false,
     ];
 
     $reflection = new \ReflectionClass(Image::class);
@@ -74,7 +75,6 @@ final class ImageSnapshotTest extends TestCase {
     $this->assertEquals('image/jpeg', $image->getMetadata()->getMimeType());
     $this->assertEquals(800, $image->getMetadata()->getWidth());
     $this->assertEquals(600, $image->getMetadata()->getHeight());
-    $this->assertFalse($image->isDeleted());
   }
 
   #[Test]
@@ -104,30 +104,6 @@ final class ImageSnapshotTest extends TestCase {
     $this->assertEquals($originalImage->getMetadata()->getMimeType(), $restoredImage->getMetadata()->getMimeType());
     $this->assertEquals($originalImage->getMetadata()->getWidth(), $restoredImage->getMetadata()->getWidth());
     $this->assertEquals($originalImage->getMetadata()->getHeight(), $restoredImage->getMetadata()->getHeight());
-    $this->assertEquals($originalImage->isDeleted(), $restoredImage->isDeleted());
-  }
-
-  #[Test]
-  public function itHandlesDeletedImageInSnapshot(): void {
-    $imageId = ID::generate();
-    $userId = ID::generate();
-    $attributes = ImageAttributes::create('deleted.jpg', 'Deleted image', true);
-    $metadata = new ImageMetadata(512, 'image/jpeg', 640, 480);
-
-    $image = Image::create($imageId, $userId, $attributes, $metadata);
-    $image->delete($userId);
-
-    $reflection = new \ReflectionClass($image);
-    $createMethod = $reflection->getMethod('createSnapshotState');
-
-    $snapshotState = $createMethod->invoke($image);
-    
-    $restoreMethod = $reflection->getMethod('reconstituteFromSnapshotState');
-
-    $restoredImage = $restoreMethod->invoke(null, $imageId, $snapshotState);
-
-    $this->assertTrue($restoredImage->isDeleted());
-    $this->assertEquals($image->aggregateRootId(), $restoredImage->aggregateRootId());
   }
 
   #[Test]

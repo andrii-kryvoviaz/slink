@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Slink\Image\Domain;
 
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Image\Domain\Context\ImageCreationContext;
+use Slink\Image\Domain\Event\ImageWasDeleted;
 use Slink\Image\Domain\Exception\DuplicateImageException;
 use Slink\Image\Domain\Image;
 use Slink\Image\Domain\Repository\ImageRepositoryInterface;
@@ -33,7 +35,6 @@ final class ImageTest extends TestCase {
     $this->assertEquals($userId, $image->getUserId());
     $this->assertEquals($attributes, $image->getAttributes());
     $this->assertEquals($metadata, $image->getMetadata());
-    $this->assertFalse($image->isDeleted());
   }
 
   #[Test]
@@ -63,7 +64,7 @@ final class ImageTest extends TestCase {
 
     $image->delete($userId);
 
-    $this->assertTrue($image->isDeleted());
+    $this->assertRecordedDeletion($image, false);
   }
 
   #[Test]
@@ -73,7 +74,7 @@ final class ImageTest extends TestCase {
 
     $image->delete($userId, true);
 
-    $this->assertTrue($image->isDeleted());
+    $this->assertRecordedDeletion($image, true);
   }
 
   #[Test]
@@ -301,6 +302,23 @@ final class ImageTest extends TestCase {
     $image->setUserId(null);
 
     $this->assertFalse($image->isOwnedBy(ID::generate()));
+  }
+
+  #[Test]
+  #[Group('sc-1179')]
+  public function itKeepsNoDeletedFlag(): void {
+    $image = new \ReflectionClass(Image::class);
+
+    $this->assertFalse($image->hasMethod('isDeleted'));
+    $this->assertFalse($image->hasProperty('deleted'));
+  }
+
+  private function assertRecordedDeletion(Image $image, bool $preserveOnDisk): void {
+    $events = $image->releaseEvents();
+    $event = \end($events);
+
+    $this->assertInstanceOf(ImageWasDeleted::class, $event);
+    $this->assertSame($preserveOnDisk, $event->preserveOnDisk);
   }
 
   private function createTestImage(

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Slink\Image\Application\Command\DeleteImage;
 
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
@@ -16,6 +17,7 @@ use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
+#[Group('sc-1179')]
 final class DeleteImageHandlerTest extends TestCase {
   /**
    * @throws Exception
@@ -27,7 +29,6 @@ final class DeleteImageHandlerTest extends TestCase {
     $command = new DeleteImageCommand(false);
 
     $image = $this->createMock(Image::class);
-    $image->method('aggregateRootVersion')->willReturn(1);
     $image->expects($this->once())->method('delete')->with($this->isInstanceOf(ID::class), false);
 
     $imageRepository = $this->createMock(ImageStoreRepositoryInterface::class);
@@ -47,7 +48,6 @@ final class DeleteImageHandlerTest extends TestCase {
     $command = new DeleteImageCommand(true);
 
     $image = $this->createMock(Image::class);
-    $image->method('aggregateRootVersion')->willReturn(1);
     $image->expects($this->once())->method('delete')->with($this->isInstanceOf(ID::class), true);
 
     $imageRepository = $this->createMock(ImageStoreRepositoryInterface::class);
@@ -68,30 +68,8 @@ final class DeleteImageHandlerTest extends TestCase {
     $userId = '123e4567-e89b-12d3-a456-426614174000';
     $command = new DeleteImageCommand(false);
 
-    $image = $this->createStub(Image::class);
-    $image->method('aggregateRootVersion')->willReturn(0);
-
     $imageRepository = $this->createStub(ImageStoreRepositoryInterface::class);
-    $imageRepository->method('get')->willReturn($image);
-
-    $access = $this->createStub(AuthorizationCheckerInterface::class);
-
-    $handler = new DeleteImageHandler($imageRepository, $access);
-    $handler($command, $userId, '123');
-  }
-
-  #[Test]
-  public function itThrowsNotFoundExceptionForDeletedImage(): void {
-    $this->expectException(NotFoundException::class);
-
-    $userId = '123e4567-e89b-12d3-a456-426614174000';
-    $command = new DeleteImageCommand(false);
-
-    $image = $this->createStub(Image::class);
-    $image->method('aggregateRootVersion')->willReturn(0);
-
-    $imageRepository = $this->createStub(ImageStoreRepositoryInterface::class);
-    $imageRepository->method('get')->willReturn($image);
+    $imageRepository->method('get')->willThrowException(new NotFoundException());
 
     $access = $this->createStub(AuthorizationCheckerInterface::class);
 
@@ -106,7 +84,6 @@ final class DeleteImageHandlerTest extends TestCase {
     $command = new DeleteImageCommand(false);
 
     $image = $this->createStub(Image::class);
-    $image->method('aggregateRootVersion')->willReturn(1);
 
     $imageRepository = $this->createStub(ImageStoreRepositoryInterface::class);
     $imageRepository->method('get')->willReturn($image);
@@ -126,7 +103,6 @@ final class DeleteImageHandlerTest extends TestCase {
     $command = new DeleteImageCommand(false);
 
     $image = $this->createStub(Image::class);
-    $image->method('aggregateRootVersion')->willReturn(1);
 
     $imageRepository = $this->createStub(ImageStoreRepositoryInterface::class);
     $imageRepository->method('get')->willReturn($image);
@@ -146,7 +122,6 @@ final class DeleteImageHandlerTest extends TestCase {
     $command = new DeleteImageCommand(false);
 
     $image = $this->createStub(Image::class);
-    $image->method('aggregateRootVersion')->willReturn(1);
 
     $imageRepository = $this->createStub(ImageStoreRepositoryInterface::class);
     $imageRepository->method('get')->willReturn($image);
