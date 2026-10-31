@@ -356,12 +356,4 @@ final class TagStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
   private function tagColumn(string $tagId, string $column): mixed {
     return $this->readModel()->fetchOne(\sprintf('SELECT %s FROM "tag" WHERE uuid = ?', $column), [$tagId]);
   }
-
-  private function secondsOf(mixed $timestamp): ?string {
-    if (!\is_string($timestamp)) {
-      return null;
-    }
-
-    return \substr($timestamp, 0, 19);
-  }
 }

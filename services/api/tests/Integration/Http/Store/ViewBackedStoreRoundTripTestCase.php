@@ -6,7 +6,6 @@ namespace Tests\Integration\Http\Store;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
-use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
@@ -17,8 +16,9 @@ use Tests\Integration\Http\HttpTestCase;
 /**
  * @template TAggregate of object
  */
-#[Group('sc-1175')]
 abstract class ViewBackedStoreRoundTripTestCase extends HttpTestCase {
+  use InspectsEventLog;
+
   /** @var list<KernelInterface> */
   private array $independentKernels = [];
 
@@ -41,6 +41,26 @@ abstract class ViewBackedStoreRoundTripTestCase extends HttpTestCase {
   abstract protected function storedState(ID $id): array;
 
   abstract protected function rootTable(): string;
+
+  protected function rootIdColumn(): string {
+    return 'uuid';
+  }
+
+  /**
+   * @param array<string, string> $server
+   */
+  #[\Override]
+  protected function apiRequest(
+    string $method,
+    string $path,
+    ?string $token = null,
+    array $server = [],
+    ?string $body = null,
+  ): int {
+    $this->entityManager()->clear();
+
+    return parent::apiRequest($method, $path, $token, $server, $body);
+  }
 
   protected function tearDown(): void {
     foreach ($this->independentKernels as $kernel) {
@@ -71,7 +91,7 @@ abstract class ViewBackedStoreRoundTripTestCase extends HttpTestCase {
   public function reloadingAfterTheRootRowIsDeletedThrowsNotFound(): void {
     $id = $this->createAggregate();
     $this->readModel()->executeStatement(
-      \sprintf('DELETE FROM "%s" WHERE uuid = ?', $this->rootTable()),
+      \sprintf('DELETE FROM "%s" WHERE %s = ?', $this->rootTable(), $this->rootIdColumn()),
       [$id->toString()],
     );
 
@@ -98,24 +118,6 @@ abstract class ViewBackedStoreRoundTripTestCase extends HttpTestCase {
 
   protected function readModel(): Connection {
     return $this->entityManager()->getConnection();
-  }
-
-  protected function loggedEvents(ID $id): int {
-    return $this->eventStoreRows('SELECT COUNT(*) FROM event_store WHERE aggregate_root_id = ?', $id);
-  }
-
-  protected function snapshots(ID $id): int {
-    return $this->eventStoreRows('SELECT COUNT(*) FROM snapshots WHERE aggregate_root_id = ?', $id);
-  }
-
-  /**
-   * @return array{event_store: int, snapshots: int}
-   */
-  protected function eventLogSize(): array {
-    return [
-      'event_store' => (int) $this->eventStore()->fetchOne('SELECT COUNT(*) FROM event_store'),
-      'snapshots' => (int) $this->eventStore()->fetchOne('SELECT COUNT(*) FROM snapshots'),
-    ];
   }
 
   protected function independentContainer(): ContainerInterface {
@@ -159,14 +161,11 @@ abstract class ViewBackedStoreRoundTripTestCase extends HttpTestCase {
     self::fail(\sprintf('Expected %s, got: %s', $expected, \implode(' <- ', $causes) ?: 'no failure'));
   }
 
-  private function eventStoreRows(string $sql, ID $id): int {
-    return (int) $this->eventStore()->fetchOne($sql, [$id->toString()]);
-  }
+  protected function secondsOf(mixed $timestamp): ?string {
+    if (!\is_string($timestamp)) {
+      return null;
+    }
 
-  private function eventStore(): Connection {
-    /** @var Connection $connection */
-    $connection = static::getContainer()->get('doctrine.dbal.event_store_connection');
-
-    return $connection;
+    return \substr($timestamp, 0, 19);
   }
 }

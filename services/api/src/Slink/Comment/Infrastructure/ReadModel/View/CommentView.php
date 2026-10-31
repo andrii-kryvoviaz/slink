@@ -86,6 +86,10 @@ class CommentView extends AbstractView {
     return $this->user;
   }
 
+  public function getAuthorId(): string {
+    return $this->user->getUuid();
+  }
+
   public function getUserId(): ?string {
     return $this->getUser()?->getUuid();
   }

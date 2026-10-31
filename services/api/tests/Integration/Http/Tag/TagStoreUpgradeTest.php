@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Integration\Http\Tag;
 
-use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -12,9 +11,11 @@ use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Tag\Domain\Repository\TagStoreRepositoryInterface;
 use Tests\Integration\Console\Boot\RollsBackToPreviousRelease;
 use Tests\Integration\Http\HttpTestCase;
+use Tests\Integration\Http\Store\InspectsEventLog;
 
 #[Group('sc-1175')]
 final class TagStoreUpgradeTest extends HttpTestCase {
+  use InspectsEventLog;
   use RollsBackToPreviousRelease;
 
   private string $ownerToken = '';
@@ -85,7 +86,7 @@ final class TagStoreUpgradeTest extends HttpTestCase {
 
   #[Test]
   public function viewBackedTagsAndReplayedCollectionsWorkSideBySideAfterBoot(): void {
-    $streamBeforeRename = $this->loggedEvents($this->collectionId);
+    $streamBeforeRename = $this->loggedEvents(ID::fromString($this->collectionId));
 
     self::assertSame(200, $this->apiRequest('GET', '/api/tags', $this->ownerToken));
     self::assertSame(200, $this->apiRequest('GET', \sprintf('/api/tags/%s', $this->childId), $this->ownerToken));
@@ -105,15 +106,8 @@ final class TagStoreUpgradeTest extends HttpTestCase {
       'renamed after upgrade',
       $this->connection()->fetchOne('SELECT name FROM "collection" WHERE uuid = ?', [$this->collectionId]),
     );
-    self::assertGreaterThan($streamBeforeRename, $this->loggedEvents($this->collectionId));
-    self::assertSame(0, $this->loggedEvents($newTagId));
-  }
-
-  private function loggedEvents(string $aggregateId): int {
-    return (int) $this->eventStore()->fetchOne(
-      'SELECT COUNT(*) FROM event_store WHERE aggregate_root_id = ?',
-      [$aggregateId],
-    );
+    self::assertGreaterThan($streamBeforeRename, $this->loggedEvents(ID::fromString($this->collectionId)));
+    self::assertSame(0, $this->loggedEvents(ID::fromString($newTagId)));
   }
 
   private function forgetEventStreams(): void {
@@ -122,13 +116,6 @@ final class TagStoreUpgradeTest extends HttpTestCase {
       $this->childId,
       $this->bucketId,
     ]);
-  }
-
-  private function eventStore(): Connection {
-    /** @var Connection $eventStore */
-    $eventStore = static::getContainer()->get('doctrine.dbal.event_store_connection');
-
-    return $eventStore;
   }
 
   private function createTag(string $name, ?string $parentId = null): string {

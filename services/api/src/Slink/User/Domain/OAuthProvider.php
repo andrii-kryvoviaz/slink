@@ -21,6 +21,7 @@ use Slink\User\Domain\ValueObject\OAuth\OAuthScopes;
 use Slink\User\Domain\ValueObject\OAuth\OAuthType;
 use Slink\User\Domain\ValueObject\OAuth\ProviderName;
 use Slink\User\Domain\ValueObject\OAuth\ProviderSlug;
+use Slink\User\Infrastructure\ReadModel\View\OAuthProviderView;
 
 final class OAuthProvider extends AbstractAggregateRoot {
   private ProviderName $name;
@@ -68,6 +69,23 @@ final class OAuthProvider extends AbstractAggregateRoot {
       $enabled,
       $sortOrder,
     ));
+
+    return $provider;
+  }
+
+  public static function fromView(OAuthProviderView $view): self {
+    $provider = new self(ID::fromString($view->getId()));
+    $provider->name = ProviderName::fromString($view->getName());
+    $provider->slug = $view->getSlug();
+    $provider->type = OAuthType::fromString($view->getType());
+    $provider->clientId = $view->getClientId();
+    $provider->clientSecret = $view->getClientSecret();
+    $provider->discoveryUrl = $view->getDiscoveryUrl();
+    $provider->scopes = $view->getScopes();
+    $provider->enabled = $view->isEnabled();
+    $provider->sortOrder = $view->getSortOrder();
+    $provider->registrationPolicy = $view->getRegistrationPolicy();
+    $provider->approvalPolicy = $view->getApprovalPolicy();
 
     return $provider;
   }

@@ -5,33 +5,41 @@ declare(strict_types=1);
 namespace Slink\Notification\Infrastructure\Repository;
 
 use EventSauce\EventSourcing\MessageDispatcher;
-use EventSauce\EventSourcing\MessageRepository;
 use Slink\Notification\Domain\Notification;
+use Slink\Notification\Domain\Repository\NotificationRepositoryInterface;
 use Slink\Notification\Domain\Repository\NotificationStoreRepositoryInterface;
+use Slink\Notification\Infrastructure\ReadModel\View\NotificationView;
 use Slink\Shared\Domain\ValueObject\ID;
-use Slink\Shared\Infrastructure\Persistence\EventStore\AbstractStoreRepository;
+use Slink\Shared\Infrastructure\Persistence\EventStore\AbstractViewBackedStore;
 
-final class NotificationStoreRepository extends AbstractStoreRepository implements NotificationStoreRepositoryInterface {
-  public static function getAggregateRootClass(): string {
+/**
+ * @extends AbstractViewBackedStore<Notification, NotificationView>
+ */
+final class NotificationStoreRepository extends AbstractViewBackedStore implements NotificationStoreRepositoryInterface {
+  public function __construct(
+    MessageDispatcher $messageDispatcher,
+    private readonly NotificationRepositoryInterface $notificationRepository,
+  ) {
+    parent::__construct($messageDispatcher);
+  }
+
+  protected static function getAggregateRootClass(): string {
     return Notification::class;
   }
 
-  public function __construct(
-    MessageRepository $messageRepository,
-    MessageDispatcher $messageDispatcher
-  ) {
-    parent::__construct($messageRepository, $messageDispatcher);
+  protected function findRootView(ID $id): object {
+    return $this->notificationRepository->oneById($id->toString());
+  }
+
+  protected function hydrate(object $view): object {
+    return Notification::fromView($view);
   }
 
   public function store(Notification $notification): void {
     $this->persist($notification);
   }
 
-  /**
-   * @return Notification
-   */
   public function get(ID $id): Notification {
-    /** @var Notification */
     return $this->retrieve($id);
   }
 }

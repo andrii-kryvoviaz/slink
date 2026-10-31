@@ -9,6 +9,7 @@ use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
 use Slink\Bookmark\Domain\Context\BookmarkCreationContext;
 use Slink\Bookmark\Domain\Event\BookmarkWasCreated;
 use Slink\Bookmark\Domain\Event\BookmarkWasRemoved;
+use Slink\Bookmark\Infrastructure\ReadModel\View\BookmarkView;
 use Slink\Shared\Domain\AbstractAggregateRoot;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
@@ -17,7 +18,6 @@ final class Bookmark extends AbstractAggregateRoot {
   private ID $imageId;
   private ID $userId;
   private DateTime $createdAt;
-  private bool $removed = false;
 
   public static function create(
     ID $id,
@@ -41,6 +41,15 @@ final class Bookmark extends AbstractAggregateRoot {
     return $bookmark;
   }
 
+  public static function fromView(BookmarkView $view): self {
+    $bookmark = new self(ID::fromString($view->getId()));
+    $bookmark->imageId = ID::fromString($view->getImageId());
+    $bookmark->userId = ID::fromString($view->getUserId());
+    $bookmark->createdAt = $view->getCreatedAt();
+
+    return $bookmark;
+  }
+
   public function remove(): void {
     $this->recordThat(new BookmarkWasRemoved(
       $this->aggregateRootId(),
@@ -52,10 +61,6 @@ final class Bookmark extends AbstractAggregateRoot {
     $this->imageId = $event->imageId;
     $this->userId = $event->userId;
     $this->createdAt = $event->createdAt;
-  }
-
-  public function applyBookmarkWasRemoved(BookmarkWasRemoved $event): void {
-    $this->removed = true;
   }
 
   public function getImageId(): ID {
@@ -70,19 +75,14 @@ final class Bookmark extends AbstractAggregateRoot {
     return $this->createdAt;
   }
 
-  public function isRemoved(): bool {
-    return $this->removed;
-  }
-
   /**
-   * @return array{imageId: string, userId: string, createdAt: string, removed: bool}
+   * @return array{imageId: string, userId: string, createdAt: string}
    */
   protected function createSnapshotState(): array {
     return [
       'imageId' => $this->imageId->toString(),
       'userId' => $this->userId->toString(),
       'createdAt' => $this->createdAt->toString(),
-      'removed' => $this->removed,
     ];
   }
 
@@ -91,7 +91,6 @@ final class Bookmark extends AbstractAggregateRoot {
     $bookmark->imageId = ID::fromString($state['imageId']);
     $bookmark->userId = ID::fromString($state['userId']);
     $bookmark->createdAt = DateTime::fromString($state['createdAt']);
-    $bookmark->removed = $state['removed'] ?? false;
 
     return $bookmark;
   }

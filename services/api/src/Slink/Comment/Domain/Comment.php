@@ -12,6 +12,7 @@ use Slink\Comment\Domain\Event\CommentWasEdited;
 use Slink\Comment\Domain\Exception\CommentEditWindowExpiredException;
 use Slink\Comment\Domain\Service\CommentEditPolicy;
 use Slink\Comment\Domain\ValueObject\CommentContent;
+use Slink\Comment\Infrastructure\ReadModel\View\CommentView;
 use Slink\Shared\Domain\AbstractAggregateRoot;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
@@ -43,6 +44,19 @@ final class Comment extends AbstractAggregateRoot {
       $content,
       $now,
     ));
+
+    return $comment;
+  }
+
+  public static function fromView(CommentView $view): self {
+    $comment = new self(ID::fromString($view->getId()));
+    $comment->imageId = ID::fromString($view->getImageId());
+    $comment->userId = ID::fromString($view->getAuthorId());
+    $comment->referencedCommentId = ID::fromUnknown($view->getReferencedComment()?->getId());
+    $comment->content = CommentContent::fromStored($view->getContent());
+    $comment->createdAt = $view->getCreatedAt();
+    $comment->updatedAt = $view->getUpdatedAt();
+    $comment->deletedAt = $view->getDeletedAt();
 
     return $comment;
   }

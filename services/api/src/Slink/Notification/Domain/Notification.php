@@ -9,6 +9,7 @@ use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
 use Slink\Notification\Domain\Enum\NotificationType;
 use Slink\Notification\Domain\Event\NotificationWasCreated;
 use Slink\Notification\Domain\Event\NotificationWasRead;
+use Slink\Notification\Infrastructure\ReadModel\View\NotificationView;
 use Slink\Shared\Domain\AbstractAggregateRoot;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
@@ -42,6 +43,19 @@ final class Notification extends AbstractAggregateRoot {
       $actorId,
       $now,
     ));
+
+    return $notification;
+  }
+
+  public static function fromView(NotificationView $view): self {
+    $notification = new self(ID::fromString($view->getId()));
+    $notification->userId = ID::fromString($view->getUserId());
+    $notification->type = $view->getType();
+    $notification->referenceId = ID::fromString($view->getReference()->getUuid());
+    $notification->relatedCommentId = ID::fromUnknown($view->getRelatedComment()?->getId());
+    $notification->actorId = ID::fromUnknown($view->getActor()?->getUuid());
+    $notification->createdAt = $view->getCreatedAt();
+    $notification->readAt = $view->getReadAt();
 
     return $notification;
   }
