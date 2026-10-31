@@ -4,9 +4,6 @@ imports:
 doctrine:
   dbal:
     connections:
-      event_store:
-        url: '%env(resolve:ES_DATABASE_URL)%'
-        profiling_collect_backtrace: '%kernel.debug%'
       read_model:
         url: '%env(resolve:DATABASE_URL)%'
         profiling_collect_backtrace: '%kernel.debug%'

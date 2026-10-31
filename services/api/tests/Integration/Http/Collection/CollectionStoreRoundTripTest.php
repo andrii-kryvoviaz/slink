@@ -100,10 +100,9 @@ final class CollectionStoreRoundTripTest extends ViewBackedStoreRoundTripTestCas
   }
 
   #[Test]
-  public function everyCollectionCommandUpdatesTheRowsAndAppendsNothing(): void {
+  public function everyCollectionCommandUpdatesTheRows(): void {
     $this->bootOwner();
     [$first, $second] = $this->uploadImages(2);
-    $logBefore = $this->eventLogSize();
 
     $collectionId = $this->createDescribedCollection('Commands', 'Before the rename');
     $this->addItem($collectionId, $first);
@@ -115,8 +114,6 @@ final class CollectionStoreRoundTripTest extends ViewBackedStoreRoundTripTestCas
     self::assertSame([$second], $this->storedItemIds($collectionId));
     self::assertSame(204, $this->deleteCollection($collectionId));
     self::assertSame(0, $this->countRowsByColumn('collection', 'uuid', $collectionId));
-
-    self::assertSame($logBefore, $this->eventLogSize());
   }
 
   #[Test]
@@ -161,7 +158,6 @@ final class CollectionStoreRoundTripTest extends ViewBackedStoreRoundTripTestCas
     self::assertSame('', $collection->getDescription()->toString());
     self::assertNull($collection->getUpdatedAt());
     self::assertSame(0, $collection->getItemCount());
-    self::assertSame(0, $this->loggedEvents(ID::fromString($collectionId)));
   }
 
   #[Test]
@@ -329,7 +325,7 @@ final class CollectionStoreRoundTripTest extends ViewBackedStoreRoundTripTestCas
   }
 
   #[Test]
-  public function purgingTheOwnerDeletesTheirCollectionWithoutAppendingForIt(): void {
+  public function purgingTheOwnerDeletesTheirCollection(): void {
     $adminToken = $this->bootAdmin();
     $this->bootOwner();
     [$collectionId] = $this->collectionOfThreeImages();
@@ -338,7 +334,6 @@ final class CollectionStoreRoundTripTest extends ViewBackedStoreRoundTripTestCas
 
     self::assertSame(0, $this->countRowsByColumn('collection', 'uuid', $collectionId));
     self::assertSame(0, $this->countRowsByColumn('collection_item', 'collection_id', $collectionId));
-    self::assertSame(0, $this->loggedEvents(ID::fromString($collectionId)));
     $this->expectException(NotFoundException::class);
     $this->reload(ID::fromString($collectionId));
   }
@@ -378,8 +373,6 @@ final class CollectionStoreRoundTripTest extends ViewBackedStoreRoundTripTestCas
 
     $collectionId = $this->createCollection($this->ownerToken);
 
-    self::assertSame(0, $this->loggedEvents(ID::fromString($collectionId)));
-    self::assertSame(0, $this->loggedEvents(ID::fromString($this->ownerId)));
     self::assertSame('functional-collection', $this->reload(ID::fromString($collectionId))->getName()->toString());
 
     /** @var UserStoreRepositoryInterface $users */

@@ -6,8 +6,8 @@ namespace Tests\Integration\Console\Boot;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ManagerRegistry;
-use Slink\Shared\Application\Boot\Step\EventStoreSchemaStep;
+use Slink\Shared\Application\Boot\BootContext;
+use Slink\Shared\Application\Boot\BootRunner;
 use Slink\Shared\Application\Service\ProjectMetadataExtractor;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -23,11 +23,6 @@ trait RunsBootCommand {
 
   /** @return array{int, string} */
   private function bootResult(): array {
-    $registry = static::getContainer()->get('doctrine');
-    self::assertInstanceOf(ManagerRegistry::class, $registry);
-    $path = $this->connection()->getParams()['path'] ?? null;
-    self::assertIsString($path);
-    static::getContainer()->set(EventStoreSchemaStep::class, new EventStoreSchemaStep($registry, $path . '.es_migrations.yaml'));
     $metadata = $this->createStub(ProjectMetadataExtractor::class);
     $metadata->method('version')->willReturn('test');
     static::getContainer()->set(ProjectMetadataExtractor::class, $metadata);
@@ -44,8 +39,21 @@ trait RunsBootCommand {
     }
   }
 
+  private function bootReport(): RecordingBootReporter {
+    $runner = static::getContainer()->get(BootRunner::class);
+    self::assertInstanceOf(BootRunner::class, $runner);
+    self::assertNotNull(self::$kernel);
+    $application = new Application(self::$kernel);
+    $application->setAutoExit(false);
+    $application->setCatchExceptions(false);
+    $report = new RecordingBootReporter();
+    $runner->run(new BootContext($application), $report);
+
+    return $report;
+  }
+
   /**
-   * @param array<string, string> $arguments
+   * @param array<string, string|bool|list<string>> $arguments
    * @return array{int, string}
    */
   private function consoleResult(array $arguments): array {

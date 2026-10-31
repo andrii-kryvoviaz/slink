@@ -13,11 +13,9 @@ use Slink\Collection\Domain\ValueObject\CollectionItem;
 use Slink\Shared\Domain\ValueObject\ID;
 use Tests\Integration\Console\Boot\RollsBackToPreviousRelease;
 use Tests\Integration\Http\HttpTestCase;
-use Tests\Integration\Http\Store\InspectsEventLog;
 
 #[Group('sc-1178')]
 final class CollectionStoreUpgradeTest extends HttpTestCase {
-  use InspectsEventLog;
   use RollsBackToPreviousRelease;
 
   private string $ownerId = '';
@@ -49,8 +47,6 @@ final class CollectionStoreUpgradeTest extends HttpTestCase {
 
   #[Test]
   public function aCollectionFromThePreviousReleaseReloadsItsRowAndItems(): void {
-    $this->forgetEventStream();
-
     $collection = $this->reloaded();
 
     self::assertSame('functional-collection', $collection->getName()->toString());
@@ -60,8 +56,6 @@ final class CollectionStoreUpgradeTest extends HttpTestCase {
 
   #[Test]
   public function aCollectionFromThePreviousReleaseIsListedAndServesItsItems(): void {
-    $this->forgetEventStream();
-
     self::assertSame(200, $this->apiRequest('GET', '/api/collections', $this->ownerToken));
     self::assertStringContainsString($this->collectionId, (string) $this->client->getResponse()->getContent());
     self::assertSame(
@@ -73,8 +67,6 @@ final class CollectionStoreUpgradeTest extends HttpTestCase {
 
   #[Test]
   public function aCollectionFromThePreviousReleaseRenames(): void {
-    $this->forgetEventStream();
-
     self::assertContains($this->rename('renamed after upgrade'), [200, 204]);
 
     self::assertSame('renamed after upgrade', $this->reloaded()->getName()->toString());
@@ -82,8 +74,6 @@ final class CollectionStoreUpgradeTest extends HttpTestCase {
 
   #[Test]
   public function aCollectionFromThePreviousReleaseReorders(): void {
-    $this->forgetEventStream();
-
     self::assertContains(
       $this->apiRequest(
         'PATCH',
@@ -103,7 +93,6 @@ final class CollectionStoreUpgradeTest extends HttpTestCase {
 
   #[Test]
   public function aCollectionFromThePreviousReleaseTakesAndLosesItems(): void {
-    $this->forgetEventStream();
     $thirdImageId = $this->uploadImage($this->ownerToken, false);
 
     $this->clearEntityManager();
@@ -121,8 +110,6 @@ final class CollectionStoreUpgradeTest extends HttpTestCase {
 
   #[Test]
   public function aCollectionFromThePreviousReleaseDeletesOnceThenAnswersNotFound(): void {
-    $this->forgetEventStream();
-
     self::assertSame(204, $this->deleteCollection());
     self::assertSame(0, $this->countRowsByColumn('collection', 'uuid', $this->collectionId));
     self::assertSame(404, $this->deleteCollection());
@@ -162,14 +149,10 @@ final class CollectionStoreUpgradeTest extends HttpTestCase {
 
   #[Test]
   public function viewBackedCollectionsAndUsersWorkSideBySideAfterBoot(): void {
-    $streamBeforeRename = $this->loggedEvents(ID::fromString($this->ownerId));
-
     self::assertSame(204, $this->updateDisplayName($this->ownerToken, 'Renamed Owner'));
-    self::assertSame($streamBeforeRename, $this->loggedEvents(ID::fromString($this->ownerId)));
 
     $newCollectionId = $this->createCollection($this->ownerToken);
 
-    self::assertSame(0, $this->loggedEvents(ID::fromString($newCollectionId)));
     self::assertContains($this->rename('renamed after upgrade'), [200, 204]);
     self::assertSame('renamed after upgrade', $this->reloaded()->getName()->toString());
   }
@@ -214,13 +197,6 @@ final class CollectionStoreUpgradeTest extends HttpTestCase {
     return \array_map(
       static fn (CollectionItem $item): string => $item->getItemId()->toString(),
       \array_values($collection->getItems()->getSortedItems()),
-    );
-  }
-
-  private function forgetEventStream(): void {
-    $this->eventStore()->executeStatement(
-      'DELETE FROM event_store WHERE aggregate_root_id = ?',
-      [$this->collectionId],
     );
   }
 

@@ -21,6 +21,8 @@ trait RollsBackToPreviousRelease {
     $this->previousSchemaBackup = $database . '.before-version-rollback';
     \copy($database, $this->previousSchemaBackup);
 
+    $this->connection()->executeStatement('DROP TABLE IF EXISTS messenger_messages');
+
     foreach ($this->tablesWithVersionColumn() as $table) {
       $this->connection()->executeStatement(\sprintf('ALTER TABLE "%s" DROP COLUMN version', $table));
     }
@@ -28,7 +30,7 @@ trait RollsBackToPreviousRelease {
     $this->connection()->executeStatement(
       <<<'SQL'
         DELETE FROM doctrine_migration_versions
-        WHERE version = (SELECT MIN(version) FROM doctrine_migration_versions WHERE version > ?)
+        WHERE version > ?
         SQL,
       ['Slink\\Shared\\Infrastructure\\Persistence\\Doctrine\\Migrations\\Version20260725154530'],
     );

@@ -69,17 +69,14 @@ final class BookmarkStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase 
   }
 
   #[Test]
-  public function addingAndRemovingABookmarkChangesItsRowAndAppendsNothing(): void {
+  public function addingAndRemovingABookmarkChangesItsRow(): void {
     $this->bootParties();
-    $logBefore = $this->eventLogSize();
 
     $this->bookmark();
     self::assertSame(1, $this->countRowsByColumn('bookmark', 'image_id', $this->imageId));
 
     $this->assertRemoved($this->removeBookmark());
     self::assertSame(0, $this->countRowsByColumn('bookmark', 'image_id', $this->imageId));
-
-    self::assertSame($logBefore, $this->eventLogSize());
   }
 
   #[Test]

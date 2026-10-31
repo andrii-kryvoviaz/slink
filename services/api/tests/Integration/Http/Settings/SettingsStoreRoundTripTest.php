@@ -23,11 +23,6 @@ final class SettingsStoreRoundTripTest extends HttpTestCase {
   private const string S3_SECRET = 'plain-secret-key';
 
   /**
-   * @var array{events: int, snapshots: int}
-   */
-  private const array NO_SETTINGS_HISTORY = ['events' => 0, 'snapshots' => 0];
-
-  /**
    * @var list<string>
    */
   private const array UNTOUCHED_CATEGORY_KEYS = [
@@ -131,7 +126,6 @@ final class SettingsStoreRoundTripTest extends HttpTestCase {
     self::assertSame('7M', $settings->get('image.maxSize'));
     self::assertSame(66, $settings->get('image.compressionQuality'));
     self::assertTrue($settings->get('access.allowGuestUploads'));
-    self::assertSame(self::NO_SETTINGS_HISTORY, $this->settingsHistory());
 
     $resolved = $this->configurationProvider();
     $fallback = $this->fallbackProvider();
@@ -152,7 +146,6 @@ final class SettingsStoreRoundTripTest extends HttpTestCase {
   #[DataProvider('everyCategoryProvider')]
   public function aSavedCategoryReloadsFromItsRowsAlone(string $category, array $payload, array $expected): void {
     $this->saveSettings($category, $payload);
-    $this->forgetSettingsHistory();
 
     $settings = $this->reloadSettings();
 
@@ -164,20 +157,17 @@ final class SettingsStoreRoundTripTest extends HttpTestCase {
   #[Test]
   public function s3CredentialsStayEncryptedInTheirRowsAndReloadAsPlaintext(): void {
     $this->saveS3Credentials();
-    $this->forgetSettingsHistory();
 
     $this->assertCredentialRowsHoldCiphertextOfThePlaintext();
     $s3 = $this->reloadedS3Settings();
     self::assertSame(self::S3_KEY, $s3->getKey());
     self::assertSame(self::S3_SECRET, $s3->getSecret());
-    self::assertSame(self::NO_SETTINGS_HISTORY, $this->settingsHistory());
   }
 
   #[Test]
   public function savingTheSameS3PlaintextAgainKeepsTheRowsDecryptable(): void {
     $this->saveS3Credentials();
     $this->saveS3Credentials();
-    $this->forgetSettingsHistory();
 
     $this->assertCredentialRowsHoldCiphertextOfThePlaintext();
     self::assertSame(self::S3_SECRET, $this->reloadedS3Settings()->getSecret());
@@ -186,7 +176,6 @@ final class SettingsStoreRoundTripTest extends HttpTestCase {
   #[Test]
   public function savingTheStorageCategoryReloadedFromRowsDoesNotEncryptItTwice(): void {
     $this->saveS3Credentials();
-    $this->forgetSettingsHistory();
 
     /** @var array<string, mixed> $reloaded */
     $reloaded = $this->reloadSettings()->get('storage');
@@ -200,7 +189,6 @@ final class SettingsStoreRoundTripTest extends HttpTestCase {
   public function savingAnotherCategoryLeavesTheS3CredentialsDecryptable(): void {
     $this->saveS3Credentials();
     $this->saveSettings('image', ['maxSize' => '7M']);
-    $this->forgetSettingsHistory();
 
     $this->assertCredentialRowsHoldCiphertextOfThePlaintext();
     self::assertSame(self::S3_SECRET, $this->reloadedS3Settings()->getSecret());
@@ -208,20 +196,18 @@ final class SettingsStoreRoundTripTest extends HttpTestCase {
   }
 
   #[Test]
-  public function theFirstCategorySavedOnAnEmptyTableReloadsAndLeavesNoHistory(): void {
+  public function theFirstCategorySavedOnAnEmptyTableReloads(): void {
     self::assertSame(0, $this->settingsRowCount());
 
     $this->reloadSettings();
     $this->saveSettings('share', ['enableUrlShortening' => true, 'shortUrlLength' => 12]);
 
     self::assertSame(12, $this->reloadSettings()->get('share.shortUrlLength'));
-    self::assertSame(self::NO_SETTINGS_HISTORY, $this->settingsHistory());
   }
 
   #[Test]
   public function aCategoryWithoutRowsStaysEmptyBesideASavedOne(): void {
     $this->saveSettings('share', ['enableUrlShortening' => true, 'shortUrlLength' => 12]);
-    $this->forgetSettingsHistory();
 
     $settings = $this->reloadSettings();
 

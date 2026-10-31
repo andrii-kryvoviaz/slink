@@ -84,9 +84,8 @@ final class TagStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
   }
 
   #[Test]
-  public function creatingMovingAndDeletingATagUpdatesItsRowAndAppendsNothing(): void {
+  public function creatingMovingAndDeletingATagUpdatesItsRow(): void {
     $this->bootOwner();
-    $logBefore = $this->eventLogSize();
 
     $parentId = $this->createRootTag('parent');
     $childId = $this->createChildOf($parentId, 'child');
@@ -99,12 +98,10 @@ final class TagStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
 
     self::assertSame(204, $this->deleteTag($childId));
     self::assertSame(0, $this->countRowsByColumn('tag', 'uuid', $childId));
-
-    self::assertSame($logBefore, $this->eventLogSize());
   }
 
   #[Test]
-  public function storingDispatchesDecoratedMessagesWithoutAppendingThem(): void {
+  public function storingDispatchesDecoratedMessages(): void {
     $dispatcher = new RecordingMessageDispatcher();
     static::getContainer()->set(EventDispatcher::class, $dispatcher);
     $tagId = ID::generate();
@@ -121,7 +118,6 @@ final class TagStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
     self::assertNotNull($message->header(Header::AGGREGATE_ROOT_VERSION));
     self::assertNotNull($message->header(Header::TIME_OF_RECORDING));
     self::assertNotNull($message->header(Header::TIME_OF_RECORDING_FORMAT));
-    self::assertSame(0, $this->loggedEvents($tagId));
   }
 
   #[Test]
@@ -199,14 +195,13 @@ final class TagStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
   }
 
   #[Test]
-  public function deletingAParentRemovesEveryDescendantRowAndAppendsNothing(): void {
+  public function deletingAParentRemovesEveryDescendantRow(): void {
     $this->bootOwner();
     $parentId = $this->createRootTag('parent');
     $childId = $this->createChildOf($parentId, 'child');
     $siblingId = $this->createChildOf($parentId, 'sibling');
     $leafId = $this->createChildOf($childId, 'leaf');
     $unrelatedId = $this->createRootTag('unrelated');
-    $logBefore = $this->eventLogSize();
 
     self::assertSame(204, $this->deleteTag($parentId));
 
@@ -215,7 +210,6 @@ final class TagStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
     }
 
     self::assertSame('#unrelated', $this->pathOf($unrelatedId));
-    self::assertSame($logBefore, $this->eventLogSize());
   }
 
   #[Test]
@@ -280,8 +274,6 @@ final class TagStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
 
     $tagId = $this->createRootTag('side-by-side');
 
-    self::assertSame(0, $this->loggedEvents(ID::fromString($tagId)));
-    self::assertSame(0, $this->loggedEvents(ID::fromString($this->ownerId)));
     self::assertSame('side-by-side', $this->reload(ID::fromString($tagId))->getName()->getValue());
 
     /** @var UserStoreRepositoryInterface $users */

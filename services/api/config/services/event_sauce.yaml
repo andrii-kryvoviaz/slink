@@ -1,36 +1,3 @@
-parameters:
-  event_sauce.table_name: 'event_store'
-
 services:
-  EventSauce\EventSourcing\Serialization\MessageSerializer:
-    class: EventSauce\EventSourcing\Serialization\ConstructingMessageSerializer
-    tags:
-      - { name: 'event_sauce.message_serializer' }
-
-  event_sauce.message_serializer:
-    class: EventSauce\EventSourcing\Serialization\UpcastingMessageSerializer
-    factory:
-      [
-        '@Slink\Shared\Infrastructure\Persistence\EventStore\UpcastingMessageSerializerFactory',
-        'createSerializer',
-      ]
-
-  EventSauce\IdEncoding\IdEncoder:
-    class: EventSauce\IdEncoding\StringIdEncoder
-    tags:
-      - { name: 'event_sauce.id_encoder' }
-
-  event_sauce.id_encoder: '@EventSauce\IdEncoding\IdEncoder'
-
-  EventSauce\EventSourcing\MessageRepository:
-    class: EventSauce\MessageRepository\DoctrineMessageRepository\DoctrineMessageRepository
-    arguments:
-      $connection: '@doctrine.dbal.event_store_connection'
-      $tableName: '%event_sauce.table_name%'
-      $serializer: '@event_sauce.message_serializer'
-      $aggregateRootIdEncoder: '@event_sauce.id_encoder'
-    tags:
-      - { name: 'event_sauce.message_repository' }
-
   EventSauce\EventSourcing\MessageDispatcher:
     alias: Slink\Shared\Infrastructure\MessageBus\Event\EventDispatcher

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Integration\Http\User;
 
-use Doctrine\DBAL\ArrayParameterType;
-use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Slink\User\Application\Command\CreateUser\CreateUserCommand;
 use Slink\User\Domain\Enum\UserStatus;
@@ -128,18 +126,6 @@ trait ReloadsUsers {
     self::assertIsString($rotated);
 
     return $rotated;
-  }
-
-  private function leaveOnlyRows(string ...$userIds): void {
-    $this->userEntityManager()->clear();
-
-    /** @var Connection $eventStore */
-    $eventStore = static::getContainer()->get('doctrine.dbal.event_store_connection');
-    $eventStore->executeStatement(
-      'DELETE FROM event_store WHERE aggregate_root_id IN (?)',
-      [\array_values($userIds)],
-      [ArrayParameterType::STRING],
-    );
   }
 
   private function expireRefreshTokens(string $userId): void {

@@ -89,9 +89,8 @@ final class OAuthProviderStoreRoundTripTest extends ViewBackedStoreRoundTripTest
   }
 
   #[Test]
-  public function creatingUpdatingMovingAndRemovingAProviderChangesItsRowAndAppendsNothing(): void {
+  public function creatingUpdatingMovingAndRemovingAProviderChangesItsRow(): void {
     $this->adminToken = $this->bootAdmin();
-    $logBefore = $this->eventLogSize();
 
     $id = ID::fromString($this->createProvider('acme'));
     $this->createProvider('other');
@@ -105,8 +104,6 @@ final class OAuthProviderStoreRoundTripTest extends ViewBackedStoreRoundTripTest
 
     self::assertSame(204, $this->removeProvider($id->toString()));
     self::assertSame(0, $this->countRowsByColumn('oauth_provider', 'id', $id->toString()));
-
-    self::assertSame($logBefore, $this->eventLogSize());
   }
 
   #[Test]

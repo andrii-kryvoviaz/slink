@@ -5,13 +5,9 @@ declare(strict_types=1);
 namespace Tests\Integration\Http;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ManagerRegistry;
 use Slink\Collection\Domain\Enum\ItemType;
 use Slink\Collection\Domain\Repository\CollectionStoreRepositoryInterface;
 use Slink\Settings\Application\Command\SaveSettings\SaveSettingsCommand;
-use Slink\Shared\Application\Boot\BootContext;
-use Slink\Shared\Application\Boot\BootStatus;
-use Slink\Shared\Application\Boot\Step\EventStoreSchemaStep;
 use Slink\Shared\Application\Command\CommandBusInterface;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Application\Command\CreateOAuthProvider\CreateOAuthProviderCommand;
@@ -32,7 +28,6 @@ abstract class HttpTestCase extends WebTestCase {
   use ClockSensitiveTrait;
 
   private static string $readModelDb = '';
-  private static string $eventStoreDb = '';
   private static bool $schemaProvisioned = false;
 
   protected KernelBrowser $client;
@@ -57,7 +52,6 @@ abstract class HttpTestCase extends WebTestCase {
     }
 
     self::$readModelDb = $dir . '/read_model.db';
-    self::$eventStoreDb = $dir . '/event_store.db';
 
     self::applyDatabaseEnv();
     self::provisionSchema($projectDir);
@@ -67,7 +61,7 @@ abstract class HttpTestCase extends WebTestCase {
     parent::setUp();
 
     self::applyDatabaseEnv();
-    $this->truncateDatabases();
+    $this->truncateDatabase();
 
     $this->client = static::createClient();
     $this->client->disableReboot();
@@ -118,15 +112,12 @@ abstract class HttpTestCase extends WebTestCase {
 
   private static function applyDatabaseEnv(): void {
     $readModelUrl = 'sqlite:///' . self::$readModelDb;
-    $eventStoreUrl = 'sqlite:///' . self::$eventStoreDb;
 
     $_ENV['DATABASE_URL'] = $readModelUrl;
     $_SERVER['DATABASE_URL'] = $readModelUrl;
     \putenv('DATABASE_URL=' . $readModelUrl);
 
-    $_ENV['ES_DATABASE_URL'] = $eventStoreUrl;
-    $_SERVER['ES_DATABASE_URL'] = $eventStoreUrl;
-    \putenv('ES_DATABASE_URL=' . $eventStoreUrl);
+    self::writeEnv('ES_DATABASE_URL', null);
 
     foreach (self::requiredEnv() as $name => $value) {
       $_ENV[$name] = $value;
@@ -150,18 +141,7 @@ abstract class HttpTestCase extends WebTestCase {
     }
 
     @\unlink(self::$readModelDb);
-    @\unlink(self::$eventStoreDb);
     new Filesystem()->remove($projectDir . '/var/functional-test/storage');
-
-    $eventStoreConfig = self::$readModelDb . '.es_migrations.yaml';
-    $migrationsPath = $projectDir . '/src/Slink/Shared/Infrastructure/Persistence/EventStore/Migrations';
-    \file_put_contents(
-      $eventStoreConfig,
-      \sprintf(
-        "migrations_paths:\n    Slink\\Shared\\Infrastructure\\Persistence\\EventStore\\Migrations: %s\nconnection: event_store\n",
-        $migrationsPath,
-      ),
-    );
 
     self::runConsole([
       'command' => 'doctrine:migrations:migrate',
@@ -174,15 +154,6 @@ abstract class HttpTestCase extends WebTestCase {
       'transport' => 'feed',
       '--no-interaction' => true,
     ]);
-
-    $registry = self::getContainer()->get('doctrine');
-    \assert($registry instanceof ManagerRegistry);
-    $kernel = self::$kernel;
-    \assert($kernel !== null);
-    $result = new EventStoreSchemaStep($registry, $eventStoreConfig)->run(new BootContext(new Application($kernel)));
-    if ($result->status === BootStatus::Fail) {
-      throw new \RuntimeException('Event store migration failed: ' . $result->verboseOutput);
-    }
 
     self::ensureKernelShutdown();
     self::$schemaProvisioned = true;
@@ -208,29 +179,27 @@ abstract class HttpTestCase extends WebTestCase {
     }
   }
 
-  private function truncateDatabases(): void {
-    foreach ([self::$readModelDb, self::$eventStoreDb] as $database) {
-      if (!\is_file($database)) {
+  private function truncateDatabase(): void {
+    if (!\is_file(self::$readModelDb)) {
+      return;
+    }
+
+    $preserved = ['user_role'];
+    $pdo = new \PDO('sqlite:' . self::$readModelDb);
+    $tables = $pdo->query(
+      "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' AND name NOT LIKE 'doctrine_migration%'",
+    );
+
+    if ($tables === false) {
+      return;
+    }
+
+    foreach ($tables->fetchAll(\PDO::FETCH_COLUMN) as $table) {
+      if (\in_array($table, $preserved, true)) {
         continue;
       }
 
-      $preserved = ['user_role'];
-      $pdo = new \PDO('sqlite:' . $database);
-      $tables = $pdo->query(
-        "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' AND name NOT LIKE 'doctrine_migration%'",
-      );
-
-      if ($tables === false) {
-        continue;
-      }
-
-      foreach ($tables->fetchAll(\PDO::FETCH_COLUMN) as $table) {
-        if (\in_array($table, $preserved, true)) {
-          continue;
-        }
-
-        $pdo->exec(\sprintf('DELETE FROM "%s"', $table));
-      }
+      $pdo->exec(\sprintf('DELETE FROM "%s"', $table));
     }
   }
 

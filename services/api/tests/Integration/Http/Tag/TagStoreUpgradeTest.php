@@ -11,11 +11,9 @@ use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Tag\Domain\Repository\TagStoreRepositoryInterface;
 use Tests\Integration\Console\Boot\RollsBackToPreviousRelease;
 use Tests\Integration\Http\HttpTestCase;
-use Tests\Integration\Http\Store\InspectsEventLog;
 
 #[Group('sc-1175')]
 final class TagStoreUpgradeTest extends HttpTestCase {
-  use InspectsEventLog;
   use RollsBackToPreviousRelease;
 
   private string $ownerId = '';
@@ -45,8 +43,6 @@ final class TagStoreUpgradeTest extends HttpTestCase {
 
   #[Test]
   public function aTagFromThePreviousReleaseMovesAndItsDescendantReloadsTheNewPath(): void {
-    $this->forgetEventStreams();
-
     self::assertSame(204, $this->moveTag($this->parentId, $this->bucketId));
 
     self::assertSame('#bucket/parent/child', $this->reloadedPath($this->childId));
@@ -54,8 +50,6 @@ final class TagStoreUpgradeTest extends HttpTestCase {
 
   #[Test]
   public function aTagFromThePreviousReleaseTakesNewChildren(): void {
-    $this->forgetEventStreams();
-
     $newChildId = $this->createTag('new-child', $this->parentId);
 
     self::assertSame('#parent/new-child', $this->reloadedPath($newChildId));
@@ -63,8 +57,6 @@ final class TagStoreUpgradeTest extends HttpTestCase {
 
   #[Test]
   public function aTagFromThePreviousReleaseDeletesWithItsDescendants(): void {
-    $this->forgetEventStreams();
-
     self::assertSame(204, $this->apiRequest('DELETE', \sprintf('/api/tags/%s', $this->parentId), $this->ownerToken));
 
     self::assertSame(0, $this->countRowsByColumn('tag', 'uuid', $this->parentId));
@@ -73,7 +65,6 @@ final class TagStoreUpgradeTest extends HttpTestCase {
 
   #[Test]
   public function aTagFromThePreviousReleaseKeepsLabellingImages(): void {
-    $this->forgetEventStreams();
     $imageId = $this->uploadImage($this->ownerToken, true);
     $tagPath = \sprintf('/api/images/%s/tags/%s', $imageId, $this->childId);
 
@@ -86,23 +77,11 @@ final class TagStoreUpgradeTest extends HttpTestCase {
   #[Test]
   public function viewBackedTagsAndUsersWorkSideBySideAfterBoot(): void {
     $owner = ID::fromString($this->ownerId);
-    $streamBeforeRename = $this->loggedEvents($owner);
 
     self::assertSame(200, $this->apiRequest('GET', '/api/tags', $this->ownerToken));
     self::assertSame(200, $this->apiRequest('GET', \sprintf('/api/tags/%s', $this->childId), $this->ownerToken));
     self::assertSame(204, $this->updateDisplayName($this->ownerToken, 'Renamed Owner'));
     $newTagId = $this->createTag('after-upgrade');
-
-    self::assertSame($streamBeforeRename, $this->loggedEvents($owner));
-    self::assertSame(0, $this->loggedEvents(ID::fromString($newTagId)));
-  }
-
-  private function forgetEventStreams(): void {
-    $this->eventStore()->executeStatement('DELETE FROM event_store WHERE aggregate_root_id IN (?, ?, ?)', [
-      $this->parentId,
-      $this->childId,
-      $this->bucketId,
-    ]);
   }
 
   private function createTag(string $name, ?string $parentId = null): string {

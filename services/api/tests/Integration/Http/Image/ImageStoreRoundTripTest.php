@@ -121,7 +121,7 @@ final class ImageStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
   }
 
   #[Test]
-  public function everyWriteOnAnImageLeavesTheEventLogAlone(): void {
+  public function everyWriteOnAnImageSucceeds(): void {
     $this->bootActors();
 
     $imageId = $this->uploadTaggedLicensedImage(self::DESCRIPTION);
@@ -131,12 +131,10 @@ final class ImageStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
     self::assertWriteSucceeded($this->deleteImage($imageId));
 
     self::assertSame(0, $this->countRowsByColumn('image', 'uuid', $imageId));
-    self::assertSame(0, $this->loggedEvents(ID::fromString($imageId)));
-    self::assertSame(0, $this->snapshots(ID::fromString($imageId)));
   }
 
   #[Test]
-  public function storingDispatchesDecoratedMessagesWithoutAppendingThem(): void {
+  public function storingDispatchesDecoratedMessages(): void {
     $dispatcher = new RecordingMessageDispatcher();
     static::getContainer()->set(EventDispatcher::class, $dispatcher);
     $imageId = ID::generate();
@@ -156,7 +154,6 @@ final class ImageStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
     self::assertSame('slink.image.domain.image', $message->header(Header::AGGREGATE_ROOT_TYPE));
     self::assertNotNull($message->header(Header::AGGREGATE_ROOT_VERSION));
     self::assertNotNull($message->header(Header::TIME_OF_RECORDING));
-    self::assertSame(0, $this->loggedEvents($imageId));
   }
 
   #[Test]
@@ -170,7 +167,6 @@ final class ImageStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
     self::assertSame(2, $this->reload($id)->getAttributes()->getViews());
     self::assertSame(self::STORED_DESCRIPTION, $this->imageColumn($id->toString(), 'description'));
     self::assertSame($description, $this->detailDescription($id->toString()));
-    self::assertSame(0, $this->loggedEvents($id));
   }
 
   #[Test]
@@ -184,7 +180,6 @@ final class ImageStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
     self::assertSame($description, $this->detailDescription($id->toString()));
     self::assertSame([$this->attachedTagId], $this->reload($id)->getTagIds());
     self::assertSame(License::CC_BY, $this->reload($id)->getLicense());
-    self::assertSame(0, $this->loggedEvents($id));
   }
 
   #[Test]
@@ -206,7 +201,6 @@ final class ImageStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
 
     self::assertNull($image->getUserId());
     self::assertSame($this->storedState($id), $this->aggregateState($image));
-    self::assertSame(0, $this->loggedEvents($id));
   }
 
   #[Test]
@@ -282,7 +276,7 @@ final class ImageStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
   }
 
   #[Test]
-  public function purgingAUserRemovesTheirImagesThroughTheStoreAndAppendsNothing(): void {
+  public function purgingAUserRemovesTheirImagesThroughTheStore(): void {
     $this->bootActors();
     $firstImageId = $this->uploadTaggedLicensedImage(self::DESCRIPTION);
     $secondImageId = $this->uploadDescribedImage('second');
@@ -293,8 +287,6 @@ final class ImageStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
 
     self::assertSame(0, $this->countRowsByColumn('image', 'user_id', $this->ownerId));
     self::assertSame(0, $this->countRowsByColumn('image_license', 'image_id', $firstImageId));
-    self::assertSame(0, $this->loggedEvents(ID::fromString($firstImageId)));
-    self::assertSame(0, $this->loggedEvents(ID::fromString($secondImageId)));
   }
 
   #[Test]

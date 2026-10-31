@@ -81,9 +81,8 @@ final class NotificationStoreRoundTripTest extends ViewBackedStoreRoundTripTestC
   }
 
   #[Test]
-  public function creatingAndReadingANotificationChangesItsRowAndAppendsNothing(): void {
+  public function creatingAndReadingANotificationChangesItsRow(): void {
     $this->bootParties();
-    $logBefore = $this->eventLogSize();
 
     $this->postComment($this->actorToken, $this->imageId, 'actor words');
     $notificationId = $this->notificationOfType(NotificationType::COMMENT);
@@ -91,8 +90,6 @@ final class NotificationStoreRoundTripTest extends ViewBackedStoreRoundTripTestC
 
     $this->assertAccepted($this->markRead($notificationId->toString(), $this->ownerToken));
     self::assertNotNull($this->storedState($notificationId)['readAt']);
-
-    self::assertSame($logBefore, $this->eventLogSize());
   }
 
   #[Test]

@@ -221,7 +221,7 @@ final class UserStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
   #[Test]
   public function aReloadedUserSignsInWithItsStoredPasswordAndRejectsAnother(): void {
     $id = $this->bootMember();
-    $this->leaveOnlyRows($id->toString());
+    $this->userEntityManager()->clear();
 
     $user = $this->reload($id);
     $user->signIn(self::PASSWORD);
@@ -236,7 +236,7 @@ final class UserStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
   #[Test]
   public function aReloadedUserDoesNotLinkAStoredSubjectAgain(): void {
     $id = $this->createAggregate();
-    $this->leaveOnlyRows($id->toString());
+    $this->userEntityManager()->clear();
 
     $user = $this->reload($id);
     $user->link($this->identity(self::SUBJECT, self::EMAIL));
@@ -253,19 +253,18 @@ final class UserStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
   #[Test]
   public function aLinkedUserSignsInThroughSsoAgainWithoutASecondLink(): void {
     $id = $this->createAggregate();
-    $this->leaveOnlyRows($id->toString());
+    $this->userEntityManager()->clear();
 
     $this->signInThroughSso($this->identity(self::SUBJECT, self::EMAIL));
 
     self::assertSame(1, $this->countRowsByColumn('oauth_link', 'user_id', $id->toString()));
-    self::assertSame(0, $this->loggedEvents($id));
   }
 
   #[Test]
   public function lookupsByUsernameEmailAndRefreshTokenReturnTheUserFromItsRows(): void {
     $id = $this->bootMember();
     $tokens = $this->authenticateWithRefreshToken(self::USERNAME, self::PASSWORD);
-    $this->leaveOnlyRows($id->toString());
+    $this->userEntityManager()->clear();
     $store = $this->userStore();
 
     $byUsername = $store->getByUsername(Username::fromString(self::USERNAME));
@@ -301,7 +300,7 @@ final class UserStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
   public function aStoredTokenIsRestoredWithoutRecordingAnything(): void {
     $id = $this->bootMember();
     $tokens = $this->authenticateWithRefreshToken(self::USERNAME, self::PASSWORD);
-    $this->leaveOnlyRows($id->toString());
+    $this->userEntityManager()->clear();
     [$store, $dispatcher] = $this->recordingStore();
 
     $user = $store->get($id);
@@ -320,10 +319,10 @@ final class UserStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
   }
 
   #[Test]
-  public function refreshingRotatesThePresentedTokenAndAppendsNothing(): void {
+  public function refreshingRotatesThePresentedToken(): void {
     $id = $this->bootMember();
     $tokens = $this->authenticateWithRefreshToken(self::USERNAME, self::PASSWORD);
-    $this->leaveOnlyRows($id->toString());
+    $this->userEntityManager()->clear();
 
     $rotated = $this->rotatedRefreshToken($tokens['refresh_token']);
 
@@ -331,7 +330,6 @@ final class UserStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
     self::assertSame(400, $this->refreshStatus($tokens['refresh_token']));
     self::assertSame(1, $this->countRowsByColumn('refresh_token', 'user_uuid', $id->toString()));
     self::assertSame(200, $this->refreshStatus($rotated));
-    self::assertSame(0, $this->loggedEvents($id));
   }
 
   #[Test]
@@ -339,7 +337,7 @@ final class UserStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
     $id = $this->bootMember();
     $firstSession = $this->authenticateWithRefreshToken(self::USERNAME, self::PASSWORD);
     $secondSession = $this->authenticateWithRefreshToken(self::USERNAME, self::PASSWORD);
-    $this->leaveOnlyRows($id->toString());
+    $this->userEntityManager()->clear();
 
     $this->rotatedRefreshToken($firstSession['refresh_token']);
 
@@ -352,14 +350,13 @@ final class UserStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
     $id = $this->bootMember();
     $firstSession = $this->authenticateWithRefreshToken(self::USERNAME, self::PASSWORD);
     $secondSession = $this->authenticateWithRefreshToken(self::USERNAME, self::PASSWORD);
-    $this->leaveOnlyRows($id->toString());
+    $this->userEntityManager()->clear();
 
     self::assertContains($this->signOut($firstSession['refresh_token']), [200, 204]);
 
     self::assertSame(1, $this->countRowsByColumn('refresh_token', 'user_uuid', $id->toString()));
     self::assertSame(400, $this->refreshStatus($firstSession['refresh_token']));
     self::assertSame(200, $this->refreshStatus($secondSession['refresh_token']));
-    self::assertSame(0, $this->loggedEvents($id));
   }
 
   #[Test]
@@ -367,7 +364,7 @@ final class UserStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
     $id = $this->bootMember();
     $this->authenticateWithRefreshToken(self::USERNAME, self::PASSWORD);
     $this->expireRefreshTokens($id->toString());
-    $this->leaveOnlyRows($id->toString());
+    $this->userEntityManager()->clear();
 
     $this->userStore()->store($this->reload($id));
     $this->entityManager()->flush();
@@ -380,7 +377,7 @@ final class UserStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
     $id = $this->bootMember();
     $expired = $this->authenticateWithRefreshToken(self::USERNAME, self::PASSWORD);
     $this->expireRefreshTokens($id->toString());
-    $this->leaveOnlyRows($id->toString());
+    $this->userEntityManager()->clear();
 
     $fresh = $this->authenticateWithRefreshToken(self::USERNAME, self::PASSWORD);
 
@@ -432,7 +429,7 @@ final class UserStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
   public function changingTheStatusLeavesAnEscapedNameUnchanged(UserStatus $status): void {
     $adminToken = $this->bootAdmin();
     $id = $this->bootMember();
-    $this->leaveOnlyRows($id->toString());
+    $this->userEntityManager()->clear();
 
     self::assertSame(200, $this->changeUserStatus($adminToken, $id->toString(), $status));
 
@@ -446,7 +443,7 @@ final class UserStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
     $adminToken = $this->bootAdmin();
     $id = $this->bootMember();
     $this->clearDisplayName($id->toString());
-    $this->leaveOnlyRows($id->toString());
+    $this->userEntityManager()->clear();
 
     self::assertSame(200, $this->changeUserStatus($adminToken, $id->toString(), $status));
 
@@ -460,7 +457,7 @@ final class UserStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
     $token = $this->login(self::USERNAME, self::PASSWORD);
     self::assertSame(200, $this->apiRequest('GET', '/api/user', $token));
     $nameBefore = $this->responsePayload()['data']['displayName'] ?? null;
-    $this->leaveOnlyRows($id->toString());
+    $this->userEntityManager()->clear();
 
     self::assertContains($this->changePassword($token, self::NEW_PASSWORD), [200, 204]);
 
@@ -474,7 +471,7 @@ final class UserStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
     $adminToken = $this->bootAdmin();
     $id = $this->createAggregate();
     $this->softDelete($adminToken, $id->toString());
-    $this->leaveOnlyRows($id->toString());
+    $this->userEntityManager()->clear();
 
     $user = $this->reload($id);
 
@@ -491,7 +488,7 @@ final class UserStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
     $adminToken = $this->bootAdmin();
     $id = $this->createAggregate();
     self::assertSame(204, $this->purgeUser($adminToken, $id->toString()));
-    $this->leaveOnlyRows($id->toString());
+    $this->userEntityManager()->clear();
 
     $user = $this->reload($id);
 
@@ -527,7 +524,7 @@ final class UserStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
     $adminToken = $this->bootAdmin();
     $id = $this->bootMember();
     $this->softDelete($adminToken, $id->toString());
-    $this->leaveOnlyRows($id->toString());
+    $this->userEntityManager()->clear();
 
     self::assertSame(400, $this->changeUserStatus($adminToken, $id->toString(), UserStatus::Active));
 
@@ -535,17 +532,16 @@ final class UserStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
   }
 
   #[Test]
-  public function purgingADeletedUserTwiceSucceedsAndAppendsNothing(): void {
+  public function purgingADeletedUserTwiceSucceeds(): void {
     $adminToken = $this->bootAdmin();
     $id = $this->bootMember();
     $this->softDelete($adminToken, $id->toString());
-    $this->leaveOnlyRows($id->toString());
+    $this->userEntityManager()->clear();
 
     $statuses = [$this->purgeUser($adminToken, $id->toString()), $this->purgeUser($adminToken, $id->toString())];
 
     self::assertSame([204, 204], $statuses);
     self::assertSame(0, $this->countRowsByColumn('user_preferences', 'user_id', $id->toString()));
-    self::assertSame(0, $this->loggedEvents($id));
   }
 
   #[Test]
@@ -581,7 +577,7 @@ final class UserStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
   }
 
   #[Test]
-  public function everyWriteOnAUserLeavesTheEventLogAlone(): void {
+  public function everyWriteOnAUserSucceeds(): void {
     $adminToken = $this->bootAdmin();
     $id = $this->createAggregate();
     $userId = $id->toString();
@@ -601,16 +597,13 @@ final class UserStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
     self::assertSame(200, $this->changeUserStatus($adminToken, $userId, UserStatus::Suspended));
     self::assertSame(200, $this->changeUserStatus($adminToken, $userId, UserStatus::Active));
     self::assertSame(204, $this->purgeUser($adminToken, $userId));
-
-    self::assertSame(0, $this->loggedEvents($id));
-    self::assertSame(0, $this->snapshots($id));
   }
 
   #[Test]
-  public function storingDispatchesDecoratedMessagesWithoutAppendingThem(): void {
+  public function storingDispatchesDecoratedMessages(): void {
     $id = $this->bootMember();
     $tokens = $this->authenticateWithRefreshToken(self::USERNAME, self::PASSWORD);
-    $this->leaveOnlyRows($id->toString());
+    $this->userEntityManager()->clear();
     [$store, $dispatcher] = $this->recordingStore();
 
     $user = $store->get($id);
@@ -631,7 +624,6 @@ final class UserStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
     self::assertNotNull($signedOut->header(Header::AGGREGATE_ROOT_VERSION));
     self::assertNotNull($signedOut->header(Header::TIME_OF_RECORDING));
     self::assertNotNull($signedOut->header(Header::TIME_OF_RECORDING_FORMAT));
-    self::assertSame(0, $this->loggedEvents($id));
   }
 
   #[Test]

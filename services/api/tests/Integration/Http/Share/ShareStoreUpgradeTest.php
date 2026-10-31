@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Integration\Http\Share;
 
-use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -50,7 +49,6 @@ final class ShareStoreUpgradeTest extends HttpTestCase {
 
   #[Test]
   public function aShareFromThePreviousReleaseReloadsFromItsRows(): void {
-    $this->forgetEventStreams();
     $stored = $this->connection()->fetchAssociative('SELECT * FROM "share" WHERE uuid = ?', [$this->shareId]);
     self::assertIsArray($stored);
 
@@ -67,16 +65,12 @@ final class ShareStoreUpgradeTest extends HttpTestCase {
 
   #[Test]
   #[DataProvider('shareWrites')]
-  public function aWriteOnAShareFromThePreviousReleaseSucceedsAndAppendsNothing(string $write): void {
-    $this->forgetEventStreams();
-
+  public function aWriteOnAShareFromThePreviousReleaseSucceeds(string $write): void {
     self::assertSame(204, $this->writeShare($write, $this->shareId, $this->ownerToken));
-    self::assertSame(0, $this->loggedEvents($this->shareId));
   }
 
   #[Test]
   public function aWrongPasswordIsStillRefusedOnAShareFromThePreviousRelease(): void {
-    $this->forgetEventStreams();
     $this->forgetLoadedRows();
 
     [$status] = $this->unlockShare($this->shareId, 'not-the-password');
@@ -86,15 +80,12 @@ final class ShareStoreUpgradeTest extends HttpTestCase {
 
   #[Test]
   public function sharingAnImageAgainReturnsItsShareFromThePreviousRelease(): void {
-    $this->forgetEventStreams();
-
     self::assertSame($this->shareId, $this->shareImage($this->imageId, $this->ownerToken));
     self::assertSame(1, $this->countRowsByColumn('share', 'shareable_id', $this->imageId));
   }
 
   #[Test]
   public function aPublishedShareFromThePreviousReleaseKeepsItsShortUrlAndListing(): void {
-    $this->forgetEventStreams();
     self::assertSame(204, $this->writeShare('publish', $this->shareId, $this->ownerToken));
 
     self::assertSame(200, $this->apiRequest('GET', '/api/shares', $this->ownerToken));
@@ -104,7 +95,6 @@ final class ShareStoreUpgradeTest extends HttpTestCase {
 
   #[Test]
   public function deletingAnImageRevokesItsShareFromThePreviousRelease(): void {
-    $this->forgetEventStreams();
     $this->forgetLoadedRows();
 
     self::assertSame(204, $this->apiRequest('DELETE', \sprintf('/api/image/%s', $this->imageId), $this->ownerToken));
@@ -115,7 +105,6 @@ final class ShareStoreUpgradeTest extends HttpTestCase {
 
   #[Test]
   public function deletingACollectionRevokesItsShareFromThePreviousRelease(): void {
-    $this->forgetEventStreams();
     $this->forgetLoadedRows();
 
     self::assertSame(204, $this->apiRequest(
@@ -154,7 +143,6 @@ final class ShareStoreUpgradeTest extends HttpTestCase {
     );
     self::assertSame($this->ownerId, $this->userStore()->get(ID::fromString($this->ownerId))->aggregateRootId()->toString());
     self::assertTrue($this->shareStore()->get(ID::fromString($this->shareId))->isPublished());
-    self::assertSame(0, $this->loggedEvents($this->shareId));
   }
 
   private function shareStore(): ShareStoreRepositoryInterface {
@@ -173,26 +161,5 @@ final class ShareStoreUpgradeTest extends HttpTestCase {
 
   private function shortCodeOf(string $shareId): mixed {
     return $this->connection()->fetchOne('SELECT short_code FROM "short_url" WHERE share_id = ?', [$shareId]);
-  }
-
-  private function loggedEvents(string $aggregateId): int {
-    return (int) $this->eventStore()->fetchOne(
-      'SELECT COUNT(*) FROM event_store WHERE aggregate_root_id = ?',
-      [$aggregateId],
-    );
-  }
-
-  private function forgetEventStreams(): void {
-    $this->eventStore()->executeStatement(
-      'DELETE FROM event_store WHERE aggregate_root_id IN (?, ?)',
-      [$this->shareId, $this->collectionShareId],
-    );
-  }
-
-  private function eventStore(): Connection {
-    /** @var Connection $eventStore */
-    $eventStore = static::getContainer()->get('doctrine.dbal.event_store_connection');
-
-    return $eventStore;
   }
 }

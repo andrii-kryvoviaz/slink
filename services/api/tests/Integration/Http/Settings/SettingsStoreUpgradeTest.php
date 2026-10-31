@@ -56,8 +56,6 @@ final class SettingsStoreUpgradeTest extends HttpTestCase {
 
   #[Test]
   public function settingsSavedBeforeTheUpgradeLoadUnchangedFromTheirRows(): void {
-    $this->forgetSettingsHistory();
-
     $settings = $this->reloadSettings();
 
     self::assertSame('7M', $settings->get('image.maxSize'));
@@ -68,22 +66,17 @@ final class SettingsStoreUpgradeTest extends HttpTestCase {
   }
 
   #[Test]
-  public function aSaveAfterTheUpgradeKeepsTheOtherCategoriesAndAddsNoHistory(): void {
-    $historyBeforeSave = $this->settingsHistory();
-
+  public function aSaveAfterTheUpgradeKeepsTheOtherCategories(): void {
     $this->saveSettings('share', ['enableUrlShortening' => true, 'shortUrlLength' => 12]);
 
     $settings = $this->reloadSettings();
     self::assertSame(12, $settings->get('share.shortUrlLength'));
     self::assertSame('7M', $settings->get('image.maxSize'));
-    self::assertSame($historyBeforeSave, $this->settingsHistory());
     self::assertSame(self::S3_SECRET, $this->decryptedRow('storage.adapter.s3.secret'));
   }
 
   #[Test]
   public function settingsWorkSideBySideWithOtherStoresAfterBoot(): void {
-    $historyBeforeSave = $this->settingsHistory();
-
     self::assertSame(200, $this->apiRequest('GET', '/api/settings/global', $this->adminToken));
     self::assertSame(200, $this->apiRequest('GET', '/api/tags', $this->adminToken));
     self::assertSame(
@@ -113,6 +106,5 @@ final class SettingsStoreUpgradeTest extends HttpTestCase {
       $this->connection()->fetchOne('SELECT name FROM "collection" WHERE uuid = ?', [$this->collectionId]),
     );
     self::assertSame(12, $this->reloadSettings()->get('share.shortUrlLength'));
-    self::assertSame($historyBeforeSave, $this->settingsHistory());
   }
 }

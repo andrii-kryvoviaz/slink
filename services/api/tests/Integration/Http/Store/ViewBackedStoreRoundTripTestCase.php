@@ -17,8 +17,6 @@ use Tests\Integration\Http\HttpTestCase;
  * @template TAggregate of object
  */
 abstract class ViewBackedStoreRoundTripTestCase extends HttpTestCase {
-  use InspectsEventLog;
-
   /** @var list<KernelInterface> */
   private array $independentKernels = [];
 
@@ -70,14 +68,6 @@ abstract class ViewBackedStoreRoundTripTestCase extends HttpTestCase {
     $this->independentKernels = [];
 
     parent::tearDown();
-  }
-
-  #[Test]
-  public function creatingTheAggregateAppendsNothingToTheEventLog(): void {
-    $id = $this->createAggregate();
-
-    self::assertSame(0, $this->loggedEvents($id));
-    self::assertSame(0, $this->snapshots($id));
   }
 
   #[Test]

@@ -91,21 +91,15 @@ final class CommentStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
   }
 
   #[Test]
-  public function postingEditingAndDeletingACommentChangesItsRowAndAppendsNothing(): void {
+  public function postingEditingAndDeletingACommentChangesItsRow(): void {
     $this->bootParties();
     $commentId = $this->postComment($this->authorToken, $this->imageId, 'first words');
-
-    $id = ID::fromString($commentId);
-    self::assertSame(0, $this->loggedEvents($id));
 
     $this->assertEdited($this->edit($commentId, 'second words'));
     self::assertSame('second words', $this->rowContent($commentId));
 
     $this->assertDeleted($this->delete($commentId, $this->authorToken));
     self::assertNotNull($this->rowColumn($commentId, 'deleted_at'));
-
-    self::assertSame(0, $this->loggedEvents($id));
-    self::assertSame(0, $this->snapshots($id));
   }
 
   #[Test]

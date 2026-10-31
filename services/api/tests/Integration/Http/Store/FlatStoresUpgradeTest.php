@@ -18,7 +18,6 @@ use Tests\Integration\Http\HttpTestCase;
 
 #[Group('sc-1176')]
 final class FlatStoresUpgradeTest extends HttpTestCase {
-  use InspectsEventLog;
   use RollsBackToPreviousRelease;
 
   private string $adminToken = '';
@@ -77,8 +76,6 @@ final class FlatStoresUpgradeTest extends HttpTestCase {
 
   #[Test]
   public function aBookmarkFromThePreviousReleaseRemovesAndIsThenNotFound(): void {
-    $this->forgetEventStreams();
-
     self::assertContains(
       $this->apiRequest('DELETE', \sprintf('/api/image/%s/bookmark', $this->imageId), $this->readerToken),
       [200, 204],
@@ -90,7 +87,6 @@ final class FlatStoresUpgradeTest extends HttpTestCase {
 
   #[Test]
   public function aCommentFromThePreviousReleaseEditsWithoutEscapingAgain(): void {
-    $this->forgetEventStreams();
     $storedContent = $this->connection()->fetchOne('SELECT content FROM "comment" WHERE uuid = ?', [$this->commentId]);
 
     self::assertSame($storedContent, $this->comments()->get(ID::fromString($this->commentId))->getContent()->toString());
@@ -105,8 +101,6 @@ final class FlatStoresUpgradeTest extends HttpTestCase {
 
   #[Test]
   public function aCommentFromThePreviousReleaseDeletes(): void {
-    $this->forgetEventStreams();
-
     self::assertContains(
       $this->apiRequest('DELETE', \sprintf('/api/comment/%s', $this->commentId), $this->readerToken),
       [200, 202, 204],
@@ -118,8 +112,6 @@ final class FlatStoresUpgradeTest extends HttpTestCase {
 
   #[Test]
   public function aNotificationFromThePreviousReleaseMarksRead(): void {
-    $this->forgetEventStreams();
-
     self::assertContains(
       $this->apiRequest('POST', \sprintf('/api/notifications/%s/read', $this->notificationId), $this->ownerToken),
       [200, 204],
@@ -134,7 +126,6 @@ final class FlatStoresUpgradeTest extends HttpTestCase {
 
   #[Test]
   public function aProviderFromThePreviousReleaseUpdatesKeepingItsEncryptedCredentials(): void {
-    $this->forgetEventStreams();
     $credentialsSql = 'SELECT client_id, client_secret FROM "oauth_provider" WHERE id = ?';
     $encryptedBefore = $this->connection()->fetchAssociative($credentialsSql, [$this->providerId]);
 
@@ -149,8 +140,6 @@ final class FlatStoresUpgradeTest extends HttpTestCase {
 
   #[Test]
   public function aProviderFromThePreviousReleaseRemovesAndIsThenNotFound(): void {
-    $this->forgetEventStreams();
-
     self::assertSame(204, $this->apiRequest(
       'DELETE',
       \sprintf('/api/admin/oauth/providers/%s', $this->providerId),
@@ -172,15 +161,11 @@ final class FlatStoresUpgradeTest extends HttpTestCase {
   }
 
   #[Test]
-  public function everyStoreWorksSideBySideAfterBootWithoutLoggingEvents(): void {
+  public function everyStoreWorksSideBySideAfterBoot(): void {
     $owner = ID::fromString($this->ownerId);
-    $streamBeforeRename = $this->loggedEvents($owner);
 
     self::assertSame(204, $this->updateDisplayName($this->ownerToken, 'Renamed Owner'));
     $newCommentId = $this->postComment($this->readerToken, $this->imageId, 'after the upgrade');
-
-    self::assertSame($streamBeforeRename, $this->loggedEvents($owner));
-    self::assertSame(0, $this->loggedEvents(ID::fromString($newCommentId)));
   }
 
   /**
@@ -218,13 +203,6 @@ final class FlatStoresUpgradeTest extends HttpTestCase {
       ['CONTENT_TYPE' => 'application/json'],
       \json_encode(['name' => 'Renamed after upgrade'], JSON_THROW_ON_ERROR),
     );
-  }
-
-  private function forgetEventStreams(): void {
-    foreach ([$this->bookmarkId, $this->commentId, $this->notificationId, $this->providerId] as $aggregateId) {
-      $this->eventStore()->executeStatement('DELETE FROM event_store WHERE aggregate_root_id = ?', [$aggregateId]);
-      $this->eventStore()->executeStatement('DELETE FROM snapshots WHERE aggregate_root_id = ?', [$aggregateId]);
-    }
   }
 
   private function singleRowId(string $table): string {

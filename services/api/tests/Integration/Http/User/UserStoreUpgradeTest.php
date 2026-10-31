@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Integration\Http\User;
 
-use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Slink\Shared\Domain\ValueObject\ID;
@@ -14,13 +13,16 @@ use Slink\User\Domain\Enum\UserStatus;
 use Slink\User\Domain\User;
 use Slink\User\Domain\ValueObject\UserPreferences;
 use Tests\Integration\Console\Boot\RollsBackToPreviousRelease;
+use Tests\Integration\Console\Boot\SeedsLegacyEventStore;
 use Tests\Integration\Http\Double\StubOAuthAdapter;
 use Tests\Integration\Http\HttpTestCase;
 
 #[Group('sc-1180')]
+#[Group('sc-1183')]
 final class UserStoreUpgradeTest extends HttpTestCase {
   use ReloadsUsers;
   use RollsBackToPreviousRelease;
+  use SeedsLegacyEventStore;
 
   private const string MEMBER_EMAIL = 'upgrade-member@local.test';
   private const string MEMBER_USERNAME = 'upgrademember';
@@ -38,10 +40,15 @@ final class UserStoreUpgradeTest extends HttpTestCase {
     parent::setUp();
 
     StubOAuthAdapter::reset();
+    $this->seedLegacyStore();
+    $this->useEnv([
+      'ES_DATABASE_URL' => $this->legacyStoreUrl(),
+      'ADMIN_USERNAME' => 'adminuser',
+      'ADMIN_EMAIL' => 'admin@local.test',
+    ]);
     $this->adminToken = $this->bootAdmin();
     $this->adminId = $this->userIdByUsername('adminuser');
     $this->dropRoleRows($this->adminId);
-    $this->recordGrantedRoleEvent($this->adminId, 'ROLE_ADMIN');
     $this->memberId = $this->createUserWithRolesSubjectAndPreferences(
       self::MEMBER_EMAIL,
       self::MEMBER_USERNAME,
@@ -62,13 +69,13 @@ final class UserStoreUpgradeTest extends HttpTestCase {
     [$status, $output] = $this->bootResult();
     self::assertSame(0, $status, $output);
     $this->assertRoleRowMigrationExecuted();
-    $this->leaveOnlyRows($this->memberId, $this->deletedId, $this->purgedId, $this->namelessId);
     $this->userEntityManager()->clear();
   }
 
   protected function tearDown(): void {
     StubOAuthAdapter::reset();
     $this->restorePreviousReleaseBackup();
+    $this->removeLegacyStore();
 
     parent::tearDown();
   }
@@ -92,17 +99,6 @@ final class UserStoreUpgradeTest extends HttpTestCase {
 
     self::assertSame(200, $this->apiRequest('GET', '/api/users/1', $adminToken));
     self::assertSame(['ROLE_ADMIN', 'ROLE_USER'], $this->sortedRolesOf($this->reloadedUser($this->adminId)));
-  }
-
-  #[Test]
-  public function theRoleRowMigrationDoesNotRestoreARevokedOrPurgedRole(): void {
-    $this->dropRoleRows($this->memberId);
-    $this->dropRoleRows($this->deletedId);
-
-    $this->runRoleRowMigration();
-
-    self::assertSame(0, $this->countRowsByColumn('user_to_role', 'user_id', $this->deletedId));
-    self::assertSame(0, $this->countRowsByColumn('user_to_role', 'user_id', $this->purgedId));
   }
 
   #[Test]
@@ -206,27 +202,11 @@ final class UserStoreUpgradeTest extends HttpTestCase {
     self::assertSame(200, $this->apiRequest('GET', '/api/user', $this->login('upgradenew', self::PASSWORD)));
 
     self::assertSame(UserStatus::Active, $this->reloadedUser($newUserId)->getStatus());
-    self::assertSame(0, $this->userEvents($newUserId));
   }
 
   private function userIdByUsername(string $username): string {
     return (string) $this->userEntityManager()->getConnection()
       ->fetchOne('SELECT uuid FROM "user" WHERE username = ?', [$username]);
-  }
-
-  private function recordGrantedRoleEvent(string $userId, string $role): void {
-    /** @var Connection $eventStore */
-    $eventStore = static::getContainer()->get('doctrine.dbal.event_store_connection');
-
-    $eventStore->insert('event_store', [
-      'event_id' => ID::generate()->toString(),
-      'aggregate_root_id' => $userId,
-      'version' => 1,
-      'payload' => \json_encode([
-        'headers' => ['__event_type' => 'slink.user.domain.event.role.user_granted_role', '__aggregate_root_type' => 'slink.user.domain.user', '__aggregate_root_id' => $userId],
-        'payload' => ['uuid' => $userId, 'role' => $role],
-      ], JSON_THROW_ON_ERROR),
-    ]);
   }
 
   private function dropRoleRows(string $userId): void {
@@ -240,14 +220,6 @@ final class UserStoreUpgradeTest extends HttpTestCase {
     $runner->ensureTable();
     $this->userEntityManager()->getConnection()
       ->executeStatement('DELETE FROM data_migration_versions WHERE version = ?', [Migration20261031143201::class]);
-  }
-
-  private function runRoleRowMigration(): void {
-    /** @var Connection $eventStore */
-    $eventStore = static::getContainer()->get('doctrine.dbal.event_store_connection');
-
-    (new Migration20261031143201($eventStore, $this->userEntityManager()->getConnection()))->up();
-    $this->userEntityManager()->clear();
   }
 
   /**
@@ -272,12 +244,5 @@ final class UserStoreUpgradeTest extends HttpTestCase {
     $this->userEntityManager()->clear();
 
     return $this->userStore()->get(ID::fromString($userId));
-  }
-
-  private function userEvents(string $userId): int {
-    /** @var Connection $eventStore */
-    $eventStore = static::getContainer()->get('doctrine.dbal.event_store_connection');
-
-    return (int) $eventStore->fetchOne('SELECT COUNT(*) FROM event_store WHERE aggregate_root_id = ?', [$userId]);
   }
 }

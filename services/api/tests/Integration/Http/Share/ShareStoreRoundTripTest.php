@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Integration\Http\Share;
 
-use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
 use EventSauce\EventSourcing\Header;
@@ -101,10 +100,8 @@ final class ShareStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
   }
 
   #[Test]
-  public function aShareBuiltThroughCommandsHoldsItsStateInRowsAndAppendsNothing(): void {
+  public function aShareBuiltThroughCommandsHoldsItsStateInRows(): void {
     $shareId = $this->createAggregate();
-
-    self::assertSame(0, $this->loggedEvents($shareId));
 
     $stored = $this->storedState($shareId);
     self::assertTrue($stored['isPublished']);
@@ -169,13 +166,12 @@ final class ShareStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
   }
 
   #[Test]
-  public function aShareCreatedWithoutShorteningAppendsNothingAndReloadsWithAnEmptyContext(): void {
+  public function aShareCreatedWithoutShorteningReloadsWithAnEmptyContext(): void {
     $this->bootOwner();
     $this->configureShortening(false, self::SHORT_CODE_LENGTH);
     $shareId = $this->createImageShare($this->ownerToken, $this->uploadImage($this->ownerToken, false));
 
     self::assertFalse($this->shortUrlOf($shareId));
-    self::assertSame(0, $this->loggedEvents(ID::fromString($shareId)));
     self::assertFalse($this->reload(ID::fromString($shareId))->getContext()->hasShortUrl());
   }
 
@@ -214,7 +210,6 @@ final class ShareStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
     self::assertIsArray($shortUrlAfter);
     self::assertSame($shortUrlBefore['uuid'], $shortUrlAfter['uuid']);
     self::assertSame(self::LONGER_SHORT_CODE_LENGTH, \strlen((string) $shortUrlAfter['short_code']));
-    self::assertSame(0, $this->loggedEvents(ID::fromString($shareId)));
   }
 
   #[Test]
@@ -226,7 +221,6 @@ final class ShareStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
     $this->publishShare($this->ownerToken, $shareId);
     $shortUrlBefore = $this->shortUrlOf($shareId);
     $this->configureShortening(true, self::LONGER_SHORT_CODE_LENGTH);
-    $this->forgetEventStream($shareId);
 
     self::assertSame($shareId, $this->shareImage($imageId, $this->ownerToken));
 
@@ -241,7 +235,6 @@ final class ShareStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
     $shareId = $this->shareImage($imageId, $this->ownerToken);
     self::assertFalse($this->shortUrlOf($shareId));
     $this->configureShortening(true, self::SHORT_CODE_LENGTH);
-    $this->forgetEventStream($shareId);
 
     self::assertSame($shareId, $this->shareImage($imageId, $this->ownerToken));
 
@@ -261,18 +254,16 @@ final class ShareStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
     $this->setShareExpiration($this->ownerToken, $shareId, $expiresAt);
 
     self::assertSame($versionBefore, $this->shareVersion($shareId));
-    self::assertSame(0, $this->loggedEvents(ID::fromString($shareId)));
   }
 
   #[Test]
-  public function revokingAShareRemovesItsRowsAndAppendsNothing(): void {
+  public function revokingAShareRemovesItsRows(): void {
     $shareId = $this->createAggregate();
 
     $this->revoke($shareId);
 
     self::assertSame(0, $this->countRowsByColumn('share', 'uuid', $shareId->toString()));
     self::assertSame(0, $this->countRowsByColumn('short_url', 'share_id', $shareId->toString()));
-    self::assertSame(0, $this->loggedEvents($shareId));
   }
 
   #[Test]
@@ -356,7 +347,7 @@ final class ShareStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
   }
 
   #[Test]
-  public function storingDispatchesDecoratedMessagesWithoutAppendingThem(): void {
+  public function storingDispatchesDecoratedMessages(): void {
     $dispatcher = new RecordingMessageDispatcher();
     static::getContainer()->set(EventDispatcher::class, $dispatcher);
     $shareId = ID::generate();
@@ -376,7 +367,6 @@ final class ShareStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
     self::assertSame($shareId->toString(), $message->aggregateRootId()?->toString());
     self::assertSame('slink.share.domain.event.share_was_created', $message->header(Header::EVENT_TYPE));
     self::assertSame('slink.share.domain.share', $message->header(Header::AGGREGATE_ROOT_TYPE));
-    self::assertSame(0, $this->loggedEvents($shareId));
   }
 
   #[Test]
@@ -423,12 +413,6 @@ final class ShareStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
     /** @var EntityManagerInterface $entityManager */
     $entityManager = $container->get(EntityManagerInterface::class);
     $entityManager->flush();
-  }
-
-  private function forgetEventStream(string $shareId): void {
-    /** @var Connection $eventStore */
-    $eventStore = static::getContainer()->get('doctrine.dbal.event_store_connection');
-    $eventStore->executeStatement('DELETE FROM event_store WHERE aggregate_root_id = ?', [$shareId]);
   }
 
   private function shareStore(): ShareStoreRepositoryInterface {

@@ -23,7 +23,11 @@ framework:
                     - doctrine_close_connection: ['read_model']
 
         transports:
-             failed: 'doctrine://event_store?queue_name=failed'
+             failed:
+                 dsn: 'doctrine://read_model'
+                 options:
+                     queue_name: failed
+                     auto_setup: false
              sync: 'sync://'
              feed:
                  dsn: 'doctrine://read_model'
