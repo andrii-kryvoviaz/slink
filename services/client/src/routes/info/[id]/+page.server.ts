@@ -15,8 +15,9 @@ export const load: PageServerLoad = async ({ params, locals, parent }) => {
     parentData.globalSettings?.image?.enableLicensing ?? false;
 
   try {
-    const [image, imageTags, licenses] = await Promise.all([
-      locals.api.image.getDetails(params.id),
+    const image = await locals.api.image.getDetails(params.id);
+
+    const [imageTags, licenses] = await Promise.all([
       locals.api.tag.getImageTags(params.id),
       licensingEnabled
         ? locals.api.image.getLicenses()
