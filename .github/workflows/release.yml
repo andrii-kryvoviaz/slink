@@ -7,6 +7,7 @@ on:
       - "v[0-9]+.[0-9]+.[0-9]+*"
 
 permissions:
+  actions: read
   contents: write
 
 concurrency:
@@ -20,6 +21,7 @@ jobs:
     outputs:
       version: ${{ steps.version.outputs.current }}
       prerelease: ${{ steps.semver.outputs.prerelease }}
+      tested: ${{ steps.tested.outputs.tested }}
     steps:
       - uses: actions/checkout@v5
         with:
@@ -65,15 +67,41 @@ jobs:
             exit 1
           fi
 
+      - name: Check commit is already tested
+        id: tested
+        env:
+          GH_TOKEN: ${{ github.token }}
+          LATEST: ${{ steps.version.outputs.latest }}
+        run: |
+          limit=500
+          tested=false
+          if [[ -n "$LATEST" ]] \
+            && since=$(TZ=UTC git log -1 --date=format-local:%Y-%m-%dT%H:%M:%SZ --format=%cd "v$LATEST") \
+            && range=$(git rev-list "v$LATEST..$GITHUB_SHA") \
+            && runs=$(gh run list --repo "$GITHUB_REPOSITORY" --workflow ci.yml --branch main --event push --created ">=$since" --limit "$limit" --json headSha,conclusion,status) \
+            && jq -e --arg tip "$GITHUB_SHA" --arg range "$range" --argjson limit "$limit" '
+              ($range | split("\n")) as $shas
+              | [.[] | select(.headSha | IN($shas[]))] as $runs
+              | length < $limit
+              and any($runs[]; .headSha == $tip)
+              and all($runs[]; .status == "completed" and .conclusion == "success")
+            ' <<< "$runs" > /dev/null; then
+            tested=true
+          fi
+          echo "Commit already tested on main: $tested"
+          echo "tested=$tested" >> "$GITHUB_OUTPUT"
+
   ci:
     name: CI
     needs: validate
+    if: needs.validate.outputs.tested != 'true'
     uses: ./.github/workflows/ci.yml
     secrets: inherit
 
   build:
     name: Build
     needs: [validate, ci]
+    if: ${{ !cancelled() && needs.validate.result == 'success' && (needs.ci.result == 'success' || needs.ci.result == 'skipped') }}
     uses: ./.github/workflows/docker-build.yml
     with:
       tag: ${{ github.ref_name }}
@@ -86,6 +114,7 @@ jobs:
     name: Create Release
     runs-on: ubuntu-latest
     needs: [validate, build]
+    if: ${{ !cancelled() && needs.build.result == 'success' }}
     steps:
       - name: Create Release
         env:
