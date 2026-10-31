@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Unit\Slink\Settings\Domain;
 
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Settings\Domain\Event\SettingsChanged;
@@ -132,6 +133,40 @@ final class SettingsTest extends TestCase {
         
         $appliedSettings = $this->getPrivateProperty($settings, 'user');
         $this->assertSame($newUserSettings, $appliedSettings);
+    }
+
+    #[Test]
+    #[Group('sc-1181')]
+    public function itHydratesEachCategoryFromItsViewArray(): void {
+        $settings = Settings::fromView(
+            ['provider' => 'local', 'adapter' => ['local' => ['dir' => '/storage']]],
+            ['allowRegistration' => false, 'password' => ['minLength' => 11, 'requirements' => 3]],
+            ['maxSize' => '7M'],
+            ['allowGuestUploads' => true],
+            ['shortUrlLength' => 12],
+            ['siteName' => 'From the view'],
+        );
+
+        $this->assertSame(Settings::getIdReference(), $settings->aggregateRootId()->toString());
+        $this->assertSame('local', $settings->get('storage.provider'));
+        $this->assertFalse($settings->get('user.allowRegistration'));
+        $this->assertSame(11, $settings->get('user.password.minLength'));
+        $this->assertSame('7M', $settings->get('image.maxSize'));
+        $this->assertTrue($settings->get('access.allowGuestUploads'));
+        $this->assertSame(12, $settings->get('share.shortUrlLength'));
+        $this->assertSame('From the view', $settings->get('customization.siteName'));
+    }
+
+    #[Test]
+    #[Group('sc-1181')]
+    public function itHydratesACategoryWithoutRowsAsNull(): void {
+        $settings = Settings::fromView(null, null, ['maxSize' => '7M'], null, null, null);
+
+        $this->assertSame('7M', $settings->get('image.maxSize'));
+
+        foreach (['storage', 'user', 'access', 'share', 'customization'] as $category) {
+            $this->assertNull($this->getPrivateProperty($settings, $category), $category);
+        }
     }
 
     private function createSettings(): Settings {
