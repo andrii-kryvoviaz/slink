@@ -152,6 +152,8 @@ abstract class ViewBackedStoreRoundTripTestCase extends HttpTestCase {
 
     for ($cause = $failure; $cause !== null; $cause = $cause->getPrevious()) {
       if ($cause instanceof $expected) {
+        self::assertInstanceOf($expected, $cause);
+
         return;
       }
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Slink\Share\Application\Command\UnpublishShare;
 
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -13,9 +14,9 @@ use Slink\Share\Domain\Exception\ShareAccessDeniedException;
 use Slink\Share\Domain\Repository\ShareStoreRepositoryInterface;
 use Slink\Share\Domain\Share;
 use Slink\Shared\Domain\ValueObject\ID;
-use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
+#[Group('sc-1177')]
 final class UnpublishShareHandlerTest extends TestCase {
   private ShareStoreRepositoryInterface&MockObject $shareStore;
   private UnpublishShareHandler $handler;
@@ -40,7 +41,6 @@ final class UnpublishShareHandlerTest extends TestCase {
     $command = new UnpublishShareCommand($shareId);
 
     $share = $this->createMock(Share::class);
-    $share->method('aggregateRootVersion')->willReturn(1);
 
     $share
       ->expects($this->once())
@@ -61,34 +61,12 @@ final class UnpublishShareHandlerTest extends TestCase {
   }
 
   #[Test]
-  public function itThrowsNotFoundWhenAggregateMissing(): void {
-    $shareId = ID::generate()->toString();
-    $command = new UnpublishShareCommand($shareId);
-
-    $share = $this->createStub(Share::class);
-    $share->method('aggregateRootVersion')->willReturn(0);
-
-    $this->shareStore
-      ->method('get')
-      ->willReturn($share);
-
-    $this->shareStore
-      ->expects($this->never())
-      ->method('store');
-
-    $this->expectException(NotFoundException::class);
-
-    $this->handler->__invoke($command);
-  }
-
-  #[Test]
   public function itDeniesAccessWhenVoterRejectsCaller(): void {
     $handler = $this->createHandler(accessGranted: false);
     $shareId = ID::generate()->toString();
     $command = new UnpublishShareCommand($shareId);
 
     $share = $this->createMock(Share::class);
-    $share->method('aggregateRootVersion')->willReturn(1);
     $share->expects($this->never())->method('unpublish');
 
     $this->shareStore

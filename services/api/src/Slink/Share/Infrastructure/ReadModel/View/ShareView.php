@@ -96,6 +96,10 @@ class ShareView extends AbstractView implements PublicationAware, ExpirationAwar
     $this->accessControl = $this->accessControl->withPassword($password);
   }
 
+  public function getAccessControl(): AccessControl {
+    return $this->accessControl;
+  }
+
   public function isPublished(): bool {
     return $this->accessControl->isPublished;
   }

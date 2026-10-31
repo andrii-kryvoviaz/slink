@@ -4,37 +4,47 @@ declare(strict_types=1);
 
 namespace Slink\Share\Infrastructure\Repository;
 
+use EventSauce\EventSourcing\MessageDispatcher;
 use Slink\Share\Domain\Repository\ShareRepositoryInterface;
 use Slink\Share\Domain\Repository\ShareStoreRepositoryInterface;
 use Slink\Share\Domain\Share;
 use Slink\Share\Domain\ValueObject\TargetPath;
+use Slink\Share\Infrastructure\ReadModel\View\ShareView;
 use Slink\Shared\Domain\ValueObject\ID;
-use Slink\Shared\Infrastructure\Persistence\EventStore\AbstractSnapshotStoreRepository;
-use Slink\Shared\Infrastructure\Persistence\EventStore\SnapshotRepositoryFactory;
-use EventSauce\EventSourcing\Snapshotting\SnapshotRepository;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Slink\Shared\Infrastructure\Exception\NotFoundException;
+use Slink\Shared\Infrastructure\Persistence\EventStore\AbstractViewBackedStore;
 
-final class ShareStore extends AbstractSnapshotStoreRepository implements ShareStoreRepositoryInterface {
+/**
+ * @extends AbstractViewBackedStore<Share, ShareView>
+ */
+final class ShareStore extends AbstractViewBackedStore implements ShareStoreRepositoryInterface {
   public function __construct(
-    SnapshotRepositoryFactory $factory,
-    SnapshotRepository $snapshotRepository,
-    #[Autowire(param: 'event_sauce.snapshot_frequency')]
-    int $snapshotFrequency,
+    MessageDispatcher $messageDispatcher,
     private readonly ShareRepositoryInterface $shareRepository,
   ) {
-    parent::__construct($factory, $snapshotRepository, $snapshotFrequency);
+    parent::__construct($messageDispatcher);
   }
 
   protected static function getAggregateRootClass(): string {
     return Share::class;
   }
 
-  public function get(ID $id): Share {
-    $share = $this->retrieve($id);
-    if (!$share instanceof Share) {
-      throw new \RuntimeException('Expected instance of Share, got ' . get_class($share));
+  protected function findRootView(ID $id): object {
+    $view = $this->shareRepository->findById($id->toString());
+
+    if ($view === null) {
+      throw new NotFoundException();
     }
-    return $share;
+
+    return $view;
+  }
+
+  protected function hydrate(object $view): object {
+    return Share::fromView($view, $view->getShortUrl());
+  }
+
+  public function get(ID $id): Share {
+    return $this->retrieve($id);
   }
 
   public function findByTargetPath(TargetPath $targetPath): ?Share {

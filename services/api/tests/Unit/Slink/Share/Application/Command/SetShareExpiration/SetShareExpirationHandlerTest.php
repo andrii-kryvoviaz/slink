@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Slink\Share\Application\Command\SetShareExpiration;
 
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -14,9 +15,9 @@ use Slink\Share\Domain\Repository\ShareStoreRepositoryInterface;
 use Slink\Share\Domain\Share;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
-use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
+#[Group('sc-1177')]
 final class SetShareExpirationHandlerTest extends TestCase {
   private ShareStoreRepositoryInterface&MockObject $shareStore;
   private SetShareExpirationHandler $handler;
@@ -41,7 +42,6 @@ final class SetShareExpirationHandlerTest extends TestCase {
     $command = new SetShareExpirationCommand(new \DateTimeImmutable('2099-12-31T23:59:59.000Z'));
 
     $share = $this->createMock(Share::class);
-    $share->method('aggregateRootVersion')->willReturn(1);
 
     $share
       ->expects($this->once())
@@ -71,7 +71,6 @@ final class SetShareExpirationHandlerTest extends TestCase {
     $command = new SetShareExpirationCommand(null);
 
     $share = $this->createMock(Share::class);
-    $share->method('aggregateRootVersion')->willReturn(1);
 
     $share
       ->expects($this->once())
@@ -91,34 +90,12 @@ final class SetShareExpirationHandlerTest extends TestCase {
   }
 
   #[Test]
-  public function itThrowsNotFoundWhenAggregateMissing(): void {
-    $shareId = ID::generate()->toString();
-    $command = new SetShareExpirationCommand(null);
-
-    $share = $this->createStub(Share::class);
-    $share->method('aggregateRootVersion')->willReturn(0);
-
-    $this->shareStore
-      ->method('get')
-      ->willReturn($share);
-
-    $this->shareStore
-      ->expects($this->never())
-      ->method('store');
-
-    $this->expectException(NotFoundException::class);
-
-    $this->handler->__invoke($command, $shareId);
-  }
-
-  #[Test]
   public function itDeniesAccessWhenVoterRejectsCaller(): void {
     $handler = $this->createHandler(accessGranted: false);
     $shareId = ID::generate()->toString();
     $command = new SetShareExpirationCommand(null);
 
     $share = $this->createMock(Share::class);
-    $share->method('aggregateRootVersion')->willReturn(1);
     $share->expects($this->never())->method('setExpiration');
 
     $this->shareStore

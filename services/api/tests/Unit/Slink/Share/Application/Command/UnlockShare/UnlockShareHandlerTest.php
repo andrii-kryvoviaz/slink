@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Slink\Share\Application\Command\UnlockShare;
 
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
@@ -19,6 +20,7 @@ use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
+#[Group('sc-1177')]
 final class UnlockShareHandlerTest extends TestCase {
   private ShareStoreRepositoryInterface&Stub $shareStore;
   private ShareUnlockCookieSigner $signer;
@@ -41,7 +43,6 @@ final class UnlockShareHandlerTest extends TestCase {
     $password = HashedSharePassword::encode('hunter2');
 
     $share = $this->createStub(Share::class);
-    $share->method('aggregateRootVersion')->willReturn(1);
     $share->method('getPassword')->willReturn($password);
 
     $this->shareStore->method('get')->willReturn($share);
@@ -61,7 +62,6 @@ final class UnlockShareHandlerTest extends TestCase {
     $password = HashedSharePassword::encode('hunter2');
 
     $share = $this->createStub(Share::class);
-    $share->method('aggregateRootVersion')->willReturn(1);
     $share->method('getPassword')->willReturn($password);
 
     $this->shareStore->method('get')->willReturn($share);
@@ -76,7 +76,6 @@ final class UnlockShareHandlerTest extends TestCase {
     $shareId = ID::generate();
 
     $share = $this->createStub(Share::class);
-    $share->method('aggregateRootVersion')->willReturn(1);
     $share->method('getPassword')->willReturn(null);
 
     $this->shareStore->method('get')->willReturn($share);
@@ -87,25 +86,10 @@ final class UnlockShareHandlerTest extends TestCase {
   }
 
   #[Test]
-  public function itThrowsNotFoundWhenAggregateMissing(): void {
-    $shareId = ID::generate()->toString();
-
-    $share = $this->createStub(Share::class);
-    $share->method('aggregateRootVersion')->willReturn(0);
-
-    $this->shareStore->method('get')->willReturn($share);
-
-    $this->expectException(NotFoundException::class);
-
-    $this->handler->__invoke(new UnlockShareCommand('hunter2'), $shareId);
-  }
-
-  #[Test]
   public function itThrowsNotFoundWhenAccessIsDenied(): void {
     $shareId = ID::generate()->toString();
 
     $share = $this->createStub(Share::class);
-    $share->method('aggregateRootVersion')->willReturn(1);
 
     $this->shareStore = $this->createStub(ShareStoreRepositoryInterface::class);
     $this->shareStore->method('get')->willReturn($share);

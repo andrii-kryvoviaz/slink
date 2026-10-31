@@ -26,6 +26,8 @@ use Slink\Share\Domain\ValueObject\TargetPath;
 use Slink\Shared\Domain\AbstractAggregateRoot;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
+use Slink\Share\Infrastructure\ReadModel\View\ShareView;
+use Slink\Share\Infrastructure\ReadModel\View\ShortUrlView;
 
 final class Share extends AbstractAggregateRoot implements PublicationAware, ExpirationAware, PasswordProtected {
   private ShareableReference $shareable;
@@ -57,6 +59,27 @@ final class Share extends AbstractAggregateRoot implements PublicationAware, Exp
     ));
 
     return $share;
+  }
+
+  public static function fromView(ShareView $view, ?ShortUrlView $shortUrl): self {
+    $share = new self(ID::fromString($view->getId()));
+    $share->shareable = $view->getShareable();
+    $share->targetPath = TargetPath::fromString($view->getTargetPath());
+    $share->createdAt = $view->getCreatedAt();
+    $share->context = self::contextFrom($view->getShareable(), $shortUrl);
+    $share->accessControl = $view->getAccessControl();
+
+    return $share;
+  }
+
+  private static function contextFrom(ShareableReference $shareable, ?ShortUrlView $shortUrl): ShareContext {
+    $context = ShareContext::for($shareable);
+
+    if ($shortUrl === null) {
+      return $context;
+    }
+
+    return $context->withShortUrl(ID::fromString($shortUrl->getId()), $shortUrl->getShortCode());
   }
 
   public function addShortUrl(?ID $shortUrlId, ?string $shortCode): void {
