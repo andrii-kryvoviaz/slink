@@ -44,6 +44,16 @@ final class RefreshTokenSet extends AbstractEventSourcedAggregate {
   }
   
   /**
+   * @param array<HashedRefreshToken> $hashedRefreshTokens
+   * @return void
+   */
+  public function restore(array $hashedRefreshTokens): void {
+    foreach ($hashedRefreshTokens as $hashedRefreshToken) {
+      $this->setHashedRefreshToken($hashedRefreshToken);
+    }
+  }
+  
+  /**
    * @return void
    */
   public function clear(): void {

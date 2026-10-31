@@ -28,6 +28,15 @@ final class RefreshTokenRepository extends AbstractRepository implements Refresh
     }
   }
 
+  /**
+   * @return array<int, RefreshTokenView>
+   */
+  #[\Override]
+  public function findByUserId(string $userUuid): array {
+    /** @var array<int, RefreshTokenView> */
+    return $this->getEntityManager()->getRepository(RefreshTokenView::class)->findBy(['userUuid' => $userUuid]);
+  }
+
   #[\Override]
   public function deleteByUserId(string $userUuid): void {
     $this->getEntityManager()

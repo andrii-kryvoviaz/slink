@@ -4,23 +4,21 @@ declare(strict_types=1);
 
 namespace Tests\Unit\UI\Console\Command\User;
 
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Shared\Application\Command\CommandBusInterface;
 use Slink\Shared\Application\Command\CommandInterface;
-use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Application\Command\PurgeUser\PurgeUserCommand as PurgeUser;
 use Slink\User\Domain\Enum\UserStatus;
-use Slink\User\Domain\Event\UserWasPurged;
 use Slink\User\Domain\Repository\UserRepositoryInterface;
-use Slink\User\Domain\Repository\UserStoreRepositoryInterface;
-use Slink\User\Domain\User;
 use Slink\User\Infrastructure\ReadModel\View\UserView;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 use UI\Console\Command\User\PurgeUserCommand;
 
+#[Group('sc-1180')]
 final class PurgeUserCommandTest extends TestCase {
   private const string USER_ID = '11111111-2222-3333-4444-555555555555';
   private const string OTHER_USER_ID = '66666666-7777-8888-9999-aaaaaaaaaaaa';
@@ -34,37 +32,8 @@ final class PurgeUserCommandTest extends TestCase {
     return $user;
   }
 
-  /**
-   * @return \Generator<int, object, void, int>
-   */
-  private function events(string $uuid, bool $purged): \Generator {
-    if ($purged) {
-      yield new UserWasPurged(ID::fromString($uuid));
-    }
-
-    return 1;
-  }
-
-  /**
-   * @param array<string, bool> $purgedByUuid
-   */
-  private function store(array $purgedByUuid): UserStoreRepositoryInterface {
-    $store = $this->createStub(UserStoreRepositoryInterface::class);
-    $store->method('get')->willReturnCallback(
-      fn (ID $id): User => User::reconstituteFromEvents(
-        $id,
-        $this->events($id->toString(), $purgedByUuid[$id->toString()] ?? false),
-      ),
-    );
-
-    return $store;
-  }
-
-  /**
-   * @param array<string, bool> $purgedByUuid
-   */
-  private function tester(UserRepositoryInterface $repository, CommandBusInterface $bus, array $purgedByUuid = []): CommandTester {
-    $command = new PurgeUserCommand($repository, $this->store($purgedByUuid));
+  private function tester(UserRepositoryInterface $repository, CommandBusInterface $bus): CommandTester {
+    $command = new PurgeUserCommand($repository);
     $command->setCommandBus($bus);
     (new Application())->addCommand($command);
 
@@ -159,7 +128,7 @@ final class PurgeUserCommandTest extends TestCase {
   }
 
   #[Test]
-  public function itSkipsAlreadyPurgedUsersWithAllDeleted(): void {
+  public function itAsksToConfirmEveryDeletedUserWithAllDeleted(): void {
     $repository = $this->createStub(UserRepositoryInterface::class);
     $repository->method('findByStatus')->willReturn([
       $this->userView(self::USER_ID, UserStatus::Deleted),
@@ -168,33 +137,31 @@ final class PurgeUserCommandTest extends TestCase {
 
     $purgedIds = [];
     $bus = $this->createMock(CommandBusInterface::class);
-    $bus->expects(self::once())
+    $bus->expects(self::exactly(2))
       ->method('handle')
       ->willReturnCallback(static function (CommandInterface $command) use (&$purgedIds): void {
         self::assertInstanceOf(PurgeUser::class, $command);
         $purgedIds[] = $command->getId();
       });
 
-    $tester = $this->tester($repository, $bus, [self::USER_ID => true]);
+    $tester = $this->tester($repository, $bus);
     $tester->setInputs(['y']);
     $exitCode = $tester->execute(['--all-deleted' => true]);
 
     self::assertSame(Command::SUCCESS, $exitCode);
-    self::assertSame([self::OTHER_USER_ID], $purgedIds);
-    self::assertStringContainsString('Purge 1 soft-deleted user(s)?', $tester->getDisplay());
+    self::assertSame([self::USER_ID, self::OTHER_USER_ID], $purgedIds);
+    self::assertStringContainsString('Purge 2 soft-deleted user(s)?', $tester->getDisplay());
   }
 
   #[Test]
-  public function itReportsNothingToPurgeWhenEveryDeletedUserIsAlreadyPurged(): void {
+  public function itReportsNothingToPurgeWhenNoUserIsSoftDeleted(): void {
     $repository = $this->createStub(UserRepositoryInterface::class);
-    $repository->method('findByStatus')->willReturn([
-      $this->userView(self::USER_ID, UserStatus::Deleted),
-    ]);
+    $repository->method('findByStatus')->willReturn([]);
 
     $bus = $this->createMock(CommandBusInterface::class);
     $bus->expects(self::never())->method('handle');
 
-    $tester = $this->tester($repository, $bus, [self::USER_ID => true]);
+    $tester = $this->tester($repository, $bus);
     $exitCode = $tester->execute(['--all-deleted' => true], ['interactive' => false]);
 
     self::assertSame(Command::SUCCESS, $exitCode);
@@ -202,18 +169,22 @@ final class PurgeUserCommandTest extends TestCase {
   }
 
   #[Test]
-  public function itSkipsAlreadyPurgedUserOnSingleUserPath(): void {
+  public function itPurgesASoftDeletedUserOnSingleUserPath(): void {
     $repository = $this->createStub(UserRepositoryInterface::class);
     $repository->method('one')->willReturn($this->userView(self::USER_ID, UserStatus::Deleted));
 
     $bus = $this->createMock(CommandBusInterface::class);
-    $bus->expects(self::never())->method('handle');
+    $bus->expects(self::once())
+      ->method('handle')
+      ->with(self::callback(
+        static fn (CommandInterface $command) => $command instanceof PurgeUser && $command->getId() === self::USER_ID,
+      ));
 
-    $tester = $this->tester($repository, $bus, [self::USER_ID => true]);
+    $tester = $this->tester($repository, $bus);
     $exitCode = $tester->execute(['user' => self::USER_ID, '--force' => true], ['interactive' => false]);
 
     self::assertSame(Command::SUCCESS, $exitCode);
-    self::assertStringContainsString('is already purged', $tester->getDisplay());
+    self::assertStringNotContainsString('already purged', $tester->getDisplay());
   }
 
   #[Test]

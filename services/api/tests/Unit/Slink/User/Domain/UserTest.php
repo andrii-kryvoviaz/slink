@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Unit\Slink\User\Domain;
 
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Shared\Domain\Exception\InvalidArgumentException;
@@ -166,7 +167,7 @@ final class UserTest extends TestCase {
 
     $this->assertInstanceOf(User::class, $user);
     $this->assertSame($id->toString(), $user->getIdentifier());
-    $this->assertSame(self::VALID_USERNAME, $user->getUsername()->toString());
+    $this->assertSame(self::VALID_USERNAME, $user->getUsername()?->toString());
     $this->assertSame(UserStatus::Active, $user->getStatus());
     $this->assertContains('ROLE_USER', $user->getRoles());
 
@@ -412,14 +413,17 @@ final class UserTest extends TestCase {
   }
 
   #[Test]
-  public function itDoesNotRecordPurgeWhenAlreadyPurged(): void {
+  #[Group('sc-1180')]
+  public function itRecordsThePurgeAgainWhenAlreadyPurged(): void {
     $user = $this->createUser();
     $user->purge();
     $user->releaseEvents();
 
     $user->purge();
 
-    $this->assertCount(0, $user->releaseEvents());
+    $events = $user->releaseEvents();
+    $this->assertCount(1, $events);
+    $this->assertInstanceOf(UserWasPurged::class, $events[0]);
   }
 
   #[Test]

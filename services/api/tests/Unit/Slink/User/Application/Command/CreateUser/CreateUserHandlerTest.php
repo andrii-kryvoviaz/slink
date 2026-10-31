@@ -125,7 +125,7 @@ final class CreateUserHandlerTest extends TestCase {
     $userRepository->expects($this->once())
       ->method('store')
       ->with($this->callback(function (User $user) {
-        return $user->getUsername()->toString() === 'testuser';
+        return $user->getUsername()?->toString() === 'testuser';
       }));
 
     $userFactory = $this->createUserFactory();

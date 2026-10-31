@@ -61,7 +61,7 @@ final class UserSnapshotTest extends TestCase {
     $user = $method->invoke(null, $userId, $snapshotData);
 
     $this->assertEquals('test-user-id', $user->aggregateRootId()->toString());
-    $this->assertEquals('janedoe', $user->getUsername()->toString());
+    $this->assertEquals('janedoe', $user->getUsername()?->toString());
     $this->assertEquals('Jane Doe', $user->getDisplayName()->toString());
     $this->assertEquals(UserStatus::Active, $user->getStatus());
     
@@ -91,7 +91,7 @@ final class UserSnapshotTest extends TestCase {
     $restoredUser = $restoreMethod->invoke(null, $userId, $snapshotData);
 
     $this->assertEquals($originalUser->aggregateRootId()->toString(), $restoredUser->aggregateRootId()->toString());
-    $this->assertEquals($originalUser->getUsername()->toString(), $restoredUser->getUsername()->toString());
+    $this->assertEquals($originalUser->getUsername()?->toString(), $restoredUser->getUsername()->toString());
     $this->assertEquals($originalUser->getDisplayName()->toString(), $restoredUser->getDisplayName()->toString());
     $this->assertEquals($originalUser->getStatus(), $restoredUser->getStatus());
     $this->assertEquals($originalUser->getRoles(), $restoredUser->getRoles());

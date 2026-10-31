@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Slink\User\Infrastructure\ReadModel\View;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
@@ -81,7 +82,7 @@ class UserView extends AbstractView {
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'uuid')]
     #[ORM\InverseJoinColumn(name: 'role', referencedColumnName: 'role')]
     #[Groups(['internal'])]
-    private readonly ?Collection $roles,
+    private ?Collection $roles = new ArrayCollection(),
   ) {
   }
   
@@ -111,6 +112,18 @@ class UserView extends AbstractView {
    */
   public function getDisplayName(): string {
     return $this->displayName?->toString() ?? '';
+  }
+  
+  public function getEmailValue(): ?Email {
+    return $this->email;
+  }
+
+  public function getUsernameValue(): ?Username {
+    return $this->username;
+  }
+
+  public function getDisplayNameValue(): DisplayName {
+    return $this->displayName ?? DisplayName::fromNullableString(null);
   }
   
   /**

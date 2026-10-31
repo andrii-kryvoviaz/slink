@@ -43,6 +43,7 @@ use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\User\Domain\Specification\CurrentUserSpecificationInterface;
 use Slink\User\Domain\ValueObject\Auth\Credentials;
 use Slink\User\Domain\ValueObject\Auth\HashedApiKey;
+use Slink\User\Domain\ValueObject\Auth\HashedRefreshToken;
 use Slink\User\Domain\ValueObject\Auth\HashedPassword;
 use Slink\User\Domain\ValueObject\DisplayName;
 use Slink\User\Domain\ValueObject\Email;
@@ -56,14 +57,17 @@ use Slink\User\Domain\ValueObject\Role;
 use Slink\User\Domain\ValueObject\RoleSet;
 use Slink\User\Domain\ValueObject\UserPreferences;
 use Slink\User\Domain\RefreshTokenSet;
+use Slink\User\Infrastructure\ReadModel\View\OAuthLinkView;
+use Slink\User\Infrastructure\ReadModel\View\RefreshTokenView;
+use Slink\User\Infrastructure\ReadModel\View\UserPreferencesView;
+use Slink\User\Infrastructure\ReadModel\View\UserView;
 
 final class User extends AbstractAggregateRoot implements UserInterface {
-  private Email $email;
-  private Username $username;
+  private ?Email $email = null;
+  private ?Username $username = null;
   private DisplayName $displayName;
   private HashedPassword $hashedPassword;
   private UserStatus $status;
-  private bool $purged = false;
   
   private RoleSet $roles;
   private OAuthSubjectSet $linkedOAuthSubjects;
@@ -76,18 +80,18 @@ final class User extends AbstractAggregateRoot implements UserInterface {
   public readonly RefreshTokenSet $refreshToken;
   
   /**
-   * @param Email $email
+   * @param Email|null $email
    * @return void
    */
-  public function setEmail(Email $email): void {
+  public function setEmail(?Email $email): void {
     $this->email = $email;
   }
   
   /**
-   * @param Username $username
+   * @param Username|null $username
    * @return void
    */
-  public function setUsername(Username $username): void {
+  public function setUsername(?Username $username): void {
     $this->username = $username;
   }
   
@@ -123,9 +127,9 @@ final class User extends AbstractAggregateRoot implements UserInterface {
   }
   
   /**
-   * @return Username
+   * @return Username|null
    */
-  public function getUsername(): Username {
+  public function getUsername(): ?Username {
     return $this->username;
   }
   
@@ -163,6 +167,44 @@ final class User extends AbstractAggregateRoot implements UserInterface {
     $this->refreshToken = RefreshTokenSet::create($id);
     $this->status = UserStatus::Inactive;
     $this->registerAggregate($this->refreshToken);
+  }
+
+  /**
+   * @param array<int, OAuthLinkView> $oauthLinks
+   * @param array<int, RefreshTokenView> $refreshTokens
+   */
+  public static function fromView(
+    UserView $view,
+    array $oauthLinks,
+    ?UserPreferencesView $preferences,
+    array $refreshTokens,
+  ): self {
+    $user = new self(ID::fromString($view->getUuid()));
+
+    $user->email = $view->getEmailValue();
+    $user->username = $view->getUsernameValue();
+    $user->displayName = $view->getDisplayNameValue();
+    $user->hashedPassword = $view->getPassword();
+    $user->status = UserStatus::from($view->getStatus());
+    $user->roles = RoleSet::create(array_map(Role::fromString(...), $view->getRoles()));
+    $user->linkedOAuthSubjects = OAuthSubjectSet::fromArray(array_map(
+      fn(OAuthLinkView $link) => $link->getProviderSlug() . ':' . $link->getProviderUserId(),
+      $oauthLinks,
+    ));
+    $user->preferences = $preferences?->getPreferences() ?? UserPreferences::empty();
+    $user->refreshToken->restore(array_map(
+      fn(RefreshTokenView $token) => HashedRefreshToken::createFromHashed(
+        $token->getToken(),
+        $token->getExpiresAt()->toString(),
+      ),
+      $refreshTokens,
+    ));
+
+    return $user;
+  }
+
+  private function requireEmail(): Email {
+    return $this->email ?? throw new NotFoundException();
   }
 
   /**
@@ -266,7 +308,7 @@ final class User extends AbstractAggregateRoot implements UserInterface {
    * @return void
    */
   public function logout(): void {
-    $this->recordThat(new UserLoggedOut($this->aggregateRootId(), $this->email));
+    $this->recordThat(new UserLoggedOut($this->aggregateRootId(), $this->requireEmail()));
   }
   
   /**
@@ -309,31 +351,11 @@ final class User extends AbstractAggregateRoot implements UserInterface {
    * @return void
    */
   public function purge(): void {
-    if (!$this->aggregateRootVersion()) {
-      throw new NotFoundException();
-    }
-
-    if ($this->purged) {
-      return;
-    }
-
     if (!$this->status->isDeleted()) {
       $this->recordThat(new UserStatusWasChanged($this->aggregateRootId(), UserStatus::Deleted));
     }
 
     $this->recordThat(new UserWasPurged($this->aggregateRootId()));
-  }
-
-  /**
-   * @param UserWasPurged $event
-   * @return void
-   */
-  public function applyUserWasPurged(UserWasPurged $event): void {
-    $this->purged = true;
-  }
-
-  public function isPurged(): bool {
-    return $this->purged;
   }
 
   public function changeDisplayName(DisplayName $displayName, UniqueDisplayNameSpecificationInterface $uniqueDisplayNameSpecification): void {
@@ -453,7 +475,7 @@ final class User extends AbstractAggregateRoot implements UserInterface {
   }
 
   public function authenticate(): void {
-    $this->recordThat(new UserSignedIn($this->aggregateRootId(), $this->email));
+    $this->recordThat(new UserSignedIn($this->aggregateRootId(), $this->requireEmail()));
   }
 
   public function link(OAuthIdentity $identity): void {
@@ -490,12 +512,11 @@ final class User extends AbstractAggregateRoot implements UserInterface {
    */
   protected function createSnapshotState(): array {
     return [
-      'email' => $this->email->toString(),
-      'username' => $this->username->toString(),
+      'email' => $this->email?->toString(),
+      'username' => $this->username?->toString(),
       'displayName' => $this->displayName->toString(),
       'hashedPassword' => $this->hashedPassword->toString(),
       'status' => $this->status->value,
-      'purged' => $this->purged,
       'roles' => $this->roles->toArray(),
       'linkedOAuthSubjects' => $this->linkedOAuthSubjects->toArray(),
       'preferences' => $this->preferences->toPayload(),
@@ -508,12 +529,11 @@ final class User extends AbstractAggregateRoot implements UserInterface {
   protected static function reconstituteFromSnapshotState(AggregateRootId $id, $state): AggregateRootWithSnapshotting {
     $user = new static(ID::fromString($id->toString()));
 
-    $user->email = Email::fromString($state['email']);
-    $user->username = Username::fromString($state['username']);
+    $user->email = Email::fromStringOrNull($state['email']);
+    $user->username = $state['username'] === null ? null : Username::fromString($state['username']);
     $user->displayName = DisplayName::fromString($state['displayName']);
     $user->hashedPassword = HashedPassword::fromHash($state['hashedPassword']);
     $user->status = UserStatus::from($state['status']);
-    $user->purged = $state['purged'] ?? false;
 
     $roles = array_map(fn(string $roleString) => Role::fromString($roleString), $state['roles']);
     $user->roles = RoleSet::create($roles);

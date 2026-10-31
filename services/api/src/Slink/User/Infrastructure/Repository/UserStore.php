@@ -5,22 +5,41 @@ declare(strict_types=1);
 namespace Slink\User\Infrastructure\Repository;
 
 use Slink\Shared\Domain\ValueObject\ID;
-use Slink\Shared\Infrastructure\Persistence\EventStore\AbstractStoreRepository;
+use EventSauce\EventSourcing\MessageDispatcher;
+use Slink\Shared\Infrastructure\Persistence\EventStore\AbstractViewBackedStore;
 use Slink\User\Domain\Repository\CheckUserByEmailInterface;
 use Slink\User\Domain\Repository\CheckUserByRefreshTokenInterface;
 use Slink\User\Domain\Repository\CheckUserByUsernameInterface;
+use Slink\User\Domain\Repository\OAuthLinkRepositoryInterface;
+use Slink\User\Domain\Repository\RefreshTokenRepositoryInterface;
+use Slink\User\Domain\Repository\UserPreferencesRepositoryInterface;
+use Slink\User\Domain\Repository\UserRepositoryInterface;
 use Slink\User\Domain\Repository\UserStoreRepositoryInterface;
 use Slink\User\Domain\User;
 use Slink\User\Domain\ValueObject\Auth\HashedRefreshToken;
 use Slink\User\Domain\ValueObject\Email;
 use Slink\User\Domain\ValueObject\Username;
+use Slink\User\Infrastructure\ReadModel\View\UserView;
 use Symfony\Contracts\Service\Attribute\Required;
 
-final class UserStore extends AbstractStoreRepository implements UserStoreRepositoryInterface {
+/**
+ * @extends AbstractViewBackedStore<User, UserView>
+ */
+final class UserStore extends AbstractViewBackedStore implements UserStoreRepositoryInterface {
   private CheckUserByEmailInterface $checkUserByEmail;
   private CheckUserByUsernameInterface $checkUserByUsername;
   private CheckUserByRefreshTokenInterface $getUserByRefreshToken;
-  
+
+  public function __construct(
+    MessageDispatcher $messageDispatcher,
+    private readonly UserRepositoryInterface $userRepository,
+    private readonly OAuthLinkRepositoryInterface $oauthLinkRepository,
+    private readonly UserPreferencesRepositoryInterface $userPreferencesRepository,
+    private readonly RefreshTokenRepositoryInterface $refreshTokenRepository,
+  ) {
+    parent::__construct($messageDispatcher);
+  }
+
   #[Required]
   public function setCheckUserByEmail(CheckUserByEmailInterface $checkUserByEmail): void {
     $this->checkUserByEmail = $checkUserByEmail;
@@ -36,8 +55,23 @@ final class UserStore extends AbstractStoreRepository implements UserStoreReposi
     $this->getUserByRefreshToken = $getUserByRefreshToken;
   }
   
-  static function getAggregateRootClass(): string {
+  protected static function getAggregateRootClass(): string {
     return User::class;
+  }
+
+  protected function findRootView(ID $id): object {
+    return $this->userRepository->one($id);
+  }
+
+  protected function hydrate(object $view): object {
+    $userId = $view->getUuid();
+
+    return User::fromView(
+      $view,
+      $this->oauthLinkRepository->findByUserId($userId),
+      $this->userPreferencesRepository->findByUserId($userId),
+      $this->refreshTokenRepository->findByUserId($userId),
+    );
   }
   
   /**
@@ -46,11 +80,7 @@ final class UserStore extends AbstractStoreRepository implements UserStoreReposi
    */
   #[\Override]
   public function get(ID $id): User {
-    $user = $this->retrieve($id);
-    if (!$user instanceof User) {
-      throw new \RuntimeException('Expected instance of User, got ' . get_class($user));
-    }
-    return $user;
+    return $this->retrieve($id);
   }
   
   /**
