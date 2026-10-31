@@ -189,6 +189,28 @@ final class BookmarkRepository extends AbstractRepository implements BookmarkRep
   }
 
   /**
+   * @param array<string> $imageIds
+   * @return array<string, int>
+   */
+  #[Override]
+  public function countByImageIds(array $imageIds): array {
+    if (empty($imageIds)) {
+      return [];
+    }
+
+    $results = $this->createQueryBuilder('b')
+      ->select('i.uuid AS imageId', 'COUNT(b.uuid) AS total')
+      ->join('b.image', 'i')
+      ->where('i.uuid IN (:imageIds)')
+      ->groupBy('i.uuid')
+      ->setParameter('imageIds', $imageIds)
+      ->getQuery()
+      ->getScalarResult();
+
+    return array_map('intval', array_column($results, 'total', 'imageId'));
+  }
+
+  /**
    * @return Paginator<BookmarkView>
    */
   #[Override]

@@ -44,7 +44,6 @@ class ImageView extends AbstractView implements CursorAwareInterface, OwnerAware
    * @param ?UserView $user
    * @param ImageAttributes $attributes
    * @param ImageMetadata|null $metadata
-   * @param int $bookmarkCount
    */
   public function __construct(
     #[ORM\Id]
@@ -65,10 +64,6 @@ class ImageView extends AbstractView implements CursorAwareInterface, OwnerAware
     #[ORM\Embedded(class: ImageMetadata::class, columnPrefix: false)]
     #[Groups(['public'])]
     private ?ImageMetadata  $metadata = null,
-
-    #[ORM\Column(type: 'integer', options: ['default' => 0])]
-    #[Groups(['public'])]
-    private int             $bookmarkCount = 0,
   ) {
     $this->tags = new ArrayCollection();
   }
@@ -194,20 +189,6 @@ class ImageView extends AbstractView implements CursorAwareInterface, OwnerAware
     $this->tags->clear();
   }
 
-  public function getBookmarkCount(): int {
-    return $this->bookmarkCount;
-  }
-
-  public function incrementBookmarkCount(): void {
-    $this->bookmarkCount++;
-  }
-
-  public function decrementBookmarkCount(): void {
-    if ($this->bookmarkCount > 0) {
-      $this->bookmarkCount--;
-    }
-  }
-
   public function getLicenseView(): ?ImageLicenseView {
     return $this->license;
   }
@@ -231,7 +212,6 @@ class ImageView extends AbstractView implements CursorAwareInterface, OwnerAware
     return [
       'id' => $this->uuid,
       'user' => $this->getOwner(),
-      'bookmarkCount' => $this->bookmarkCount,
       'license' => $this->getLicense()?->value,
       ...$this->attributes->toPayload(),
       ...$this->metadata ? $this->metadata->toPayload() : []

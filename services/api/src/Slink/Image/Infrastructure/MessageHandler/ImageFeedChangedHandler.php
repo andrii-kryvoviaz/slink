@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Slink\Image\Infrastructure\MessageHandler;
 
 use Doctrine\Persistence\ManagerRegistry;
+use Slink\Bookmark\Domain\Repository\BookmarkRepositoryInterface;
 use Slink\Image\Domain\Enum\ImageFeedEventType;
 use Slink\Image\Domain\Filter\ImageListFilter;
 use Slink\Image\Domain\Repository\ImageRepositoryInterface;
@@ -18,6 +19,7 @@ final readonly class ImageFeedChangedHandler {
   public function __construct(
     private ManagerRegistry $doctrine,
     private ImageRepositoryInterface $imageRepository,
+    private BookmarkRepositoryInterface $bookmarkRepository,
     private NormalizerInterface $serializer,
     private ServerSentEventPublisherInterface $publisher,
   ) {
@@ -37,9 +39,15 @@ final readonly class ImageFeedChangedHandler {
         $eventType = ImageFeedEventType::Updated;
       }
 
+      $payload = $this->serializer->normalize($image, context: ['groups' => ['public']]);
+
+      if (is_array($payload)) {
+        $payload['bookmarkCount'] = $this->bookmarkRepository->countByImageId($message->imageId);
+      }
+
       $this->publisher->publish('public-feed', [
         'event' => $eventType->value,
-        'image' => $this->serializer->normalize($image, context: ['groups' => ['public']]),
+        'image' => $payload,
       ]);
       return;
     }

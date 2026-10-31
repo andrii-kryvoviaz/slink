@@ -33,7 +33,6 @@ final class ImageNormalizerTest extends KernelTestCase {
         'views' => 4,
       ],
       'metadata' => ['size' => 1234, 'mimeType' => 'image/png', 'width' => 640, 'height' => 480],
-      'bookmarkCount' => 3,
     ], $this->serializer()->normalize($this->image(), context: ['groups' => ['public']]));
   }
 
@@ -108,7 +107,6 @@ final class ImageNormalizerTest extends KernelTestCase {
         4,
       ),
       $metadata,
-      3,
     );
   }
 }

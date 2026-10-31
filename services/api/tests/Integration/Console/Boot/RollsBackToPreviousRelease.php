@@ -27,6 +27,8 @@ trait RollsBackToPreviousRelease {
       $this->connection()->executeStatement(\sprintf('ALTER TABLE "%s" DROP COLUMN version', $table));
     }
 
+    $this->connection()->executeStatement('ALTER TABLE "image" ADD COLUMN bookmark_count INTEGER DEFAULT 0 NOT NULL');
+
     $this->connection()->executeStatement(
       <<<'SQL'
         DELETE FROM doctrine_migration_versions

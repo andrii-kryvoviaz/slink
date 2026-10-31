@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Slink\Image\Application\Query\GetImageListById;
 
+use Slink\Bookmark\Domain\Repository\BookmarkRepositoryInterface;
 use Slink\Image\Domain\Filter\ImageListFilter;
 use Slink\Image\Domain\Repository\ImageRepositoryInterface;
 use Slink\Shared\Application\Http\Item;
@@ -11,7 +12,8 @@ use Slink\Shared\Application\Query\QueryHandlerInterface;
 
 final readonly class GetImageListByIdHandler implements QueryHandlerInterface {
   public function __construct(
-    private ImageRepositoryInterface $repository
+    private ImageRepositoryInterface $repository,
+    private BookmarkRepositoryInterface $bookmarkRepository,
   ) {
   }
   
@@ -24,6 +26,11 @@ final readonly class GetImageListByIdHandler implements QueryHandlerInterface {
       uuids: $query->getUuid()
     ));
     
-    return array_map(fn($image) => Item::fromEntity($image), iterator_to_array($images));
+    $bookmarkCounts = $this->bookmarkRepository->countByImageIds($query->getUuid());
+
+    return array_map(
+      fn($image) => Item::fromEntity($image, ['bookmarkCount' => $bookmarkCounts[$image->getUuid()] ?? 0]),
+      iterator_to_array($images),
+    );
   }
 }

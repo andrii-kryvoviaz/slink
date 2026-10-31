@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Slink\Collection\Infrastructure\Resource\Provider;
 
+use Slink\Bookmark\Domain\Repository\BookmarkRepositoryInterface;
 use Slink\Collection\Application\Resource\ItemDataProviderInterface;
 use Slink\Collection\Domain\Enum\ItemType;
 use Slink\Collection\Infrastructure\Resource\CollectionItemResourceContext;
@@ -18,6 +19,7 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 final readonly class ImageItemDataProvider implements ItemDataProviderInterface {
   public function __construct(
     private ImageRepositoryInterface $imageRepository,
+    private BookmarkRepositoryInterface $bookmarkRepository,
   ) {
   }
 
@@ -52,10 +54,13 @@ final readonly class ImageItemDataProvider implements ItemDataProviderInterface 
       limit: count($imageIds),
       uuids: $imageIds
     ));
+    $bookmarkCounts = $this->bookmarkRepository->countByImageIds($imageIds);
     $result = [];
 
     foreach ($images as $image) {
-      $result[$image->getUuid()] = Item::fromEntity($image);
+      $result[$image->getUuid()] = Item::fromEntity($image, [
+        'bookmarkCount' => $bookmarkCounts[$image->getUuid()] ?? 0,
+      ]);
     }
 
     return $result;

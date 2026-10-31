@@ -8,6 +8,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostPersistEventArgs;
+use Doctrine\ORM\Event\PostRemoveEventArgs;
 use Doctrine\ORM\Event\PostUpdateEventArgs;
 use Doctrine\ORM\UnitOfWork;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -15,6 +16,7 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Slink\Bookmark\Infrastructure\ReadModel\View\BookmarkView;
 use Slink\Image\Domain\ValueObject\ImageAttributes;
 use Slink\Image\Infrastructure\EventListener\ImageFeedChangeListener;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
@@ -144,7 +146,6 @@ final class ImageFeedChangeListenerTest extends TestCase {
     return [
       'description' => ['attributes.description'],
       'file name' => ['attributes.fileName'],
-      'bookmark count' => ['bookmarkCount'],
     ];
   }
 
@@ -173,5 +174,46 @@ final class ImageFeedChangeListenerTest extends TestCase {
 
     $listener = new ImageFeedChangeListener($this->busExpectingNothing());
     $listener->postUpdate($image, $this->updateArgs($image, [$field => ['old', 'new']]));
+  }
+
+  private function bookmarkOn(ImageView $image): BookmarkView {
+    $bookmark = $this->createStub(BookmarkView::class);
+    $bookmark->method('getImage')->willReturn($image);
+
+    return $bookmark;
+  }
+
+  #[Test]
+  public function itQueuesImageUpdatedWhenABookmarkIsAddedToAPublicImage(): void {
+    $bookmark = $this->bookmarkOn($this->imageView(true));
+    $messageBus = $this->busExpecting('image_updated');
+
+    $listener = new ImageFeedChangeListener($messageBus);
+    $listener->postPersistBookmark($bookmark, new PostPersistEventArgs($bookmark, $this->createStub(EntityManagerInterface::class)));
+  }
+
+  #[Test]
+  public function itQueuesNothingWhenABookmarkIsAddedToANonPublicImage(): void {
+    $bookmark = $this->bookmarkOn($this->imageView(false));
+
+    $listener = new ImageFeedChangeListener($this->busExpectingNothing());
+    $listener->postPersistBookmark($bookmark, new PostPersistEventArgs($bookmark, $this->createStub(EntityManagerInterface::class)));
+  }
+
+  #[Test]
+  public function itQueuesImageUpdatedWhenABookmarkIsRemovedFromAPublicImage(): void {
+    $bookmark = $this->bookmarkOn($this->imageView(true));
+    $messageBus = $this->busExpecting('image_updated');
+
+    $listener = new ImageFeedChangeListener($messageBus);
+    $listener->postRemoveBookmark($bookmark, new PostRemoveEventArgs($bookmark, $this->createStub(EntityManagerInterface::class)));
+  }
+
+  #[Test]
+  public function itQueuesNothingWhenABookmarkIsRemovedFromANonPublicImage(): void {
+    $bookmark = $this->bookmarkOn($this->imageView(false));
+
+    $listener = new ImageFeedChangeListener($this->busExpectingNothing());
+    $listener->postRemoveBookmark($bookmark, new PostRemoveEventArgs($bookmark, $this->createStub(EntityManagerInterface::class)));
   }
 }

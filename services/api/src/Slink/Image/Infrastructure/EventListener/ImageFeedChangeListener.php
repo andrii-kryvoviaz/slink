@@ -10,8 +10,10 @@ use Doctrine\DBAL\ParameterType;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostPersistEventArgs;
+use Doctrine\ORM\Event\PostRemoveEventArgs;
 use Doctrine\ORM\Event\PostUpdateEventArgs;
 use Doctrine\ORM\Events;
+use Slink\Bookmark\Infrastructure\ReadModel\View\BookmarkView;
 use Slink\Image\Domain\Enum\ImageFeedEventType;
 use Slink\Image\Infrastructure\Message\ImageFeedChanged;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
@@ -20,6 +22,8 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 #[AsEntityListener(event: Events::postPersist, method: 'postPersist', entity: ImageView::class, entityManager: 'read_model')]
 #[AsEntityListener(event: Events::postUpdate, method: 'postUpdate', entity: ImageView::class, entityManager: 'read_model')]
+#[AsEntityListener(event: Events::postPersist, method: 'postPersistBookmark', entity: BookmarkView::class, entityManager: 'read_model')]
+#[AsEntityListener(event: Events::postRemove, method: 'postRemoveBookmark', entity: BookmarkView::class, entityManager: 'read_model')]
 #[AsDoctrineListener(event: Events::onFlush, connection: 'read_model')]
 final readonly class ImageFeedChangeListener {
   public function __construct(
@@ -64,6 +68,14 @@ final readonly class ImageFeedChangeListener {
     }
   }
 
+  public function postPersistBookmark(BookmarkView $bookmark, PostPersistEventArgs $args): void {
+    $this->enqueueUpdateForPublic($bookmark->getImage());
+  }
+
+  public function postRemoveBookmark(BookmarkView $bookmark, PostRemoveEventArgs $args): void {
+    $this->enqueueUpdateForPublic($bookmark->getImage());
+  }
+
   public function onFlush(OnFlushEventArgs $args): void {
     $em = $args->getObjectManager();
 
@@ -102,7 +114,7 @@ final readonly class ImageFeedChangeListener {
    * @param array<string, array{0: mixed, 1: mixed}> $changeSet
    */
   private function hasRelevantChanges(array $changeSet): bool {
-    $relevantKeys = ['attributes.description', 'attributes.fileName', 'bookmarkCount'];
+    $relevantKeys = ['attributes.description', 'attributes.fileName'];
 
     foreach ($relevantKeys as $key) {
       if (isset($changeSet[$key])) {
@@ -111,6 +123,14 @@ final readonly class ImageFeedChangeListener {
     }
 
     return false;
+  }
+
+  private function enqueueUpdateForPublic(ImageView $image): void {
+    if (!$image->getAttributes()->isPublic()) {
+      return;
+    }
+
+    $this->enqueue($image->getUuid(), ImageFeedEventType::Updated);
   }
 
   private function enqueue(string $imageId, ImageFeedEventType $eventType): void {
