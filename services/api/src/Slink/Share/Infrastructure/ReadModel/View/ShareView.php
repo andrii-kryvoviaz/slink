@@ -16,6 +16,7 @@ use Slink\Share\Infrastructure\ReadModel\Repository\ShareRepository;
 use Slink\Shared\Domain\Contract\CursorAwareInterface;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
+use Slink\Shared\Infrastructure\Persistence\ReadModel\VersionedView;
 
 #[ORM\Table(name: '`share`')]
 #[ORM\Entity(repositoryClass: ShareRepository::class)]
@@ -24,6 +25,8 @@ use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
 #[ORM\Index(columns: ['is_published', 'created_at', 'uuid'], name: 'idx_share_listing')]
 #[ORM\Index(columns: ['expires_at'], name: 'idx_share_expires_at')]
 class ShareView extends AbstractView implements PublicationAware, ExpirationAware, PasswordProtected, CursorAwareInterface {
+  use VersionedView;
+
   #[ORM\Id]
   #[ORM\Column(type: 'uuid')]
   private string $uuid;

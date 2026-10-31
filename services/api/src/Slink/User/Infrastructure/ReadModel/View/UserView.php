@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Infrastructure\Attribute\Sanitize;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
+use Slink\Shared\Infrastructure\Persistence\ReadModel\VersionedView;
 use Slink\User\Domain\Enum\UserStatus;
 use Slink\User\Domain\ValueObject\Auth\HashedPassword;
 use Slink\User\Domain\ValueObject\DisplayName;
@@ -26,6 +27,8 @@ use Symfony\Component\Serializer\Attribute\SerializedName;
 #[ORM\Index(columns: ['status'], name: 'idx_user_status')]
 #[ORM\Index(columns: ['created_at'], name: 'idx_user_created_at')]
 class UserView extends AbstractView {
+  use VersionedView;
+
   /**
    * @param string $uuid
    * @param Email|null $email

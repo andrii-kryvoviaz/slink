@@ -11,6 +11,7 @@ use Slink\Image\Infrastructure\ReadModel\View\ImageView;
 use Slink\Shared\Domain\Contract\CursorAwareInterface;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
+use Slink\Shared\Infrastructure\Persistence\ReadModel\VersionedView;
 use Slink\User\Infrastructure\ReadModel\View\UserView;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Serializer\Attribute\SerializedName;
@@ -21,6 +22,8 @@ use Symfony\Component\Serializer\Attribute\SerializedName;
 #[ORM\Index(columns: ['user_id', 'created_at'], name: 'idx_bookmark_user_created')]
 #[ORM\Index(columns: ['image_id'], name: 'idx_bookmark_image')]
 class BookmarkView extends AbstractView implements CursorAwareInterface {
+  use VersionedView;
+
   public function __construct(
     #[ORM\Id]
     #[ORM\Column(type: 'uuid')]

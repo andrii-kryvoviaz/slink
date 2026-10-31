@@ -17,6 +17,7 @@ use Slink\Shared\Domain\Contract\OwnerAwareInterface;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Attribute\Sanitize;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
+use Slink\Shared\Infrastructure\Persistence\ReadModel\VersionedView;
 use Slink\Tag\Infrastructure\ReadModel\View\TagView;
 use Slink\User\Domain\ValueObject\GuestUser;
 use Slink\User\Infrastructure\ReadModel\View\UserView;
@@ -27,6 +28,8 @@ use Symfony\Component\Serializer\Attribute\SerializedName;
 #[ORM\Entity(repositoryClass: ImageRepository::class)]
 #[ORM\Index(name: 'idx_image_user_created_at', columns: ['user_id', 'created_at'])]
 class ImageView extends AbstractView implements CursorAwareInterface, OwnerAwareInterface {
+  use VersionedView;
+
   #[ORM\ManyToMany(targetEntity: TagView::class)]
   #[ORM\JoinTable(name: 'image_to_tag')]
   #[ORM\JoinColumn(name: 'image_id', referencedColumnName: 'uuid')]

@@ -10,6 +10,7 @@ use Slink\Image\Infrastructure\ReadModel\View\ImageView;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Infrastructure\Attribute\Sanitize;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
+use Slink\Shared\Infrastructure\Persistence\ReadModel\VersionedView;
 use Slink\User\Infrastructure\ReadModel\View\UserView;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Serializer\Attribute\SerializedName;
@@ -20,6 +21,8 @@ use Symfony\Component\Serializer\Attribute\SerializedName;
 #[ORM\Index(columns: ['user_id'], name: 'idx_comment_user')]
 #[ORM\Index(columns: ['referenced_comment_id'], name: 'idx_comment_referenced')]
 class CommentView extends AbstractView {
+  use VersionedView;
+
   #[ORM\ManyToOne(targetEntity: CommentView::class)]
   #[ORM\JoinColumn(name: 'referenced_comment_id', referencedColumnName: 'uuid', nullable: true)]
   private ?CommentView $referencedComment = null;

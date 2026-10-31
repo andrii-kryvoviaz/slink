@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
+use Slink\Shared\Infrastructure\Persistence\ReadModel\VersionedView;
 use Slink\Tag\Infrastructure\ReadModel\Repository\TagRepository;
 use Slink\User\Infrastructure\ReadModel\View\UserView;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -21,6 +22,8 @@ use Symfony\Component\Serializer\Attribute\SerializedName;
 #[ORM\Index(columns: ['user_id', 'parent_id'], name: 'idx_tag_user_parent')]
 #[ORM\Index(columns: ['user_id', 'path'], name: 'idx_tag_user_path')]
 class TagView extends AbstractView {
+  use VersionedView;
+
   #[ORM\ManyToOne(targetEntity: UserView::class)]
   #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'uuid')]
   private ?UserView $user = null;

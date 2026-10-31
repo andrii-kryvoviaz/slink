@@ -12,6 +12,7 @@ use Slink\Shared\Domain\Contract\OwnerAwareInterface;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
+use Slink\Shared\Infrastructure\Persistence\ReadModel\VersionedView;
 use Slink\User\Infrastructure\ReadModel\View\UserView;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Serializer\Attribute\SerializedName;
@@ -20,6 +21,8 @@ use Symfony\Component\Serializer\Attribute\SerializedName;
 #[ORM\Entity(repositoryClass: CollectionRepository::class)]
 #[ORM\Index(columns: ['user_id', 'created_at'], name: 'idx_collection_user_created_at')]
 class CollectionView extends AbstractView implements OwnerAwareInterface {
+  use VersionedView;
+
   #[ORM\OneToMany(targetEntity: CollectionItemView::class, mappedBy: 'collection', cascade: ['remove'], orphanRemoval: true)]
   private Collection $items;
 
