@@ -204,4 +204,55 @@ final class AddItemToCollectionHandlerTest extends TestCase {
 
     $handler($command, $ownerId->toString());
   }
+
+  #[Test]
+  public function itHoldsTheCollectionItemsLockFromLoadThroughStore(): void {
+    $userId = ID::generate();
+    $collectionId = ID::generate();
+    $lockFactory = $this->createLockFactory();
+    $collection = $this->createCollection($collectionId, $userId);
+
+    $isLockedByAnotherRequest = function () use ($lockFactory, $collectionId): bool {
+      $competing = $lockFactory->createLock('collection-items-' . $collectionId->toString());
+
+      if (!$competing->acquire()) {
+        return true;
+      }
+
+      $competing->release();
+
+      return false;
+    };
+
+    $lockedWhile = [];
+
+    $collectionStore = $this->createStub(CollectionStoreRepositoryInterface::class);
+    $collectionStore
+      ->method('get')
+      ->willReturnCallback(function () use (&$lockedWhile, $isLockedByAnotherRequest, $collection): Collection {
+        $lockedWhile['load'] = $isLockedByAnotherRequest();
+
+        return $collection;
+      });
+    $collectionStore
+      ->method('store')
+      ->willReturnCallback(function () use (&$lockedWhile, $isLockedByAnotherRequest): void {
+        $lockedWhile['store'] = $isLockedByAnotherRequest();
+      });
+
+    $handler = new AddItemToCollectionHandler(
+      $collectionStore,
+      $this->createImageStore(),
+      $this->createAccess(true, true),
+      $lockFactory,
+    );
+
+    $handler(
+      new AddItemToCollectionCommand($collectionId->toString(), ID::generate()->toString(), ItemType::Image),
+      $userId->toString(),
+    );
+
+    $this->assertSame(['load' => true, 'store' => true], $lockedWhile);
+    $this->assertFalse($isLockedByAnotherRequest());
+  }
 }

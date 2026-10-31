@@ -17,6 +17,8 @@ use Slink\Collection\Domain\ValueObject\CollectionDescription;
 use Slink\Collection\Domain\ValueObject\CollectionItem;
 use Slink\Collection\Domain\ValueObject\CollectionItemSet;
 use Slink\Collection\Domain\ValueObject\CollectionName;
+use Slink\Collection\Infrastructure\ReadModel\View\CollectionItemView;
+use Slink\Collection\Infrastructure\ReadModel\View\CollectionView;
 use Slink\Shared\Domain\AbstractAggregateRoot;
 use Slink\Shared\Domain\Contract\OwnerAwareInterface;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
@@ -29,7 +31,6 @@ final class Collection extends AbstractAggregateRoot implements OwnerAwareInterf
   private CollectionItemSet $items;
   private DateTime $createdAt;
   private ?DateTime $updatedAt = null;
-  private bool $deleted = false;
 
   protected function __construct(ID $id) {
     parent::__construct($id);
@@ -51,6 +52,29 @@ final class Collection extends AbstractAggregateRoot implements OwnerAwareInterf
       $name,
       $description,
       $now,
+    ));
+
+    return $collection;
+  }
+
+  /**
+   * @param list<CollectionItemView> $itemViews
+   */
+  public static function fromView(CollectionView $view, array $itemViews): self {
+    $collection = new self(ID::fromString($view->getUuid()));
+    $collection->userId = ID::fromString($view->getUserId());
+    $collection->name = CollectionName::fromStored($view->getName());
+    $collection->description = CollectionDescription::fromStored($view->getDescription());
+    $collection->createdAt = $view->getCreatedAt();
+    $collection->updatedAt = $view->getUpdatedAt();
+    $collection->items = CollectionItemSet::create(array_map(
+      static fn(CollectionItemView $item): CollectionItem => CollectionItem::create(
+        ID::fromString($item->getItemId()),
+        $item->getItemType(),
+        $item->getPosition(),
+        $item->getAddedAt(),
+      ),
+      $itemViews,
     ));
 
     return $collection;
@@ -120,10 +144,6 @@ final class Collection extends AbstractAggregateRoot implements OwnerAwareInterf
     $this->updatedAt = $event->updatedAt;
   }
 
-  protected function applyCollectionWasDeleted(CollectionWasDeleted $event): void {
-    $this->deleted = true;
-  }
-
   protected function applyItemWasAddedToCollection(ItemWasAddedToCollection $event): void {
     $this->items = $this->items->add($event->item);
   }
@@ -164,10 +184,6 @@ final class Collection extends AbstractAggregateRoot implements OwnerAwareInterf
     return $this->updatedAt;
   }
 
-  public function isDeleted(): bool {
-    return $this->deleted;
-  }
-
   public function isOwnedBy(?ID $userId): bool {
     return $this->userId->equals($userId);
   }
@@ -183,7 +199,6 @@ final class Collection extends AbstractAggregateRoot implements OwnerAwareInterf
       'items' => $this->items->toPayload(),
       'createdAt' => $this->createdAt->toString(),
       'updatedAt' => $this->updatedAt?->toString(),
-      'deleted' => $this->deleted,
     ];
   }
 
@@ -195,7 +210,6 @@ final class Collection extends AbstractAggregateRoot implements OwnerAwareInterf
     $collection->items = CollectionItemSet::fromPayload($state['items'] ?? []);
     $collection->createdAt = DateTime::fromString($state['createdAt']);
     $collection->updatedAt = isset($state['updatedAt']) ? DateTime::fromString($state['updatedAt']) : null;
-    $collection->deleted = $state['deleted'] ?? false;
 
     return $collection;
   }

@@ -6,7 +6,6 @@ namespace Slink\Image\Infrastructure\ReadModel\Projection;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
-use Psr\Log\LoggerInterface;
 use Slink\Collection\Domain\Repository\CollectionItemRepositoryInterface;
 use Slink\Image\Domain\Event\ImageAttributesWasUpdated;
 use Slink\Image\Domain\Event\ImageLicenseWasUpdated;
@@ -28,7 +27,6 @@ final class ImageProjection extends AbstractProjection {
     private readonly ImageLicenseRepository $licenseRepository,
     private readonly CollectionItemRepositoryInterface $collectionItemRepository,
     private readonly EntityManagerInterface $em,
-    private readonly LoggerInterface $logger,
   ) {
   }
 
@@ -75,11 +73,7 @@ final class ImageProjection extends AbstractProjection {
   public function handleImageWasDeleted(ImageWasDeleted $event): void {
     $imageId = $event->id->toString();
 
-    try {
-      $this->collectionItemRepository->removeByItemId($imageId);
-    } catch (\Throwable $e) {
-      $this->logger->error(sprintf('Failed to remove collection items for image %s: %s in %s:%s', $imageId, $e->getMessage(), $e->getFile(), $e->getLine()));
-    }
+    $this->collectionItemRepository->removeByItemId($imageId);
 
     try {
       $image = $this->repository->oneById($imageId);

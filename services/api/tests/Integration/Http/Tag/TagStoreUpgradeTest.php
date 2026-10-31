@@ -18,21 +18,20 @@ final class TagStoreUpgradeTest extends HttpTestCase {
   use InspectsEventLog;
   use RollsBackToPreviousRelease;
 
+  private string $ownerId = '';
   private string $ownerToken = '';
   private string $parentId = '';
   private string $childId = '';
   private string $bucketId = '';
-  private string $collectionId = '';
 
   protected function setUp(): void {
     parent::setUp();
 
-    $this->createUser('tag-upgrade-owner@local.test', 'tagupgradeowner', self::PASSWORD);
+    $this->ownerId = $this->createUser('tag-upgrade-owner@local.test', 'tagupgradeowner', self::PASSWORD);
     $this->ownerToken = $this->login('tagupgradeowner', self::PASSWORD);
     $this->parentId = $this->createTag('parent');
     $this->childId = $this->createTag('child', $this->parentId);
     $this->bucketId = $this->createTag('bucket');
-    $this->collectionId = $this->createCollection($this->ownerToken);
 
     $this->rollBackToPreviousRelease();
     $this->bootApplicationOnPreviousReleaseDatabase();
@@ -85,28 +84,16 @@ final class TagStoreUpgradeTest extends HttpTestCase {
   }
 
   #[Test]
-  public function viewBackedTagsAndReplayedCollectionsWorkSideBySideAfterBoot(): void {
-    $streamBeforeRename = $this->loggedEvents(ID::fromString($this->collectionId));
+  public function viewBackedTagsAndReplayedUsersWorkSideBySideAfterBoot(): void {
+    $owner = ID::fromString($this->ownerId);
+    $streamBeforeRename = $this->loggedEvents($owner);
 
     self::assertSame(200, $this->apiRequest('GET', '/api/tags', $this->ownerToken));
     self::assertSame(200, $this->apiRequest('GET', \sprintf('/api/tags/%s', $this->childId), $this->ownerToken));
-    self::assertContains(
-      $this->apiRequest(
-        'PATCH',
-        '/api/collection',
-        $this->ownerToken,
-        ['CONTENT_TYPE' => 'application/json'],
-        \json_encode(['id' => $this->collectionId, 'name' => 'renamed after upgrade', 'description' => ''], JSON_THROW_ON_ERROR),
-      ),
-      [200, 204],
-    );
+    self::assertSame(204, $this->updateDisplayName($this->ownerToken, 'Renamed Owner'));
     $newTagId = $this->createTag('after-upgrade');
 
-    self::assertSame(
-      'renamed after upgrade',
-      $this->connection()->fetchOne('SELECT name FROM "collection" WHERE uuid = ?', [$this->collectionId]),
-    );
-    self::assertGreaterThan($streamBeforeRename, $this->loggedEvents(ID::fromString($this->collectionId)));
+    self::assertGreaterThan($streamBeforeRename, $this->loggedEvents($owner));
     self::assertSame(0, $this->loggedEvents(ID::fromString($newTagId)));
   }
 

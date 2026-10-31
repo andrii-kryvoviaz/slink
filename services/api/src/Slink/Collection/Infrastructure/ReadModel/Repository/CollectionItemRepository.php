@@ -66,12 +66,9 @@ final class CollectionItemRepository extends AbstractRepository implements Colle
   }
 
   public function removeByItemId(string $itemId): void {
-    $this->createQueryBuilder('ci')
-      ->delete()
-      ->where('ci.itemId = :itemId')
-      ->setParameter('itemId', $itemId)
-      ->getQuery()
-      ->execute();
+    foreach ($this->findBy(['itemId' => $itemId]) as $item) {
+      $this->getEntityManager()->remove($item);
+    }
   }
 
   /**

@@ -27,7 +27,7 @@ final readonly class AddItemToCollectionHandler implements CommandHandlerInterfa
   public function __invoke(AddItemToCollectionCommand $command, string $userId): void {
     $collectionId = $command->getCollectionId();
 
-    $lock = $this->lockFactory->createLock('collection-add-' . $collectionId);
+    $lock = $this->lockFactory->createLock('collection-items-' . $collectionId);
     $lock->acquire(true);
 
     try {

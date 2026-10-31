@@ -30,7 +30,6 @@ final class FlatStoresUpgradeTest extends HttpTestCase {
   private string $bookmarkId = '';
   private string $notificationId = '';
   private string $providerId = '';
-  private string $collectionId = '';
 
   protected function setUp(): void {
     parent::setUp();
@@ -49,7 +48,6 @@ final class FlatStoresUpgradeTest extends HttpTestCase {
     $this->bookmarkId = $this->singleRowId('bookmark');
     $this->notificationId = $this->notificationIdOfType('comment');
     $this->providerId = $this->createOAuthProvider('flat-upgrade');
-    $this->collectionId = $this->createCollection($this->ownerToken);
 
     $this->rollBackToPreviousRelease();
     $this->bootApplicationOnPreviousReleaseDatabase();
@@ -174,27 +172,14 @@ final class FlatStoresUpgradeTest extends HttpTestCase {
   }
 
   #[Test]
-  public function viewBackedStoresAndReplayedCollectionsWorkSideBySideAfterBoot(): void {
-    $collectionId = ID::fromString($this->collectionId);
-    $streamBeforeRename = $this->loggedEvents($collectionId);
+  public function viewBackedStoresAndReplayedUsersWorkSideBySideAfterBoot(): void {
+    $owner = ID::fromString($this->ownerId);
+    $streamBeforeRename = $this->loggedEvents($owner);
 
-    self::assertContains(
-      $this->apiRequest(
-        'PATCH',
-        '/api/collection',
-        $this->ownerToken,
-        ['CONTENT_TYPE' => 'application/json'],
-        \json_encode(['id' => $this->collectionId, 'name' => 'renamed after upgrade', 'description' => ''], JSON_THROW_ON_ERROR),
-      ),
-      [200, 204],
-    );
+    self::assertSame(204, $this->updateDisplayName($this->ownerToken, 'Renamed Owner'));
     $newCommentId = $this->postComment($this->readerToken, $this->imageId, 'after the upgrade');
 
-    self::assertSame(
-      'renamed after upgrade',
-      $this->connection()->fetchOne('SELECT name FROM "collection" WHERE uuid = ?', [$this->collectionId]),
-    );
-    self::assertGreaterThan($streamBeforeRename, $this->loggedEvents($collectionId));
+    self::assertGreaterThan($streamBeforeRename, $this->loggedEvents($owner));
     self::assertSame(0, $this->loggedEvents(ID::fromString($newCommentId)));
   }
 

@@ -9,7 +9,6 @@ use Doctrine\ORM\OptimisticLockException;
 use EventSauce\EventSourcing\Header;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
-use Slink\Collection\Domain\Repository\CollectionStoreRepositoryInterface;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\Shared\Infrastructure\MessageBus\Event\EventDispatcher;
@@ -21,6 +20,7 @@ use Slink\Tag\Domain\Tag;
 use Slink\Tag\Domain\ValueObject\TagName;
 use Slink\Tag\Domain\ValueObject\TagPath;
 use Slink\Tag\Infrastructure\EventConsumer\TagCascadeDeleteConsumer;
+use Slink\User\Domain\Repository\UserStoreRepositoryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Tests\Integration\Http\Double\RecordingMessageDispatcher;
 use Tests\Integration\Http\Store\ViewBackedStoreRoundTripTestCase;
@@ -275,19 +275,18 @@ final class TagStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
   }
 
   #[Test]
-  public function viewBackedTagsAndReplayedCollectionsWorkSideBySide(): void {
+  public function viewBackedTagsAndReplayedUsersWorkSideBySide(): void {
     $this->bootOwner();
 
     $tagId = $this->createRootTag('side-by-side');
-    $collectionId = $this->createCollection($this->ownerToken);
 
     self::assertSame(0, $this->loggedEvents(ID::fromString($tagId)));
-    self::assertGreaterThan(0, $this->loggedEvents(ID::fromString($collectionId)));
+    self::assertGreaterThan(0, $this->loggedEvents(ID::fromString($this->ownerId)));
     self::assertSame('side-by-side', $this->reload(ID::fromString($tagId))->getName()->getValue());
 
-    /** @var CollectionStoreRepositoryInterface $collections */
-    $collections = static::getContainer()->get(CollectionStoreRepositoryInterface::class);
-    self::assertSame('functional-collection', $collections->get(ID::fromString($collectionId))->getName()->toString());
+    /** @var UserStoreRepositoryInterface $users */
+    $users = static::getContainer()->get(UserStoreRepositoryInterface::class);
+    self::assertSame($this->ownerId, $users->get(ID::fromString($this->ownerId))->aggregateRootId()->toString());
   }
 
   private function bootOwner(): void {
