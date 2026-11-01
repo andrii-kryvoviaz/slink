@@ -351,6 +351,23 @@ final class CollectionStoreRoundTripTest extends ViewBackedStoreRoundTripTestCas
   }
 
   #[Test]
+  public function loadingManyLeavesADeletedCollectionOutAndSurfacesAFailureToHydrateAnother(): void {
+    $this->bootOwner();
+    $deletedId = $this->createCollection($this->ownerToken);
+    self::assertSame(204, $this->deleteCollection($deletedId));
+    $brokenId = $this->createCollection($this->ownerToken);
+    $this->addItem($brokenId, $this->uploadImage($this->ownerToken, false));
+    $this->readModel()->executeStatement('UPDATE "collection_item" SET item_type = ? WHERE collection_id = ?', ['unknown', $brokenId]);
+    $this->entityManager()->clear();
+
+    self::assertFalse($this->collectionStore()->getByIds([$deletedId])->has($deletedId));
+
+    $this->expectException(\ValueError::class);
+
+    $this->collectionStore()->getByIds([$deletedId, $brokenId]);
+  }
+
+  #[Test]
   public function theSecondOfTwoConcurrentWritersFailsAndTheFirstWritersValuesStay(): void {
     $collectionId = $this->createAggregate();
     $firstContainer = $this->independentContainer();

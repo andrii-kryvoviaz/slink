@@ -13,6 +13,7 @@ use Slink\Collection\Domain\Repository\CollectionStoreRepositoryInterface;
 use Slink\Collection\Infrastructure\ReadModel\View\CollectionView;
 use Slink\Shared\Domain\DataStructures\HashMap;
 use Slink\Shared\Domain\ValueObject\ID;
+use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\Shared\Infrastructure\Persistence\EventStore\AbstractViewBackedStore;
 
 /**
@@ -57,7 +58,7 @@ final class CollectionStore extends AbstractViewBackedStore implements Collectio
     foreach ($ids as $id) {
       try {
         $map->set($id, $this->get(ID::fromString($id)));
-      } catch (\Throwable) {
+      } catch (NotFoundException) {
       }
     }
     return $map;
