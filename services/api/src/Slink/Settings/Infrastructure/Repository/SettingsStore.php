@@ -9,7 +9,7 @@ use Slink\Settings\Domain\Repository\SettingStoreRepositoryInterface;
 use Slink\Settings\Domain\Settings;
 use Slink\Settings\Infrastructure\Provider\DatabaseProvider;
 use Slink\Shared\Domain\ValueObject\ID;
-use Slink\Shared\Infrastructure\Persistence\EventStore\AbstractViewBackedStore;
+use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractViewBackedStore;
 
 /**
  * @extends AbstractViewBackedStore<Settings, \stdClass>

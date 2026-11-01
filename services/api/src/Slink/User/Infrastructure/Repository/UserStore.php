@@ -6,7 +6,7 @@ namespace Slink\User\Infrastructure\Repository;
 
 use Slink\Shared\Domain\ValueObject\ID;
 use EventSauce\EventSourcing\MessageDispatcher;
-use Slink\Shared\Infrastructure\Persistence\EventStore\AbstractViewBackedStore;
+use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractViewBackedStore;
 use Slink\User\Domain\Repository\CheckUserByEmailInterface;
 use Slink\User\Domain\Repository\CheckUserByRefreshTokenInterface;
 use Slink\User\Domain\Repository\CheckUserByUsernameInterface;

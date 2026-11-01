@@ -14,7 +14,7 @@ use Slink\Collection\Infrastructure\ReadModel\View\CollectionView;
 use Slink\Shared\Domain\DataStructures\HashMap;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
-use Slink\Shared\Infrastructure\Persistence\EventStore\AbstractViewBackedStore;
+use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractViewBackedStore;
 
 /**
  * @extends AbstractViewBackedStore<Collection, CollectionView>
@@ -40,7 +40,7 @@ final class CollectionStore extends AbstractViewBackedStore implements Collectio
   protected function hydrate(object $view): object {
     return Collection::fromView(
       $view,
-      array_values($this->collectionItemRepository->getByCollectionId($view->getUuid())),
+      $this->collectionItemRepository->getItemsForHydration($view->getUuid()),
     );
   }
 

@@ -10,7 +10,7 @@ use Slink\Image\Domain\Repository\ImageRepositoryInterface;
 use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
 use Slink\Shared\Domain\ValueObject\ID;
-use Slink\Shared\Infrastructure\Persistence\EventStore\AbstractViewBackedStore;
+use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractViewBackedStore;
 use Slink\Tag\Infrastructure\ReadModel\View\TagView;
 
 /**

@@ -7,7 +7,7 @@ namespace Slink\User\Infrastructure\Repository;
 use EventSauce\EventSourcing\MessageDispatcher;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
-use Slink\Shared\Infrastructure\Persistence\EventStore\AbstractViewBackedStore;
+use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractViewBackedStore;
 use Slink\User\Domain\OAuthProvider;
 use Slink\User\Domain\Repository\OAuthProviderRepositoryInterface;
 use Slink\User\Domain\Repository\OAuthProviderStoreRepositoryInterface;

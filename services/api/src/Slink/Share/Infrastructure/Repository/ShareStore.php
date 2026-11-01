@@ -12,7 +12,7 @@ use Slink\Share\Domain\ValueObject\TargetPath;
 use Slink\Share\Infrastructure\ReadModel\View\ShareView;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
-use Slink\Shared\Infrastructure\Persistence\EventStore\AbstractViewBackedStore;
+use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractViewBackedStore;
 
 /**
  * @extends AbstractViewBackedStore<Share, ShareView>

@@ -6,7 +6,7 @@ namespace Slink\Tag\Infrastructure\Repository;
 
 use EventSauce\EventSourcing\MessageDispatcher;
 use Slink\Shared\Domain\ValueObject\ID;
-use Slink\Shared\Infrastructure\Persistence\EventStore\AbstractViewBackedStore;
+use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractViewBackedStore;
 use Slink\Tag\Domain\Repository\TagRepositoryInterface;
 use Slink\Tag\Domain\Repository\TagStoreRepositoryInterface;
 use Slink\Tag\Domain\Tag;

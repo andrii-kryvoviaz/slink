@@ -5,8 +5,13 @@ declare(strict_types=1);
 namespace Slink\Collection\Infrastructure\ReadModel\Repository;
 
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Ramsey\Uuid\UuidInterface;
+use Slink\Collection\Domain\Enum\ItemType;
 use Slink\Collection\Domain\Repository\CollectionItemRepositoryInterface;
+use Slink\Collection\Domain\ValueObject\CollectionItem;
 use Slink\Collection\Infrastructure\ReadModel\View\CollectionItemView;
+use Slink\Shared\Domain\ValueObject\Date\DateTime;
+use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Pagination\CursorPaginationTrait;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractRepository;
 
@@ -81,6 +86,29 @@ final class CollectionItemRepository extends AbstractRepository implements Colle
       ->setParameter('collectionId', $collectionId)
       ->getQuery()
       ->getResult();
+  }
+
+  /**
+   * @return list<CollectionItem>
+   */
+  public function getItemsForHydration(string $collectionId): array {
+    /** @var list<array{itemId: UuidInterface, itemType: ItemType, position: float, addedAt: DateTime}> $rows */
+    $rows = $this->createQueryBuilder('ci')
+      ->select('ci.itemId AS itemId', 'ci.itemType AS itemType', 'ci.position AS position', 'ci.addedAt AS addedAt')
+      ->where('IDENTITY(ci.collection) = :collectionId')
+      ->setParameter('collectionId', $collectionId)
+      ->getQuery()
+      ->getArrayResult();
+
+    return array_map(
+      static fn(array $row): CollectionItem => CollectionItem::create(
+        ID::fromString($row['itemId']->toString()),
+        $row['itemType'],
+        $row['position'],
+        $row['addedAt'],
+      ),
+      $rows,
+    );
   }
 
   /**

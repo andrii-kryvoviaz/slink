@@ -15,7 +15,6 @@ use Slink\Collection\Domain\ValueObject\CollectionDescription;
 use Slink\Collection\Domain\ValueObject\CollectionItem;
 use Slink\Collection\Domain\ValueObject\CollectionItemSet;
 use Slink\Collection\Domain\ValueObject\CollectionName;
-use Slink\Collection\Infrastructure\ReadModel\View\CollectionItemView;
 use Slink\Collection\Infrastructure\ReadModel\View\CollectionView;
 use Slink\Shared\Domain\AbstractAggregateRoot;
 use Slink\Shared\Domain\Contract\OwnerAwareInterface;
@@ -56,26 +55,22 @@ final class Collection extends AbstractAggregateRoot implements OwnerAwareInterf
   }
 
   /**
-   * @param list<CollectionItemView> $itemViews
+   * @param list<CollectionItem> $items
    */
-  public static function fromView(CollectionView $view, array $itemViews): self {
+  public static function fromView(CollectionView $view, array $items): self {
     $collection = new self(ID::fromString($view->getUuid()));
     $collection->userId = ID::fromString($view->getUserId());
     $collection->name = CollectionName::fromStored($view->getName());
     $collection->description = CollectionDescription::fromStored($view->getDescription());
     $collection->createdAt = $view->getCreatedAt();
     $collection->updatedAt = $view->getUpdatedAt();
-    $collection->items = CollectionItemSet::create(array_map(
-      static fn(CollectionItemView $item): CollectionItem => CollectionItem::create(
-        ID::fromString($item->getItemId()),
-        $item->getItemType(),
-        $item->getPosition(),
-        $item->getAddedAt(),
-      ),
-      $itemViews,
-    ));
+    $collection->items = CollectionItemSet::create($items);
 
     return $collection;
+  }
+
+  public static function itemsLockKey(ID $id): string {
+    return 'collection-items-' . $id->toString();
   }
 
   public function update(CollectionName $name, CollectionDescription $description): void {

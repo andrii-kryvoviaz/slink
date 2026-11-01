@@ -10,7 +10,7 @@ use Slink\Bookmark\Domain\Repository\BookmarkRepositoryInterface;
 use Slink\Bookmark\Domain\Repository\BookmarkStoreRepositoryInterface;
 use Slink\Bookmark\Infrastructure\ReadModel\View\BookmarkView;
 use Slink\Shared\Domain\ValueObject\ID;
-use Slink\Shared\Infrastructure\Persistence\EventStore\AbstractViewBackedStore;
+use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractViewBackedStore;
 
 /**
  * @extends AbstractViewBackedStore<Bookmark, BookmarkView>

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Slink\Collection\Domain\Repository;
 
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Slink\Collection\Domain\ValueObject\CollectionItem;
 use Slink\Collection\Infrastructure\ReadModel\View\CollectionItemView;
 use Slink\Collection\Infrastructure\ReadModel\View\CollectionView;
 
@@ -32,6 +33,11 @@ interface CollectionItemRepositoryInterface {
    * @return array<CollectionItemView>
    */
   public function getByCollectionId(string $collectionId): array;
+
+  /**
+   * @return list<CollectionItem>
+   */
+  public function getItemsForHydration(string $collectionId): array;
 
   /**
    * @return array<CollectionItemView>

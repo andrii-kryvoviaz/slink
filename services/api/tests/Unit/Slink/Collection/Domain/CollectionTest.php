@@ -19,7 +19,6 @@ use Slink\Collection\Domain\Event\ItemWasRemovedFromCollection;
 use Slink\Collection\Domain\ValueObject\CollectionDescription;
 use Slink\Collection\Domain\ValueObject\CollectionItem;
 use Slink\Collection\Domain\ValueObject\CollectionName;
-use Slink\Collection\Infrastructure\ReadModel\View\CollectionItemView;
 use Slink\Collection\Infrastructure\ReadModel\View\CollectionView;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Infrastructure\ReadModel\View\UserView;
@@ -246,7 +245,7 @@ final class CollectionTest extends TestCase {
     $imageId = ID::generate();
     $addedAt = DateTime::fromString('2023-04-05 06:07:08');
 
-    $collection = Collection::fromView($view, [$this->itemView($view, $imageId, 7.5, $addedAt)]);
+    $collection = Collection::fromView($view, [$this->item($imageId, 7.5, $addedAt)]);
 
     $this->assertTrue($id->equals($collection->aggregateRootId()));
     $this->assertSame($ownerId->toString(), $collection->getUserId()->toString());
@@ -279,7 +278,7 @@ final class CollectionTest extends TestCase {
   public function itRecordsNoEventsWhenHydrated(): void {
     $view = $this->collectionView();
 
-    $collection = Collection::fromView($view, [$this->itemView($view, ID::generate(), 1.0)]);
+    $collection = Collection::fromView($view, [$this->item(ID::generate(), 1.0)]);
 
     $this->assertSame([], $collection->releaseEvents());
   }
@@ -289,8 +288,8 @@ final class CollectionTest extends TestCase {
   public function itAddsAfterTheHighestHydratedPosition(): void {
     $view = $this->collectionView();
     $collection = Collection::fromView($view, [
-      $this->itemView($view, ID::generate(), 1.0),
-      $this->itemView($view, ID::generate(), 4.0),
+      $this->item(ID::generate(), 1.0),
+      $this->item(ID::generate(), 4.0),
     ]);
 
     $collection->addItem(ID::generate(), ItemType::Image);
@@ -306,7 +305,7 @@ final class CollectionTest extends TestCase {
   public function itDoesNotAddAnItemAlreadyHydrated(): void {
     $view = $this->collectionView();
     $imageId = ID::generate();
-    $collection = Collection::fromView($view, [$this->itemView($view, $imageId, 1.0)]);
+    $collection = Collection::fromView($view, [$this->item($imageId, 1.0)]);
 
     $collection->addItem($imageId, ItemType::Image);
 
@@ -320,8 +319,8 @@ final class CollectionTest extends TestCase {
     $imageId = ID::generate();
     $remainingId = ID::generate();
     $collection = Collection::fromView($view, [
-      $this->itemView($view, $imageId, 1.0),
-      $this->itemView($view, $remainingId, 2.0),
+      $this->item($imageId, 1.0),
+      $this->item($remainingId, 2.0),
     ]);
 
     $collection->removeItem($imageId);
@@ -340,8 +339,8 @@ final class CollectionTest extends TestCase {
     $firstId = ID::generate();
     $secondId = ID::generate();
     $collection = Collection::fromView($view, [
-      $this->itemView($view, $firstId, 1.0),
-      $this->itemView($view, $secondId, 2.0),
+      $this->item($firstId, 1.0),
+      $this->item($secondId, 2.0),
     ]);
     $newOrder = [$secondId->toString(), $firstId->toString()];
 
@@ -398,16 +397,9 @@ final class CollectionTest extends TestCase {
     );
   }
 
-  private function itemView(
-    CollectionView $collection,
-    ID $itemId,
-    float $position,
-    ?DateTime $addedAt = null,
-  ): CollectionItemView {
-    return new CollectionItemView(
-      ID::generate()->toString(),
-      $collection,
-      $itemId->toString(),
+  private function item(ID $itemId, float $position, ?DateTime $addedAt = null): CollectionItem {
+    return CollectionItem::create(
+      $itemId,
       ItemType::Image,
       $position,
       $addedAt ?? DateTime::fromString('2023-04-05 06:07:08'),
