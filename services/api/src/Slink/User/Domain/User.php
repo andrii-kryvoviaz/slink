@@ -12,6 +12,7 @@ use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Domain\Context\ChangeUserRoleContext;
 use Slink\User\Domain\Context\UserCreationContext;
 use Slink\User\Domain\Contracts\UserInterface;
+use Slink\User\Domain\Enum\UserRole;
 use Slink\User\Domain\Enum\UserStatus;
 use Slink\User\Domain\Event\Role\UserGrantedRole;
 use Slink\User\Domain\Event\Role\UserRevokedRole;
@@ -435,6 +436,10 @@ final class User extends AbstractAggregateRoot implements UserInterface {
     
     if($changeUserRoleContext->currentUserSpecification->isSatisfiedBy($this->aggregateRootId())) {
       throw new SelfUserRoleChangeException();
+    }
+    
+    if($role->getRole() === UserRole::User->getRole()) {
+      return;
     }
     
     if(!$this->hasRole($role)) {

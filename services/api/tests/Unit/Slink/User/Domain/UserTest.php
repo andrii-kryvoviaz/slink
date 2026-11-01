@@ -12,6 +12,7 @@ use Slink\Shared\Domain\Exception\InvalidArgumentException;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Domain\Context\ChangeUserRoleContext;
 use Slink\User\Domain\Context\UserCreationContext;
+use Slink\User\Domain\Enum\UserRole;
 use Slink\User\Domain\Enum\UserStatus;
 use Slink\User\Domain\Event\Role\UserGrantedRole;
 use Slink\User\Domain\Event\Role\UserRevokedRole;
@@ -243,15 +244,29 @@ final class UserTest extends TestCase {
   #[Test]
   public function itRevokesRoleSuccessfully(): void {
     $user = $this->createUser();
-    $userRole = Role::fromString('USER');
+    $adminRole = Role::fromString('ADMIN');
+    $context = $this->createChangeUserRoleContext(true, false);
+    $user->grantRole($adminRole, $context);
+    $user->releaseEvents();
+
+    $user->revokeRole($adminRole, $context);
+
+    $this->assertFalse($user->hasRole($adminRole));
+    $events = $user->releaseEvents();
+    $this->assertCount(1, $events);
+    $this->assertInstanceOf(UserRevokedRole::class, $events[0]);
+  }
+
+  #[Test]
+  public function itRecordsNothingWhenRevokingTheImplicitUserRole(): void {
+    $user = $this->createUser();
+    $userRole = Role::fromString(UserRole::User->value);
     $context = $this->createChangeUserRoleContext(true, false);
 
     $user->revokeRole($userRole, $context);
 
-    $this->assertFalse($user->hasRole($userRole));
-    $events = $user->releaseEvents();
-    $this->assertCount(1, $events);
-    $this->assertInstanceOf(UserRevokedRole::class, $events[0]);
+    $this->assertTrue($user->hasRole($userRole));
+    $this->assertCount(0, $user->releaseEvents());
   }
 
   #[Test]
