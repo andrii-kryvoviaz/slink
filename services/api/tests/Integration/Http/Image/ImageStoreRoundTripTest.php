@@ -244,6 +244,21 @@ final class ImageStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
   }
 
   #[Test]
+  public function batchDeleteDeletesAnImageListedTwiceOnce(): void {
+    $this->bootActors();
+    $imageId = $this->uploadDescribedImage('listed twice');
+
+    $status = $this->send('DELETE', '/api/images/batch-delete', $this->ownerToken, [
+      'imageIds' => [$imageId, $imageId],
+    ]);
+
+    self::assertSame(200, $status);
+    self::assertSame([$imageId], $this->deletedIds());
+    self::assertSame([], $this->failedIds());
+    self::assertSame(0, $this->countRowsByColumn('image', 'uuid', $imageId));
+  }
+
+  #[Test]
   public function batchVisibilityUpdateReportsAnUnknownImageAndUpdatesTheRest(): void {
     $this->bootActors();
     $imageId = $this->uploadDescribedImage('batched');
@@ -308,6 +323,16 @@ final class ImageStoreRoundTripTest extends ViewBackedStoreRoundTripTestCase {
     /** @var CommandBusInterface $commandBus */
     $commandBus = $container->get(CommandBusInterface::class);
     $commandBus->handle(new AddImageViewCountCommand($id->toString()));
+  }
+
+  /**
+   * @return list<string>
+   */
+  private function deletedIds(): array {
+    /** @var array{data?: array{deleted?: list<string>}, deleted?: list<string>} $payload */
+    $payload = $this->responsePayload();
+
+    return $payload['data']['deleted'] ?? $payload['deleted'] ?? [];
   }
 
   /**

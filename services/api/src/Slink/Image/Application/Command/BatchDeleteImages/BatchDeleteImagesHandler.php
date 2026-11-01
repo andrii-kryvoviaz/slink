@@ -21,7 +21,7 @@ final readonly class BatchDeleteImagesHandler implements CommandHandlerInterface
     $deleted = [];
     $failed = [];
 
-    foreach ($command->imageIds() as $imageId) {
+    foreach (array_unique($command->imageIds()) as $imageId) {
       try {
         $id = ID::fromString($imageId);
         $image = $this->imageRepository->get($id);
