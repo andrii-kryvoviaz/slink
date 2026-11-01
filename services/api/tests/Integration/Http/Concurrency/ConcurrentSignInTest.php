@@ -86,6 +86,31 @@ final class ConcurrentSignInTest extends ConcurrentRequestTestCase {
   }
 
   #[Test]
+  public function overlappingRefreshesOfOneTokenLetExactlyOneThrough(): void {
+    $session = $this->authenticateWithRefreshToken(self::USERNAME, self::PASSWORD);
+    $overlapping = null;
+
+    $this->beforeTheNextFlush(function () use (&$overlapping, $session): void {
+      $overlapping = $this->requestFromAnotherKernel('POST', '/api/auth/refresh', null, [
+        'refresh_token' => $session['refresh_token'],
+      ]);
+    });
+
+    $status = $this->refreshStatus($session['refresh_token']);
+
+    self::assertIsArray($overlapping);
+    $winner = ['status' => $status, 'body' => (string) $this->client->getResponse()->getContent()];
+    $loser = $overlapping;
+
+    if ($status !== 200) {
+      [$winner, $loser] = [$loser, $winner];
+    }
+
+    self::assertSame(400, $loser['status'], $loser['body']);
+    $this->assertSessionsStillRefresh($this->sessionFrom($winner)['refreshToken']);
+  }
+
+  #[Test]
   public function aSignInOverlappingATokenRefreshOfOneUserBothSucceed(): void {
     $session = $this->authenticateWithRefreshToken(self::USERNAME, self::PASSWORD);
     $overlapping = null;

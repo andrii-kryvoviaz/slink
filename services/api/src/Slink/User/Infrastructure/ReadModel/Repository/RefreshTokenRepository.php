@@ -28,6 +28,19 @@ final class RefreshTokenRepository extends AbstractRepository implements Refresh
     }
   }
 
+  #[\Override]
+  public function claim(string $hashedRefreshToken): bool {
+    $deleted = $this->getEntityManager()
+      ->createQueryBuilder()
+      ->delete(RefreshTokenView::class, 'rt')
+      ->where('rt.token = :token')
+      ->setParameter('token', $hashedRefreshToken)
+      ->getQuery()
+      ->execute();
+
+    return $deleted === 1;
+  }
+
   /**
    * @return array<int, RefreshTokenView>
    */

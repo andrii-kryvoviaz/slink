@@ -8,6 +8,7 @@ use Slink\Shared\Application\Command\CommandHandlerInterface;
 use Slink\Shared\Domain\Exception\Date\DateTimeException;
 use Slink\User\Domain\Contracts\AuthProviderInterface;
 use Slink\User\Domain\Exception\InvalidCredentialsException;
+use Slink\User\Domain\Repository\RefreshTokenRepositoryInterface;
 use Slink\User\Domain\Repository\UserStoreRepositoryInterface;
 use Slink\User\Domain\ValueObject\Auth\HashedRefreshToken;
 use Slink\User\Domain\ValueObject\Auth\TokenPair;
@@ -17,6 +18,7 @@ final readonly class RefreshTokenHandler implements CommandHandlerInterface {
   public function __construct(
     private UserStoreRepositoryInterface $userStore,
     private AuthProviderInterface $authenticationProvider,
+    private RefreshTokenRepositoryInterface $refreshTokenRepository,
   ) {}
   
   /**
@@ -32,6 +34,10 @@ final readonly class RefreshTokenHandler implements CommandHandlerInterface {
     
     if($user->getStatus()->isRestricted()) {
       throw new InvalidCredentialsException('User is restricted');
+    }
+    
+    if(!$this->refreshTokenRepository->claim($currentHashedRefreshToken->toString())) {
+      throw new InvalidCredentialsException('Invalid refresh token');
     }
     
     $tokenPair = $this->authenticationProvider->generateTokenPair($user);
