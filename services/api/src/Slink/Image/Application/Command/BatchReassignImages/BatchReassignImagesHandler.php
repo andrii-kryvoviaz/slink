@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Slink\Image\Application\Command\BatchReassignImages;
 
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\Persistence\ManagerRegistry;
 use Slink\Image\Application\Command\BatchReassignImages\Operation\BatchReassignOperationInterface;
 use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
 use Slink\Shared\Application\Command\CommandHandlerInterface;
@@ -17,6 +20,8 @@ final readonly class BatchReassignImagesHandler implements CommandHandlerInterfa
    */
   public function __construct(
     private ImageStoreRepositoryInterface $imageRepository,
+    private EntityManagerInterface $entityManager,
+    private ManagerRegistry $managerRegistry,
     #[AutowireIterator('batch_reassign.operation')]
     private iterable $operations,
   ) {}
@@ -50,10 +55,15 @@ final readonly class BatchReassignImagesHandler implements CommandHandlerInterfa
         }
 
         $this->imageRepository->store($image);
+        $this->entityManager->flush();
 
         $processed[] = $imageId;
+      } catch (OptimisticLockException $e) {
+        throw $e;
       } catch (\Throwable $e) {
         $failed[] = ['id' => $imageId, 'reason' => $e->getMessage()];
+
+        $this->recoverEntityManager();
       }
     }
 
@@ -61,5 +71,13 @@ final readonly class BatchReassignImagesHandler implements CommandHandlerInterfa
       'processed' => $processed,
       'failed' => $failed,
     ];
+  }
+
+  private function recoverEntityManager(): void {
+    if ($this->entityManager->isOpen()) {
+      return;
+    }
+
+    $this->managerRegistry->resetManager();
   }
 }

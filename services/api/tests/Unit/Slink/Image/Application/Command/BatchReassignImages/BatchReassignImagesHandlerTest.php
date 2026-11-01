@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Slink\Image\Application\Command\BatchReassignImages;
 
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\Persistence\ManagerRegistry;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
@@ -50,7 +53,7 @@ final class BatchReassignImagesHandlerTest extends TestCase {
     $operation->method('supports')->willReturn(true);
     $operation->expects($this->exactly(2))->method('apply');
 
-    $handler = new BatchReassignImagesHandler($imageRepository, [$operation]);
+    $handler = new BatchReassignImagesHandler($imageRepository, $this->createStub(EntityManagerInterface::class), $this->createStub(ManagerRegistry::class), [$operation]);
     $result = $handler($command, self::USER_ID);
 
     $this->assertSame([self::IMAGE_ID_1, self::IMAGE_ID_2], $result['processed']);
@@ -72,7 +75,7 @@ final class BatchReassignImagesHandlerTest extends TestCase {
     $imageRepository = $this->createStub(ImageStoreRepositoryInterface::class);
     $imageRepository->method('get')->willReturn($image);
 
-    $handler = new BatchReassignImagesHandler($imageRepository, []);
+    $handler = new BatchReassignImagesHandler($imageRepository, $this->createStub(EntityManagerInterface::class), $this->createStub(ManagerRegistry::class), []);
     $result = $handler($command, self::USER_ID);
 
     $this->assertEmpty($result['processed']);
@@ -107,7 +110,7 @@ final class BatchReassignImagesHandlerTest extends TestCase {
     );
     $imageRepository->expects($this->once())->method('store')->with($image1);
 
-    $handler = new BatchReassignImagesHandler($imageRepository, []);
+    $handler = new BatchReassignImagesHandler($imageRepository, $this->createStub(EntityManagerInterface::class), $this->createStub(ManagerRegistry::class), []);
     $result = $handler($command, self::USER_ID);
 
     $this->assertSame([self::IMAGE_ID_1], $result['processed']);
@@ -124,7 +127,7 @@ final class BatchReassignImagesHandlerTest extends TestCase {
 
     $imageRepository = $this->createStub(ImageStoreRepositoryInterface::class);
 
-    $handler = new BatchReassignImagesHandler($imageRepository, []);
+    $handler = new BatchReassignImagesHandler($imageRepository, $this->createStub(EntityManagerInterface::class), $this->createStub(ManagerRegistry::class), []);
     $result = $handler($command, self::USER_ID);
 
     $this->assertEmpty($result['processed']);
@@ -151,7 +154,7 @@ final class BatchReassignImagesHandlerTest extends TestCase {
     $operation->method('supports')->willReturn(false);
     $operation->expects($this->never())->method('apply');
 
-    $handler = new BatchReassignImagesHandler($imageRepository, [$operation]);
+    $handler = new BatchReassignImagesHandler($imageRepository, $this->createStub(EntityManagerInterface::class), $this->createStub(ManagerRegistry::class), [$operation]);
     $result = $handler($command, self::USER_ID);
 
     $this->assertSame([self::IMAGE_ID_1], $result['processed']);
@@ -177,12 +180,105 @@ final class BatchReassignImagesHandlerTest extends TestCase {
     $operation->method('supports')->willReturn(true);
     $operation->method('apply')->willThrowException(new \RuntimeException('Operation failed'));
 
-    $handler = new BatchReassignImagesHandler($imageRepository, [$operation]);
+    $handler = new BatchReassignImagesHandler($imageRepository, $this->createStub(EntityManagerInterface::class), $this->createStub(ManagerRegistry::class), [$operation]);
     $result = $handler($command, self::USER_ID);
 
     $this->assertEmpty($result['processed']);
     $this->assertCount(1, $result['failed']);
     $this->assertSame(self::IMAGE_ID_1, $result['failed'][0]['id']);
     $this->assertSame('Operation failed', $result['failed'][0]['reason']);
+  }
+
+  /**
+   * @throws Exception
+   */
+  #[Test]
+  public function itFlushesOncePerImageAndListsOnlyTheImagesThatCommitted(): void {
+    $command = new BatchReassignImagesCommand([
+      self::IMAGE_ID_1 => ['tagIds' => [self::TAG_ID_1]],
+      self::IMAGE_ID_2 => ['tagIds' => [self::TAG_ID_1]],
+    ]);
+
+    $image = $this->createStub(Image::class);
+    $image->method('isOwnedBy')->willReturn(true);
+
+    $imageRepository = $this->createStub(ImageStoreRepositoryInterface::class);
+    $imageRepository->method('get')->willReturn($image);
+
+    $entityManager = $this->createMock(EntityManagerInterface::class);
+    $entityManager->method('isOpen')->willReturn(true);
+    $entityManager->expects($this->exactly(2))->method('flush')->willReturnOnConsecutiveCalls(
+      $this->throwException(new \RuntimeException('Flush failed')),
+      null,
+    );
+
+    $managerRegistry = $this->createMock(ManagerRegistry::class);
+    $managerRegistry->expects($this->never())->method('resetManager');
+
+    $handler = new BatchReassignImagesHandler($imageRepository, $entityManager, $managerRegistry, []);
+    $result = $handler($command, self::USER_ID);
+
+    $this->assertSame([self::IMAGE_ID_2], $result['processed']);
+    $this->assertSame([self::IMAGE_ID_1], array_column($result['failed'], 'id'));
+    $this->assertSame('Flush failed', $result['failed'][0]['reason']);
+  }
+
+  /**
+   * @throws Exception
+   */
+  #[Test]
+  public function itResetsAClosedEntityManagerSoTheRemainingImagesProceed(): void {
+    $command = new BatchReassignImagesCommand([
+      self::IMAGE_ID_1 => ['tagIds' => [self::TAG_ID_1]],
+      self::IMAGE_ID_2 => ['tagIds' => [self::TAG_ID_1]],
+    ]);
+
+    $image = $this->createStub(Image::class);
+    $image->method('isOwnedBy')->willReturn(true);
+
+    $imageRepository = $this->createStub(ImageStoreRepositoryInterface::class);
+    $imageRepository->method('get')->willReturn($image);
+
+    $entityManager = $this->createMock(EntityManagerInterface::class);
+    $entityManager->method('isOpen')->willReturn(false);
+    $entityManager->expects($this->exactly(2))->method('flush')->willReturnOnConsecutiveCalls(
+      $this->throwException(new \RuntimeException('Flush failed')),
+      null,
+    );
+
+    $managerRegistry = $this->createMock(ManagerRegistry::class);
+    $managerRegistry->expects($this->once())->method('resetManager');
+
+    $handler = new BatchReassignImagesHandler($imageRepository, $entityManager, $managerRegistry, []);
+    $result = $handler($command, self::USER_ID);
+
+    $this->assertSame([self::IMAGE_ID_2], $result['processed']);
+    $this->assertSame([self::IMAGE_ID_1], array_column($result['failed'], 'id'));
+  }
+
+  /**
+   * @throws Exception
+   */
+  #[Test]
+  public function itLetsAnOptimisticLockConflictEndTheBatch(): void {
+    $command = new BatchReassignImagesCommand([
+      self::IMAGE_ID_1 => ['tagIds' => [self::TAG_ID_1]],
+      self::IMAGE_ID_2 => ['tagIds' => [self::TAG_ID_1]],
+    ]);
+
+    $image = $this->createStub(Image::class);
+    $image->method('isOwnedBy')->willReturn(true);
+
+    $imageRepository = $this->createStub(ImageStoreRepositoryInterface::class);
+    $imageRepository->method('get')->willReturn($image);
+
+    $entityManager = $this->createMock(EntityManagerInterface::class);
+    $entityManager->expects($this->once())->method('flush')->willThrowException(new OptimisticLockException('Conflict', null));
+
+    $handler = new BatchReassignImagesHandler($imageRepository, $entityManager, $this->createStub(ManagerRegistry::class), []);
+
+    $this->expectException(OptimisticLockException::class);
+
+    $handler($command, self::USER_ID);
   }
 }
