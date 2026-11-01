@@ -6,6 +6,7 @@ namespace Tests\Integration\Http\Concurrency;
 
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Slink\User\Infrastructure\ReadModel\View\RefreshTokenView;
 
 #[Group('sc-1203')]
 final class ConcurrentSignInTest extends ConcurrentRequestTestCase {
@@ -75,7 +76,7 @@ final class ConcurrentSignInTest extends ConcurrentRequestTestCase {
     $secondSession = $this->authenticateWithRefreshToken(self::USERNAME, self::PASSWORD);
     $overlapping = null;
 
-    $this->beforeTheNextFlush(function () use (&$overlapping, $secondSession): void {
+    $this->afterTheNextLoadOf(RefreshTokenView::class, function () use (&$overlapping, $secondSession): void {
       $overlapping = $this->refreshFromAnotherKernel($secondSession['refresh_token']);
     });
 
@@ -90,7 +91,7 @@ final class ConcurrentSignInTest extends ConcurrentRequestTestCase {
     $session = $this->authenticateWithRefreshToken(self::USERNAME, self::PASSWORD);
     $overlapping = null;
 
-    $this->beforeTheNextFlush(function () use (&$overlapping, $session): void {
+    $this->afterTheNextLoadOf(RefreshTokenView::class, function () use (&$overlapping, $session): void {
       $overlapping = $this->requestFromAnotherKernel('POST', '/api/auth/refresh', null, [
         'refresh_token' => $session['refresh_token'],
       ]);
@@ -115,7 +116,7 @@ final class ConcurrentSignInTest extends ConcurrentRequestTestCase {
     $session = $this->authenticateWithRefreshToken(self::USERNAME, self::PASSWORD);
     $overlapping = null;
 
-    $this->beforeTheNextFlush(function () use (&$overlapping): void {
+    $this->afterTheNextLoadOf(RefreshTokenView::class, function () use (&$overlapping): void {
       $overlapping = $this->signInFromAnotherKernel();
     });
 

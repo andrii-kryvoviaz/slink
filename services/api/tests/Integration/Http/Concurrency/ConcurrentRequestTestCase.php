@@ -9,6 +9,7 @@ use Slink\Shared\Infrastructure\MessageBus\Command\MessengerCommandBus;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Tests\Integration\Http\Double\FlushInterleaver;
+use Tests\Integration\Http\Double\LoadInterleaver;
 use Tests\Integration\Http\Double\ViewCountInterleavingCommandBus;
 use Tests\Integration\Http\HttpTestCase;
 use Tests\Integration\Http\Image\DrivesFeedDelivery;
@@ -20,6 +21,7 @@ abstract class ConcurrentRequestTestCase extends HttpTestCase {
 
   private ViewCountInterleavingCommandBus $viewCountBus;
   private ?FlushInterleaver $flushInterleaver = null;
+  private ?LoadInterleaver $loadInterleaver = null;
   private ?\Throwable $interleavedFailure = null;
 
   protected function setUp(): void {
@@ -42,6 +44,7 @@ abstract class ConcurrentRequestTestCase extends HttpTestCase {
 
   protected function assertPostConditions(): void {
     self::assertTrue($this->flushInterleaver?->hasRun() ?? true, 'The request never reached its flush.');
+    self::assertTrue($this->loadInterleaver?->hasRun() ?? true, 'The request never loaded the awaited rows.');
     self::assertFalse($this->viewCountBus->hasPendingWrite(), 'The request never reached its view count.');
   }
 
@@ -68,6 +71,14 @@ abstract class ConcurrentRequestTestCase extends HttpTestCase {
   protected function beforeTheNextFlush(\Closure $write): void {
     $this->flushInterleaver = new FlushInterleaver($this->recordingFailure($write));
     $this->entityManager()->getEventManager()->addEventListener([Events::preFlush], $this->flushInterleaver);
+  }
+
+  /**
+   * @param class-string $entityClass
+   */
+  protected function afterTheNextLoadOf(string $entityClass, \Closure $write): void {
+    $this->loadInterleaver = new LoadInterleaver($entityClass, $this->recordingFailure($write));
+    $this->entityManager()->getEventManager()->addEventListener([Events::postLoad], $this->loadInterleaver);
   }
 
   protected function beforeTheNextViewCount(\Closure $write): void {

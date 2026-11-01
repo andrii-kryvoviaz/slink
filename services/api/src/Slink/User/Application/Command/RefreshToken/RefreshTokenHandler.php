@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Slink\User\Application\Command\RefreshToken;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Slink\Shared\Application\Command\CommandHandlerInterface;
 use Slink\Shared\Domain\Exception\Date\DateTimeException;
 use Slink\User\Domain\Contracts\AuthProviderInterface;
@@ -19,6 +20,7 @@ final readonly class RefreshTokenHandler implements CommandHandlerInterface {
     private UserStoreRepositoryInterface $userStore,
     private AuthProviderInterface $authenticationProvider,
     private RefreshTokenRepositoryInterface $refreshTokenRepository,
+    private EntityManagerInterface $entityManager,
   ) {}
   
   /**
@@ -36,17 +38,22 @@ final readonly class RefreshTokenHandler implements CommandHandlerInterface {
       throw new InvalidCredentialsException('User is restricted');
     }
     
-    if(!$this->refreshTokenRepository->claim($currentHashedRefreshToken->toString())) {
-      throw new InvalidCredentialsException('Invalid refresh token');
-    }
-    
-    $tokenPair = $this->authenticationProvider->generateTokenPair($user);
-    $updatedHashedRefreshToken = HashedRefreshToken::encode($tokenPair->getRefreshToken());
-    
-    $user->refreshToken->rotate($currentHashedRefreshToken, $updatedHashedRefreshToken);
-    
-    $this->userStore->store($user);
-    
-    return $tokenPair;
+    return $this->entityManager->getConnection()->transactional(
+      function () use ($user, $currentHashedRefreshToken): TokenPair {
+        if(!$this->refreshTokenRepository->claim($currentHashedRefreshToken->toString())) {
+          throw new InvalidCredentialsException('Invalid refresh token');
+        }
+
+        $tokenPair = $this->authenticationProvider->generateTokenPair($user);
+        $updatedHashedRefreshToken = HashedRefreshToken::encode($tokenPair->getRefreshToken());
+
+        $user->refreshToken->rotate($currentHashedRefreshToken, $updatedHashedRefreshToken);
+
+        $this->userStore->store($user);
+        $this->entityManager->flush();
+
+        return $tokenPair;
+      },
+    );
   }
 }
