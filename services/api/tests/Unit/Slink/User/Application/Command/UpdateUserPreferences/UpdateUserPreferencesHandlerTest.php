@@ -15,6 +15,7 @@ use Slink\User\Domain\Enum\ExifMetadataPreference;
 use Slink\User\Domain\Repository\UserStoreRepositoryInterface;
 use Slink\User\Domain\User;
 use Slink\User\Domain\ValueObject\UserPreferences;
+use Slink\Shared\Application\Lock\ResourceLock;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Lock\Store\InMemoryStore;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
@@ -56,7 +57,7 @@ final class UpdateUserPreferencesHandlerTest extends TestCase {
         $licenseSyncService->expects($this->never())
             ->method('syncLicenseForUser');
 
-        $handler = new UpdateUserPreferencesHandler($userStore, $licenseSyncService, $this->normalizer(), new LockFactory(new InMemoryStore()));
+        $handler = new UpdateUserPreferencesHandler($userStore, $licenseSyncService, $this->normalizer(), new ResourceLock(new LockFactory(new InMemoryStore())));
         $handler($command, $userId);
     }
 
@@ -88,7 +89,7 @@ final class UpdateUserPreferencesHandlerTest extends TestCase {
             ->method('store')
             ->with($user);
 
-        $handler = new UpdateUserPreferencesHandler($userStore, $licenseSyncService, $this->normalizer(), new LockFactory(new InMemoryStore()));
+        $handler = new UpdateUserPreferencesHandler($userStore, $licenseSyncService, $this->normalizer(), new ResourceLock(new LockFactory(new InMemoryStore())));
         $handler($command, $userId);
     }
 
@@ -118,7 +119,7 @@ final class UpdateUserPreferencesHandlerTest extends TestCase {
             ->method('syncLicenseForUser')
             ->with(ID::fromString($userId), License::CC0);
 
-        $handler = new UpdateUserPreferencesHandler($userStore, $licenseSyncService, $this->normalizer(), new LockFactory(new InMemoryStore()));
+        $handler = new UpdateUserPreferencesHandler($userStore, $licenseSyncService, $this->normalizer(), new ResourceLock(new LockFactory(new InMemoryStore())));
         $handler($command, $userId);
     }
 
@@ -147,7 +148,7 @@ final class UpdateUserPreferencesHandlerTest extends TestCase {
         $licenseSyncService->expects($this->never())
             ->method('syncLicenseForUser');
 
-        $handler = new UpdateUserPreferencesHandler($userStore, $licenseSyncService, $this->normalizer(), new LockFactory(new InMemoryStore()));
+        $handler = new UpdateUserPreferencesHandler($userStore, $licenseSyncService, $this->normalizer(), new ResourceLock(new LockFactory(new InMemoryStore())));
         $handler($command, $userId);
     }
 
@@ -175,7 +176,7 @@ final class UpdateUserPreferencesHandlerTest extends TestCase {
             ->method('syncLicenseForUser')
             ->with(ID::fromString($userId), License::CC_BY_ND);
 
-        $handler = new UpdateUserPreferencesHandler($userStore, $licenseSyncService, $this->normalizer(), new LockFactory(new InMemoryStore()));
+        $handler = new UpdateUserPreferencesHandler($userStore, $licenseSyncService, $this->normalizer(), new ResourceLock(new LockFactory(new InMemoryStore())));
         $handler($command, $userId);
     }
 
@@ -208,7 +209,7 @@ final class UpdateUserPreferencesHandlerTest extends TestCase {
         $userStore->expects($this->once())
             ->method('store');
 
-        $handler = new UpdateUserPreferencesHandler($userStore, $licenseSyncService, $this->normalizer(), new LockFactory(new InMemoryStore()));
+        $handler = new UpdateUserPreferencesHandler($userStore, $licenseSyncService, $this->normalizer(), new ResourceLock(new LockFactory(new InMemoryStore())));
         $handler($command, $userId);
     }
 
@@ -249,7 +250,7 @@ final class UpdateUserPreferencesHandlerTest extends TestCase {
             ->method('syncLicenseForUser')
             ->with(ID::fromString($userId), License::CC_BY);
 
-        $handler = new UpdateUserPreferencesHandler($userStore, $licenseSyncService, $this->normalizer(), new LockFactory(new InMemoryStore()));
+        $handler = new UpdateUserPreferencesHandler($userStore, $licenseSyncService, $this->normalizer(), new ResourceLock(new LockFactory(new InMemoryStore())));
         $handler($command, $userId);
     }
 
@@ -284,7 +285,7 @@ final class UpdateUserPreferencesHandlerTest extends TestCase {
             ->method('syncLicenseForUser')
             ->with(ID::fromString($userId), License::CC_BY);
 
-        $handler = new UpdateUserPreferencesHandler($userStore, $licenseSyncService, $this->normalizer(), new LockFactory(new InMemoryStore()));
+        $handler = new UpdateUserPreferencesHandler($userStore, $licenseSyncService, $this->normalizer(), new ResourceLock(new LockFactory(new InMemoryStore())));
         $handler($command, $userId);
     }
 
@@ -331,7 +332,7 @@ final class UpdateUserPreferencesHandlerTest extends TestCase {
         $userStore->expects($this->once())
             ->method('store');
 
-        $handler = new UpdateUserPreferencesHandler($userStore, $licenseSyncService, $this->normalizer(), new LockFactory(new InMemoryStore()));
+        $handler = new UpdateUserPreferencesHandler($userStore, $licenseSyncService, $this->normalizer(), new ResourceLock(new LockFactory(new InMemoryStore())));
         $handler($command, $userId);
     }
 
@@ -379,7 +380,7 @@ final class UpdateUserPreferencesHandlerTest extends TestCase {
             },
         );
 
-        $handler = new UpdateUserPreferencesHandler($userStore, $licenseSyncService, $this->normalizer(), $lockFactory);
+        $handler = new UpdateUserPreferencesHandler($userStore, $licenseSyncService, $this->normalizer(), new ResourceLock($lockFactory));
         $handler($command, $userId);
 
         $this->assertSame(['load' => true, 'store' => true, 'sync' => false], $lockedWhile);

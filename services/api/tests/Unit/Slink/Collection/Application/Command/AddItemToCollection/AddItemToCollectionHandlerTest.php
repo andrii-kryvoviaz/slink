@@ -23,6 +23,7 @@ use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
 use Slink\Shared\Domain\Exception\ForbiddenException;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
+use Slink\Shared\Application\Lock\ResourceLock;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Lock\Store\InMemoryStore;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -97,7 +98,7 @@ final class AddItemToCollectionHandlerTest extends TestCase {
       $collectionStore,
       $this->createImageStore(),
       $this->createAccess(true, true),
-      $this->createLockFactory(),
+      new ResourceLock($this->createLockFactory()),
     );
 
     $command = new AddItemToCollectionCommand(
@@ -127,7 +128,7 @@ final class AddItemToCollectionHandlerTest extends TestCase {
       $collectionStore,
       $this->createImageStore(),
       $this->createAccess(false, true),
-      $this->createLockFactory(),
+      new ResourceLock($this->createLockFactory()),
     );
 
     $command = new AddItemToCollectionCommand(
@@ -160,7 +161,7 @@ final class AddItemToCollectionHandlerTest extends TestCase {
       $collectionStore,
       $this->createImageStore(),
       $this->createAccess(true, false),
-      $this->createLockFactory(),
+      new ResourceLock($this->createLockFactory()),
     );
 
     $command = new AddItemToCollectionCommand(
@@ -193,7 +194,7 @@ final class AddItemToCollectionHandlerTest extends TestCase {
       $collectionStore,
       $this->createMissingImageStore(),
       $this->createAccess(true, true),
-      $this->createLockFactory(),
+      new ResourceLock($this->createLockFactory()),
     );
 
     $command = new AddItemToCollectionCommand(
@@ -244,7 +245,7 @@ final class AddItemToCollectionHandlerTest extends TestCase {
       $collectionStore,
       $this->createImageStore(),
       $this->createAccess(true, true),
-      $lockFactory,
+      new ResourceLock($lockFactory),
     );
 
     $handler(

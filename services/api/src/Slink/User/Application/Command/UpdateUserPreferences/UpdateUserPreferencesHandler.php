@@ -6,10 +6,10 @@ namespace Slink\User\Application\Command\UpdateUserPreferences;
 
 use Slink\Image\Application\Service\LicenseSyncServiceInterface;
 use Slink\Shared\Application\Command\CommandHandlerInterface;
+use Slink\Shared\Application\Lock\ResourceLock;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Domain\Repository\UserStoreRepositoryInterface;
 use Slink\User\Domain\ValueObject\UserPreferences;
-use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 final readonly class UpdateUserPreferencesHandler implements CommandHandlerInterface {
@@ -17,7 +17,7 @@ final readonly class UpdateUserPreferencesHandler implements CommandHandlerInter
     private UserStoreRepositoryInterface $userStore,
     private LicenseSyncServiceInterface $licenseSyncService,
     private NormalizerInterface $normalizer,
-    private LockFactory $lockFactory,
+    private ResourceLock $lock,
   ) {
   }
 
@@ -32,10 +32,7 @@ final readonly class UpdateUserPreferencesHandler implements CommandHandlerInter
   }
 
   private function storeChanges(UpdateUserPreferencesCommand $command, string $userId): UserPreferences {
-    $lock = $this->lockFactory->createLock('user-preferences-' . $userId);
-    $lock->acquire(true);
-
-    try {
+    return $this->lock->run('user-preferences-' . $userId, function () use ($command, $userId): UserPreferences {
       $user = $this->userStore->get(ID::fromString($userId));
 
       /** @var array<string, string|bool|null> $changes */
@@ -46,8 +43,6 @@ final readonly class UpdateUserPreferencesHandler implements CommandHandlerInter
       $this->userStore->store($user);
 
       return $preferences;
-    } finally {
-      $lock->release();
-    }
+    });
   }
 }

@@ -15,6 +15,7 @@ use Slink\Collection\Domain\Repository\CollectionStoreRepositoryInterface;
 use Slink\Collection\Domain\ValueObject\CollectionDescription;
 use Slink\Collection\Domain\ValueObject\CollectionName;
 use Slink\Shared\Domain\ValueObject\ID;
+use Slink\Shared\Application\Lock\ResourceLock;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Lock\Store\InMemoryStore;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -83,7 +84,7 @@ final class ReorderCollectionItemsHandlerTest extends TestCase {
     $access = $this->createStub(AuthorizationCheckerInterface::class);
     $access->method('isGranted')->willReturn(true);
 
-    $handler = new ReorderCollectionItemsHandler($collectionStore, $access, $this->createLockFactory());
+    $handler = new ReorderCollectionItemsHandler($collectionStore, $access, new ResourceLock($this->createLockFactory()));
 
     $newOrder = [$item3Id->toString(), $item1Id->toString(), $item2Id->toString()];
     $command = new ReorderCollectionItemsCommand($collectionId->toString(), $newOrder);
@@ -117,7 +118,7 @@ final class ReorderCollectionItemsHandlerTest extends TestCase {
     $access = $this->createStub(AuthorizationCheckerInterface::class);
     $access->method('isGranted')->willReturn(false);
 
-    $handler = new ReorderCollectionItemsHandler($collectionStore, $access, $this->createLockFactory());
+    $handler = new ReorderCollectionItemsHandler($collectionStore, $access, new ResourceLock($this->createLockFactory()));
 
     $command = new ReorderCollectionItemsCommand($collectionId->toString(), []);
 
@@ -154,7 +155,7 @@ final class ReorderCollectionItemsHandlerTest extends TestCase {
     $access = $this->createStub(AuthorizationCheckerInterface::class);
     $access->method('isGranted')->willReturn(true);
 
-    $handler = new ReorderCollectionItemsHandler($collectionStore, $access, $lockFactory);
+    $handler = new ReorderCollectionItemsHandler($collectionStore, $access, new ResourceLock($lockFactory));
     $handler(
       new ReorderCollectionItemsCommand($collectionId->toString(), [$secondItemId->toString(), $firstItemId->toString()]),
       $ownerId->toString(),

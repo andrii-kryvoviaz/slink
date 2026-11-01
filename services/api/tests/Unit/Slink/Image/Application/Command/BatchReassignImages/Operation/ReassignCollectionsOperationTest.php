@@ -13,8 +13,11 @@ use Slink\Collection\Domain\Repository\CollectionStoreRepositoryInterface;
 use Slink\Image\Application\Command\BatchReassignImages\BatchReassignImagesCommand;
 use Slink\Image\Application\Command\BatchReassignImages\Operation\ReassignCollectionsOperation;
 use Slink\Image\Domain\Image;
+use Slink\Shared\Application\Lock\ResourceLock;
 use Slink\Shared\Domain\DataStructures\HashMap;
 use Slink\Shared\Domain\ValueObject\ID;
+use Symfony\Component\Lock\LockFactory;
+use Symfony\Component\Lock\Store\InMemoryStore;
 
 final class ReassignCollectionsOperationTest extends TestCase {
   private const USER_ID = '123e4567-e89b-12d3-a456-426614174000';
@@ -35,7 +38,7 @@ final class ReassignCollectionsOperationTest extends TestCase {
     $collectionRepository = $this->createStub(CollectionStoreRepositoryInterface::class);
     $collectionItemRepository = $this->createStub(CollectionItemRepositoryInterface::class);
 
-    $operation = new ReassignCollectionsOperation($collectionRepository, $collectionItemRepository);
+    $operation = new ReassignCollectionsOperation($collectionRepository, $collectionItemRepository, new ResourceLock(new LockFactory(new InMemoryStore())));
 
     $this->assertTrue($operation->supports($command, self::IMAGE_ID));
   }
@@ -52,7 +55,7 @@ final class ReassignCollectionsOperationTest extends TestCase {
     $collectionRepository = $this->createStub(CollectionStoreRepositoryInterface::class);
     $collectionItemRepository = $this->createStub(CollectionItemRepositoryInterface::class);
 
-    $operation = new ReassignCollectionsOperation($collectionRepository, $collectionItemRepository);
+    $operation = new ReassignCollectionsOperation($collectionRepository, $collectionItemRepository, new ResourceLock(new LockFactory(new InMemoryStore())));
 
     $this->assertFalse($operation->supports($command, self::IMAGE_ID));
   }
@@ -92,7 +95,7 @@ final class ReassignCollectionsOperationTest extends TestCase {
     $image = $this->createStub(Image::class);
     $image->method('aggregateRootId')->willReturn($imageId);
 
-    $operation = new ReassignCollectionsOperation($collectionRepository, $collectionItemRepository);
+    $operation = new ReassignCollectionsOperation($collectionRepository, $collectionItemRepository, new ResourceLock(new LockFactory(new InMemoryStore())));
     $operation->apply($image, $command, self::IMAGE_ID, $userId);
   }
 
@@ -132,7 +135,7 @@ final class ReassignCollectionsOperationTest extends TestCase {
     $image = $this->createStub(Image::class);
     $image->method('aggregateRootId')->willReturn($imageId);
 
-    $operation = new ReassignCollectionsOperation($collectionRepository, $collectionItemRepository);
+    $operation = new ReassignCollectionsOperation($collectionRepository, $collectionItemRepository, new ResourceLock(new LockFactory(new InMemoryStore())));
     $operation->apply($image, $command, self::IMAGE_ID, $userId);
   }
 }

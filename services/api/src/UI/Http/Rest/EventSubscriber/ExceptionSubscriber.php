@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace UI\Http\Rest\EventSubscriber;
 
-use Doctrine\ORM\OptimisticLockException;
 use Psr\Log\LoggerInterface;
 use Slink\Shared\Domain\Exception\SpecificationException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -90,8 +89,8 @@ final readonly class ExceptionSubscriber implements EventSubscriberInterface {
       'message' => $this->getExceptionMessage($exception),
     ];
     
-    if ($exception instanceof OptimisticLockException) {
-      $reason = $this->exceptionCodeToMessage[$this->determineStatusCode($exception)] ?? 'Conflict';
+    if ($this->determineStatusCode($exception) === Response::HTTP_CONFLICT) {
+      $reason = $this->exceptionCodeToMessage[Response::HTTP_CONFLICT] ?? 'Conflict';
       $error['title'] = $reason;
       $error['message'] = $reason;
     }
