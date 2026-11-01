@@ -162,4 +162,8 @@ final readonly class ImageAttributes extends AbstractCompoundValueObject impleme
   public function withIsPublic(?bool $isPublic): self {
     return $this->markForUpdate('isPublic', $isPublic);
   }
+
+  public function withUpdatedAt(?DateTime $updatedAt): self {
+    return $this->markForUpdate('updatedAt', $updatedAt);
+  }
 }

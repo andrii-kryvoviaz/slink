@@ -14,6 +14,7 @@ use Slink\Image\Domain\ValueObject\ImageMetadata;
 use Slink\Image\Infrastructure\ReadModel\Repository\ImageRepository;
 use Slink\Shared\Domain\Contract\CursorAwareInterface;
 use Slink\Shared\Domain\Contract\OwnerAwareInterface;
+use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Attribute\Sanitize;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
@@ -157,6 +158,10 @@ class ImageView extends AbstractView implements CursorAwareInterface, OwnerAware
    */
   public function updateAttributes(ImageAttributes $attributes): void {
     $this->attributes = $attributes;
+  }
+
+  public function touch(): void {
+    $this->attributes = clone $this->attributes->withUpdatedAt(DateTime::now());
   }
 
   /**
