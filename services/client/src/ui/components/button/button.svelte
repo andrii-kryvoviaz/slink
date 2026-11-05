@@ -108,7 +108,6 @@
     ],
     defaultVariants: {
       variant: 'default',
-      size: 'default',
       rounded: 'lg',
       fontWeight: 'medium',
       motion: 'none',
