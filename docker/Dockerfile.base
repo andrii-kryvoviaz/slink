@@ -67,6 +67,7 @@ RUN apk add --root /rootfs --no-cache \
         libheif-libde265@alpine \
         tzdata \
         libffi \
+        libatomic \
         libexif@alpine \
         openssl \
         readline \
