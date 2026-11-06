@@ -1,6 +1,6 @@
-variable "NODE_VERSION"                  { default = "24.22.2" }
+variable "NODE_VERSION"                  { default = "26.13.0" }
 variable "PHP_VERSION"                   { default = "8.5.12" }
-variable "FRANKENPHP_VERSION"            { default = "1.13.4" }
+variable "FRANKENPHP_VERSION"            { default = "1.13.5" }
 variable "ALPINE_VERSION"                { default = "3.24" }
 variable "COMPOSER_VERSION"              { default = "2" }
 variable "VERSION"                       { default = "dev" }

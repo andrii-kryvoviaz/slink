@@ -4,20 +4,24 @@ description: 'Run Prettier on the codebase'
 runs:
   using: 'composite'
   steps:
+    - uses: pnpm/action-setup@v6
+      with:
+        version: 12
+
     - uses: actions/setup-node@v5
       with:
         node-version: '24'
-        cache: 'yarn'
-        cache-dependency-path: './services/client/yarn.lock'
+        cache: 'pnpm'
+        cache-dependency-path: './services/client/pnpm-lock.yaml'
 
-    - run: yarn --cwd ./services/client install --frozen-lockfile
+    - run: pnpm install --frozen-lockfile --dir ./services/client
       shell: bash
 
-    - run: yarn --cwd ./services/client run lint
+    - run: pnpm --dir ./services/client run lint
       shell: bash
       continue-on-error: true
 
-    - run: yarn --cwd ./services/client run format
+    - run: pnpm --dir ./services/client run format
       shell: bash
 
     - uses: ./.github/actions/commit-bot

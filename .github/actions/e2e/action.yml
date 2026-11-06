@@ -16,22 +16,27 @@ runs:
         set: |
           *.cache-from=type=gha,scope=e2e
 
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v6
+      with:
+        version: 12
+
     - name: Setup Node.js
       uses: actions/setup-node@v5
       with:
-        cache: yarn
-        cache-dependency-path: services/client/yarn.lock
+        cache: pnpm
+        cache-dependency-path: services/client/pnpm-lock.yaml
 
     - name: Install dependencies
       shell: bash
       working-directory: services/client
-      run: yarn install --immutable
+      run: pnpm install --frozen-lockfile
 
     - name: Get Playwright version
       id: playwright-version
       shell: bash
       working-directory: services/client
-      run: echo "version=$(yarn --silent playwright --version)" >> $GITHUB_OUTPUT
+      run: echo "version=$(pnpm exec playwright --version)" >> $GITHUB_OUTPUT
 
     - name: Cache Playwright browsers
       uses: actions/cache@v5
@@ -44,13 +49,13 @@ runs:
       if: steps.playwright-cache.outputs.cache-hit != 'true'
       shell: bash
       working-directory: services/client
-      run: yarn playwright install --with-deps chromium
+      run: pnpm exec playwright install --with-deps chromium
 
     - name: Install Playwright system deps
       if: steps.playwright-cache.outputs.cache-hit == 'true'
       shell: bash
       working-directory: services/client
-      run: yarn playwright install-deps chromium
+      run: pnpm exec playwright install-deps chromium
 
     - name: Start services
       shell: bash
@@ -66,7 +71,7 @@ runs:
       env:
         E2E_BASE_URL: http://localhost:3100
         E2E_API_URL: http://localhost:8180
-      run: yarn e2e
+      run: pnpm run e2e
 
     - name: Stop services
       if: always()
