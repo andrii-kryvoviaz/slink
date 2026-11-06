@@ -36,7 +36,7 @@
     "@tanstack/svelte-table": "9.3.1",
     "@tanstack/table-core": "9.3.1",
     "@trivago/prettier-plugin-sort-imports": "6.0.2",
-    "@types/node": "24.19.2",
+    "@types/node": "26.6.6",
     "@typescript-eslint/eslint-plugin": "^8.72.1",
     "@typescript-eslint/parser": "^8.72.1",
     "@wuchale/svelte": "0.21.4",
