@@ -35,4 +35,27 @@ test.describe('Image proxy route', () => {
     expect(response.headers()['content-type']).toMatch(/^image\//);
     expect(response.headers()['access-control-allow-origin']).toBe('*');
   });
+
+  test('serves a collection item through its collection-scoped url', async ({
+    page,
+    api,
+  }) => {
+    const imageId = await api.content.uploadImage();
+    const collectionId = await api.content.createCollection({
+      name: `Media proxy ${Date.now()}`,
+    });
+    await api.content.addImageToCollection(collectionId, imageId);
+
+    const [item] = await api.content.getCollectionItems(collectionId);
+
+    expect(item.url).toMatch(
+      new RegExp(`^/image/collection/${collectionId}/items/${imageId}\\.`),
+    );
+
+    const response = await page.request.get(item.url!);
+
+    expect(response.status()).toBe(200);
+    expect(response.headers()['content-type']).toMatch(/^image\//);
+    expect(response.headers()['access-control-allow-origin']).toBe('*');
+  });
 });

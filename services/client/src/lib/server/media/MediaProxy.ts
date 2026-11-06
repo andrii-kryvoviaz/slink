@@ -4,6 +4,7 @@ import { MediaType } from '@slink/lib/enum/MediaType';
 
 export class MediaProxy {
   private static readonly _upstreamPrefix = '/api/image';
+  private static readonly _dotSegments = ['', '.', '..'];
 
   public static async forward({
     params,
@@ -28,11 +29,13 @@ export class MediaProxy {
   }
 
   private static _resolvePath(path: string): string {
-    if (path.includes('/')) {
+    const segments = path.split('/');
+
+    if (segments.some((segment) => MediaProxy._dotSegments.includes(segment))) {
       error(404);
     }
 
-    return encodeURIComponent(path);
+    return segments.map(encodeURIComponent).join('/');
   }
 
   private static _isMedia(response: Response): boolean {

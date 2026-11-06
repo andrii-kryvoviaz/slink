@@ -13,6 +13,7 @@ export interface CollectionSummary {
 
 export interface CollectionItemSummary {
   itemId: string;
+  url: string | null;
 }
 
 export class ContentApi {
@@ -43,9 +44,15 @@ export class ContentApi {
 
   async getCollectionItems(id: string): Promise<CollectionItemSummary[]> {
     const data = await this.http.request('GET', `/api/collection/${id}/items`);
-    const items = (data?.data ?? data ?? []) as Array<{ itemId: unknown }>;
+    const items = (data?.data ?? data ?? []) as Array<{
+      itemId: unknown;
+      url?: unknown;
+    }>;
 
-    return items.map((item) => ({ itemId: String(item.itemId) }));
+    return items.map((item) => ({
+      itemId: String(item.itemId),
+      url: typeof item.url === 'string' ? item.url : null,
+    }));
   }
 
   async listHistoryIds(limit = 100): Promise<string[]> {
