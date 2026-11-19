@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Slink\Image\Application\Service\Upload;
 
+use Slink\Collection\Domain\Collection;
 use Slink\Image\Application\Command\UploadImage\UploadImageCommand;
 use Slink\Image\Domain\Enum\License;
 use Slink\Image\Domain\ValueObject\ImageAttributes;
@@ -28,6 +29,9 @@ final class UploadContext {
   private ?bool $stripExifMetadata = null;
 
   private ?License $license = null;
+
+  /** @var list<Collection> */
+  private array $collections = [];
 
   /**
    * @param array<string> $tagIds
@@ -100,6 +104,16 @@ final class UploadContext {
     return $clone;
   }
 
+  /**
+   * @param list<Collection> $collections
+   */
+  public function withCollections(array $collections): self {
+    $clone = clone $this;
+    $clone->collections = $collections;
+
+    return $clone;
+  }
+
   public function id(): ID {
     return $this->id;
   }
@@ -128,6 +142,13 @@ final class UploadContext {
    */
   public function collectionIds(): array {
     return $this->collectionIds;
+  }
+
+  /**
+   * @return list<Collection>
+   */
+  public function collections(): array {
+    return $this->collections;
   }
 
   public function file(): File {

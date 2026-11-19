@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Slink\Image\Application\Service\Upload\Stage;
 
-use Doctrine\ORM\EntityManagerInterface;
-use Slink\Image\Application\Service\CollectionMembershipAssigner;
+use Slink\Collection\Domain\Enum\ItemType;
+use Slink\Collection\Domain\Repository\CollectionStoreRepositoryInterface;
 use Slink\Image\Application\Service\ImageTagAssigner;
 use Slink\Image\Application\Service\Upload\UploadContext;
 use Slink\Image\Application\Service\Upload\UploadPhase;
@@ -23,8 +23,7 @@ final readonly class CommitUploadStage implements UploadStageInterface {
     private ImageTagAssigner $tagAssigner,
     private StorageInterface $storage,
     private ImageStoreRepositoryInterface $imageRepository,
-    private CollectionMembershipAssigner $collectionAssigner,
-    private EntityManagerInterface $entityManager,
+    private CollectionStoreRepositoryInterface $collectionStore,
   ) {
   }
 
@@ -44,9 +43,11 @@ final readonly class CommitUploadStage implements UploadStageInterface {
     $this->storage->upload($context->file(), $context->fileName());
 
     $this->imageRepository->store($image);
-    $this->entityManager->flush();
 
-    $this->collectionAssigner->assign($context->id(), $context->collectionIds(), $context->userId());
+    foreach ($context->collections() as $collection) {
+      $collection->addItem($context->id(), ItemType::Image);
+      $this->collectionStore->store($collection);
+    }
 
     return $context;
   }

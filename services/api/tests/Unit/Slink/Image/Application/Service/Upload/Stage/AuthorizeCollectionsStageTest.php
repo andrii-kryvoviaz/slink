@@ -89,7 +89,9 @@ class AuthorizeCollectionsStageTest extends TestCase {
       collectionIds: [ID::generate()->toString(), ID::generate()->toString()],
     );
 
-    $this->assertSame($context, $stage->process($context));
+    $result = $stage->process($context);
+
+    $this->assertCount(2, $result->collections());
   }
 
   private function collectionStore(): CollectionStoreRepositoryInterface {
