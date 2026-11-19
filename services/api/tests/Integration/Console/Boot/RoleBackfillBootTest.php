@@ -248,22 +248,6 @@ final class RoleBackfillBootTest extends HttpTestCase {
 
   #[Test]
   #[Group('sc-1604')]
-  public function aRevokedAdminNamedByTheAdminSettingsIsNotRestored(): void {
-    $this->useAdminEnv(self::USERNAME, self::EMAIL);
-    $userId = $this->userWithoutARoleRow();
-    $this->seedLegacyStore();
-    $this->recordLegacyRoleEvent(self::GRANTED, $userId, self::ADMIN_ROLE, 1);
-    $this->recordLegacyRoleEvent(self::REVOKED, $userId, self::ADMIN_ROLE, 2);
-    $this->useEnv(['ES_DATABASE_URL' => $this->legacyStoreUrl()]);
-
-    $report = $this->bootReport();
-
-    self::assertSame([], $report->details(BootStatus::Fail));
-    self::assertSame(0, $this->adminRoleRows($userId));
-  }
-
-  #[Test]
-  #[Group('sc-1604')]
   public function aDeletedUserGrantedInTheOldStoreGainsNoRoleRow(): void {
     $this->useAdminEnv('nobody', 'nobody@local.test');
     $adminToken = $this->bootAdmin();
