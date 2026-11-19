@@ -69,10 +69,6 @@ final class Collection extends AbstractAggregateRoot implements OwnerAwareInterf
     return $collection;
   }
 
-  public static function itemsLockKey(ID $id): string {
-    return 'collection-items-' . $id->toString();
-  }
-
   public function update(CollectionName $name, CollectionDescription $description): void {
     $this->recordThat(new CollectionWasUpdated(
       $this->aggregateRootId(),
@@ -94,8 +90,8 @@ final class Collection extends AbstractAggregateRoot implements OwnerAwareInterf
       return;
     }
 
-    $position = $this->items->getNextPosition();
-    $item = CollectionItem::create($itemId, $itemType, $position);
+    $addedAt = DateTime::now();
+    $item = CollectionItem::create($itemId, $itemType, (float) $addedAt->format('U.u'), $addedAt);
 
     $this->recordThat(new ItemWasAddedToCollection(
       $this->aggregateRootId(),

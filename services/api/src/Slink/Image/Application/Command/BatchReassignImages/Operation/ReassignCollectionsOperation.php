@@ -10,7 +10,6 @@ use Slink\Collection\Domain\Repository\CollectionItemRepositoryInterface;
 use Slink\Collection\Domain\Repository\CollectionStoreRepositoryInterface;
 use Slink\Image\Application\Command\BatchReassignImages\BatchReassignImagesCommand;
 use Slink\Image\Domain\Image;
-use Slink\Shared\Application\Lock\ResourceLock;
 use Slink\Shared\Domain\ValueObject\ID;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
@@ -19,7 +18,6 @@ final class ReassignCollectionsOperation implements BatchReassignOperationInterf
   public function __construct(
     private readonly CollectionStoreRepositoryInterface $collectionRepository,
     private readonly CollectionItemRepositoryInterface $collectionItemRepository,
-    private readonly ResourceLock $lock,
   ) {}
 
   public function supports(BatchReassignImagesCommand $command, string $imageId): bool {
@@ -49,22 +47,20 @@ final class ReassignCollectionsOperation implements BatchReassignOperationInterf
   }
 
   private function changeCollection(string $collectionId, ID $userId, \Closure $change): void {
-    $this->lock->run(Collection::itemsLockKey(ID::fromString($collectionId)), function () use ($collectionId, $userId, $change): void {
-      $collections = $this->collectionRepository->getByIds([$collectionId]);
+    $collections = $this->collectionRepository->getByIds([$collectionId]);
 
-      if (!$collections->has($collectionId)) {
-        return;
-      }
+    if (!$collections->has($collectionId)) {
+      return;
+    }
 
-      $collection = $collections->get($collectionId);
+    $collection = $collections->get($collectionId);
 
-      if (!$collection->isOwnedBy($userId)) {
-        return;
-      }
+    if (!$collection->isOwnedBy($userId)) {
+      return;
+    }
 
-      $change($collection);
+    $change($collection);
 
-      $this->collectionRepository->store($collection);
-    });
+    $this->collectionRepository->store($collection);
   }
 }

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Slink\Image\Application\Command\BatchReassignImages;
 
+use Doctrine\DBAL\Driver\AbstractException;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -22,6 +24,23 @@ final class BatchReassignImagesHandlerTest extends TestCase {
   private const IMAGE_ID_1 = '11111111-1111-1111-1111-111111111111';
   private const IMAGE_ID_2 = '22222222-2222-2222-2222-222222222222';
   private const TAG_ID_1 = '33333333-3333-3333-3333-333333333333';
+
+  /**
+   * @param iterable<BatchReassignOperationInterface> $operations
+   */
+  private function handler(
+    ImageStoreRepositoryInterface $imageRepository,
+    EntityManagerInterface $entityManager,
+    ManagerRegistry $managerRegistry,
+    iterable $operations,
+  ): BatchReassignImagesHandler {
+    return new BatchReassignImagesHandler(
+      $imageRepository,
+      $entityManager,
+      $managerRegistry,
+      $operations,
+    );
+  }
 
   /**
    * @throws Exception
@@ -53,7 +72,7 @@ final class BatchReassignImagesHandlerTest extends TestCase {
     $operation->method('supports')->willReturn(true);
     $operation->expects($this->exactly(2))->method('apply');
 
-    $handler = new BatchReassignImagesHandler($imageRepository, $this->createStub(EntityManagerInterface::class), $this->createStub(ManagerRegistry::class), [$operation]);
+    $handler = $this->handler($imageRepository, $this->createStub(EntityManagerInterface::class), $this->createStub(ManagerRegistry::class), [$operation]);
     $result = $handler($command, self::USER_ID);
 
     $this->assertSame([self::IMAGE_ID_1, self::IMAGE_ID_2], $result['processed']);
@@ -75,7 +94,7 @@ final class BatchReassignImagesHandlerTest extends TestCase {
     $imageRepository = $this->createStub(ImageStoreRepositoryInterface::class);
     $imageRepository->method('get')->willReturn($image);
 
-    $handler = new BatchReassignImagesHandler($imageRepository, $this->createStub(EntityManagerInterface::class), $this->createStub(ManagerRegistry::class), []);
+    $handler = $this->handler($imageRepository, $this->createStub(EntityManagerInterface::class), $this->createStub(ManagerRegistry::class), []);
     $result = $handler($command, self::USER_ID);
 
     $this->assertEmpty($result['processed']);
@@ -110,7 +129,7 @@ final class BatchReassignImagesHandlerTest extends TestCase {
     );
     $imageRepository->expects($this->once())->method('store')->with($image1);
 
-    $handler = new BatchReassignImagesHandler($imageRepository, $this->createStub(EntityManagerInterface::class), $this->createStub(ManagerRegistry::class), []);
+    $handler = $this->handler($imageRepository, $this->createStub(EntityManagerInterface::class), $this->createStub(ManagerRegistry::class), []);
     $result = $handler($command, self::USER_ID);
 
     $this->assertSame([self::IMAGE_ID_1], $result['processed']);
@@ -127,7 +146,7 @@ final class BatchReassignImagesHandlerTest extends TestCase {
 
     $imageRepository = $this->createStub(ImageStoreRepositoryInterface::class);
 
-    $handler = new BatchReassignImagesHandler($imageRepository, $this->createStub(EntityManagerInterface::class), $this->createStub(ManagerRegistry::class), []);
+    $handler = $this->handler($imageRepository, $this->createStub(EntityManagerInterface::class), $this->createStub(ManagerRegistry::class), []);
     $result = $handler($command, self::USER_ID);
 
     $this->assertEmpty($result['processed']);
@@ -154,7 +173,7 @@ final class BatchReassignImagesHandlerTest extends TestCase {
     $operation->method('supports')->willReturn(false);
     $operation->expects($this->never())->method('apply');
 
-    $handler = new BatchReassignImagesHandler($imageRepository, $this->createStub(EntityManagerInterface::class), $this->createStub(ManagerRegistry::class), [$operation]);
+    $handler = $this->handler($imageRepository, $this->createStub(EntityManagerInterface::class), $this->createStub(ManagerRegistry::class), [$operation]);
     $result = $handler($command, self::USER_ID);
 
     $this->assertSame([self::IMAGE_ID_1], $result['processed']);
@@ -180,7 +199,7 @@ final class BatchReassignImagesHandlerTest extends TestCase {
     $operation->method('supports')->willReturn(true);
     $operation->method('apply')->willThrowException(new \RuntimeException('Operation failed'));
 
-    $handler = new BatchReassignImagesHandler($imageRepository, $this->createStub(EntityManagerInterface::class), $this->createStub(ManagerRegistry::class), [$operation]);
+    $handler = $this->handler($imageRepository, $this->createStub(EntityManagerInterface::class), $this->createStub(ManagerRegistry::class), [$operation]);
     $result = $handler($command, self::USER_ID);
 
     $this->assertEmpty($result['processed']);
@@ -215,7 +234,7 @@ final class BatchReassignImagesHandlerTest extends TestCase {
     $managerRegistry = $this->createMock(ManagerRegistry::class);
     $managerRegistry->expects($this->never())->method('resetManager');
 
-    $handler = new BatchReassignImagesHandler($imageRepository, $entityManager, $managerRegistry, []);
+    $handler = $this->handler($imageRepository, $entityManager, $managerRegistry, []);
     $result = $handler($command, self::USER_ID);
 
     $this->assertSame([self::IMAGE_ID_2], $result['processed']);
@@ -249,7 +268,7 @@ final class BatchReassignImagesHandlerTest extends TestCase {
     $managerRegistry = $this->createMock(ManagerRegistry::class);
     $managerRegistry->expects($this->once())->method('resetManager');
 
-    $handler = new BatchReassignImagesHandler($imageRepository, $entityManager, $managerRegistry, []);
+    $handler = $this->handler($imageRepository, $entityManager, $managerRegistry, []);
     $result = $handler($command, self::USER_ID);
 
     $this->assertSame([self::IMAGE_ID_2], $result['processed']);
@@ -275,9 +294,40 @@ final class BatchReassignImagesHandlerTest extends TestCase {
     $entityManager = $this->createMock(EntityManagerInterface::class);
     $entityManager->expects($this->once())->method('flush')->willThrowException(new OptimisticLockException('Conflict', null));
 
-    $handler = new BatchReassignImagesHandler($imageRepository, $entityManager, $this->createStub(ManagerRegistry::class), []);
+    $handler = $this->handler($imageRepository, $entityManager, $this->createStub(ManagerRegistry::class), []);
 
     $this->expectException(OptimisticLockException::class);
+
+    $handler($command, self::USER_ID);
+  }
+
+  /**
+   * @throws Exception
+   */
+  #[Test]
+  public function itLetsAUniqueConflictEndTheBatchSoTheBusCanRerunIt(): void {
+    $command = new BatchReassignImagesCommand([
+      self::IMAGE_ID_1 => ['tagIds' => [self::TAG_ID_1]],
+      self::IMAGE_ID_2 => ['tagIds' => [self::TAG_ID_1]],
+    ]);
+
+    $image = $this->createStub(Image::class);
+    $image->method('isOwnedBy')->willReturn(true);
+
+    $imageRepository = $this->createStub(ImageStoreRepositoryInterface::class);
+    $imageRepository->method('get')->willReturn($image);
+
+    $conflict = new UniqueConstraintViolationException(new class('duplicate key') extends AbstractException {}, null);
+
+    $entityManager = $this->createMock(EntityManagerInterface::class);
+    $entityManager->expects($this->once())->method('flush')->willThrowException($conflict);
+
+    $managerRegistry = $this->createMock(ManagerRegistry::class);
+    $managerRegistry->expects($this->never())->method('resetManager');
+
+    $handler = $this->handler($imageRepository, $entityManager, $managerRegistry, []);
+
+    $this->expectExceptionObject($conflict);
 
     $handler($command, self::USER_ID);
   }

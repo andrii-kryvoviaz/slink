@@ -87,7 +87,7 @@ final class CollectionTest extends TestCase {
     $event = $events[1];
     $this->assertTrue($event->item->getItemId()->equals($itemId));
     $this->assertEquals(ItemType::Image, $event->item->getItemType());
-    $this->assertEquals(1.0, $event->item->getPosition());
+    $this->assertSame((float) $event->item->getAddedAt()->format('U.u'), $event->item->getPosition());
   }
 
   #[Test]
@@ -285,7 +285,7 @@ final class CollectionTest extends TestCase {
 
   #[Test]
   #[Group('sc-1178')]
-  public function itAddsAfterTheHighestHydratedPosition(): void {
+  public function itPositionsAnAddedItemAfterEveryRenumberedItemFromItsAddedAtTime(): void {
     $view = $this->collectionView();
     $collection = Collection::fromView($view, [
       $this->item(ID::generate(), 1.0),
@@ -297,7 +297,9 @@ final class CollectionTest extends TestCase {
     $events = $collection->releaseEvents();
     $this->assertCount(1, $events);
     $this->assertInstanceOf(ItemWasAddedToCollection::class, $events[0]);
-    $this->assertSame(5.0, $events[0]->item->getPosition());
+    $position = $events[0]->item->getPosition();
+    $this->assertSame((float) $events[0]->item->getAddedAt()->format('U.u'), $position);
+    $this->assertGreaterThan(4.0, $position);
   }
 
   #[Test]

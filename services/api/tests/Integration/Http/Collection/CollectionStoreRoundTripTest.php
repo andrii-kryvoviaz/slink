@@ -204,8 +204,8 @@ final class CollectionStoreRoundTripTest extends ViewBackedStoreRoundTripTestCas
     $this->addItem($collectionId, $fourth);
 
     self::assertSame([$first, $second, $fourth], $this->storedItemIds($collectionId));
-    self::assertSame(
-      (float) $this->itemRows($collectionId)[1]['position'] + 1.0,
+    self::assertGreaterThan(
+      (float) $this->itemRows($collectionId)[1]['position'],
       (float) $this->itemRows($collectionId)[2]['position'],
     );
   }
@@ -244,10 +244,24 @@ final class CollectionStoreRoundTripTest extends ViewBackedStoreRoundTripTestCas
 
     self::assertSame(200, $status, (string) $this->client->getResponse()->getContent());
     self::assertSame([$first, $second], $this->storedItemIds($collectionId));
-    self::assertSame([1.0, 2.0], \array_map(
-      static fn (array $item): float => (float) $item['position'],
-      $this->itemRows($collectionId),
-    ));
+    [$firstRow, $secondRow] = $this->itemRows($collectionId);
+    self::assertGreaterThan((float) $firstRow['position'], (float) $secondRow['position']);
+  }
+
+  #[Test]
+  public function itemsAddedMicrosecondsApartKeepTheirOwnPositions(): void {
+    $this->bootOwner();
+    $collectionId = $this->createCollection($this->ownerToken);
+    [$first, $second] = $this->uploadImages(2);
+    $clock = self::mockTime(new \DateTimeImmutable('@' . \time() . '.000010'));
+
+    $this->addItem($collectionId, $first);
+    $clock->sleep(0.00003);
+    $this->addItem($collectionId, $second);
+
+    self::assertSame([$first, $second], $this->storedItemIds($collectionId));
+    [$firstRow, $secondRow] = $this->itemRows($collectionId);
+    self::assertGreaterThan((float) $firstRow['position'], (float) $secondRow['position']);
   }
 
   #[Test]

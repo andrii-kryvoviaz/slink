@@ -37,6 +37,15 @@ final class ConcurrentCollectionItemsTest extends ConcurrentRequestTestCase {
     yield 'reorder overlapping a batch add' => ['reorder', 'batchAdd'];
   }
 
+  /**
+   * @return iterable<string, array{string, string}>
+   */
+  public static function racingAdds(): iterable {
+    yield 'batch add overlapping an add' => ['batchAdd', 'add'];
+    yield 'add overlapping a batch add' => ['add', 'batchAdd'];
+    yield 'batch add overlapping a batch add' => ['batchAdd', 'batchAdd'];
+  }
+
   private function itemPath(string $collectionId, string $imageId): string {
     return \sprintf('/api/collection/%s/items/%s', $collectionId, $imageId);
   }
@@ -101,6 +110,16 @@ final class ConcurrentCollectionItemsTest extends ConcurrentRequestTestCase {
    */
   private function reassignFromAnotherKernel(string $imageId, array $collectionIds): array {
     return $this->requestFromAnotherKernel('PUT', '/api/images/batch', $this->ownerToken, $this->reassignBody($imageId, $collectionIds));
+  }
+
+  /**
+   * @return array{processed: list<string>, failed: list<array{id: string, reason: string}>}
+   */
+  private function batchResult(string $body): array {
+    /** @var array{data?: array{processed: list<string>, failed: list<array{id: string, reason: string}>}, processed?: list<string>, failed?: list<array{id: string, reason: string}>} $payload */
+    $payload = \json_decode($body, true, 512, JSON_THROW_ON_ERROR);
+
+    return $payload['data'] ?? ['processed' => $payload['processed'] ?? [], 'failed' => $payload['failed'] ?? []];
   }
 
   /**
@@ -312,5 +331,73 @@ final class ConcurrentCollectionItemsTest extends ConcurrentRequestTestCase {
     self::assertSame(409, $status, (string) $this->client->getResponse()->getContent());
     self::assertSame(['error' => ['title' => 'Conflict', 'message' => 'Conflict']], $this->responsePayload());
     self::assertSame([$third, $second, $first], $this->listedItemIds($collectionId));
+  }
+
+  #[Test]
+  #[DataProvider('racingAdds')]
+  public function anAddRacingAnotherAddOfTheSameImageCountsAsAddedAndKeepsTheRestOfTheBatch(string $write, string $overlap): void {
+    $collectionId = $this->createCollection($this->ownerToken);
+    $otherCollectionId = $this->createCollection($this->ownerToken);
+    [$imageId] = $this->uploadImages(1);
+    $overlapping = null;
+
+    $this->beforeTheNextFlush(function () use (&$overlapping, $overlap, $imageId, $collectionId): void {
+      $overlapping = $this->performFromAnotherKernel($overlap, $collectionId, $imageId, []);
+    });
+
+    if ($write === 'batchAdd') {
+      $status = $this->reassign($imageId, [$collectionId, $otherCollectionId]);
+    } else {
+      $status = $this->add($collectionId, $imageId);
+    }
+
+    $body = (string) $this->client->getResponse()->getContent();
+
+    self::assertContains($overlapping['status'] ?? null, self::SUCCESS, $overlapping['body'] ?? '');
+    self::assertContains($status, self::SUCCESS, $body);
+
+    if ($write === 'batchAdd') {
+      self::assertSame([], $this->batchResult($body)['failed'], $body);
+      self::assertSame([$imageId], $this->batchResult($body)['processed'], $body);
+      self::assertSame(1, $this->countRowsByColumn('collection_item', 'collection_id', $otherCollectionId));
+    }
+
+    if ($overlap === 'batchAdd') {
+      self::assertSame([], $this->batchResult($overlapping['body'] ?? '')['failed'], $overlapping['body'] ?? '');
+    }
+
+    self::assertSame(1, $this->countRowsByColumn('collection_item', 'collection_id', $collectionId));
+  }
+
+  #[Test]
+  public function aBatchRerunAfterARacingAddKeepsTheEntriesItCommittedBeforeTheRace(): void {
+    $collectionId = $this->createCollection($this->ownerToken);
+    $otherCollectionId = $this->createCollection($this->ownerToken);
+    [$committed, $raced] = $this->uploadImages(2);
+    $overlapping = null;
+
+    $this->beforeTheNextFlush(function () use (&$overlapping, $collectionId, $raced): void {
+      $this->beforeTheNextFlush(function () use (&$overlapping, $collectionId, $raced): void {
+        $overlapping = $this->addFromAnotherKernel($collectionId, $raced);
+      });
+    });
+
+    $collectionIds = [$collectionId, $otherCollectionId];
+    $status = $this->sendJson('PUT', '/api/images/batch', $this->ownerToken, [
+      'assignments' => [
+        $committed => ['collectionIds' => $collectionIds],
+        $raced => ['collectionIds' => $collectionIds],
+      ],
+    ]);
+    $body = (string) $this->client->getResponse()->getContent();
+
+    self::assertContains($overlapping['status'] ?? null, self::SUCCESS, $overlapping['body'] ?? '');
+    self::assertContains($status, self::SUCCESS, $body);
+    self::assertSame([], $this->batchResult($body)['failed'], $body);
+    self::assertSame([$committed, $raced], $this->batchResult($body)['processed'], $body);
+    self::assertSame(2, $this->countRowsByColumn('collection_item', 'collection_id', $collectionId));
+    self::assertSame(2, $this->countRowsByColumn('collection_item', 'collection_id', $otherCollectionId));
+    $this->assertListsExactly([$committed, $raced], $collectionId);
+    $this->assertListsExactly([$committed, $raced], $otherCollectionId);
   }
 }

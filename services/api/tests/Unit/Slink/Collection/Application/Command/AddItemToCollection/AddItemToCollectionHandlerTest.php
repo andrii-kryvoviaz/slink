@@ -23,17 +23,10 @@ use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
 use Slink\Shared\Domain\Exception\ForbiddenException;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
-use Slink\Shared\Application\Lock\ResourceLock;
-use Symfony\Component\Lock\LockFactory;
-use Symfony\Component\Lock\Store\InMemoryStore;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 #[Group('sc-1179')]
 final class AddItemToCollectionHandlerTest extends TestCase {
-
-  private function createLockFactory(): LockFactory {
-    return new LockFactory(new InMemoryStore());
-  }
 
   private function createImageStore(): ImageStoreRepositoryInterface&Stub {
     $imageStore = $this->createStub(ImageStoreRepositoryInterface::class);
@@ -98,7 +91,6 @@ final class AddItemToCollectionHandlerTest extends TestCase {
       $collectionStore,
       $this->createImageStore(),
       $this->createAccess(true, true),
-      new ResourceLock($this->createLockFactory()),
     );
 
     $command = new AddItemToCollectionCommand(
@@ -128,7 +120,6 @@ final class AddItemToCollectionHandlerTest extends TestCase {
       $collectionStore,
       $this->createImageStore(),
       $this->createAccess(false, true),
-      new ResourceLock($this->createLockFactory()),
     );
 
     $command = new AddItemToCollectionCommand(
@@ -161,7 +152,6 @@ final class AddItemToCollectionHandlerTest extends TestCase {
       $collectionStore,
       $this->createImageStore(),
       $this->createAccess(true, false),
-      new ResourceLock($this->createLockFactory()),
     );
 
     $command = new AddItemToCollectionCommand(
@@ -194,7 +184,6 @@ final class AddItemToCollectionHandlerTest extends TestCase {
       $collectionStore,
       $this->createMissingImageStore(),
       $this->createAccess(true, true),
-      new ResourceLock($this->createLockFactory()),
     );
 
     $command = new AddItemToCollectionCommand(
@@ -204,56 +193,5 @@ final class AddItemToCollectionHandlerTest extends TestCase {
     );
 
     $handler($command, $ownerId->toString());
-  }
-
-  #[Test]
-  public function itHoldsTheCollectionItemsLockFromLoadThroughStore(): void {
-    $userId = ID::generate();
-    $collectionId = ID::generate();
-    $lockFactory = $this->createLockFactory();
-    $collection = $this->createCollection($collectionId, $userId);
-
-    $isLockedByAnotherRequest = function () use ($lockFactory, $collectionId): bool {
-      $competing = $lockFactory->createLock('collection-items-' . $collectionId->toString());
-
-      if (!$competing->acquire()) {
-        return true;
-      }
-
-      $competing->release();
-
-      return false;
-    };
-
-    $lockedWhile = [];
-
-    $collectionStore = $this->createStub(CollectionStoreRepositoryInterface::class);
-    $collectionStore
-      ->method('get')
-      ->willReturnCallback(function () use (&$lockedWhile, $isLockedByAnotherRequest, $collection): Collection {
-        $lockedWhile['load'] = $isLockedByAnotherRequest();
-
-        return $collection;
-      });
-    $collectionStore
-      ->method('store')
-      ->willReturnCallback(function () use (&$lockedWhile, $isLockedByAnotherRequest): void {
-        $lockedWhile['store'] = $isLockedByAnotherRequest();
-      });
-
-    $handler = new AddItemToCollectionHandler(
-      $collectionStore,
-      $this->createImageStore(),
-      $this->createAccess(true, true),
-      new ResourceLock($lockFactory),
-    );
-
-    $handler(
-      new AddItemToCollectionCommand($collectionId->toString(), ID::generate()->toString(), ItemType::Image),
-      $userId->toString(),
-    );
-
-    $this->assertSame(['load' => true, 'store' => true], $lockedWhile);
-    $this->assertFalse($isLockedByAnotherRequest());
   }
 }

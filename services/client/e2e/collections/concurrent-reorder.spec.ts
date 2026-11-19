@@ -45,7 +45,7 @@ async function listItems(
 }
 
 test.describe('Concurrent collection reorder', () => {
-  test('parallel reorders leave distinct positions that match one of the requested orders', async () => {
+  test('parallel reorders answer 204 or 409 and leave distinct positions that match a successful order', async () => {
     const api = await provisionUser(unique('reorder'));
     const collectionId = await api.content.createCollection({
       name: 'concurrent-reorder',
@@ -67,7 +67,14 @@ test.describe('Concurrent collection reorder', () => {
         reorder(api.token, collectionId, second),
       ]);
 
-      expect(statuses, `round ${round}`).toEqual([204, 204]);
+      for (const status of statuses) {
+        expect([204, 409], `round ${round}`).toContain(status);
+      }
+      expect(statuses, `round ${round}`).toContain(204);
+
+      const succeeded = [first, second].filter(
+        (_, index) => statuses[index] === 204,
+      );
 
       const items = (await listItems(api.token, collectionId)).sort(
         (left, right) => left.position - right.position,
@@ -75,7 +82,7 @@ test.describe('Concurrent collection reorder', () => {
       const positions = items.map((item) => item.position);
 
       expect(new Set(positions).size, `round ${round}`).toBe(ITEM_COUNT);
-      expect([first, second], `round ${round}`).toContainEqual(
+      expect(succeeded, `round ${round}`).toContainEqual(
         items.map((item) => item.itemId),
       );
     }

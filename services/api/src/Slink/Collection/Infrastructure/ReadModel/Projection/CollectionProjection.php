@@ -80,6 +80,8 @@ final class CollectionProjection extends AbstractProjection {
   }
 
   public function handleCollectionItemsWereReordered(CollectionItemsWereReordered $event): void {
+    $this->collectionRepository->oneById($event->collectionId->toString())->touch();
+
     $itemsById = [];
     foreach ($this->collectionItemRepository->getByCollectionId($event->collectionId->toString()) as $item) {
       $itemsById[$item->getItemId()] = $item;

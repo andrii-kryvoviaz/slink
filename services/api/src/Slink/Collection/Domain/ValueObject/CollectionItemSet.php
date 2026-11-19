@@ -88,21 +88,6 @@ final readonly class CollectionItemSet extends AbstractValueObject {
     return $this->items->count() === 0;
   }
 
-  public function getNextPosition(): float {
-    if ($this->isEmpty()) {
-      return 1.0;
-    }
-
-    $maxPosition = 0.0;
-    foreach ($this->getItems() as $item) {
-      if ($item->getPosition() > $maxPosition) {
-        $maxPosition = $item->getPosition();
-      }
-    }
-
-    return $maxPosition + 1.0;
-  }
-
   /**
    * @param array<string> $orderedItemIds
    */

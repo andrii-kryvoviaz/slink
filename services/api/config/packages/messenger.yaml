@@ -6,6 +6,7 @@ framework:
             messenger.bus.command:
                 default_middleware: false
                 middleware:
+                    - Slink\Shared\Infrastructure\MessageBus\Middleware\Retry
                     - handle_message
                     - doctrine_transaction
 

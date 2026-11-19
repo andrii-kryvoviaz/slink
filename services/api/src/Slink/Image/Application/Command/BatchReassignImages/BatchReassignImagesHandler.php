@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Slink\Image\Application\Command\BatchReassignImages;
 
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -58,7 +59,7 @@ final readonly class BatchReassignImagesHandler implements CommandHandlerInterfa
         $this->entityManager->flush();
 
         $processed[] = $imageId;
-      } catch (OptimisticLockException $e) {
+      } catch (OptimisticLockException|UniqueConstraintViolationException $e) {
         throw $e;
       } catch (\Throwable $e) {
         $failed[] = ['id' => $imageId, 'reason' => $e->getMessage()];

@@ -11,6 +11,7 @@ doctrine:
 
     types:
       datetime_immutable: Slink\Shared\Infrastructure\Persistence\Doctrine\Types\DateTimeType
+      float: Slink\Shared\Infrastructure\Persistence\Doctrine\Types\FloatType
       email: Slink\Shared\Infrastructure\Persistence\Doctrine\Types\EmailType
       username: Slink\Shared\Infrastructure\Persistence\Doctrine\Types\UsernameType
       display_name: Slink\Shared\Infrastructure\Persistence\Doctrine\Types\DisplayNameType

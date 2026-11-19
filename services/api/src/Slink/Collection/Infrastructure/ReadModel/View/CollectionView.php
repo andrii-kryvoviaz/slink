@@ -103,4 +103,8 @@ class CollectionView extends AbstractView implements OwnerAwareInterface {
     $this->description = $description;
     $this->updatedAt = $updatedAt;
   }
+
+  public function touch(): void {
+    $this->updatedAt = DateTime::now();
+  }
 }
