@@ -37,6 +37,12 @@ final readonly class BatchReassignImagesCommand implements CommandInterface {
    * @return array<string>|null
    */
   public function getCollectionIdsForImage(string $imageId): ?array {
-    return $this->assignments[$imageId]['collectionIds'] ?? null;
+    $ids = $this->assignments[$imageId]['collectionIds'] ?? null;
+
+    if ($ids === null) {
+      return null;
+    }
+
+    return \array_values(\array_unique($ids));
   }
 }

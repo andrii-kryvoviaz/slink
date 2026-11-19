@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Slink\Collection\Infrastructure\Repository;
 
-use Doctrine\ORM\EntityManagerInterface;
 use EventSauce\EventSourcing\MessageDispatcher;
 use Slink\Collection\Domain\Collection;
 use Slink\Collection\Domain\Repository\CollectionItemRepositoryInterface;
@@ -24,7 +23,6 @@ final class CollectionStore extends AbstractViewBackedStore implements Collectio
     MessageDispatcher $messageDispatcher,
     private readonly CollectionRepositoryInterface $collectionRepository,
     private readonly CollectionItemRepositoryInterface $collectionItemRepository,
-    private readonly EntityManagerInterface $entityManager,
   ) {
     parent::__construct($messageDispatcher);
   }
@@ -46,7 +44,6 @@ final class CollectionStore extends AbstractViewBackedStore implements Collectio
 
   public function store(Collection $collection): void {
     $this->persist($collection);
-    $this->entityManager->flush();
   }
 
   public function get(ID $id): Collection {

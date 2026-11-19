@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Slink\Collection\Infrastructure\EventConsumer;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Slink\Collection\Domain\Repository\CollectionRepositoryInterface;
 use Slink\Collection\Domain\Repository\CollectionStoreRepositoryInterface;
 use Slink\Shared\Domain\ValueObject\ID;
@@ -14,6 +15,7 @@ final class CollectionPurger extends AbstractEventConsumer {
   public function __construct(
     private readonly CollectionRepositoryInterface $collectionRepository,
     private readonly CollectionStoreRepositoryInterface $collectionStore,
+    private readonly EntityManagerInterface $entityManager,
   ) {
   }
 
@@ -23,6 +25,7 @@ final class CollectionPurger extends AbstractEventConsumer {
       $collection->delete();
 
       $this->collectionStore->store($collection);
+      $this->entityManager->flush();
     }
   }
 }
