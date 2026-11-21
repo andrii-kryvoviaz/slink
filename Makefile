@@ -14,7 +14,7 @@ test-e2e:
 	docker buildx bake -f docker-bake.hcl e2e --load$(if $(filter-out slink:e2e,$(E2E_IMAGE)), --set e2e.tags=$(E2E_IMAGE))
 	$(E2E_COMPOSE) up -d
 	@$(E2E_COMPOSE) $(E2E_HEALTH_WAIT)
-	cd services/client && COMPOSE_PROJECT_NAME=$(E2E_PROJECT) E2E_BASE_URL=http://localhost:$(E2E_WEB_PORT) E2E_API_URL=http://localhost:$(E2E_API_PORT) yarn e2e; \
+	cd services/client && COMPOSE_PROJECT_NAME=$(E2E_PROJECT) E2E_BASE_URL=http://localhost:$(E2E_WEB_PORT) E2E_API_URL=http://localhost:$(E2E_API_PORT) pnpm run e2e; \
 	rc=$$?; \
 	cd ../.. && $(E2E_COMPOSE) down --volumes; \
 	exit $$rc
@@ -50,7 +50,7 @@ run-dev-host:
 	else \
 		echo "slink dev container already running — skipping bake + compose up"; \
 	fi
-	API_URL=http://localhost:8080 yarn --cwd services/client run dev:with-deps --host
+	API_URL=http://localhost:8080 pnpm --dir services/client run dev:with-deps --host
 
 purge:
 	docker compose -f docker/docker-compose.yaml down --rmi all --volumes --remove-orphans

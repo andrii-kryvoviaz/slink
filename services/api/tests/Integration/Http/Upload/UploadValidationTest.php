@@ -94,9 +94,6 @@ final class UploadValidationTest extends HttpTestCase {
     $temp = (string) \tempnam(\sys_get_temp_dir(), 'slink_upload_') . '.gif';
 
     $gif = \base64_decode('R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7', true);
-    if ($gif === false) {
-      throw new \RuntimeException('Unable to decode test gif image.');
-    }
 
     \file_put_contents($temp, $gif);
 

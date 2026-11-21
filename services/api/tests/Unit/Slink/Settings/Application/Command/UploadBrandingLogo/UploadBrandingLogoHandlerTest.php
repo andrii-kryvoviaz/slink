@@ -121,10 +121,6 @@ final class UploadBrandingLogoHandlerTest extends TestCase {
   private function pngContent(): string {
     $png = \base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==', true);
 
-    if ($png === false) {
-      throw new \RuntimeException('Unable to decode test png image.');
-    }
-
     return $png;
   }
 }

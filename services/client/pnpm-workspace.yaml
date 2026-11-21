@@ -1,0 +1,5 @@
+engineStrict: true
+overrides:
+  picomatch: '>=4.0.4'
+  minimatch: '>=11.0.1'
+  '@trivago/prettier-plugin-sort-imports>prettier-plugin-svelte:peer': '3.x || 4'

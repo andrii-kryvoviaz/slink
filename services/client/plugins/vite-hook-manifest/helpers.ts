@@ -1,4 +1,3 @@
-import chokidar from 'chokidar';
 import fs from 'fs';
 import path from 'path';
 
@@ -62,12 +61,4 @@ export function writeManifest(dir: string): {
   fs.writeFileSync(output, content);
 
   return { output, changed: true };
-}
-
-export function createWatcher(dir: string, usePolling: boolean) {
-  return chokidar.watch(dir, {
-    ignoreInitial: true,
-    usePolling,
-    ignored: /manifest\.gen\.ts$/,
-  });
 }

@@ -9,6 +9,7 @@ ARG USER_ID
 ARG GROUP_ID
 
 FROM node:${NODE_VERSION}-alpine AS node
+RUN npm install -g pnpm@12 && npm cache clean --force
 
 FROM dunglas/frankenphp:${FRANKENPHP_VERSION}-php${PHP_VERSION}-alpine AS frankenphp-upstream
 
@@ -66,6 +67,7 @@ RUN apk add --root /rootfs --no-cache \
         libheif-libde265@alpine \
         tzdata \
         libffi \
+        libatomic \
         libexif@alpine \
         openssl \
         readline \
