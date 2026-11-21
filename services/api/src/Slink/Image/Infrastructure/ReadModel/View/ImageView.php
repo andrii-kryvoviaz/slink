@@ -14,9 +14,11 @@ use Slink\Image\Domain\ValueObject\ImageMetadata;
 use Slink\Image\Infrastructure\ReadModel\Repository\ImageRepository;
 use Slink\Shared\Domain\Contract\CursorAwareInterface;
 use Slink\Shared\Domain\Contract\OwnerAwareInterface;
+use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Attribute\Sanitize;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
+use Slink\Shared\Infrastructure\Persistence\ReadModel\VersionedView;
 use Slink\Tag\Infrastructure\ReadModel\View\TagView;
 use Slink\User\Domain\ValueObject\GuestUser;
 use Slink\User\Infrastructure\ReadModel\View\UserView;
@@ -27,6 +29,8 @@ use Symfony\Component\Serializer\Attribute\SerializedName;
 #[ORM\Entity(repositoryClass: ImageRepository::class)]
 #[ORM\Index(name: 'idx_image_user_created_at', columns: ['user_id', 'created_at'])]
 class ImageView extends AbstractView implements CursorAwareInterface, OwnerAwareInterface {
+  use VersionedView;
+
   #[ORM\ManyToMany(targetEntity: TagView::class)]
   #[ORM\JoinTable(name: 'image_to_tag')]
   #[ORM\JoinColumn(name: 'image_id', referencedColumnName: 'uuid')]
@@ -41,7 +45,6 @@ class ImageView extends AbstractView implements CursorAwareInterface, OwnerAware
    * @param ?UserView $user
    * @param ImageAttributes $attributes
    * @param ImageMetadata|null $metadata
-   * @param int $bookmarkCount
    */
   public function __construct(
     #[ORM\Id]
@@ -62,10 +65,6 @@ class ImageView extends AbstractView implements CursorAwareInterface, OwnerAware
     #[ORM\Embedded(class: ImageMetadata::class, columnPrefix: false)]
     #[Groups(['public'])]
     private ?ImageMetadata  $metadata = null,
-
-    #[ORM\Column(type: 'integer', options: ['default' => 0])]
-    #[Groups(['public'])]
-    private int             $bookmarkCount = 0,
   ) {
     $this->tags = new ArrayCollection();
   }
@@ -161,6 +160,10 @@ class ImageView extends AbstractView implements CursorAwareInterface, OwnerAware
     $this->attributes = $attributes;
   }
 
+  public function touch(): void {
+    $this->attributes = clone $this->attributes->withUpdatedAt(DateTime::now());
+  }
+
   /**
    * @param ImageMetadata $metadata
    * @return void
@@ -191,20 +194,6 @@ class ImageView extends AbstractView implements CursorAwareInterface, OwnerAware
     $this->tags->clear();
   }
 
-  public function getBookmarkCount(): int {
-    return $this->bookmarkCount;
-  }
-
-  public function incrementBookmarkCount(): void {
-    $this->bookmarkCount++;
-  }
-
-  public function decrementBookmarkCount(): void {
-    if ($this->bookmarkCount > 0) {
-      $this->bookmarkCount--;
-    }
-  }
-
   public function getLicenseView(): ?ImageLicenseView {
     return $this->license;
   }
@@ -228,7 +217,6 @@ class ImageView extends AbstractView implements CursorAwareInterface, OwnerAware
     return [
       'id' => $this->uuid,
       'user' => $this->getOwner(),
-      'bookmarkCount' => $this->bookmarkCount,
       'license' => $this->getLicense()?->value,
       ...$this->attributes->toPayload(),
       ...$this->metadata ? $this->metadata->toPayload() : []

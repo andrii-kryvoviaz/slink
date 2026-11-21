@@ -11,6 +11,7 @@ use Slink\Notification\Domain\Enum\NotificationType;
 use Slink\Notification\Infrastructure\ReadModel\Repository\NotificationRepository;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
+use Slink\Shared\Infrastructure\Persistence\ReadModel\VersionedView;
 use Slink\User\Infrastructure\ReadModel\View\UserView;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Serializer\Attribute\SerializedName;
@@ -20,6 +21,8 @@ use Symfony\Component\Serializer\Attribute\SerializedName;
 #[ORM\Index(columns: ['user_id', 'is_read', 'created_at'], name: 'idx_notification_user_read_created')]
 #[ORM\Index(columns: ['user_id', 'created_at'], name: 'idx_notification_user_created')]
 class NotificationView extends AbstractView {
+  use VersionedView;
+
   public function __construct(
     #[ORM\Id]
     #[ORM\Column(type: 'uuid')]

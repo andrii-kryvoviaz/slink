@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Integration\Console\Boot;
 
-use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Slink\Shared\Infrastructure\DataMigration\DataMigrationRunner;
@@ -96,19 +95,14 @@ final class MessageQueueBootTest extends HttpTestCase {
   }
 
   #[Test]
-  public function setupLeavesApplicationTablesAndLegacyEventStoreTransportUntouched(): void {
+  public function setupLeavesApplicationTablesUntouched(): void {
     $connection = $this->connection();
     $connection->executeStatement('CREATE TABLE IF NOT EXISTS queue_setup_sentinel (value TEXT NOT NULL)');
     $connection->executeStatement("INSERT INTO queue_setup_sentinel (value) VALUES ('keep application data')");
-    $eventStore = static::getContainer()->get('doctrine.dbal.event_store_connection');
-    self::assertInstanceOf(Connection::class, $eventStore);
-    $before = $eventStore->createSchemaManager()->listTableNames();
 
     $this->setupQueue();
 
     self::assertSame('keep application data', $connection->fetchOne('SELECT value FROM queue_setup_sentinel'));
-    self::assertSame($before, $eventStore->createSchemaManager()->listTableNames());
-    self::assertFalse($eventStore->createSchemaManager()->tablesExist(['message_queue']));
   }
 
   private function transport(string $name): TransportInterface {

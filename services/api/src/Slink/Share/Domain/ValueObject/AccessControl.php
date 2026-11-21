@@ -40,11 +40,19 @@ final readonly class AccessControl extends AbstractValueObject {
   }
 
   public function expireAt(?DateTime $expiresAt): self {
-    if ($this->expiresAt === $expiresAt || $this->expiresAt?->equals($expiresAt) === true) {
+    if ($this->hasSameExpiry($expiresAt)) {
       return $this;
     }
 
     return clone($this, ['expiresAt' => $expiresAt]);
+  }
+
+  private function hasSameExpiry(?DateTime $expiresAt): bool {
+    if ($this->expiresAt === null || $expiresAt === null) {
+      return $this->expiresAt === $expiresAt;
+    }
+
+    return $this->expiresAt->getTimestamp() === $expiresAt->getTimestamp();
   }
 
   public function withPassword(?HashedSharePassword $password): self {

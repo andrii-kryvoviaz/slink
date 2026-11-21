@@ -9,7 +9,6 @@ use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
 use Slink\Shared\Application\Command\CommandHandlerInterface;
 use Slink\Shared\Domain\Exception\ForbiddenException;
 use Slink\Shared\Domain\ValueObject\ID;
-use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 final readonly class DeleteImageHandler implements CommandHandlerInterface {
@@ -25,10 +24,6 @@ final readonly class DeleteImageHandler implements CommandHandlerInterface {
     string $id
   ): void {
     $image = $this->imageRepository->get(ID::fromString($id));
-
-    if (!$image->aggregateRootVersion()) {
-      throw new NotFoundException();
-    }
 
     if (!$this->access->isGranted(ImageAccess::Delete, $image)) {
       throw new ForbiddenException();

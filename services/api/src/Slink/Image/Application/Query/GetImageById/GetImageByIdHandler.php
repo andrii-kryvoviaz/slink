@@ -6,6 +6,7 @@ namespace Slink\Image\Application\Query\GetImageById;
 
 use Doctrine\ORM\NonUniqueResultException;
 use Ramsey\Uuid\Uuid;
+use Slink\Bookmark\Domain\Repository\BookmarkRepositoryInterface;
 use Slink\Collection\Domain\Repository\CollectionItemRepositoryInterface;
 use Slink\Collection\Infrastructure\ReadModel\View\CollectionView;
 use Slink\Image\Domain\Repository\ImageRepositoryInterface;
@@ -25,6 +26,7 @@ final readonly class GetImageByIdHandler implements QueryHandlerInterface {
     private ImageAnalyzerInterface $imageAnalyzer,
     private StorageInterface $storage,
     private CollectionItemRepositoryInterface $collectionItemRepository,
+    private BookmarkRepositoryInterface $bookmarkRepository,
   ) {
   }
   
@@ -54,6 +56,7 @@ final readonly class GetImageByIdHandler implements QueryHandlerInterface {
 
     return Item::fromPayload(ImageView::class, [
       ...$imageView->toPayload(),
+      'bookmarkCount' => $this->bookmarkRepository->countByImageId($imageId),
       'supportsResize' => $supportsResize,
       'supportsFormatConversion' => $this->imageAnalyzer->supportsFormatConversion($mimeType),
       'isAnimated' => $isAnimated,

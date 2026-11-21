@@ -21,6 +21,10 @@ final readonly class CommentContent extends AbstractValueObject {
     return new self($escaped);
   }
 
+  public static function fromStored(string $content): self {
+    return new self($content);
+  }
+
   private static function validate(string $content): void {
     $length = mb_strlen($content);
 

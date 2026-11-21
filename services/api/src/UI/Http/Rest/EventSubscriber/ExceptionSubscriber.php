@@ -89,6 +89,12 @@ final readonly class ExceptionSubscriber implements EventSubscriberInterface {
       'message' => $this->getExceptionMessage($exception),
     ];
     
+    if ($this->determineStatusCode($exception) === Response::HTTP_CONFLICT) {
+      $reason = $this->exceptionCodeToMessage[Response::HTTP_CONFLICT] ?? 'Conflict';
+      $error['title'] = $reason;
+      $error['message'] = $reason;
+    }
+
     if($exception instanceof SpecificationException) {
       $violation = [
         'property' => $exception->getProperty(),

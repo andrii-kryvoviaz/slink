@@ -25,10 +25,6 @@ final readonly class UnlockShareHandler implements CommandHandlerInterface {
     $id = ID::fromString($shareId);
     $share = $this->shareStore->get($id);
 
-    if (!$share->aggregateRootVersion()) {
-      throw new NotFoundException();
-    }
-
     if (!$this->access->isGranted(ShareAccess::Unlock, $share)) {
       throw new NotFoundException();
     }

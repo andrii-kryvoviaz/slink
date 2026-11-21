@@ -4,18 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Integration\Http\Image;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Slink\Image\Domain\ValueObject\ImageAttributes;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
-use Slink\Shared\Domain\Service\ServerSentEventPublisherInterface;
 use Slink\Shared\Infrastructure\Service\MercureServerSentEventPublisher;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Transport\Serialization\SerializerInterface;
 use Symfony\Component\Messenger\Transport\TransportFactoryInterface;
@@ -24,14 +18,14 @@ use Tests\Integration\Http\HttpTestCase;
 
 #[Group('feed-delivery')]
 final class ImageFeedDeliveryTest extends HttpTestCase {
-  private RecordingFeedPublisher $publisher;
+  use DrivesFeedDelivery;
+
   private string $token;
   private string $ownerId;
 
   protected function setUp(): void {
     parent::setUp();
-    $this->publisher = new RecordingFeedPublisher();
-    static::getContainer()->set(MercureServerSentEventPublisher::class, $this->publisher);
+    $this->recordFeedPublications();
     $this->ownerId = $this->createUser('feed-owner@local.test', 'feedowner', self::PASSWORD);
     $this->token = $this->login('feedowner', self::PASSWORD);
   }
@@ -273,7 +267,7 @@ final class ImageFeedDeliveryTest extends HttpTestCase {
     $this->consumeOne();
     $this->publisher->messages = [];
     $connection = $this->connection();
-    $connection->executeStatement('CREATE TRIGGER fail_second_feed_delete BEFORE DELETE ON image WHEN OLD.uuid = ' . $connection->quote($secondId) . " BEGIN SELECT RAISE(ABORT, 'injected nested delete failure'); END");
+    $connection->executeStatement('CREATE TRIGGER fail_second_feed_delete BEFORE DELETE ON image WHEN (SELECT COUNT(*) FROM image WHERE uuid IN (' . $connection->quote($firstId) . ', ' . $connection->quote($secondId) . ")) = 1 BEGIN SELECT RAISE(ABORT, 'injected nested delete failure'); END");
     if ($outerTransaction) {
       $connection->beginTransaction();
     }
@@ -297,12 +291,13 @@ final class ImageFeedDeliveryTest extends HttpTestCase {
       self::assertSame(0, $this->visiblePending());
       return;
     }
-    self::assertSame(0, (int) $connection->fetchOne('SELECT COUNT(*) FROM image WHERE uuid = ?', [$firstId]));
-    self::assertSame(1, (int) $connection->fetchOne('SELECT COUNT(*) FROM image WHERE uuid = ?', [$secondId]));
+    $remaining = $connection->fetchFirstColumn('SELECT uuid FROM image WHERE uuid IN (?, ?)', [$firstId, $secondId]);
+    $removed = array_values(array_diff([$firstId, $secondId], $remaining));
+    self::assertCount(1, $removed);
     self::assertSame(1, $this->visiblePending());
     $this->restartKernel();
     $this->consumeOne();
-    $this->assertPublished('image_removed', $firstId);
+    $this->assertPublished('image_removed', $removed[0]);
   }
 
   /** @return array<string, array{bool}> */
@@ -622,13 +617,6 @@ final class ImageFeedDeliveryTest extends HttpTestCase {
     self::assertContains($status, [200, 204], (string) $this->client->getResponse()->getContent());
   }
 
-  private function entityManager(): EntityManagerInterface {
-    $entityManager = static::getContainer()->get(EntityManagerInterface::class);
-    self::assertInstanceOf(EntityManagerInterface::class, $entityManager);
-
-    return $entityManager;
-  }
-
   private function image(string $imageId): ImageView {
     $image = $this->entityManager()->find(ImageView::class, $imageId);
     self::assertNotNull($image);
@@ -643,14 +631,6 @@ final class ImageFeedDeliveryTest extends HttpTestCase {
     return new \PDO('sqlite:' . $path);
   }
 
-  private function connection(): Connection {
-    return $this->entityManager()->getConnection();
-  }
-
-  private function pending(): int {
-    return (int) $this->connection()->fetchOne("SELECT COUNT(*) FROM message_queue WHERE queue_name = 'feed'");
-  }
-
   private function visiblePending(): int {
     $pdo = $this->independentConnection();
 
@@ -660,69 +640,10 @@ final class ImageFeedDeliveryTest extends HttpTestCase {
     return (int) $statement->fetchColumn();
   }
 
-  private function consumeOne(): void {
-    self::assertGreaterThan(0, $this->pending());
-    $this->console([
-      'command' => 'messenger:consume',
-      'receivers' => ['feed'],
-      '--limit' => 1,
-      '--no-interaction' => true,
-    ]);
-  }
-
-  /** @param array<string, bool|int|string|list<string>> $arguments */
-  private function console(array $arguments): void {
-    self::assertNotNull(self::$kernel);
-    $application = new Application(self::$kernel);
-    $application->setAutoExit(false);
-    $output = new BufferedOutput();
-    $status = $application->run(new ArrayInput($arguments), $output);
-    self::assertSame(0, $status, $output->fetch());
-  }
-
   private function makeDeliveryDue(): void {
     $this->connection()->executeStatement("UPDATE message_queue SET available_at = '2000-01-01 00:00:00', delivered_at = NULL WHERE queue_name = 'feed'");
   }
-
-  private function assertPublished(string $event, string $imageId): void {
-    $message = array_last($this->publisher->messages);
-    self::assertNotNull($message);
-    self::assertSame('public-feed', $message['topic']);
-    self::assertFalse($message['private']);
-    self::assertSame($event, $message['data']['event']);
-    if ($event === 'image_removed') {
-      self::assertSame($imageId, $message['data']['imageId']);
-      self::assertSame(['event', 'imageId'], array_keys($message['data']));
-      return;
-    }
-    self::assertSame(['event', 'image'], array_keys($message['data']));
-    self::assertSame($imageId, $message['data']['image']['id']);
-  }
-
 }
-
-final class RecordingFeedPublisher implements ServerSentEventPublisherInterface {
-  /** @var list<array{topic: string, data: array<string, mixed>, private: bool}> */
-  public array $messages = [];
-  public bool $fail = false;
-  public bool $killAfterPublish = false;
-  public ?string $journal = null;
-
-  public function publish(string $topic, array $data, bool $private = false): void {
-    if ($this->fail) {
-      throw new \RuntimeException('Mercure unavailable');
-    }
-    $message = ['topic' => $topic, 'data' => $data, 'private' => $private];
-    $this->messages[] = $message;
-    if ($this->journal !== null) {
-      file_put_contents($this->journal, json_encode($message, JSON_THROW_ON_ERROR));
-    }
-    if ($this->killAfterPublish) {
-      posix_kill(posix_getpid(), SIGKILL);
-    }
-  }
-}
-
 
 final class FiniteQueueWriter {
   /** @var resource|null */

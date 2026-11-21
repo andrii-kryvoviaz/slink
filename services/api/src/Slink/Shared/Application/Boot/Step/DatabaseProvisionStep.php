@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\Attribute\AsTaggedItem;
 
 #[AsTaggedItem(priority: 100)]
 final readonly class DatabaseProvisionStep implements BootStepInterface {
-  private const CONNECTIONS = ['event_store', 'read_model'];
+  private const CONNECTIONS = ['read_model'];
 
   public function __construct(
     private ManagerRegistry $registry,

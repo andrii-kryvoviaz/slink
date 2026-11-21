@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Slink\Collection\Domain;
 
-use EventSauce\EventSourcing\AggregateRootId;
-use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
 use Slink\Collection\Domain\Enum\ItemType;
 use Slink\Collection\Domain\Event\CollectionItemsWereReordered;
 use Slink\Collection\Domain\Event\CollectionWasCreated;
@@ -17,6 +15,7 @@ use Slink\Collection\Domain\ValueObject\CollectionDescription;
 use Slink\Collection\Domain\ValueObject\CollectionItem;
 use Slink\Collection\Domain\ValueObject\CollectionItemSet;
 use Slink\Collection\Domain\ValueObject\CollectionName;
+use Slink\Collection\Infrastructure\ReadModel\View\CollectionView;
 use Slink\Shared\Domain\AbstractAggregateRoot;
 use Slink\Shared\Domain\Contract\OwnerAwareInterface;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
@@ -29,7 +28,6 @@ final class Collection extends AbstractAggregateRoot implements OwnerAwareInterf
   private CollectionItemSet $items;
   private DateTime $createdAt;
   private ?DateTime $updatedAt = null;
-  private bool $deleted = false;
 
   protected function __construct(ID $id) {
     parent::__construct($id);
@@ -56,6 +54,21 @@ final class Collection extends AbstractAggregateRoot implements OwnerAwareInterf
     return $collection;
   }
 
+  /**
+   * @param list<CollectionItem> $items
+   */
+  public static function fromView(CollectionView $view, array $items): self {
+    $collection = new self(ID::fromString($view->getUuid()));
+    $collection->userId = ID::fromString($view->getUserId());
+    $collection->name = CollectionName::fromStored($view->getName());
+    $collection->description = CollectionDescription::fromStored($view->getDescription());
+    $collection->createdAt = $view->getCreatedAt();
+    $collection->updatedAt = $view->getUpdatedAt();
+    $collection->items = CollectionItemSet::create($items);
+
+    return $collection;
+  }
+
   public function update(CollectionName $name, CollectionDescription $description): void {
     $this->recordThat(new CollectionWasUpdated(
       $this->aggregateRootId(),
@@ -77,8 +90,8 @@ final class Collection extends AbstractAggregateRoot implements OwnerAwareInterf
       return;
     }
 
-    $position = $this->items->getNextPosition();
-    $item = CollectionItem::create($itemId, $itemType, $position);
+    $addedAt = DateTime::now();
+    $item = CollectionItem::create($itemId, $itemType, (float) $addedAt->format('U.u'), $addedAt);
 
     $this->recordThat(new ItemWasAddedToCollection(
       $this->aggregateRootId(),
@@ -118,10 +131,6 @@ final class Collection extends AbstractAggregateRoot implements OwnerAwareInterf
     $this->name = $event->name;
     $this->description = $event->description;
     $this->updatedAt = $event->updatedAt;
-  }
-
-  protected function applyCollectionWasDeleted(CollectionWasDeleted $event): void {
-    $this->deleted = true;
   }
 
   protected function applyItemWasAddedToCollection(ItemWasAddedToCollection $event): void {
@@ -164,39 +173,7 @@ final class Collection extends AbstractAggregateRoot implements OwnerAwareInterf
     return $this->updatedAt;
   }
 
-  public function isDeleted(): bool {
-    return $this->deleted;
-  }
-
   public function isOwnedBy(?ID $userId): bool {
     return $this->userId->equals($userId);
-  }
-
-  /**
-   * @return array<string, mixed>
-   */
-  protected function createSnapshotState(): array {
-    return [
-      'userId' => $this->userId->toString(),
-      'name' => $this->name->toString(),
-      'description' => $this->description->toString(),
-      'items' => $this->items->toPayload(),
-      'createdAt' => $this->createdAt->toString(),
-      'updatedAt' => $this->updatedAt?->toString(),
-      'deleted' => $this->deleted,
-    ];
-  }
-
-  protected static function reconstituteFromSnapshotState(AggregateRootId $id, mixed $state): AggregateRootWithSnapshotting {
-    $collection = new self(ID::fromString($id->toString()));
-    $collection->userId = ID::fromString($state['userId']);
-    $collection->name = CollectionName::fromString($state['name']);
-    $collection->description = CollectionDescription::fromString($state['description']);
-    $collection->items = CollectionItemSet::fromPayload($state['items'] ?? []);
-    $collection->createdAt = DateTime::fromString($state['createdAt']);
-    $collection->updatedAt = isset($state['updatedAt']) ? DateTime::fromString($state['updatedAt']) : null;
-    $collection->deleted = $state['deleted'] ?? false;
-
-    return $collection;
   }
 }

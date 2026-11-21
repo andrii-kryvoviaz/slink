@@ -16,10 +16,6 @@ final readonly class RevokeShareHandler implements CommandHandlerInterface {
   public function __invoke(RevokeShareCommand $command): void {
     $share = $this->shareStore->get(ID::fromString($command->getShareId()));
 
-    if (!$share->aggregateRootVersion()) {
-      return;
-    }
-
     $share->revoke();
     $this->shareStore->store($share);
   }

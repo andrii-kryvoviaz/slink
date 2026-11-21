@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Slink\Image\Application\Service\Upload\Stage;
 
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
-use Slink\Image\Application\Service\CollectionMembershipAssigner;
+use Slink\Collection\Domain\Collection;
+use Slink\Collection\Domain\Repository\CollectionStoreRepositoryInterface;
+use Slink\Collection\Domain\ValueObject\CollectionDescription;
+use Slink\Collection\Domain\ValueObject\CollectionName;
 use Slink\Image\Application\Service\ImageTagAssigner;
 use Slink\Image\Application\Service\Upload\Stage\CommitUploadStage;
 use Slink\Image\Application\Service\Upload\UploadContext;
@@ -20,8 +24,8 @@ use Slink\Image\Domain\ValueObject\ImageFile;
 use Slink\Image\Domain\ValueObject\ImageMetadata;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
 use Slink\Shared\Domain\Exception\Date\DateTimeException;
-use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Domain\FileSystem\Storage\StorageInterface;
+use Slink\Shared\Domain\ValueObject\ID;
 use Symfony\Component\HttpFoundation\File\File;
 use Tests\Unit\Slink\Image\Application\Service\Upload\UploadContextFactoryTrait;
 
@@ -43,7 +47,21 @@ class CommitUploadStageTest extends TestCase {
         new ImageFile('/tmp/test.webp', 'image/webp', 'webp', 512),
         new ImageMetadata(512, 'image/webp', 800, 600, 'hash'),
       )
-      ->withVisibility(true);
+      ->withVisibility(true)
+      ->withCollections([$this->loadedCollection()]);
+  }
+
+  private function loadedCollection(): Collection {
+    return Collection::create(
+      ID::generate(),
+      ID::generate(),
+      CollectionName::fromString('Test'),
+      CollectionDescription::fromString('Test'),
+    );
+  }
+
+  private function creationContext(): ImageCreationContext {
+    return new ImageCreationContext($this->createStub(ImageDuplicateSpecificationInterface::class));
   }
 
   /**
@@ -53,9 +71,6 @@ class CommitUploadStageTest extends TestCase {
   #[Test]
   public function itExecutesSideEffectsInSafeOrder(): void {
     $calls = [];
-
-    $duplicateSpec = $this->createStub(ImageDuplicateSpecificationInterface::class);
-    $creationContext = new ImageCreationContext($duplicateSpec);
 
     $tagAssigner = $this->createMock(ImageTagAssigner::class);
     $tagAssigner->expects($this->once())->method('assign')->willReturnCallback(static function () use (&$calls): void {
@@ -72,12 +87,12 @@ class CommitUploadStageTest extends TestCase {
       $calls[] = 'store';
     });
 
-    $collectionAssigner = $this->createMock(CollectionMembershipAssigner::class);
-    $collectionAssigner->expects($this->once())->method('assign')->willReturnCallback(static function () use (&$calls): void {
+    $collectionStore = $this->createMock(CollectionStoreRepositoryInterface::class);
+    $collectionStore->expects($this->once())->method('store')->willReturnCallback(static function () use (&$calls): void {
       $calls[] = 'collections';
     });
 
-    $stage = new CommitUploadStage($creationContext, $tagAssigner, $storage, $imageRepository, $collectionAssigner);
+    $stage = new CommitUploadStage($this->creationContext(), $tagAssigner, $storage, $imageRepository, $collectionStore);
 
     $stage->process($this->describedContext());
 
@@ -89,10 +104,36 @@ class CommitUploadStageTest extends TestCase {
    * @throws DateTimeException
    */
   #[Test]
-  public function itAbortsBeforeStorageWhenTagAuthorizationFails(): void {
-    $duplicateSpec = $this->createStub(ImageDuplicateSpecificationInterface::class);
-    $creationContext = new ImageCreationContext($duplicateSpec);
+  #[Group('sc-1607')]
+  public function itAddsTheImageToEachLoadedCollection(): void {
+    $stored = [];
 
+    $collectionStore = $this->createMock(CollectionStoreRepositoryInterface::class);
+    $collectionStore->expects($this->exactly(2))->method('store')->willReturnCallback(
+      static function (Collection $collection) use (&$stored): void {
+        $stored[] = $collection;
+      },
+    );
+
+    $stage = new CommitUploadStage(
+      $this->creationContext(),
+      $this->createStub(ImageTagAssigner::class),
+      $this->createStub(StorageInterface::class),
+      $this->createStub(ImageStoreRepositoryInterface::class),
+      $collectionStore,
+    );
+
+    $stage->process($this->describedContext()->withCollections([$this->loadedCollection(), $this->loadedCollection()]));
+
+    $this->assertSame([1, 1], \array_map(static fn(Collection $collection): int => $collection->getItemCount(), $stored));
+  }
+
+  /**
+   * @throws Exception
+   * @throws DateTimeException
+   */
+  #[Test]
+  public function itAbortsBeforeStorageWhenTagAuthorizationFails(): void {
     $userId = ID::generate();
     $tagAssigner = $this->createMock(ImageTagAssigner::class);
     $tagAssigner->expects($this->once())->method('assign')->willThrowException(
@@ -105,10 +146,10 @@ class CommitUploadStageTest extends TestCase {
     $imageRepository = $this->createMock(ImageStoreRepositoryInterface::class);
     $imageRepository->expects($this->never())->method('store');
 
-    $collectionAssigner = $this->createMock(CollectionMembershipAssigner::class);
-    $collectionAssigner->expects($this->never())->method('assign');
+    $collectionStore = $this->createMock(CollectionStoreRepositoryInterface::class);
+    $collectionStore->expects($this->never())->method('store');
 
-    $stage = new CommitUploadStage($creationContext, $tagAssigner, $storage, $imageRepository, $collectionAssigner);
+    $stage = new CommitUploadStage($this->creationContext(), $tagAssigner, $storage, $imageRepository, $collectionStore);
 
     $this->expectException(UnauthorizedTagAccessException::class);
 
@@ -121,21 +162,22 @@ class CommitUploadStageTest extends TestCase {
    */
   #[Test]
   public function itAbortsBeforeStoreWhenStorageFails(): void {
-    $duplicateSpec = $this->createStub(ImageDuplicateSpecificationInterface::class);
-    $creationContext = new ImageCreationContext($duplicateSpec);
-
-    $tagAssigner = $this->createStub(ImageTagAssigner::class);
-
     $storage = $this->createMock(StorageInterface::class);
     $storage->expects($this->once())->method('upload')->willThrowException(new \RuntimeException('disk full'));
 
     $imageRepository = $this->createMock(ImageStoreRepositoryInterface::class);
     $imageRepository->expects($this->never())->method('store');
 
-    $collectionAssigner = $this->createMock(CollectionMembershipAssigner::class);
-    $collectionAssigner->expects($this->never())->method('assign');
+    $collectionStore = $this->createMock(CollectionStoreRepositoryInterface::class);
+    $collectionStore->expects($this->never())->method('store');
 
-    $stage = new CommitUploadStage($creationContext, $tagAssigner, $storage, $imageRepository, $collectionAssigner);
+    $stage = new CommitUploadStage(
+      $this->creationContext(),
+      $this->createStub(ImageTagAssigner::class),
+      $storage,
+      $imageRepository,
+      $collectionStore,
+    );
 
     $this->expectException(\RuntimeException::class);
 
@@ -164,10 +206,10 @@ class CommitUploadStageTest extends TestCase {
     $imageRepository = $this->createMock(ImageStoreRepositoryInterface::class);
     $imageRepository->expects($this->never())->method('store');
 
-    $collectionAssigner = $this->createMock(CollectionMembershipAssigner::class);
-    $collectionAssigner->expects($this->never())->method('assign');
+    $collectionStore = $this->createMock(CollectionStoreRepositoryInterface::class);
+    $collectionStore->expects($this->never())->method('store');
 
-    $stage = new CommitUploadStage($creationContext, $tagAssigner, $storage, $imageRepository, $collectionAssigner);
+    $stage = new CommitUploadStage($creationContext, $tagAssigner, $storage, $imageRepository, $collectionStore);
 
     $this->expectException(DuplicateImageException::class);
 

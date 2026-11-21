@@ -1,4 +1,5 @@
 export * from './BadRequestException';
+export * from './ConflictException';
 export * from './ForbiddenException';
 export * from './GoneException';
 export * from './HttpException';

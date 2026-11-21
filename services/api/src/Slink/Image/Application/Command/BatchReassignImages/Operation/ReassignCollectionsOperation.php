@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Slink\Image\Application\Command\BatchReassignImages\Operation;
 
+use Slink\Collection\Domain\Collection;
 use Slink\Collection\Domain\Enum\ItemType;
 use Slink\Collection\Domain\Repository\CollectionItemRepositoryInterface;
 use Slink\Collection\Domain\Repository\CollectionStoreRepositoryInterface;
@@ -30,32 +31,36 @@ final class ReassignCollectionsOperation implements BatchReassignOperationInterf
     }
 
     $currentIds = $this->collectionItemRepository->getCollectionIdsByImageIds([$imageId])[$imageId] ?? [];
+    $itemId = $image->aggregateRootId();
 
-    $toAdd = array_diff($desiredIds, $currentIds);
-    $toRemove = array_diff($currentIds, $desiredIds);
-
-    $collections = $this->collectionRepository->getByIds(array_merge($toAdd, $toRemove));
-
-    foreach ($collections->keys() as $key) {
-      if (!$collections->get($key)->isOwnedBy($userId)) {
-        $collections->remove($key);
-      }
+    foreach (array_diff($desiredIds, $currentIds) as $collectionId) {
+      $this->changeCollection($collectionId, $userId, static function (Collection $collection) use ($itemId): void {
+        $collection->addItem($itemId, ItemType::Image);
+      });
     }
 
-    foreach ($toAdd as $collectionId) {
-      if ($collections->has($collectionId)) {
-        $collections->get($collectionId)->addItem($image->aggregateRootId(), ItemType::Image);
-      }
+    foreach (array_diff($currentIds, $desiredIds) as $collectionId) {
+      $this->changeCollection($collectionId, $userId, static function (Collection $collection) use ($itemId): void {
+        $collection->removeItem($itemId);
+      });
+    }
+  }
+
+  private function changeCollection(string $collectionId, ID $userId, \Closure $change): void {
+    $collections = $this->collectionRepository->getByIds([$collectionId]);
+
+    if (!$collections->has($collectionId)) {
+      return;
     }
 
-    foreach ($toRemove as $collectionId) {
-      if ($collections->has($collectionId)) {
-        $collections->get($collectionId)->removeItem($image->aggregateRootId());
-      }
+    $collection = $collections->get($collectionId);
+
+    if (!$collection->isOwnedBy($userId)) {
+      return;
     }
 
-    foreach ($collections->values() as $collection) {
-      $this->collectionRepository->store($collection);
-    }
+    $change($collection);
+
+    $this->collectionRepository->store($collection);
   }
 }

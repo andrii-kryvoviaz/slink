@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Slink\Share\Domain;
 
-use EventSauce\EventSourcing\AggregateRootId;
-use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
 use Slink\Share\Domain\AccessRule\ExpirationAware;
 use Slink\Share\Domain\AccessRule\PasswordProtected;
 use Slink\Share\Domain\AccessRule\PublicationAware;
@@ -26,6 +24,8 @@ use Slink\Share\Domain\ValueObject\TargetPath;
 use Slink\Shared\Domain\AbstractAggregateRoot;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
+use Slink\Share\Infrastructure\ReadModel\View\ShareView;
+use Slink\Share\Infrastructure\ReadModel\View\ShortUrlView;
 
 final class Share extends AbstractAggregateRoot implements PublicationAware, ExpirationAware, PasswordProtected {
   private ShareableReference $shareable;
@@ -57,6 +57,27 @@ final class Share extends AbstractAggregateRoot implements PublicationAware, Exp
     ));
 
     return $share;
+  }
+
+  public static function fromView(ShareView $view, ?ShortUrlView $shortUrl): self {
+    $share = new self(ID::fromString($view->getId()));
+    $share->shareable = $view->getShareable();
+    $share->targetPath = TargetPath::fromString($view->getTargetPath());
+    $share->createdAt = $view->getCreatedAt();
+    $share->context = self::contextFrom($view->getShareable(), $shortUrl);
+    $share->accessControl = $view->getAccessControl();
+
+    return $share;
+  }
+
+  private static function contextFrom(ShareableReference $shareable, ?ShortUrlView $shortUrl): ShareContext {
+    $context = ShareContext::for($shareable);
+
+    if ($shortUrl === null) {
+      return $context;
+    }
+
+    return $context->withShortUrl(ID::fromString($shortUrl->getId()), $shortUrl->getShortCode());
   }
 
   public function addShortUrl(?ID $shortUrlId, ?string $shortCode): void {
@@ -220,33 +241,5 @@ final class Share extends AbstractAggregateRoot implements PublicationAware, Exp
 
   public function getShortCode(): ?string {
     return $this->context->getShortCode();
-  }
-
-  /**
-   * @return array<string, mixed>
-   */
-  protected function createSnapshotState(): array {
-    return [
-      'shareable' => $this->shareable->toPayload(),
-      'targetUrl' => $this->targetPath->toString(),
-      'createdAt' => $this->createdAt->toString(),
-      'context' => $this->context->toPayload(),
-      'accessControl' => $this->accessControl->toPayload(),
-    ];
-  }
-
-  /**
-   * @param mixed $state
-   */
-  protected static function reconstituteFromSnapshotState(AggregateRootId $id, $state): AggregateRootWithSnapshotting {
-    $share = new self(ID::fromString($id->toString()));
-
-    $share->shareable = ShareableReference::fromPayload($state['shareable']);
-    $share->targetPath = TargetPath::fromString($state['targetUrl']);
-    $share->createdAt = DateTime::fromString($state['createdAt']);
-    $share->context = ShareContext::fromPayload($state['context'] ?? [], $share->shareable);
-    $share->accessControl = AccessControl::fromPayload($state['accessControl'] ?? []);
-
-    return $share;
   }
 }

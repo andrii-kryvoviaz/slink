@@ -124,6 +124,7 @@ final class TagProjection extends AbstractProjection {
 
     if ($imageView instanceof ImageView && $tagView instanceof TagView) {
       $imageView->addTag($tagView);
+      $imageView->touch();
       $this->imageRepository->add($imageView);
     }
   }
@@ -139,6 +140,7 @@ final class TagProjection extends AbstractProjection {
 
     if ($imageView instanceof ImageView && $tagView instanceof TagView) {
       $imageView->removeTag($tagView);
+      $imageView->touch();
       $this->imageRepository->add($imageView);
     }
   }
@@ -151,6 +153,7 @@ final class TagProjection extends AbstractProjection {
     }
 
     $imageView->clearTags();
+    $imageView->touch();
 
     foreach ($event->tags->getTags() as $tagId) {
       $tagView = $this->entityManager->getReference(TagView::class, $tagId->toString());

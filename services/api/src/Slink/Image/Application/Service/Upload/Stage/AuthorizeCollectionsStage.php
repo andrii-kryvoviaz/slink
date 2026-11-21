@@ -27,14 +27,18 @@ final readonly class AuthorizeCollectionsStage implements UploadStageInterface {
       return $context;
     }
 
-    foreach ($context->collectionIds() as $collectionId) {
+    $collections = [];
+
+    foreach (\array_unique($context->collectionIds()) as $collectionId) {
       $collection = $this->collectionStore->get(ID::fromString($collectionId));
 
       if (!$this->access->isGranted(CollectionAccess::ManageItems, $collection)) {
         throw new CollectionAccessDeniedException();
       }
+
+      $collections[] = $collection;
     }
 
-    return $context;
+    return $context->withCollections($collections);
   }
 }

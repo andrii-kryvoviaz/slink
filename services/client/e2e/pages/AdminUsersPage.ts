@@ -5,6 +5,8 @@ import { BasePage } from './BasePage';
 
 const MAX_PAGES_TO_WALK = 25;
 
+type UserAction = 'Suspend' | 'Activate' | 'Make Admin' | 'Remove Admin';
+
 export class AdminUsersPage extends BasePage {
   static readonly URL = '/admin/user';
   static readonly PAGE_SIZE = 96;
@@ -200,16 +202,19 @@ export class AdminUsersPage extends BasePage {
     return row.getByText(label, { exact: true });
   }
 
-  async runAction(
-    username: string,
-    action: 'Suspend' | 'Activate' | 'Make Admin' | 'Remove Admin',
-  ) {
+  async runAction(username: string, action: UserAction) {
+    const item = await this.clickAction(username, action);
+    await expect(item).toBeHidden({ timeout: 15000 });
+  }
+
+  async clickAction(username: string, action: UserAction): Promise<Locator> {
     const row = await this.rowByUsername(username);
 
     const item = this.page.getByRole('menuitem', { name: action, exact: true });
     await this.clickUntil(this.actionsTrigger(row), item);
     await item.click();
-    await expect(item).toBeHidden({ timeout: 15000 });
+
+    return item;
   }
 
   async openDeleteConfirmation(row: Locator) {

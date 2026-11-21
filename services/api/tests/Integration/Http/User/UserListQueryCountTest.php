@@ -23,8 +23,11 @@ final class UserListQueryCountTest extends HttpTestCase {
    * @param array<int, string> $roles
    */
   private function assignRoles(string $userId, array $roles): void {
-    foreach ($roles as $role) {
-      $this->entityManager()->getConnection()->insert('user_to_role', [
+    $connection = $this->entityManager()->getConnection();
+    $assigned = $connection->fetchFirstColumn('SELECT role FROM user_to_role WHERE user_id = ?', [$userId]);
+
+    foreach (\array_diff($roles, $assigned) as $role) {
+      $connection->insert('user_to_role', [
         'user_id' => $userId,
         'role' => $role,
       ]);

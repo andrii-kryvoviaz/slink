@@ -27,6 +27,10 @@ final readonly class CollectionDescription extends AbstractValueObject {
     return new self($trimmed);
   }
 
+  public static function fromStored(string $description): self {
+    return new self($description);
+  }
+
   public static function empty(): self {
     return new self('');
   }

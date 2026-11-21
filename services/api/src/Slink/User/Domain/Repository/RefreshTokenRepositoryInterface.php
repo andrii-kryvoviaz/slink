@@ -10,5 +10,10 @@ interface RefreshTokenRepositoryInterface {
   
   public function add(RefreshTokenView $refreshTokenView): void;
   public function remove(string $hashedRefreshToken): void;
+  public function claim(string $hashedRefreshToken): bool;
+  /**
+   * @return array<int, RefreshTokenView>
+   */
+  public function findByUserId(string $userUuid): array;
   public function deleteByUserId(string $userUuid): void;
 }

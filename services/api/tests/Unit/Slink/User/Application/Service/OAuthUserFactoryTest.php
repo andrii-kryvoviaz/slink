@@ -175,7 +175,7 @@ final class OAuthUserFactoryTest extends TestCase {
 
     $user = $factory->create($identity);
 
-    $this->assertSame('andy', $user->getUsername()->toString());
+    $this->assertSame('andy', $user->getUsername()?->toString());
   }
 
   #[Test]
@@ -213,7 +213,7 @@ final class OAuthUserFactoryTest extends TestCase {
 
     $user = $factory->create($identity);
 
-    $this->assertSame('andy', $user->getUsername()->toString());
+    $this->assertSame('andy', $user->getUsername()?->toString());
     $this->assertSame('Andrii Kryvoviaz', $user->getDisplayName()->toString());
   }
 
@@ -229,7 +229,7 @@ final class OAuthUserFactoryTest extends TestCase {
 
     $user = $factory->create($identity);
 
-    $this->assertSame('john.doe', $user->getUsername()->toString());
+    $this->assertSame('john.doe', $user->getUsername()?->toString());
   }
 
   /**
@@ -259,7 +259,7 @@ final class OAuthUserFactoryTest extends TestCase {
 
     $user = $factory->create($identity);
 
-    $this->assertSame('andrii.kryvoviaz', $user->getUsername()->toString());
+    $this->assertSame('andrii.kryvoviaz', $user->getUsername()?->toString());
   }
 
   #[Test]
@@ -274,7 +274,7 @@ final class OAuthUserFactoryTest extends TestCase {
 
     $user = $factory->create($identity);
 
-    $this->assertSame('andy1', $user->getUsername()->toString());
+    $this->assertSame('andy1', $user->getUsername()?->toString());
   }
 
   #[Test]
@@ -289,7 +289,7 @@ final class OAuthUserFactoryTest extends TestCase {
 
     $user = $factory->create($identity);
 
-    $this->assertSame('o.neil.smith1', $user->getUsername()->toString());
+    $this->assertSame('o.neil.smith1', $user->getUsername()?->toString());
   }
 
   #[Test]
@@ -304,7 +304,7 @@ final class OAuthUserFactoryTest extends TestCase {
 
     $user = $factory->create($identity);
 
-    $this->assertSame('user', $user->getUsername()->toString());
+    $this->assertSame('user', $user->getUsername()?->toString());
   }
 
   #[Test]
@@ -315,7 +315,7 @@ final class OAuthUserFactoryTest extends TestCase {
 
     $user = $factory->create($identity);
 
-    $this->assertSame('user', $user->getUsername()->toString());
+    $this->assertSame('user', $user->getUsername()?->toString());
   }
 
   #[Test]
@@ -330,7 +330,7 @@ final class OAuthUserFactoryTest extends TestCase {
 
     $user = $factory->create($identity);
 
-    $this->assertSame('user2', $user->getUsername()->toString());
+    $this->assertSame('user2', $user->getUsername()?->toString());
   }
 
   /**
@@ -346,7 +346,7 @@ final class OAuthUserFactoryTest extends TestCase {
 
     $user = $factory->create($identity);
 
-    $this->assertSame('andrii.kryvoviaz', $user->getUsername()->toString());
+    $this->assertSame('andrii.kryvoviaz', $user->getUsername()?->toString());
   }
 
   #[Test]
@@ -361,7 +361,7 @@ final class OAuthUserFactoryTest extends TestCase {
 
     $user = $factory->create($identity);
 
-    $this->assertSame('andy1', $user->getUsername()->toString());
+    $this->assertSame('andy1', $user->getUsername()?->toString());
   }
 
   #[Test]
@@ -377,7 +377,7 @@ final class OAuthUserFactoryTest extends TestCase {
 
     $user = $factory->create($identity);
 
-    $this->assertSame(str_repeat('b', 29) . '1', $user->getUsername()->toString());
+    $this->assertSame(str_repeat('b', 29) . '1', $user->getUsername()?->toString());
   }
 
   #[Test]

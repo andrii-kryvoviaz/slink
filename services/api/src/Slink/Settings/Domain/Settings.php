@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Slink\Settings\Domain;
 
-use EventSauce\EventSourcing\AggregateRootId;
-use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
 use Slink\Settings\Domain\Event\SettingsChanged;
 use Slink\Settings\Domain\Exception\InvalidSettingsException;
 use Slink\Settings\Domain\ValueObject\AbstractSettingsValueObject;
@@ -16,6 +14,7 @@ use Slink\Settings\Domain\ValueObject\Share\ShareSettings;
 use Slink\Settings\Domain\ValueObject\Storage\StorageSettings;
 use Slink\Settings\Domain\ValueObject\User\UserSettings;
 use Slink\Shared\Domain\AbstractAggregateRoot;
+use Slink\Shared\Domain\Exception\SpecificationException;
 use Slink\Shared\Domain\ValueObject\ID;
 
 final class Settings extends AbstractAggregateRoot {
@@ -46,6 +45,52 @@ final class Settings extends AbstractAggregateRoot {
   private ?ShareSettings $share = null;
   private ?CustomizationSettings $customization = null;
   
+  /**
+   * @param array<string, mixed>|null $storage
+   * @param array<string, mixed>|null $user
+   * @param array<string, mixed>|null $image
+   * @param array<string, mixed>|null $access
+   * @param array<string, mixed>|null $share
+   * @param array<string, mixed>|null $customization
+   */
+  public static function fromView(
+    ?array $storage,
+    ?array $user,
+    ?array $image,
+    ?array $access,
+    ?array $share,
+    ?array $customization,
+  ): self {
+    $settings = new self();
+
+    $settings->storage = self::hydrateCategory($storage, StorageSettings::fromPayload(...));
+    $settings->user = self::hydrateCategory($user, UserSettings::fromPayload(...));
+    $settings->image = self::hydrateCategory($image, ImageSettings::fromPayload(...));
+    $settings->access = self::hydrateCategory($access, AccessSettings::fromPayload(...));
+    $settings->share = self::hydrateCategory($share, ShareSettings::fromPayload(...));
+    $settings->customization = self::hydrateCategory($customization, CustomizationSettings::fromPayload(...));
+
+    return $settings;
+  }
+
+  /**
+   * @template T of AbstractSettingsValueObject
+   * @param array<string, mixed>|null $payload
+   * @param \Closure(array<string, mixed>): T $factory
+   * @return T|null
+   */
+  private static function hydrateCategory(?array $payload, \Closure $factory): ?AbstractSettingsValueObject {
+    if ($payload === null) {
+      return null;
+    }
+
+    try {
+      return $factory($payload);
+    } catch (SpecificationException) {
+      return null;
+    }
+  }
+
   /**
    * @param array<int, ?AbstractSettingsValueObject> $data
    */
@@ -101,35 +146,5 @@ final class Settings extends AbstractAggregateRoot {
   public function applySettingsChanged(SettingsChanged $event): void {
     $categoryKey = $event->category->getCategoryKey();
     $this->{$categoryKey} = $event->settings;
-  }
-
-  /**
-   * @return array<string, mixed>
-   */
-  protected function createSnapshotState(): array {
-    return [
-      'storage' => $this->storage?->toPayload(),
-      'user' => $this->user?->toPayload(),
-      'image' => $this->image?->toPayload(),
-      'access' => $this->access?->toPayload(),
-      'share' => $this->share?->toPayload(),
-      'customization' => $this->customization?->toPayload(),
-    ];
-  }
-
-  /**
-   * @param array<string, mixed> $state
-   */
-  protected static function reconstituteFromSnapshotState(AggregateRootId $id, $state): AggregateRootWithSnapshotting {
-    $settings = new static();
-
-    $settings->storage = isset($state['storage']) ? StorageSettings::fromPayload($state['storage']) : null;
-    $settings->user = isset($state['user']) ? UserSettings::fromPayload($state['user']) : null;
-    $settings->image = isset($state['image']) ? ImageSettings::fromPayload($state['image']) : null;
-    $settings->access = isset($state['access']) ? AccessSettings::fromPayload($state['access']) : null;
-    $settings->share = isset($state['share']) ? ShareSettings::fromPayload($state['share']) : null;
-    $settings->customization = isset($state['customization']) ? CustomizationSettings::fromPayload($state['customization']) : null;
-
-    return $settings;
   }
 }

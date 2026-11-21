@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Slink\Image\Domain;
 
-use EventSauce\EventSourcing\AggregateRootId;
-use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
 use Slink\Image\Domain\Context\ImageCreationContext;
 use Slink\Image\Domain\Enum\License;
 use Slink\Image\Domain\Event\ImageAttributesWasUpdated;
@@ -21,11 +19,11 @@ use Slink\Image\Domain\ValueObject\ImageAttributes;
 use Slink\Image\Domain\ValueObject\ImageFile;
 use Slink\Image\Domain\ValueObject\ImageMetadata;
 use Slink\Image\Domain\ValueObject\TagSet;
+use Slink\Image\Infrastructure\ReadModel\View\ImageView;
 use Slink\Shared\Domain\AbstractAggregateRoot;
 use Slink\Shared\Domain\Contract\OwnerAwareInterface;
 use Slink\Shared\Domain\Exception\ForbiddenException;
 use Slink\Shared\Domain\ValueObject\ID;
-use Slink\Shared\Infrastructure\Exception\NotFoundException;
 
 final class Image extends AbstractAggregateRoot implements OwnerAwareInterface {
   private ?ID $userId;
@@ -37,8 +35,6 @@ final class Image extends AbstractAggregateRoot implements OwnerAwareInterface {
   private TagSet $tags;
 
   private ?License $license = null;
-
-  private bool $deleted = false;
 
   /**
    * @param ID $id
@@ -100,13 +96,6 @@ final class Image extends AbstractAggregateRoot implements OwnerAwareInterface {
    */
   public function hasExtension(string $extension): bool {
     return $this->getAttributes()->getExtension() === $extension;
-  }
-
-  /**
-   * @return bool
-   */
-  public function isDeleted(): bool {
-    return $this->deleted;
   }
 
   public function isOwnedBy(?ID $userId): bool {
@@ -173,6 +162,20 @@ final class Image extends AbstractAggregateRoot implements OwnerAwareInterface {
   }
 
   /**
+   * @param array<ID> $tagIds
+   */
+  public static function fromView(ImageView $view, array $tagIds, ?License $license): self {
+    $image = new self(ID::fromString($view->getUuid()));
+    $image->userId = $view->getUserId();
+    $image->attributes = $view->getAttributes();
+    $image->metadata = $view->getMetadata() ?? throw new \LogicException('Image view has no metadata.');
+    $image->tags = TagSet::create($tagIds);
+    $image->license = $license;
+
+    return $image;
+  }
+
+  /**
    * @param ImageWasCreated $event
    * @return void
    */
@@ -193,15 +196,6 @@ final class Image extends AbstractAggregateRoot implements OwnerAwareInterface {
 
   public function getLicense(): ?License {
     return $this->license;
-  }
-
-  /**
-   * @return void
-   */
-  public function addView(): void {
-    $attributes = $this->getAttributes()->addView();
-
-    $this->recordThat(new ImageAttributesWasUpdated($this->aggregateRootId(), $attributes));
   }
 
   /**
@@ -246,10 +240,6 @@ final class Image extends AbstractAggregateRoot implements OwnerAwareInterface {
    * @return void
    */
   public function delete(ID $requestedBy, bool $preserveOnDisk = false): void {
-    if (!$this->aggregateRootVersion()) {
-      throw new NotFoundException();
-    }
-
     if (!$this->isOwnedBy($requestedBy)) {
       throw new ForbiddenException();
     }
@@ -258,10 +248,6 @@ final class Image extends AbstractAggregateRoot implements OwnerAwareInterface {
   }
 
   public function forceDelete(bool $preserveOnDisk = false): void {
-    if (!$this->aggregateRootVersion()) {
-      throw new NotFoundException();
-    }
-
     $this->recordThat(new ImageWasDeleted($this->aggregateRootId(), $preserveOnDisk));
   }
 
@@ -299,7 +285,6 @@ final class Image extends AbstractAggregateRoot implements OwnerAwareInterface {
    * @return void
    */
   public function applyImageWasDeleted(ImageWasDeleted $event): void {
-    $this->deleted = true;
   }
 
   /**
@@ -320,35 +305,5 @@ final class Image extends AbstractAggregateRoot implements OwnerAwareInterface {
 
   public function applyImageTagsWereReassigned(ImageTagsWereReassigned $event): void {
     $this->tags = $event->tags;
-  }
-
-  /**
-   * @return array<string, mixed>
-   */
-  protected function createSnapshotState(): array {
-    return [
-      'userId' => $this->userId?->toString(),
-      'attributes' => $this->attributes->toPayload(),
-      'metadata' => $this->metadata->toPayload(),
-      'tags' => $this->tags->toPayload(),
-      'license' => $this->license?->value,
-      'deleted' => $this->deleted,
-    ];
-  }
-
-  /**
-   * @param array<string, mixed> $state
-   */
-  protected static function reconstituteFromSnapshotState(AggregateRootId $id, $state): AggregateRootWithSnapshotting {
-    $image = new static(ID::fromString($id->toString()));
-
-    $image->userId = $state['userId'] ? ID::fromString($state['userId']) : null;
-    $image->attributes = ImageAttributes::fromPayload($state['attributes']);
-    $image->metadata = ImageMetadata::fromPayload($state['metadata']);
-    $image->tags = TagSet::fromPayload($state['tags'] ?? ['tags' => []]);
-    $image->license = isset($state['license']) ? License::tryFrom($state['license']) : null;
-    $image->deleted = $state['deleted'];
-
-    return $image;
   }
 }

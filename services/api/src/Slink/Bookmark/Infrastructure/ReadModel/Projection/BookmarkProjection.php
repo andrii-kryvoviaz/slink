@@ -9,7 +9,6 @@ use Slink\Bookmark\Domain\Event\BookmarkWasCreated;
 use Slink\Bookmark\Domain\Event\BookmarkWasRemoved;
 use Slink\Bookmark\Domain\Repository\BookmarkRepositoryInterface;
 use Slink\Bookmark\Infrastructure\ReadModel\View\BookmarkView;
-use Slink\Image\Domain\Repository\ImageRepositoryInterface;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractProjection;
 use Slink\User\Infrastructure\ReadModel\View\UserView;
@@ -17,7 +16,6 @@ use Slink\User\Infrastructure\ReadModel\View\UserView;
 final class BookmarkProjection extends AbstractProjection {
   public function __construct(
     private readonly BookmarkRepositoryInterface $bookmarkRepository,
-    private readonly ImageRepositoryInterface $imageRepository,
     private readonly EntityManagerInterface $em,
   ) {
   }
@@ -36,9 +34,6 @@ final class BookmarkProjection extends AbstractProjection {
     );
 
     $this->bookmarkRepository->add($bookmark);
-
-    $imageView = $this->imageRepository->oneById($event->imageId->toString());
-    $imageView->incrementBookmarkCount();
   }
 
   public function handleBookmarkWasRemoved(BookmarkWasRemoved $event): void {
@@ -48,10 +43,6 @@ final class BookmarkProjection extends AbstractProjection {
       return;
     }
 
-    $imageId = $bookmark->getImageId();
     $this->bookmarkRepository->remove($bookmark);
-
-    $imageView = $this->imageRepository->oneById($imageId);
-    $imageView->decrementBookmarkCount();
   }
 }

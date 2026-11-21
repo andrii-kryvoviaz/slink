@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Integration\Http\Auth;
 
+use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Integration\Http\HttpTestCase;
 
@@ -106,5 +107,29 @@ final class RefreshTokenFlowTest extends HttpTestCase {
 
     [$status] = $this->refresh($tokens['refresh_token']);
     self::assertSame(400, $status);
+  }
+
+  #[Test]
+  public function aRefreshThatFailsAfterClaimingTheTokenLeavesTheTokenUsable(): void {
+    $this->createUser('refresh-failure@local.test', 'refreshfailure', self::PASSWORD);
+    $tokens = $this->authenticate('refreshfailure', self::PASSWORD);
+    /** @var EntityManagerInterface $entityManager */
+    $entityManager = static::getContainer()->get(EntityManagerInterface::class);
+    $connection = $entityManager->getConnection();
+    $connection->executeStatement(
+      "CREATE TRIGGER fail_refresh_token_insert BEFORE INSERT ON refresh_token BEGIN SELECT RAISE(ABORT, 'injected refresh token insert failure'); END",
+    );
+
+    try {
+      [$failedStatus] = $this->refresh($tokens['refresh_token']);
+    } finally {
+      $connection->executeStatement('DROP TRIGGER fail_refresh_token_insert');
+    }
+
+    self::assertSame(500, $failedStatus);
+
+    [$retryStatus, $retryPayload] = $this->refresh($tokens['refresh_token']);
+    self::assertSame(200, $retryStatus);
+    self::assertArrayHasKey('refresh_token', $retryPayload);
   }
 }

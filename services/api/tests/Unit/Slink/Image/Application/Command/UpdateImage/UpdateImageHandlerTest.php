@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Slink\Image\Application\Command\UpdateImage;
 
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
@@ -20,6 +21,7 @@ use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\User\Infrastructure\Auth\JwtUser;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
+#[Group('sc-1179')]
 final class UpdateImageHandlerTest extends TestCase {
   /**
    * @throws Exception
@@ -37,7 +39,6 @@ final class UpdateImageHandlerTest extends TestCase {
     $image = $this->createMock(Image::class);
     $attributes = $this->createStub(ImageAttributes::class);
     $image->method('getAttributes')->willReturn($attributes);
-    $image->method('aggregateRootVersion')->willReturn(1);
     $image->method('getUserId')->willReturn($imageUserId);
     $image->expects($this->once())->method('updateAttributes');
 
@@ -61,7 +62,6 @@ final class UpdateImageHandlerTest extends TestCase {
     $command = new UpdateImageCommand('New Description', true);
 
     $image = $this->createStub(Image::class);
-    $image->method('aggregateRootVersion')->willReturn(1);
 
     $imageRepository = $this->createStub(ImageStoreRepositoryInterface::class);
     $imageRepository->method('get')->willReturn($image);
@@ -88,7 +88,6 @@ final class UpdateImageHandlerTest extends TestCase {
 
     $imageUserId = ID::fromString($differentUserId);
     $image = $this->createStub(Image::class);
-    $image->method('aggregateRootVersion')->willReturn(1);
     $image->method('getUserId')->willReturn($imageUserId);
 
     $imageRepository = $this->createStub(ImageStoreRepositoryInterface::class);
@@ -114,7 +113,6 @@ final class UpdateImageHandlerTest extends TestCase {
     $user->method('getIdentifier')->willReturn($userId);
 
     $image = $this->createStub(Image::class);
-    $image->method('aggregateRootVersion')->willReturn(1);
     $image->method('getUserId')->willReturn(null);
 
     $imageRepository = $this->createStub(ImageStoreRepositoryInterface::class);

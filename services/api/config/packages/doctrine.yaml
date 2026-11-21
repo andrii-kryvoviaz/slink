@@ -4,9 +4,6 @@ imports:
 doctrine:
   dbal:
     connections:
-      event_store:
-        url: '%env(resolve:ES_DATABASE_URL)%'
-        profiling_collect_backtrace: '%kernel.debug%'
       read_model:
         url: '%env(resolve:DATABASE_URL)%'
         profiling_collect_backtrace: '%kernel.debug%'
@@ -14,6 +11,7 @@ doctrine:
 
     types:
       datetime_immutable: Slink\Shared\Infrastructure\Persistence\Doctrine\Types\DateTimeType
+      float: Slink\Shared\Infrastructure\Persistence\Doctrine\Types\FloatType
       email: Slink\Shared\Infrastructure\Persistence\Doctrine\Types\EmailType
       username: Slink\Shared\Infrastructure\Persistence\Doctrine\Types\UsernameType
       display_name: Slink\Shared\Infrastructure\Persistence\Doctrine\Types\DisplayNameType
@@ -28,12 +26,6 @@ doctrine:
     controller_resolver:
       auto_mapping: false
     entity_managers:
-      event_store:
-        connection: event_store
-        mappings:
-          Snapshot:
-            dir: '%kernel.project_dir%/src/Slink/Shared/Infrastructure/Persistence/EventStore/Entity'
-            prefix: 'Slink\Shared\Infrastructure\Persistence\EventStore\Entity'
       read_model:
         connection: read_model
         validate_xml_mapping: true

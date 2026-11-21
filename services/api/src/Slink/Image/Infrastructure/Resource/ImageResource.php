@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Slink\Image\Infrastructure\Resource;
 
+use Slink\Bookmark\Domain\ValueObject\BookmarkStatus;
 use Slink\Image\Domain\Enum\License;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
 use Slink\Shared\Application\Resource\ResourceInterface;
@@ -96,12 +97,12 @@ final class ImageResource implements ResourceInterface {
 
   #[Groups(['bookmark'])]
   public int $bookmarkCount {
-    get => $this->image->getBookmarkCount();
+    get => $this->bookmarkStatus()->bookmarkCount;
   }
 
   #[Groups(['bookmark'])]
   public bool $isBookmarked {
-    get => $this->data->has('bookmarks', $this->image->getUuid());
+    get => $this->bookmarkStatus()->isBookmarked;
   }
 
   /** @var array<array{id: string, name: string}> */
@@ -114,5 +115,15 @@ final class ImageResource implements ResourceInterface {
   #[Groups(['tag'])]
   public array $tags {
     get => $this->image->getTags()->toArray();
+  }
+
+  private function bookmarkStatus(): BookmarkStatus {
+    $status = $this->data->get('bookmarks', $this->image->getUuid());
+
+    if ($status instanceof BookmarkStatus) {
+      return $status;
+    }
+
+    return new BookmarkStatus(isBookmarked: false, bookmarkCount: 0);
   }
 }

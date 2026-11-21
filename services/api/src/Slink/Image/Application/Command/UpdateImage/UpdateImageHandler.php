@@ -38,10 +38,6 @@ final readonly class UpdateImageHandler implements CommandHandlerInterface {
   ): void {
     $image = $this->imageRepository->get(ID::fromString($id));
 
-    if (!$image->aggregateRootVersion()) {
-      throw new NotFoundException();
-    }
-
     if (!$this->access->isGranted(ImageAccess::Edit, $image)) {
       throw new ForbiddenException();
     }

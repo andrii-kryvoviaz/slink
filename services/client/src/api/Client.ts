@@ -3,6 +3,7 @@ import { refreshAll } from '$app/navigation';
 
 import {
   BadRequestException,
+  ConflictException,
   ForbiddenException,
   GoneException,
   LockedException,
@@ -86,6 +87,7 @@ export type EventType =
   | 'unauthorized'
   | 'forbidden'
   | 'not-found'
+  | 'conflict'
   | 'gone'
   | 'locked'
   | 'payload-too-large'
@@ -122,6 +124,10 @@ const STATUS_EXCEPTIONS: Record<number, ExceptionResolver> = {
   [HttpStatus.NotFound]: () => ({
     event: 'not-found',
     exception: new NotFoundException(),
+  }),
+  [HttpStatus.Conflict]: () => ({
+    event: 'conflict',
+    exception: new ConflictException(),
   }),
   [HttpStatus.Gone]: (body) => ({
     event: 'gone',

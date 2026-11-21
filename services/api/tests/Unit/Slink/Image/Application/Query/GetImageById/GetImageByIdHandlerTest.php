@@ -6,8 +6,10 @@ namespace Unit\Slink\Image\Application\Query\GetImageById;
 
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
+use Slink\Bookmark\Domain\Repository\BookmarkRepositoryInterface;
 use Slink\Collection\Domain\Repository\CollectionItemRepositoryInterface;
 use Slink\Image\Application\Query\GetImageById\GetImageByIdHandler;
 use Slink\Image\Application\Query\GetImageById\GetImageByIdQuery;
@@ -26,6 +28,7 @@ final class GetImageByIdHandlerTest extends TestCase {
   private ImageAnalyzerInterface $analyser;
   private StorageInterface $storage;
   private CollectionItemRepositoryInterface $collectionItemRepository;
+  private BookmarkRepositoryInterface&Stub $bookmarkRepository;
 
   public function setUp(): void {
     parent::setUp();
@@ -34,6 +37,7 @@ final class GetImageByIdHandlerTest extends TestCase {
     $this->analyser = $this->createStub(ImageAnalyzerInterface::class);
     $this->storage = $this->createStub(StorageInterface::class);
     $this->collectionItemRepository = $this->createStub(CollectionItemRepositoryInterface::class);
+    $this->bookmarkRepository = $this->createStub(BookmarkRepositoryInterface::class);
   }
 
   #[Test]
@@ -87,6 +91,19 @@ final class GetImageByIdHandlerTest extends TestCase {
     $this->assertArrayNotHasKey('preview', $payload);
   }
 
+  #[Test]
+  public function itExposesTheBookmarkCountOfTheImage(): void {
+    $id = Uuid::uuid4()->toString();
+    $imageView = $this->stubImageView($id, 'photo.jpg', 1920);
+    $this->repository->method('oneById')->willReturn($imageView);
+    $this->analyser->method('supportsAnimation')->willReturn(false);
+    $this->bookmarkRepository->method('countByImageId')->willReturn(4);
+
+    $payload = $this->resourceFromHandler(new GetImageByIdQuery($id));
+
+    $this->assertSame(4, $payload['bookmarkCount']);
+  }
+
   /**
    * @return array<string, mixed>
    */
@@ -122,6 +139,7 @@ final class GetImageByIdHandlerTest extends TestCase {
       $this->analyser,
       $this->storage,
       $this->collectionItemRepository,
+      $this->bookmarkRepository,
     );
   }
 }

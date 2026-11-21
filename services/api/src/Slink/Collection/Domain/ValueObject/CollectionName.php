@@ -32,6 +32,10 @@ final readonly class CollectionName extends AbstractValueObject {
     return new self($trimmed);
   }
 
+  public static function fromStored(string $name): self {
+    return new self($name);
+  }
+
   public function getValue(): string {
     return $this->value;
   }

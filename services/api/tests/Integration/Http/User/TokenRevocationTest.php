@@ -8,6 +8,7 @@ use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Psr\Cache\CacheItemPoolInterface;
+use Slink\User\Domain\Enum\UserRole;
 use Slink\User\Domain\Enum\UserStatus;
 use Tests\Integration\Http\HttpTestCase;
 
@@ -25,6 +26,22 @@ final class TokenRevocationTest extends HttpTestCase {
       200,
       $responseStatus,
       'Status change failed: ' . (string) $this->client->getResponse()->getContent(),
+    );
+  }
+
+  private function revokeRole(string $adminToken, string $userId, UserRole $role): void {
+    $responseStatus = $this->apiRequest(
+      'DELETE',
+      '/api/user/role',
+      $adminToken,
+      ['CONTENT_TYPE' => 'application/json'],
+      \json_encode(['id' => $userId, 'role' => $role->value], JSON_THROW_ON_ERROR),
+    );
+
+    self::assertSame(
+      200,
+      $responseStatus,
+      'Role revoke failed: ' . (string) $this->client->getResponse()->getContent(),
     );
   }
 
@@ -147,5 +164,19 @@ final class TokenRevocationTest extends HttpTestCase {
     $this->forgetPermissionsVersions();
 
     self::assertSame(200, $this->apiRequest('GET', '/api/users/1', $adminToken));
+  }
+
+  #[Test]
+  public function revokingTheImplicitUserRoleTwiceLeavesIssuedTokensValid(): void {
+    $adminToken = $this->bootAdmin();
+    $memberId = $this->createUser('member@local.test', 'memberuser', self::PASSWORD);
+    $memberToken = $this->forgeToken($memberId, \time() - 5);
+
+    self::assertSame(200, $this->apiRequest('GET', '/api/user', $memberToken));
+
+    $this->revokeRole($adminToken, $memberId, UserRole::User);
+    $this->revokeRole($adminToken, $memberId, UserRole::User);
+
+    self::assertSame(200, $this->apiRequest('GET', '/api/user', $memberToken));
   }
 }

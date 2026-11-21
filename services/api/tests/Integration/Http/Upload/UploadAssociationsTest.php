@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Integration\Http\Upload;
 
-use Doctrine\DBAL\Connection;
+use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Integration\Http\HttpTestCase;
 
@@ -53,11 +54,11 @@ final class UploadAssociationsTest extends HttpTestCase {
     return $payload['data'] ?? [];
   }
 
-  private function imageCreatedEventCount(): int {
-    /** @var Connection $connection */
-    $connection = static::getContainer()->get('doctrine.dbal.event_store_connection');
+  private function imageRowCount(): int {
+    /** @var EntityManagerInterface $entityManager */
+    $entityManager = static::getContainer()->get(EntityManagerInterface::class);
 
-    return (int) $connection->fetchOne("SELECT COUNT(*) FROM event_store WHERE payload LIKE '%image_was_created%'");
+    return (int) $entityManager->getConnection()->fetchOne('SELECT COUNT(*) FROM "image"');
   }
 
   private function storedFileCount(): int {
@@ -73,6 +74,7 @@ final class UploadAssociationsTest extends HttpTestCase {
   }
 
   #[Test]
+  #[Group('sc-1179')]
   public function uploadIntoAnotherUsersCollectionIsRejectedWithoutSideEffects(): void {
     $this->bootOwner();
     $collectionId = $this->createCollection($this->ownerToken);
@@ -80,13 +82,13 @@ final class UploadAssociationsTest extends HttpTestCase {
     $this->createUser('assoc-non-owner@local.test', 'assocnonowner', self::PASSWORD);
     $nonOwnerToken = $this->login('assocnonowner', self::PASSWORD);
 
-    $eventsBefore = $this->imageCreatedEventCount();
+    $imagesBefore = $this->imageRowCount();
     $filesBefore = $this->storedFileCount();
 
     $status = $this->uploadImageWithFields($nonOwnerToken, ['collectionIds' => [$collectionId]]);
 
     self::assertSame(400, $status, 'Upload into a foreign collection was not rejected: ' . (string) $this->client->getResponse()->getContent());
-    self::assertSame($eventsBefore, $this->imageCreatedEventCount(), 'Rejected upload persisted an image event.');
+    self::assertSame($imagesBefore, $this->imageRowCount(), 'Rejected upload persisted an image row.');
     self::assertSame($filesBefore, $this->storedFileCount(), 'Rejected upload left a stored file.');
     self::assertSame([], $this->listCollectionItems($collectionId));
   }

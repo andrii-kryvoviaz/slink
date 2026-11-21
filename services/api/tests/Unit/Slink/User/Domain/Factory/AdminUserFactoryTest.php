@@ -32,7 +32,7 @@ final class AdminUserFactoryTest extends TestCase {
 
     $user = $factory->createAdminUser();
 
-    $this->assertEquals('myadmin', $user->getUsername()->toString());
+    $this->assertEquals('myadmin', $user->getUsername()?->toString());
   }
 
   #[Test]

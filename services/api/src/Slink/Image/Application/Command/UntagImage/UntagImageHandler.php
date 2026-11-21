@@ -10,7 +10,6 @@ use Slink\Image\Domain\Exception\UnauthorizedTagAccessException;
 use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
 use Slink\Shared\Application\Command\CommandHandlerInterface;
 use Slink\Shared\Domain\ValueObject\ID;
-use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\Tag\Domain\Enum\TagAccess;
 use Slink\Tag\Domain\Repository\TagStoreRepositoryInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -28,9 +27,6 @@ final readonly class UntagImageHandler implements CommandHandlerInterface {
     $userId = ID::fromString($userId);
 
     $image = $this->imageStore->get($imageId);
-    if (!$image->aggregateRootVersion()) {
-      throw new NotFoundException();
-    }
 
     if (!$this->access->isGranted(ImageAccess::Tag, $image)) {
       throw new UnauthorizedImageAccessException($imageId, $userId);

@@ -16,7 +16,55 @@ const submitLogout = (page: Page) =>
     form.requestSubmit();
   });
 
+const SERVER_CONFLICT_MESSAGE = 'The optimistic lock on an entity failed.';
+const CONFLICT_COPY = 'This was changed by someone else. Reload and try again.';
+
 test.describe('Admin user moderation', () => {
+  test(
+    'shows the conflict toast and keeps the row when a suspend loses a race',
+    { tag: '@sc-1203' },
+    async ({ page }) => {
+      const targetUser = unique('conflict');
+      await provisionUser(targetUser);
+
+      await page.route('**/api/user/status', (route) =>
+        route.fulfill({
+          status: 409,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            error: {
+              title: 'Doctrine.ORM.OptimisticLockException',
+              message: SERVER_CONFLICT_MESSAGE,
+            },
+          }),
+        }),
+      );
+
+      const adminUsersPage = new AdminUsersPage(page);
+      await adminUsersPage.goto();
+
+      await expect(
+        await adminUsersPage.badgeInRow(targetUser.username, 'Active'),
+      ).toBeVisible();
+
+      await adminUsersPage.clickAction(targetUser.username, 'Suspend');
+
+      await expect(
+        page.locator('[data-sonner-toast]').filter({ hasText: CONFLICT_COPY }),
+      ).toBeVisible();
+      await expect(page.getByText(SERVER_CONFLICT_MESSAGE)).toHaveCount(0);
+
+      await page.keyboard.press('Escape');
+
+      await expect(
+        await adminUsersPage.badgeInRow(targetUser.username, 'Active'),
+      ).toBeVisible();
+      await expect(
+        await adminUsersPage.badgeInRow(targetUser.username, 'Suspended'),
+      ).toHaveCount(0);
+    },
+  );
+
   test('suspends a user from the admin list and blocks their login', async ({
     page,
     browser,

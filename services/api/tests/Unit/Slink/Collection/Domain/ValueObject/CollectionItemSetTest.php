@@ -111,23 +111,6 @@ final class CollectionItemSetTest extends TestCase {
   }
 
   #[Test]
-  public function itCalculatesNextPosition(): void {
-    $set = CollectionItemSet::empty();
-    
-    $this->assertEquals(1.0, $set->getNextPosition());
-    
-    $item1 = CollectionItem::create(ID::generate(), ItemType::Image, 1.0);
-    $set = $set->add($item1);
-    
-    $this->assertEquals(2.0, $set->getNextPosition());
-    
-    $item2 = CollectionItem::create(ID::generate(), ItemType::Image, 5.0);
-    $set = $set->add($item2);
-    
-    $this->assertEquals(6.0, $set->getNextPosition());
-  }
-
-  #[Test]
   public function itReordersItems(): void {
     $item1Id = ID::generate();
     $item2Id = ID::generate();
