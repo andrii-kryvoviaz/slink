@@ -4,6 +4,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 import { expect, test } from '../fixtures/auth.fixture';
+import { DEFAULT_CUSTOMIZATION } from '../pages/ThemeSettingsPage';
 
 const API_URL = process.env.E2E_API_URL ?? 'http://localhost:8180';
 
@@ -11,12 +12,6 @@ const PIXEL_PNG = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   '../fixtures/pixel.png',
 );
-
-const DEFAULT_CUSTOMIZATION = {
-  siteName: 'Slink',
-  siteDescription: 'Fast and secure image sharing service',
-  logoUrl: '',
-};
 
 const BRANDING_LOGO_URL = /\/api\/branding\/logo\?v=[0-9a-f]{8}$/;
 
