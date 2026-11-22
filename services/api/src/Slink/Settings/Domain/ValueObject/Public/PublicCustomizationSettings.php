@@ -24,9 +24,6 @@ final readonly class PublicCustomizationSettings {
     public string $logoUrl,
 
     #[Groups(['public'])]
-    public string $customCss = '',
-
-    #[Groups(['public'])]
     public bool $themeSelectorEnabled = true,
 
     #[Groups(['public'])]
@@ -47,7 +44,6 @@ final readonly class PublicCustomizationSettings {
       siteName: $settings['siteName'] ?? CustomizationSettings::DEFAULT_SITE_NAME,
       siteDescription: $settings['siteDescription'] ?? CustomizationSettings::DEFAULT_SITE_DESCRIPTION,
       logoUrl: $settings['logoUrl'] ?? '',
-      customCss: $settings['customCss'] ?? '',
       themeSelectorEnabled: $settings['themeSelectorEnabled'] ?? true,
       defaultTheme: $settings['defaultTheme'] ?? CustomizationSettings::DEFAULT_THEME,
       hiddenThemes: $settings['hiddenThemes'] ?? [],

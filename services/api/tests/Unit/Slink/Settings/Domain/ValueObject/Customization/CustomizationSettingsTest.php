@@ -9,7 +9,6 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Settings\Domain\Enum\SettingCategory;
 use Slink\Settings\Domain\Event\SettingsChanged;
-use Slink\Settings\Domain\Exception\InvalidCustomCssException;
 use Slink\Settings\Domain\Exception\InvalidDefaultThemeException;
 use Slink\Settings\Domain\Exception\InvalidHiddenThemesException;
 use Slink\Settings\Domain\Exception\InvalidLogoUrlException;
@@ -27,11 +26,10 @@ final class CustomizationSettingsTest extends TestCase {
       'siteName' => 'My Site',
       'siteDescription' => 'My description',
       'logoUrl' => 'https://example.com/logo.png',
-      'customCss' => 'body { color: red; }',
       'themeSelectorEnabled' => false,
       'defaultTheme' => 'ocean',
       'hiddenThemes' => ['nord'],
-      'themes' => [self::theme('ocean')],
+      'themes' => [self::theme('ocean', ['css' => 'body { color: red; }'])],
     ];
 
     $settings = CustomizationSettings::fromPayload($payload);
@@ -39,7 +37,6 @@ final class CustomizationSettingsTest extends TestCase {
     $this->assertSame('My Site', $settings->getSiteName());
     $this->assertSame('My description', $settings->getSiteDescription());
     $this->assertSame('https://example.com/logo.png', $settings->getLogoUrl());
-    $this->assertSame('body { color: red; }', $settings->getCustomCss());
     $this->assertFalse($settings->isThemeSelectorEnabled());
     $this->assertSame('ocean', $settings->getDefaultTheme());
     $this->assertSame($payload, $settings->toPayload());
@@ -69,6 +66,7 @@ final class CustomizationSettingsTest extends TestCase {
         'customization.siteName' => 'Acme',
         'customization.siteDescription' => 'Screens',
         'customization.logoUrl' => '',
+        'customization.customCss' => 'body { color: red; }',
       ],
     ]);
 
@@ -78,6 +76,14 @@ final class CustomizationSettingsTest extends TestCase {
     $this->assertTrue($payload['themeSelectorEnabled']);
     $this->assertSame('default', $payload['defaultTheme']);
     $this->assertSame([], $payload['themes']);
+    $this->assertArrayNotHasKey('customCss', $payload);
+  }
+
+  #[Test]
+  public function itIgnoresLegacyGlobalCustomCss(): void {
+    $payload = CustomizationSettings::fromPayload(['customCss' => 'body { color: red; }'])->toPayload();
+
+    $this->assertArrayNotHasKey('customCss', $payload);
   }
 
   #[Test]
@@ -97,8 +103,8 @@ final class CustomizationSettingsTest extends TestCase {
    * @return iterable<string, array{array<string, mixed>, class-string<SpecificationException>, string}>
    */
   public static function invalidThemingProvider(): iterable {
-    yield 'css too long' => [['customCss' => str_repeat('a', 65537)], InvalidCustomCssException::class, 'customization.customCss'];
-    yield 'css not a string' => [['customCss' => ['a']], InvalidCustomCssException::class, 'customization.customCss'];
+    yield 'theme css too long' => [['themes' => [self::theme('ocean', ['css' => str_repeat('a', 65537)])]], InvalidThemeException::class, 'customization.themes'];
+    yield 'theme css not a string' => [['themes' => [self::theme('ocean', ['css' => ['a']])]], InvalidThemeException::class, 'customization.themes'];
     yield 'unknown default theme' => [['defaultTheme' => 'solarized'], InvalidDefaultThemeException::class, 'customization.defaultTheme'];
     yield 'hidden default theme' => [['hiddenThemes' => ['default']], InvalidDefaultThemeException::class, 'customization.defaultTheme'];
     yield 'default theme not a string' => [['defaultTheme' => []], InvalidDefaultThemeException::class, 'customization.defaultTheme'];
@@ -131,15 +137,18 @@ final class CustomizationSettingsTest extends TestCase {
   }
 
   /**
+   * @param array<string, mixed> $overrides
    * @return array<string, mixed>
    */
-  private static function theme(string $id): array {
+  private static function theme(string $id, array $overrides = []): array {
     return [
       'id' => $id,
       'name' => ucfirst($id),
       'light' => array_fill_keys(Theme::COLORS, '#ffffff'),
       'dark' => array_fill_keys(Theme::COLORS, '#000000'),
       'radius' => null,
+      'css' => '',
+      ...$overrides,
     ];
   }
 
@@ -150,7 +159,6 @@ final class CustomizationSettingsTest extends TestCase {
     $this->assertSame(CustomizationSettings::DEFAULT_SITE_NAME, $settings->getSiteName());
     $this->assertSame(CustomizationSettings::DEFAULT_SITE_DESCRIPTION, $settings->getSiteDescription());
     $this->assertSame('', $settings->getLogoUrl());
-    $this->assertSame('', $settings->getCustomCss());
     $this->assertTrue($settings->isThemeSelectorEnabled());
     $this->assertSame(CustomizationSettings::DEFAULT_THEME, $settings->getDefaultTheme());
   }

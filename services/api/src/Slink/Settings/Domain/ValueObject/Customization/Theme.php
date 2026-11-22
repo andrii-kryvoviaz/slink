@@ -6,6 +6,7 @@ namespace Slink\Settings\Domain\ValueObject\Customization;
 
 use Slink\Settings\Domain\Exception\InvalidThemeException;
 use Slink\Shared\Domain\ValueObject\AbstractCompoundValueObject;
+use Slink\User\Domain\Enum\DisplayTheme;
 
 final readonly class Theme extends AbstractCompoundValueObject {
   public const array COLORS = [
@@ -22,17 +23,19 @@ final readonly class Theme extends AbstractCompoundValueObject {
   private const int MAX_ID_LENGTH = 48;
   private const int MAX_NAME_LENGTH = 48;
   private const int MAX_RADIUS = 2;
+  private const int MAX_CSS_LENGTH = 65536;
 
   /**
-   * @param array<string, string> $light
-   * @param array<string, string> $dark
+   * @param array<string, string>|null $light null only for built-in themes, which keep their stock colors
+   * @param array<string, string>|null $dark null only for built-in themes, which keep their stock colors
    */
   private function __construct(
     private string $id,
     private string $name,
-    private array $light,
-    private array $dark,
+    private ?array $light,
+    private ?array $dark,
     private ?float $radius,
+    private string $css,
   ) {
     if (mb_strlen($id) > self::MAX_ID_LENGTH || !preg_match('/^[a-z0-9]+(-[a-z0-9]+)*$/D', $id)) {
       throw new InvalidThemeException('Theme id must be a lowercase slug of up to 48 characters');
@@ -42,8 +45,20 @@ final readonly class Theme extends AbstractCompoundValueObject {
       throw new InvalidThemeException('Theme name must be between 1 and 48 characters');
     }
 
+    if (($light === null) !== ($dark === null)) {
+      throw new InvalidThemeException('Theme light and dark palettes must either both be set or both be null');
+    }
+
+    if ($light === null && !in_array($id, DisplayTheme::values(), true)) {
+      throw new InvalidThemeException('Only built-in themes can use stock colors');
+    }
+
     if ($radius !== null && ($radius < 0 || $radius > self::MAX_RADIUS)) {
       throw new InvalidThemeException('Theme radius must be between 0 and 2');
+    }
+
+    if (mb_strlen($css) > self::MAX_CSS_LENGTH) {
+      throw new InvalidThemeException('Theme CSS cannot be longer than 65536 characters');
     }
   }
 
@@ -55,6 +70,7 @@ final readonly class Theme extends AbstractCompoundValueObject {
       'light' => $this->light,
       'dark' => $this->dark,
       'radius' => $this->radius,
+      'css' => $this->css,
     ];
   }
 
@@ -66,12 +82,16 @@ final readonly class Theme extends AbstractCompoundValueObject {
       throw new InvalidThemeException('Theme radius must be between 0 and 2');
     }
 
+    $light = $payload['light'] ?? null;
+    $dark = $payload['dark'] ?? null;
+
     return new self(
       self::text($payload['id'] ?? null),
       trim(self::text($payload['name'] ?? null)),
-      self::palette($payload['light'] ?? null),
-      self::palette($payload['dark'] ?? null),
+      $light === null ? null : self::palette($light),
+      $dark === null ? null : self::palette($dark),
       $radius === null ? null : (float) $radius,
+      self::css($payload['css'] ?? null),
     );
   }
 
@@ -81,6 +101,18 @@ final readonly class Theme extends AbstractCompoundValueObject {
 
   private static function text(mixed $value): string {
     return is_string($value) ? $value : '';
+  }
+
+  private static function css(mixed $css): string {
+    if ($css === null) {
+      return '';
+    }
+
+    if (!is_string($css)) {
+      throw new InvalidThemeException('Theme CSS must be a string');
+    }
+
+    return $css;
   }
 
   /**

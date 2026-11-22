@@ -14,7 +14,7 @@ use Slink\Shared\Application\Command\CommandHandlerInterface;
 
 final readonly class SaveSettingsHandler implements CommandHandlerInterface {
   private const string LOCAL_AUTH_ENABLED_KEY = 'localAuthEnabled';
-  private const array CUSTOMIZATION_THEMING_KEYS = ['customCss', 'themeSelectorEnabled', 'defaultTheme', 'hiddenThemes', 'themes'];
+  private const array CUSTOMIZATION_THEMING_KEYS = ['themeSelectorEnabled', 'defaultTheme', 'hiddenThemes', 'themes'];
 
   /**
    * @param SettingStoreRepositoryInterface $store

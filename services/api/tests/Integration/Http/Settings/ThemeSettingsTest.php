@@ -10,6 +10,8 @@ use Slink\Settings\Domain\ValueObject\Customization\Theme;
 use Tests\Integration\Http\HttpTestCase;
 
 final class ThemeSettingsTest extends HttpTestCase {
+  private const string THEME_CSS = ":root { --radius: 0; } /* \"quoted\" */\n.badge > span { content: \"ünïcode 🎨\"; }";
+
   private string $adminToken = '';
 
   protected function setUp(): void {
@@ -21,15 +23,18 @@ final class ThemeSettingsTest extends HttpTestCase {
   }
 
   /**
+   * @param array<string, mixed> $overrides
    * @return array<string, mixed>
    */
-  private static function theme(string $id): array {
+  private static function theme(string $id, array $overrides = []): array {
     return [
       'id' => $id,
       'name' => ucfirst($id),
       'light' => array_fill_keys(Theme::COLORS, '#ffffff'),
       'dark' => array_fill_keys(Theme::COLORS, '#000000'),
       'radius' => 0.5,
+      'css' => '',
+      ...$overrides,
     ];
   }
 
@@ -73,7 +78,7 @@ final class ThemeSettingsTest extends HttpTestCase {
   public function itExposesDefaultsBeforeAnythingIsSaved(): void {
     $customization = $this->customization('/api/settings/public');
 
-    self::assertSame('', $customization['customCss']);
+    self::assertArrayNotHasKey('customCss', $customization);
     self::assertTrue($customization['themeSelectorEnabled']);
     self::assertSame('default', $customization['defaultTheme']);
     self::assertSame([], $customization['hiddenThemes']);
@@ -86,17 +91,30 @@ final class ThemeSettingsTest extends HttpTestCase {
       'siteName' => 'Acme',
       'siteDescription' => 'Screens',
       'logoUrl' => '',
-      'customCss' => ':root { --radius: 0; } /* "quoted" */',
       'themeSelectorEnabled' => false,
       'defaultTheme' => 'ocean',
       'hiddenThemes' => ['nord'],
-      'themes' => [self::theme('ocean'), self::theme('gruvbox')],
+      'themes' => [self::theme('ocean', ['css' => self::THEME_CSS]), self::theme('gruvbox')],
     ];
 
     self::assertSame(204, $this->save($settings));
 
     self::assertEquals($settings, $this->customization('/api/settings/global'));
     self::assertEquals($settings, $this->customization('/api/settings/public'));
+    self::assertArrayNotHasKey('customCss', $this->customization('/api/settings/public'));
+  }
+
+  #[Test]
+  public function itPersistsStockColorsForBuiltInThemeWithCss(): void {
+    $stock = self::theme('nord', ['light' => null, 'dark' => null, 'css' => '.card { border-radius: 0; }']);
+
+    self::assertSame(204, $this->save(['themes' => [$stock]]));
+
+    $themes = $this->customization('/api/settings/public')['themes'];
+    self::assertSame('nord', $themes[0]['id']);
+    self::assertNull($themes[0]['light']);
+    self::assertNull($themes[0]['dark']);
+    self::assertSame('.card { border-radius: 0; }', $themes[0]['css']);
   }
 
   #[Test]
@@ -105,11 +123,10 @@ final class ThemeSettingsTest extends HttpTestCase {
       'siteName' => 'Acme',
       'siteDescription' => 'Screens',
       'logoUrl' => '',
-      'customCss' => ':root { --radius: 0; }',
       'themeSelectorEnabled' => false,
       'defaultTheme' => 'ocean',
       'hiddenThemes' => ['nord'],
-      'themes' => [self::theme('ocean'), self::theme('gruvbox')],
+      'themes' => [self::theme('ocean', ['css' => self::THEME_CSS]), self::theme('gruvbox')],
     ];
 
     self::assertSame(204, $this->save($settings));
@@ -117,11 +134,20 @@ final class ThemeSettingsTest extends HttpTestCase {
 
     $customization = $this->customization('/api/settings/global');
     self::assertSame('Renamed', $customization['siteName']);
-    self::assertSame($settings['customCss'], $customization['customCss']);
     self::assertFalse($customization['themeSelectorEnabled']);
     self::assertSame('ocean', $customization['defaultTheme']);
     self::assertSame(['nord'], $customization['hiddenThemes']);
     self::assertEquals($settings['themes'], $customization['themes']);
+  }
+
+  #[Test]
+  public function itRemovesCssOfDeletedThemes(): void {
+    self::assertSame(204, $this->save(['themes' => [self::theme('ocean', ['css' => 'body{}']), self::theme('forest', ['css' => 'h1{}'])]]));
+    self::assertSame(204, $this->save(['themes' => [self::theme('forest', ['css' => 'h1{}'])]]));
+
+    $themes = $this->customization('/api/settings/public')['themes'];
+    self::assertSame(['forest'], array_column($themes, 'id'));
+    self::assertSame(['h1{}'], array_column($themes, 'css'));
   }
 
   #[Test]
@@ -154,13 +180,14 @@ final class ThemeSettingsTest extends HttpTestCase {
    * @return iterable<string, array{array<string, mixed>, string}>
    */
   public static function invalidSettingsProvider(): iterable {
-    yield 'oversized css' => [['customCss' => str_repeat('a', 65537)], 'customization.customCss'];
+    yield 'oversized css' => [['themes' => [self::theme('ocean', ['css' => str_repeat('a', 65537)])]], 'customization.themes'];
     yield 'unknown default theme' => [['defaultTheme' => 'solarized'], 'customization.defaultTheme'];
     yield 'hidden default theme' => [['defaultTheme' => 'nord', 'hiddenThemes' => ['nord']], 'customization.defaultTheme'];
     yield 'hiding a custom theme' => [['themes' => [self::theme('ocean')], 'hiddenThemes' => ['ocean']], 'customization.hiddenThemes'];
     yield 'duplicate theme' => [['themes' => [self::theme('ocean'), self::theme('ocean')]], 'customization.themes'];
     yield 'malformed theme' => [['themes' => ['ocean']], 'customization.themes'];
-    yield 'unsafe color' => [['themes' => [[...self::theme('ocean'), 'light' => ['background' => 'url(x)']]]], 'customization.themes'];
+    yield 'unsafe color' => [['themes' => [self::theme('ocean', ['light' => ['background' => 'url(x)'] + array_fill_keys(Theme::COLORS, '#ffffff')])]], 'customization.themes'];
+    yield 'stock colors on custom theme' => [['themes' => [self::theme('ocean', ['light' => null, 'dark' => null])]], 'customization.themes'];
   }
 
   /**
@@ -180,6 +207,6 @@ final class ThemeSettingsTest extends HttpTestCase {
   public function itForbidsNonAdmins(): void {
     $this->createUser('regular@local.test', 'regularuser', self::PASSWORD);
 
-    self::assertSame(403, $this->save(['customCss' => 'body{}'], $this->login('regularuser', self::PASSWORD)));
+    self::assertSame(403, $this->save(['themes' => [self::theme('ocean', ['css' => 'body{}'])]], $this->login('regularuser', self::PASSWORD)));
   }
 }

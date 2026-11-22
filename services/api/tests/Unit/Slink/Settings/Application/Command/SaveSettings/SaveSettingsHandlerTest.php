@@ -408,7 +408,6 @@ final class SaveSettingsHandlerTest extends TestCase {
      */
     private static function effectiveCustomizationMap(): array {
         return [
-            ['customization.customCss', ':root { --radius: 0; }'],
             ['customization.themeSelectorEnabled', false],
             ['customization.defaultTheme', 'ocean'],
             ['customization.hiddenThemes', ['nord']],
@@ -417,6 +416,7 @@ final class SaveSettingsHandlerTest extends TestCase {
                 'name' => 'Ocean',
                 'light' => array_fill_keys(Theme::COLORS, '#ffffff'),
                 'dark' => array_fill_keys(Theme::COLORS, '#000000'),
+                'css' => ':root { --radius: 0; }',
             ]]],
         ];
     }
@@ -442,17 +442,17 @@ final class SaveSettingsHandlerTest extends TestCase {
         $this->assertInstanceOf(CustomizationSettings::class, $captured);
         $payload = $captured->toPayload();
         $this->assertSame('Acme', $payload['siteName']);
-        $this->assertSame(':root { --radius: 0; }', $payload['customCss']);
+        $this->assertArrayNotHasKey('customCss', $payload);
         $this->assertFalse($payload['themeSelectorEnabled']);
         $this->assertSame('ocean', $payload['defaultTheme']);
         $this->assertSame(['nord'], $payload['hiddenThemes']);
         $this->assertSame(['ocean'], array_column($payload['themes'], 'id'));
+        $this->assertSame(':root { --radius: 0; }', $payload['themes'][0]['css']);
     }
 
     #[Test]
     public function itLetsExplicitEmptyCustomizationValuesWin(): void {
         $command = new SaveSettingsCommand('customization', [
-            'customCss' => '',
             'themeSelectorEnabled' => false,
             'defaultTheme' => 'default',
             'hiddenThemes' => [],
@@ -475,7 +475,6 @@ final class SaveSettingsHandlerTest extends TestCase {
 
         $this->assertInstanceOf(CustomizationSettings::class, $captured);
         $payload = $captured->toPayload();
-        $this->assertSame('', $payload['customCss']);
         $this->assertFalse($payload['themeSelectorEnabled']);
         $this->assertSame('default', $payload['defaultTheme']);
         $this->assertSame([], $payload['hiddenThemes']);

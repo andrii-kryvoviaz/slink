@@ -9,6 +9,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Settings\Domain\Exception\InvalidThemeException;
 use Slink\Settings\Domain\ValueObject\Customization\Theme;
+use Slink\User\Domain\Enum\DisplayTheme;
 
 final class ThemeTest extends TestCase {
   /**
@@ -22,6 +23,7 @@ final class ThemeTest extends TestCase {
       'light' => array_fill_keys(Theme::COLORS, '#ffffff'),
       'dark' => array_fill_keys(Theme::COLORS, '#000000'),
       'radius' => 0.5,
+      'css' => '',
       ...$overrides,
     ];
   }
@@ -32,6 +34,40 @@ final class ThemeTest extends TestCase {
 
     $this->assertSame('ocean', $theme->getId());
     $this->assertSame(self::payload(), $theme->toPayload());
+  }
+
+  #[Test]
+  public function itPutsCssLastInPayload(): void {
+    $this->assertSame('css', array_key_last(Theme::fromPayload(self::payload())->toPayload()));
+  }
+
+  #[Test]
+  public function itRoundTripsCssVerbatim(): void {
+    $css = ":root { --radius: 0; }\n.badge::before { content: \"a > b\"; } /* ünïcode 🎨 */";
+
+    $payload = Theme::fromPayload(self::payload(['css' => $css]))->toPayload();
+
+    $this->assertSame($css, $payload['css']);
+  }
+
+  #[Test]
+  public function itDefaultsMissingCssToEmptyString(): void {
+    $payload = self::payload();
+    unset($payload['css']);
+
+    $this->assertSame('', Theme::fromPayload($payload)->toPayload()['css']);
+  }
+
+  #[Test]
+  public function itTreatsNullCssAsEmptyString(): void {
+    $this->assertSame('', Theme::fromPayload(self::payload(['css' => null]))->toPayload()['css']);
+  }
+
+  #[Test]
+  public function itAcceptsCssAtMaxLength(): void {
+    $css = str_repeat('a', 65536);
+
+    $this->assertSame($css, Theme::fromPayload(self::payload(['css' => $css]))->toPayload()['css']);
   }
 
   #[Test]
@@ -59,6 +95,25 @@ final class ThemeTest extends TestCase {
     $this->assertNull(Theme::fromPayload(self::payload(['radius' => null]))->toPayload()['radius']);
   }
 
+  #[Test]
+  #[DataProvider('builtInThemeProvider')]
+  public function itAcceptsStockColorsForBuiltInThemes(string $id): void {
+    $payload = Theme::fromPayload(self::payload(['id' => $id, 'light' => null, 'dark' => null]))->toPayload();
+
+    $this->assertSame($id, $payload['id']);
+    $this->assertNull($payload['light']);
+    $this->assertNull($payload['dark']);
+  }
+
+  /**
+   * @return iterable<string, array{string}>
+   */
+  public static function builtInThemeProvider(): iterable {
+    foreach (DisplayTheme::values() as $id) {
+      yield $id => [$id];
+    }
+  }
+
   /**
    * @return iterable<string, array{array<string, mixed>}>
    */
@@ -79,6 +134,13 @@ final class ThemeTest extends TestCase {
     yield 'negative radius' => [['radius' => -1]];
     yield 'huge radius' => [['radius' => 2.1]];
     yield 'string radius' => [['radius' => '1rem']];
+    yield 'css too long' => [['css' => str_repeat('a', 65537)]];
+    yield 'css not a string' => [['css' => ['a']]];
+    yield 'css is an int' => [['css' => 5]];
+    yield 'stock colors for custom theme' => [['light' => null, 'dark' => null]];
+    yield 'only light null for built-in theme' => [['id' => 'nord', 'light' => null]];
+    yield 'only dark null for built-in theme' => [['id' => 'nord', 'dark' => null]];
+    yield 'only light null for custom theme' => [['light' => null]];
   }
 
   /**
