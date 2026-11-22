@@ -47,6 +47,10 @@ function decodeSetting(key: SettingsKey, raw: string | undefined): unknown {
     return fallback;
   }
 
+  if (typeof fallback === 'string') {
+    return typeof parsed === 'string' ? parsed : raw;
+  }
+
   return parsed;
 }
 

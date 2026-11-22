@@ -1,5 +1,7 @@
 import { page } from '$app/state';
 
+import { ThemeCatalog } from './ThemeCatalog';
+
 class Customization {
   private _settings = $derived(page.data.globalSettings?.customization);
 
@@ -10,6 +12,16 @@ class Customization {
   logoUrl = $derived(this._settings?.logoUrl || '/favicon.svg');
   appleTouchIconUrl = $derived(
     this._settings?.logoUrl || '/icons/icon-192x192.png',
+  );
+  themes = $derived(new ThemeCatalog(this._settings));
+
+  /**
+   * `?custom-css=off` keeps the instance reachable when custom CSS breaks it.
+   */
+  customCss = $derived(
+    page.url.searchParams.get('custom-css') === 'off'
+      ? ''
+      : (this._settings?.customCss ?? ''),
   );
 }
 

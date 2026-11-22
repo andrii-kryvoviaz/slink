@@ -22,6 +22,7 @@
   import { isAdmin } from '@slink/lib/auth/utils';
   import { customization } from '@slink/lib/settings';
   import { initResponsiveStore } from '@slink/lib/stores/responsive.svelte';
+  import { styleTag } from '@slink/lib/utils/ui/styleTag';
 
   const { settings } = page.data;
 
@@ -44,6 +45,12 @@
 
   let showSidebar = $derived(!!user);
 
+  let activeTheme = $derived(
+    customization.themes.selector(
+      customization.themes.resolve(settings.theme.current),
+    ),
+  );
+
   let sidebarOpen = $state(settings.sidebar.expanded);
 
   $effect(() => {
@@ -64,12 +71,14 @@
     <link rel="icon" href={customization.logoUrl} />
   {/if}
   <link rel="apple-touch-icon" href={customization.appleTouchIconUrl} />
+  {@html styleTag('slink-themes', customization.themes.css)}
+  {@html styleTag('slink-custom-css', customization.customCss)}
 </svelte:head>
 
 <div
   class="relative flex h-screen"
   use:mode={settings.mode.current}
-  use:theme={settings.theme.current}
+  use:theme={activeTheme}
 >
   <Sidebar.Provider bind:open={sidebarOpen}>
     {#if showSidebar}

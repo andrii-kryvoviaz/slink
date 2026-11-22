@@ -78,8 +78,13 @@ const resolveEnum = <T extends Record<string, string>>(
   return fallback;
 };
 
-export const resolveTheme = (value: unknown): Theme =>
-  resolveEnum(Theme, value, Theme.DEFAULT);
+/**
+ * Themes are defined at runtime, so only the shape is checked here. Use
+ * ThemeCatalog to find the theme that applies; an empty value follows the
+ * instance default.
+ */
+export const resolveTheme = (value: unknown): string =>
+  typeof value === 'string' && /^[a-z0-9-]*$/.test(value) ? value : '';
 
 export const resolveMode = (value: unknown): Mode =>
   resolveEnum(Mode, value, Mode.SYSTEM);
@@ -119,7 +124,7 @@ export const isViewModeSettingsKey = (
 
 export const defaultSettings: Record<SettingsKey, unknown> = {
   mode: Mode.SYSTEM,
-  theme: Theme.DEFAULT,
+  theme: '',
   locale: Locale.EN,
   sidebar: { expanded: true },
   navigation: { expandedGroups: {} },
