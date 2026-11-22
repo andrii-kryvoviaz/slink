@@ -5459,3 +5459,24 @@ msgstr "Збережіть, щоб застосувати зміни теми."
 #: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
 msgid "Applied only while this theme is active. If it breaks a page, add <0/> to the address to load it without custom CSS."
 msgstr "Застосовується лише тоді, коли ця тема активна. Якщо це зламає сторінку, додайте <0/> до адреси, щоб завантажити її без власного CSS."
+
+#: src/feature/Settings/ThemeSettings/colorMode.svelte.ts
+msgid "Light and dark"
+msgstr "Світлий і темний"
+
+#: src/feature/Settings/ThemeSettings/colorMode.svelte.ts
+msgid "Light only"
+msgstr "Лише світлий"
+
+#: src/feature/Settings/ThemeSettings/colorMode.svelte.ts
+msgid "Dark only"
+msgstr "Лише темний"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Color Mode"
+msgstr "Колірний режим"
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Choose which modes are available. With only one, the light and dark switch disappears."
+msgstr "Оберіть доступні режими. Якщо доступний лише один, перемикач світлого та темного режимів зникає."

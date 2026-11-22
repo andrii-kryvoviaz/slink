@@ -5394,3 +5394,24 @@ msgstr "保存以应用您的主题更改。"
 #: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
 msgid "Applied only while this theme is active. If it breaks a page, add <0/> to the address to load it without custom CSS."
 msgstr "仅在此主题启用时应用。如果导致页面异常，请在地址后添加 <0/>，以不加载自定义 CSS 的方式打开页面。"
+
+#: src/feature/Settings/ThemeSettings/colorMode.svelte.ts
+msgid "Light and dark"
+msgstr "浅色和深色"
+
+#: src/feature/Settings/ThemeSettings/colorMode.svelte.ts
+msgid "Light only"
+msgstr "仅浅色"
+
+#: src/feature/Settings/ThemeSettings/colorMode.svelte.ts
+msgid "Dark only"
+msgstr "仅深色"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Color Mode"
+msgstr "颜色模式"
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Choose which modes are available. With only one, the light and dark switch disappears."
+msgstr "选择可用的模式。只有一种模式时，浅色与深色切换开关将隐藏。"

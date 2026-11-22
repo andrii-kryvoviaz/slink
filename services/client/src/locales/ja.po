@@ -5394,3 +5394,24 @@ msgstr "テーマの変更を適用するには保存してください。"
 #: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
 msgid "Applied only while this theme is active. If it breaks a page, add <0/> to the address to load it without custom CSS."
 msgstr "このテーマが有効な間のみ適用されます。ページが崩れた場合は、アドレスに<0/>を追加するとカスタムCSSなしで読み込めます。"
+
+#: src/feature/Settings/ThemeSettings/colorMode.svelte.ts
+msgid "Light and dark"
+msgstr "ライトとダーク"
+
+#: src/feature/Settings/ThemeSettings/colorMode.svelte.ts
+msgid "Light only"
+msgstr "ライトのみ"
+
+#: src/feature/Settings/ThemeSettings/colorMode.svelte.ts
+msgid "Dark only"
+msgstr "ダークのみ"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Color Mode"
+msgstr "カラーモード"
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Choose which modes are available. With only one, the light and dark switch disappears."
+msgstr "利用可能なモードを選択します。モードが1つだけの場合、ライト/ダークの切り替えは表示されなくなります。"

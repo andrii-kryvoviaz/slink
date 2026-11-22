@@ -5481,3 +5481,24 @@ msgstr "Zapisz, aby zastosować zmiany motywu."
 #: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
 msgid "Applied only while this theme is active. If it breaks a page, add <0/> to the address to load it without custom CSS."
 msgstr "Stosowany tylko wtedy, gdy ten motyw jest aktywny. Jeśli zepsuje stronę, dodaj <0/> do adresu, aby załadować ją bez własnego CSS."
+
+#: src/feature/Settings/ThemeSettings/colorMode.svelte.ts
+msgid "Light and dark"
+msgstr "Jasny i ciemny"
+
+#: src/feature/Settings/ThemeSettings/colorMode.svelte.ts
+msgid "Light only"
+msgstr "Tylko jasny"
+
+#: src/feature/Settings/ThemeSettings/colorMode.svelte.ts
+msgid "Dark only"
+msgstr "Tylko ciemny"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Color Mode"
+msgstr "Tryb kolorów"
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Choose which modes are available. With only one, the light and dark switch disappears."
+msgstr "Wybierz dostępne tryby. Gdy dostępny jest tylko jeden, przełącznik jasny/ciemny znika."

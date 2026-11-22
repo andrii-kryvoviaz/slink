@@ -5430,3 +5430,24 @@ msgstr "Enregistrez pour appliquer les modifications du thème."
 #: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
 msgid "Applied only while this theme is active. If it breaks a page, add <0/> to the address to load it without custom CSS."
 msgstr "Appliqué uniquement lorsque ce thème est actif. Si cela casse une page, ajoutez <0/> à l'adresse pour la charger sans CSS personnalisé."
+
+#: src/feature/Settings/ThemeSettings/colorMode.svelte.ts
+msgid "Light and dark"
+msgstr "Clair et sombre"
+
+#: src/feature/Settings/ThemeSettings/colorMode.svelte.ts
+msgid "Light only"
+msgstr "Clair uniquement"
+
+#: src/feature/Settings/ThemeSettings/colorMode.svelte.ts
+msgid "Dark only"
+msgstr "Sombre uniquement"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Color Mode"
+msgstr "Mode de couleur"
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Choose which modes are available. With only one, the light and dark switch disappears."
+msgstr "Choisissez les modes disponibles. Avec un seul mode, le commutateur clair et sombre disparaît."

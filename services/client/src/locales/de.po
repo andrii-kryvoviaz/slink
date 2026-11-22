@@ -5423,3 +5423,24 @@ msgstr "Speichern Sie, um Ihre Designänderungen zu übernehmen."
 #: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
 msgid "Applied only while this theme is active. If it breaks a page, add <0/> to the address to load it without custom CSS."
 msgstr "Wird nur angewendet, während dieses Design aktiv ist. Wenn dadurch eine Seite fehlerhaft dargestellt wird, fügen Sie <0/> zur Adresse hinzu, um die Seite ohne benutzerdefiniertes CSS zu laden."
+
+#: src/feature/Settings/ThemeSettings/colorMode.svelte.ts
+msgid "Light and dark"
+msgstr "Hell und Dunkel"
+
+#: src/feature/Settings/ThemeSettings/colorMode.svelte.ts
+msgid "Light only"
+msgstr "Nur Hell"
+
+#: src/feature/Settings/ThemeSettings/colorMode.svelte.ts
+msgid "Dark only"
+msgstr "Nur Dunkel"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Color Mode"
+msgstr "Farbmodus"
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Choose which modes are available. With only one, the light and dark switch disappears."
+msgstr "Wählen Sie, welche Modi verfügbar sind. Bei nur einem Modus entfällt der Umschalter zwischen Hell und Dunkel."
