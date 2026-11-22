@@ -6,7 +6,6 @@ export const DEFAULT_CUSTOMIZATION = {
   siteName: 'Slink',
   siteDescription: 'Fast and secure image sharing service',
   logoUrl: '',
-  customCss: '',
   themeSelectorEnabled: true,
   defaultTheme: 'default',
   hiddenThemes: [] as string[],
@@ -34,6 +33,7 @@ export const buildTheme = (
   light: palette(light),
   dark: palette(dark),
   radius: null as number | null,
+  css: '',
 });
 
 export class ThemeSettingsPage extends BasePage {
@@ -51,9 +51,7 @@ export class ThemeSettingsPage extends BasePage {
   readonly selectorSwitch = this.page.getByRole('switch', {
     name: 'Theme Selector',
   });
-  readonly customCss = this.page.locator(
-    'textarea[name="customizationCustomCss"]',
-  );
+  readonly themeCss = this.editor.locator('textarea[name="themeCss"]');
   readonly dirtyHint = this.page.getByText('Save to apply your theme changes.');
 
   constructor(page: Page) {
