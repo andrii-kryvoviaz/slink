@@ -103,6 +103,7 @@ msgstr "データなし"
 msgid "Users"
 msgstr "ユーザー"
 
+#: src/feature/Notification/NotificationThread/NotificationThread.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
 #: src/ui/components/picker/picker-create-row.svelte
 msgid "Enter"
@@ -246,7 +247,7 @@ msgstr "変更を保存"
 msgid "Create Collection"
 msgstr "コレクションを作成"
 
-#: src/feature/Notification/NotificationListItem.svelte
+#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
 msgid "Mark as read"
 msgstr "既読にする"
 
@@ -291,6 +292,7 @@ msgstr "検索オプション"
 
 #: src/feature/Comment/CommentList.svelte
 #: src/feature/Image/PostViewer/CommentsSkeleton.svelte
+#: src/lib/utils/notification/NotificationFilters.language.ts
 msgid "Comments"
 msgstr "コメント"
 
@@ -398,6 +400,7 @@ msgid "Bookmarks | Slink"
 msgstr "ブックマーク | Slink"
 
 #: src/feature/Navigation/Sidebar/config.ts
+#: src/lib/utils/notification/NotificationFilters.language.ts
 #: src/routes/bookmarks/+page.svelte
 msgid "Bookmarks"
 msgstr "ブックマーク"
@@ -846,15 +849,12 @@ msgstr "コレクションに画像を追加するにはサインインしてく
 msgid "You can only add your own images to collections"
 msgstr "コレクションに追加できるのは自分の画像のみです"
 
-#: src/feature/Collection/AddToCollectionButton/AddToCollectionButton.svelte
-msgid "Sign in to add to collection"
-msgstr "コレクションに追加するにはサインイン"
+#~ msgid "Sign in to add to collection"
+#~ msgstr "コレクションに追加するにはサインイン"
 
-#: src/feature/Collection/AddToCollectionButton/AddToCollectionButton.svelte
-msgid "Only own images can be added"
-msgstr "自分の画像のみ追加できます"
+#~ msgid "Only own images can be added"
+#~ msgstr "自分の画像のみ追加できます"
 
-#: src/feature/Collection/AddToCollectionButton/AddToCollectionButton.svelte
 #: src/feature/Image/Actions/ImageCollectionAction/ImageCollectionAction.svelte
 #: src/feature/Image/Actions/ImageCollectionAction/ImageCollectionAction.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
@@ -1000,6 +1000,7 @@ msgid "Save"
 msgstr "保存"
 
 #: src/feature/Image/BookmarkersPanel/BookmarkersPanel.svelte
+#: src/feature/Notification/NotificationActorCard/NotificationActorCard.svelte
 msgid "Bookmarked"
 msgstr "ブックマーク済み"
 
@@ -2014,7 +2015,9 @@ msgid "Move"
 msgstr "移動"
 
 #. 0: selectedCount === 1 ? 'Image' \\: 'Images'
+#. 0: row.name
 #: src/feature/Image/History/Actions/DeleteAction.svelte
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
 msgid "Delete {0}"
 msgstr "{0}を削除"
 
@@ -3761,6 +3764,7 @@ msgstr "オプションに戻る"
 msgid "Manage share link"
 msgstr "共有リンクを管理"
 
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
 #: src/feature/Share/Controls/ExpirationPicker/ExpirationPicker.svelte
 msgid "Custom"
 msgstr "カスタム"
@@ -4075,6 +4079,7 @@ msgstr "公開・非公開を問わず、どんな画像にも作成できる、
 
 #: src/feature/Analytics/analytics.language.ts
 #: src/feature/Share/Chips/ShareAttributeChips.svelte
+#: src/routes/notifications/+page.svelte
 msgid "Today"
 msgstr "今日"
 
@@ -4964,9 +4969,8 @@ msgstr "ロゴURL"
 msgid "Customize the site name, description, logo, and branding"
 msgstr "サイト名、説明、ロゴ、ブランディングをカスタマイズ"
 
-#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
-msgid "Name and brand your Slink instance."
-msgstr "Slinkインスタンスの名前とブランドを設定します。"
+#~ msgid "Name and brand your Slink instance."
+#~ msgstr "Slinkインスタンスの名前とブランドを設定します。"
 
 #: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
 msgid "The public name of your instance."
@@ -5069,7 +5073,7 @@ msgstr "モノクロ"
 msgid "Toggle light and dark mode."
 msgstr "ライトモードとダークモードを切り替えます。"
 
-#. 0: themeLabel
+#. 0: label
 #: src/feature/Layout/ModeSwitch/ModeSwitchHoverCard.svelte
 msgid "Theme: {0}"
 msgstr "テーマ: {0}"
@@ -5149,7 +5153,7 @@ msgid "Open post"
 msgstr "投稿を開く"
 
 #. 0: group.actorTotal
-#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
+#: src/feature/Notification/NotificationActorCard/NotificationActorCard.svelte
 msgid "See all {0}"
 msgstr "{0}件すべて表示"
 
@@ -5186,6 +5190,7 @@ msgstr "あなたのコメント:"
 msgid "No notifications match this filter."
 msgstr "このフィルタに一致する通知がありません。"
 
+#: src/feature/Notification/NotificationActorCard/NotificationActorCard.svelte
 #: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
 msgid "and a visitor"
 msgid_plural "and # visitors"
@@ -5239,3 +5244,153 @@ msgstr "メールアドレスとパスワードによるサインインを許可
 #: src/routes/profile/(auth)/login/+page.svelte
 msgid "No sign-in method is configured."
 msgstr "サインイン方法が設定されていません。"
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Name, brand and theme your Slink instance."
+msgstr "Slinkインスタンスの名前、ブランド、テーマを設定します。"
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Custom CSS"
+msgstr "カスタムCSS"
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Applied on top of the theme for every visitor. If it breaks a page, add <0/> to the address to load it without custom CSS."
+msgstr "すべての訪問者に対し、テーマの上から適用されます。ページが崩れた場合は、アドレスに<0/>を追加するとカスタムCSSなしで読み込めます。"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Background"
+msgstr "背景"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Text"
+msgstr "テキスト"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Primary"
+msgstr "プライマリ"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Accent"
+msgstr "アクセント"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Success"
+msgstr "成功"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Warning"
+msgstr "警告"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Danger"
+msgstr "危険"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Info"
+msgstr "情報"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Light"
+msgstr "ライト"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Dark"
+msgstr "ダーク"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Add Theme"
+msgstr "テーマを追加"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Edit Theme"
+msgstr "テーマを編集"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Every other shade is derived from these colors"
+msgstr "その他の色合いはすべて、これらの色から導出されます"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Theme Name"
+msgstr "テーマ名"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Corner Radius (rem)"
+msgstr "角丸の半径 (rem)"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Enter a number from 0 to 2"
+msgstr "0から2までの数値を入力してください"
+
+#. 0: label
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Pick {0}"
+msgstr "{0}を選択"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Apply Changes"
+msgstr "変更を適用"
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Theme Selector"
+msgstr "テーマセレクター"
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Let users pick their own theme. When off, everyone gets the default theme."
+msgstr "ユーザーが自分のテーマを選べるようにします。オフの場合、全員にデフォルトテーマが適用されます。"
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Default Theme"
+msgstr "デフォルトテーマ"
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Used for guests and for users who have not picked a theme."
+msgstr "ゲストやテーマを選んでいないユーザーに使用されます。"
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Themes"
+msgstr "テーマ"
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Add your own themes, or edit and hide the built-in ones."
+msgstr "独自のテーマを追加するか、組み込みテーマを編集・非表示にできます。"
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Hidden"
+msgstr "非表示"
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Edited"
+msgstr "編集済み"
+
+#. 0: row.name
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Restore {0}"
+msgstr "{0}を復元"
+
+#. 0: row.name
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Revert {0}"
+msgstr "{0}の編集を元に戻す"
+
+#. 0: row.name
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Edit {0}"
+msgstr "{0}を編集"
+
+#. 0: row.name
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Duplicate {0}"
+msgstr "{0}を複製"
+
+#. 0: row.name
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Hide {0}"
+msgstr "{0}を非表示"
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Save to apply your theme changes."
+msgstr "テーマの変更を適用するには保存してください。"

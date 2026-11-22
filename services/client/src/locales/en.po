@@ -103,6 +103,7 @@ msgstr "No Data"
 msgid "Users"
 msgstr "Users"
 
+#: src/feature/Notification/NotificationThread/NotificationThread.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
 #: src/ui/components/picker/picker-create-row.svelte
 msgid "Enter"
@@ -246,7 +247,7 @@ msgstr "Save Changes"
 msgid "Create Collection"
 msgstr "Create Collection"
 
-#: src/feature/Notification/NotificationListItem.svelte
+#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
 msgid "Mark as read"
 msgstr "Mark as read"
 
@@ -291,6 +292,7 @@ msgstr "Search options"
 
 #: src/feature/Comment/CommentList.svelte
 #: src/feature/Image/PostViewer/CommentsSkeleton.svelte
+#: src/lib/utils/notification/NotificationFilters.language.ts
 msgid "Comments"
 msgstr "Comments"
 
@@ -398,6 +400,7 @@ msgid "Bookmarks | Slink"
 msgstr "Bookmarks | Slink"
 
 #: src/feature/Navigation/Sidebar/config.ts
+#: src/lib/utils/notification/NotificationFilters.language.ts
 #: src/routes/bookmarks/+page.svelte
 msgid "Bookmarks"
 msgstr "Bookmarks"
@@ -846,15 +849,12 @@ msgstr "Sign in to add images to collections"
 msgid "You can only add your own images to collections"
 msgstr "You can only add your own images to collections"
 
-#: src/feature/Collection/AddToCollectionButton/AddToCollectionButton.svelte
-msgid "Sign in to add to collection"
-msgstr "Sign in to add to collection"
+#~ msgid "Sign in to add to collection"
+#~ msgstr "Sign in to add to collection"
 
-#: src/feature/Collection/AddToCollectionButton/AddToCollectionButton.svelte
-msgid "Only own images can be added"
-msgstr "Only own images can be added"
+#~ msgid "Only own images can be added"
+#~ msgstr "Only own images can be added"
 
-#: src/feature/Collection/AddToCollectionButton/AddToCollectionButton.svelte
 #: src/feature/Image/Actions/ImageCollectionAction/ImageCollectionAction.svelte
 #: src/feature/Image/Actions/ImageCollectionAction/ImageCollectionAction.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
@@ -1000,6 +1000,7 @@ msgid "Save"
 msgstr "Save"
 
 #: src/feature/Image/BookmarkersPanel/BookmarkersPanel.svelte
+#: src/feature/Notification/NotificationActorCard/NotificationActorCard.svelte
 msgid "Bookmarked"
 msgstr "Bookmarked"
 
@@ -2014,7 +2015,9 @@ msgid "Move"
 msgstr "Move"
 
 #. 0: selectedCount === 1 ? 'Image' \\: 'Images'
+#. 0: row.name
 #: src/feature/Image/History/Actions/DeleteAction.svelte
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
 msgid "Delete {0}"
 msgstr "Delete {0}"
 
@@ -3769,6 +3772,7 @@ msgstr "Back to options"
 msgid "Manage share link"
 msgstr "Manage share link"
 
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
 #: src/feature/Share/Controls/ExpirationPicker/ExpirationPicker.svelte
 msgid "Custom"
 msgstr "Custom"
@@ -4086,6 +4090,7 @@ msgstr "A separate, controlled link generated on top of any image, public or pri
 
 #: src/feature/Analytics/analytics.language.ts
 #: src/feature/Share/Chips/ShareAttributeChips.svelte
+#: src/routes/notifications/+page.svelte
 msgid "Today"
 msgstr "Today"
 
@@ -4982,9 +4987,8 @@ msgstr "Logo URL"
 msgid "Customize the site name, description, logo, and branding"
 msgstr "Customize the site name, description, logo, and branding"
 
-#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
-msgid "Name and brand your Slink instance."
-msgstr "Name and brand your Slink instance."
+#~ msgid "Name and brand your Slink instance."
+#~ msgstr "Name and brand your Slink instance."
 
 #: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
 msgid "The public name of your instance."
@@ -5087,7 +5091,7 @@ msgstr "Monochrome"
 msgid "Toggle light and dark mode."
 msgstr "Toggle light and dark mode."
 
-#. 0: themeLabel
+#. 0: label
 #: src/feature/Layout/ModeSwitch/ModeSwitchHoverCard.svelte
 msgid "Theme: {0}"
 msgstr "Theme: {0}"
@@ -5176,7 +5180,7 @@ msgid "Open post"
 msgstr "Open post"
 
 #. 0: group.actorTotal
-#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
+#: src/feature/Notification/NotificationActorCard/NotificationActorCard.svelte
 msgid "See all {0}"
 msgstr "See all {0}"
 
@@ -5214,6 +5218,7 @@ msgstr "your comment:"
 msgid "No notifications match this filter."
 msgstr "No notifications match this filter."
 
+#: src/feature/Notification/NotificationActorCard/NotificationActorCard.svelte
 #: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
 msgid "and a visitor"
 msgid_plural "and # visitors"
@@ -5268,3 +5273,153 @@ msgstr "Allow sign-in with email and password. Turning it off leaves sign-in to 
 #: src/routes/profile/(auth)/login/+page.svelte
 msgid "No sign-in method is configured."
 msgstr "No sign-in method is configured."
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Name, brand and theme your Slink instance."
+msgstr "Name, brand and theme your Slink instance."
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Custom CSS"
+msgstr "Custom CSS"
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Applied on top of the theme for every visitor. If it breaks a page, add <0/> to the address to load it without custom CSS."
+msgstr "Applied on top of the theme for every visitor. If it breaks a page, add <0/> to the address to load it without custom CSS."
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Background"
+msgstr "Background"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Text"
+msgstr "Text"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Primary"
+msgstr "Primary"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Accent"
+msgstr "Accent"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Success"
+msgstr "Success"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Warning"
+msgstr "Warning"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Danger"
+msgstr "Danger"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Info"
+msgstr "Info"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Light"
+msgstr "Light"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Dark"
+msgstr "Dark"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Add Theme"
+msgstr "Add Theme"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Edit Theme"
+msgstr "Edit Theme"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Every other shade is derived from these colors"
+msgstr "Every other shade is derived from these colors"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Theme Name"
+msgstr "Theme Name"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Corner Radius (rem)"
+msgstr "Corner Radius (rem)"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Enter a number from 0 to 2"
+msgstr "Enter a number from 0 to 2"
+
+#. 0: label
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Pick {0}"
+msgstr "Pick {0}"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Apply Changes"
+msgstr "Apply Changes"
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Theme Selector"
+msgstr "Theme Selector"
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Let users pick their own theme. When off, everyone gets the default theme."
+msgstr "Let users pick their own theme. When off, everyone gets the default theme."
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Default Theme"
+msgstr "Default Theme"
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Used for guests and for users who have not picked a theme."
+msgstr "Used for guests and for users who have not picked a theme."
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Themes"
+msgstr "Themes"
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Add your own themes, or edit and hide the built-in ones."
+msgstr "Add your own themes, or edit and hide the built-in ones."
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Hidden"
+msgstr "Hidden"
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Edited"
+msgstr "Edited"
+
+#. 0: row.name
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Restore {0}"
+msgstr "Restore {0}"
+
+#. 0: row.name
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Revert {0}"
+msgstr "Revert {0}"
+
+#. 0: row.name
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Edit {0}"
+msgstr "Edit {0}"
+
+#. 0: row.name
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Duplicate {0}"
+msgstr "Duplicate {0}"
+
+#. 0: row.name
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Hide {0}"
+msgstr "Hide {0}"
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Save to apply your theme changes."
+msgstr "Save to apply your theme changes."
