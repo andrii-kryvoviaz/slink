@@ -7,10 +7,11 @@ import { defineHook } from '../define';
 const applyShell: Handle = async ({ event, resolve }) => {
   const { mode, theme, locale } = event.locals.settings;
   const themes = new ThemeCatalog(event.locals.globalSettings?.customization);
+  const themeId = themes.resolve(theme.current);
 
   const values: Record<string, string> = {
-    mode: mode.current,
-    theme: themes.selector(themes.resolve(theme.current)),
+    mode: themes.modeFor(themeId, mode.current),
+    theme: themes.selector(themeId),
     locale: locale.current,
   };
 

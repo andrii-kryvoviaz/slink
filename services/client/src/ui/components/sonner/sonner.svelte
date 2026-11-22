@@ -4,13 +4,13 @@
     type ToasterProps as SonnerProps,
   } from 'svelte-sonner';
 
-  import { page } from '$app/state';
+  import { customization } from '@slink/lib/settings';
 
   let { ...restProps }: SonnerProps = $props();
 </script>
 
 <Sonner
-  theme={page.data.settings.mode.current}
+  theme={customization.mode}
   class="toaster group"
   style="--normal-bg: var(--color-popover); --normal-text: var(--color-on-popover); --normal-border: var(--color-border); --width: auto;"
   toastOptions={{

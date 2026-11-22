@@ -1,5 +1,6 @@
 import { ThemeCatalog, builtInThemes } from '@slink/lib/settings/ThemeCatalog';
 import type {
+  ColorMode,
   CustomTheme,
   CustomizationSettings,
   ThemeDraft,
@@ -14,6 +15,7 @@ interface ThemeRow {
   builtIn: boolean;
   hidden: boolean;
   edited: boolean;
+  colorMode: ColorMode;
   custom: CustomTheme | undefined;
 }
 
@@ -36,6 +38,7 @@ export class ThemeManager {
         builtIn,
         hidden: hiddenThemes.includes(id),
         edited: builtIn && custom !== undefined,
+        colorMode: custom?.colorMode ?? 'both',
         custom,
       };
     });
@@ -44,6 +47,17 @@ export class ThemeManager {
   isDirty = $derived.by(() => this._serialize() !== this._snapshot);
 
   constructor(private readonly _settings: () => CustomizationSettings) {
+    const settings = this._settings();
+
+    settings.colorMode ??= 'both';
+
+    if (settings.themes.some((theme) => !theme.colorMode)) {
+      settings.themes = settings.themes.map((theme) => ({
+        ...theme,
+        colorMode: theme.colorMode ?? 'both',
+      }));
+    }
+
     this._snapshot = this._serialize();
   }
 
@@ -57,6 +71,7 @@ export class ThemeManager {
       ...this._source(this.catalog.defaultTheme),
       id: '',
       name: '',
+      colorMode: 'both',
       css: '',
     };
   }
@@ -137,6 +152,7 @@ export class ThemeManager {
       ...snapshot,
       light: snapshot.light ?? stock!.light,
       dark: snapshot.dark ?? stock!.dark,
+      colorMode: snapshot.colorMode ?? 'both',
       css: snapshot.css ?? '',
     };
   }
@@ -161,6 +177,7 @@ export class ThemeManager {
       sameColors &&
       theme.name === builtInThemeLabel(theme.id) &&
       theme.radius === null &&
+      theme.colorMode === 'both' &&
       theme.css.trim() === '';
 
     if (untouched) {
@@ -175,14 +192,20 @@ export class ThemeManager {
   }
 
   private _serialize(): string {
-    const { themes, hiddenThemes, defaultTheme, themeSelectorEnabled } =
-      this._settings();
+    const {
+      themes,
+      hiddenThemes,
+      defaultTheme,
+      themeSelectorEnabled,
+      colorMode,
+    } = this._settings();
 
     return JSON.stringify([
       themes,
       hiddenThemes,
       defaultTheme,
       themeSelectorEnabled,
+      colorMode,
     ]);
   }
 }

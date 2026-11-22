@@ -45,15 +45,13 @@
 
   let showSidebar = $derived(!!user);
 
-  let activeThemeId = $derived(
-    customization.themes.resolve(settings.theme.current),
+  let activeTheme = $derived(
+    customization.themes.selector(customization.activeThemeId),
   );
-
-  let activeTheme = $derived(customization.themes.selector(activeThemeId));
 
   let activeThemeCss = $derived(
     customization.customCssEnabled
-      ? customization.themes.customCssFor(activeThemeId)
+      ? customization.themes.customCssFor(customization.activeThemeId)
       : '',
   );
 
@@ -84,7 +82,7 @@
 <div
   class="relative flex h-screen"
   data-slot="app"
-  use:mode={settings.mode.current}
+  use:mode={customization.mode}
   use:theme={activeTheme}
 >
   <Sidebar.Provider bind:open={sidebarOpen}>
@@ -114,24 +112,26 @@
             />
           </div>
         {/if}
+        {#snippet modeSwitch()}
+          <ModeSwitchHoverCard showPreferencesLink={!!user}>
+            <ModeSwitch
+              checked={customization.isDark}
+              variant="default"
+              animation="none"
+              on={{ change: (mode) => (settings.mode.current = mode) }}
+            />
+          </ModeSwitchHoverCard>
+        {/snippet}
         <Navbar
           user={user || undefined}
           showLogo={!showSidebar}
           showLoginButton={!user}
           showUploadButton={!!user ||
             !!data.globalSettings?.access?.allowGuestUploads}
-        >
-          {#snippet modeSwitch()}
-            <ModeSwitchHoverCard showPreferencesLink={!!user}>
-              <ModeSwitch
-                checked={settings.mode.isDark}
-                variant="default"
-                animation="none"
-                on={{ change: (mode) => (settings.mode.current = mode) }}
-              />
-            </ModeSwitchHoverCard>
-          {/snippet}
-        </Navbar>
+          modeSwitch={customization.forcedMode === null
+            ? modeSwitch
+            : undefined}
+        />
       </header>
       {#if isDemoMode}
         <DemoNotice visible={true} />

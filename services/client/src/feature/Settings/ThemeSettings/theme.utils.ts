@@ -77,6 +77,7 @@ export const readTheme = (id: string): ThemeDraft => ({
   light: readPalette(id, 'light'),
   dark: readPalette(id, 'dark'),
   radius: null,
+  colorMode: 'both',
   css: '',
 });
 

@@ -2,6 +2,7 @@
   import { ThemePicker, ThemePreview } from '@slink/feature/Layout';
   import { SettingItem } from '@slink/feature/Settings';
   import { Badge, Notice } from '@slink/feature/Text';
+  import { Select } from '@slink/ui/components';
   import { Button } from '@slink/ui/components/button';
   import { Switch } from '@slink/ui/components/switch';
   import { tick } from 'svelte';
@@ -10,6 +11,7 @@
 
   import { themeVariables } from '@slink/lib/settings/ThemeCatalog';
   import type {
+    ColorMode,
     CustomizationSettings,
     ThemeDraft,
   } from '@slink/lib/settings/Type/CustomizationSettings';
@@ -20,6 +22,7 @@
 
   import ThemeEditor from './ThemeEditor.svelte';
   import { ThemeManager } from './ThemeManager.svelte';
+  import { colorModeItems, colorModeLabel } from './colorMode.svelte';
 
   interface Props {
     settings: CustomizationSettings;
@@ -50,6 +53,8 @@
       errors['customization.hiddenThemes'] ??
       errors['customization.defaultTheme'],
   );
+
+  const colorModes = $derived(colorModeItems());
 </script>
 
 <SettingItem
@@ -70,6 +75,40 @@
     aria-label="Theme Selector"
     bind:checked={settings.themeSelectorEnabled}
   />
+</SettingItem>
+
+<SettingItem
+  defaultValue={defaultSettings?.colorMode ?? 'both'}
+  defaultLabel={colorModeLabel(defaultSettings?.colorMode ?? 'both')}
+  currentValue={settings.colorMode ?? 'both'}
+  reset={(value) => {
+    settings.colorMode = value;
+  }}
+>
+  {#snippet label()}
+    Color Mode
+  {/snippet}
+  {#snippet hint()}
+    Choose which modes are available. With only one, the light and dark switch
+    disappears.
+  {/snippet}
+  <Select
+    name="customizationColorMode"
+    items={colorModes}
+    value={settings.colorMode ?? 'both'}
+    onValueChange={(value: string) => {
+      settings.colorMode = value as ColorMode;
+    }}
+  />
+  {#snippet footer()}
+    {#if errors['customization.colorMode']}
+      <div class="px-4 pb-4">
+        <Notice variant="error" appearance="subtle" size="sm">
+          {errors['customization.colorMode']}
+        </Notice>
+      </div>
+    {/if}
+  {/snippet}
 </SettingItem>
 
 <SettingItem
@@ -130,6 +169,11 @@
             <Badge variant="amber" size="xs">Edited</Badge>
           {:else if !row.builtIn}
             <Badge variant="blue" size="xs">Custom</Badge>
+          {/if}
+          {#if row.colorMode !== 'both'}
+            <Badge variant="neutral" size="xs">
+              {colorModeLabel(row.colorMode)}
+            </Badge>
           {/if}
         </div>
 

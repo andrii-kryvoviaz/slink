@@ -12,6 +12,8 @@ export const themeColors = [
 export type ThemeColor = (typeof themeColors)[number];
 export type ThemePalette = Record<ThemeColor, string>;
 
+export type ColorMode = 'both' | 'light' | 'dark';
+
 /**
  * `light` and `dark` are both null only for a built-in id, which then keeps the
  * stock colors of that theme.
@@ -22,6 +24,7 @@ export type CustomTheme = {
   light: ThemePalette | null;
   dark: ThemePalette | null;
   radius: number | null;
+  colorMode: ColorMode;
   css: string;
 };
 
@@ -35,6 +38,7 @@ export type CustomizationSettings = {
   siteName: string;
   siteDescription: string;
   logoUrl: string;
+  colorMode: ColorMode;
   themeSelectorEnabled: boolean;
   defaultTheme: string;
   hiddenThemes: string[];

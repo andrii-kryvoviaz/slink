@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Select } from '@slink/ui/components';
   import { Dialog, Modal } from '@slink/ui/components/dialog';
   import { Input } from '@slink/ui/components/input';
   import { Label } from '@slink/ui/components/label';
@@ -6,11 +7,13 @@
   import Icon from '@iconify/svelte';
 
   import {
+    type ColorMode,
     type ThemeColor,
     type ThemeDraft,
     themeColors,
   } from '@slink/lib/settings/Type/CustomizationSettings';
 
+  import { colorModeItems } from './colorMode.svelte';
   import { isHexColor } from './theme.utils';
 
   interface Props {
@@ -25,6 +28,32 @@
 
   let draft = $state($state.snapshot(theme));
   let radius = $state(theme.radius?.toString() ?? '');
+
+  const colorModes = $derived(colorModeItems());
+
+  /** A scheme stays visible while the mode allows it, or while it holds an invalid color so it can be fixed. */
+  const visibleSchemes = $derived(
+    schemes.filter(
+      (scheme) =>
+        draft.colorMode === 'both' ||
+        draft.colorMode === scheme ||
+        themeColors.some((color) => !isHexColor(draft[scheme][color])),
+    ),
+  );
+
+  const colorGridClass = $derived(
+    visibleSchemes.length === 2
+      ? 'sm:grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)_minmax(0,1.5fr)]'
+      : 'sm:grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)]',
+  );
+
+  const singleCellClass = $derived(
+    visibleSchemes.length === 1 ? 'col-span-2 sm:col-span-1' : '',
+  );
+
+  const previewGridClass = $derived(
+    visibleSchemes.length === 2 ? 'sm:grid-cols-2' : '',
+  );
 
   const isNew = theme.id === '';
 
@@ -98,7 +127,7 @@
     </Modal.Header>
 
     <form onsubmit={handleSubmit} class="space-y-6">
-      <div class="grid gap-4 sm:grid-cols-2">
+      <div class="grid gap-4 sm:grid-cols-3">
         <Input
           id="theme-name"
           name="themeName"
@@ -121,13 +150,25 @@
           rounded="lg"
           error={isRadiusValid ? undefined : 'Enter a number from 0 to 2'}
         />
+        <div class="space-y-3">
+          <Label>Color Mode</Label>
+          <Select
+            name="themeColorMode"
+            class="w-full"
+            items={colorModes}
+            value={draft.colorMode}
+            onValueChange={(value: string) => {
+              draft.colorMode = value as ColorMode;
+            }}
+          />
+        </div>
       </div>
 
       <div
-        class="grid grid-cols-2 items-center sm:grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)_minmax(0,1.5fr)] gap-x-3 gap-y-2"
+        class="grid grid-cols-2 items-center {colorGridClass} gap-x-3 gap-y-2"
       >
         <span class="hidden sm:block"></span>
-        {#each schemes as scheme (scheme)}
+        {#each visibleSchemes as scheme (scheme)}
           <span class="text-xs font-medium text-foreground-muted">
             {schemeLabels[scheme]()}
           </span>
@@ -135,9 +176,9 @@
 
         {#each themeColors as color (color)}
           <Label class="col-span-2 sm:col-span-1">{colorLabels[color]()}</Label>
-          {#each schemes as scheme (scheme)}
+          {#each visibleSchemes as scheme (scheme)}
             {@const label = `${colorLabels[color]()} (${schemeLabels[scheme]()})`}
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2 {singleCellClass}">
               <input
                 type="color"
                 aria-label={`Pick ${label}`}
@@ -185,8 +226,8 @@
         </p>
       </div>
 
-      <div class="grid gap-3 sm:grid-cols-2" aria-hidden="true">
-        {#each schemes as scheme (scheme)}
+      <div class="grid gap-3 {previewGridClass}" aria-hidden="true">
+        {#each visibleSchemes as scheme (scheme)}
           {@const colors = draft[scheme]}
           <div
             class="space-y-3 border border-border p-4"
