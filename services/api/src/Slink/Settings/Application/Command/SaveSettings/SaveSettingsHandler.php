@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Slink\Settings\Application\Command\SaveSettings;
 
 use Slink\Settings\Application\Service\SettingsService;
+use Slink\Settings\Domain\Enum\ColorMode;
 use Slink\Settings\Domain\Enum\SettingCategory;
 use Slink\Settings\Domain\Exception\SsoProviderRequiredException;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
@@ -14,7 +15,7 @@ use Slink\Shared\Application\Command\CommandHandlerInterface;
 
 final readonly class SaveSettingsHandler implements CommandHandlerInterface {
   private const string LOCAL_AUTH_ENABLED_KEY = 'localAuthEnabled';
-  private const array CUSTOMIZATION_THEMING_KEYS = ['themeSelectorEnabled', 'defaultTheme', 'hiddenThemes', 'themes'];
+  private const array CUSTOMIZATION_THEMING_KEYS = ['themeSelectorEnabled', 'colorMode', 'defaultTheme', 'hiddenThemes', 'themes'];
 
   /**
    * @param SettingStoreRepositoryInterface $store
@@ -77,11 +78,26 @@ final readonly class SaveSettingsHandler implements CommandHandlerInterface {
 
       $effective = $this->configurationProvider->get($category->getCategoryKey() . '.' . $key);
 
+      if ($key === 'colorMode') {
+        $effective = self::effectiveColorMode($effective);
+      }
+
       if ($effective !== null) {
         $settings[$key] = $effective;
       }
     }
 
     return $settings;
+  }
+
+  /**
+   * A bad env value must not block saves, so it falls back to the default mode.
+   */
+  private static function effectiveColorMode(mixed $configured): string {
+    if (!is_string($configured) || ColorMode::tryFrom($configured) === null) {
+      return ColorMode::Both->value;
+    }
+
+    return $configured;
   }
 }

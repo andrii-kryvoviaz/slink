@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Slink\Settings\Domain\ValueObject\Customization;
 
+use Slink\Settings\Domain\Enum\ColorMode;
 use Slink\Settings\Domain\Exception\InvalidThemeException;
 use Slink\Shared\Domain\ValueObject\AbstractCompoundValueObject;
 use Slink\User\Domain\Enum\DisplayTheme;
@@ -35,6 +36,7 @@ final readonly class Theme extends AbstractCompoundValueObject {
     private ?array $light,
     private ?array $dark,
     private ?float $radius,
+    private ColorMode $colorMode,
     private string $css,
   ) {
     if (mb_strlen($id) > self::MAX_ID_LENGTH || !preg_match('/^[a-z0-9]+(-[a-z0-9]+)*$/D', $id)) {
@@ -70,6 +72,7 @@ final readonly class Theme extends AbstractCompoundValueObject {
       'light' => $this->light,
       'dark' => $this->dark,
       'radius' => $this->radius,
+      'colorMode' => $this->colorMode->value,
       'css' => $this->css,
     ];
   }
@@ -91,6 +94,7 @@ final readonly class Theme extends AbstractCompoundValueObject {
       $light === null ? null : self::palette($light),
       $dark === null ? null : self::palette($dark),
       $radius === null ? null : (float) $radius,
+      self::colorMode($payload['colorMode'] ?? null),
       self::css($payload['css'] ?? null),
     );
   }
@@ -101,6 +105,20 @@ final readonly class Theme extends AbstractCompoundValueObject {
 
   private static function text(mixed $value): string {
     return is_string($value) ? $value : '';
+  }
+
+  private static function colorMode(mixed $colorMode): ColorMode {
+    if ($colorMode === null) {
+      return ColorMode::Both;
+    }
+
+    $mode = is_string($colorMode) ? ColorMode::tryFrom($colorMode) : null;
+
+    if ($mode === null) {
+      throw new InvalidThemeException('Theme color mode must be one of both, light or dark');
+    }
+
+    return $mode;
   }
 
   private static function css(mixed $css): string {

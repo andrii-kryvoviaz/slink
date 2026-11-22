@@ -7,6 +7,7 @@ namespace Unit\Slink\Settings\Domain\ValueObject\Customization;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use Slink\Settings\Domain\Enum\ColorMode;
 use Slink\Settings\Domain\Exception\InvalidThemeException;
 use Slink\Settings\Domain\ValueObject\Customization\Theme;
 use Slink\User\Domain\Enum\DisplayTheme;
@@ -23,9 +24,43 @@ final class ThemeTest extends TestCase {
       'light' => array_fill_keys(Theme::COLORS, '#ffffff'),
       'dark' => array_fill_keys(Theme::COLORS, '#000000'),
       'radius' => 0.5,
+      'colorMode' => 'both',
       'css' => '',
       ...$overrides,
     ];
+  }
+
+  /**
+   * @return iterable<string, array{ColorMode}>
+   */
+  public static function colorModeProvider(): iterable {
+    foreach (ColorMode::cases() as $mode) {
+      yield $mode->value => [$mode];
+    }
+  }
+
+  #[Test]
+  #[DataProvider('colorModeProvider')]
+  public function itRoundTripsEveryColorMode(ColorMode $mode): void {
+    $payload = Theme::fromPayload(self::payload(['colorMode' => $mode->value]))->toPayload();
+
+    $this->assertSame($mode->value, $payload['colorMode']);
+  }
+
+  #[Test]
+  public function itPutsColorModeBeforeCss(): void {
+    $keys = array_keys(Theme::fromPayload(self::payload())->toPayload());
+
+    $this->assertSame(['radius', 'colorMode', 'css'], array_slice($keys, -3));
+  }
+
+  #[Test]
+  public function itDefaultsMissingOrNullColorModeToBoth(): void {
+    $payload = self::payload();
+    unset($payload['colorMode']);
+
+    $this->assertSame('both', Theme::fromPayload($payload)->toPayload()['colorMode']);
+    $this->assertSame('both', Theme::fromPayload(self::payload(['colorMode' => null]))->toPayload()['colorMode']);
   }
 
   #[Test]
@@ -137,6 +172,10 @@ final class ThemeTest extends TestCase {
     yield 'css too long' => [['css' => str_repeat('a', 65537)]];
     yield 'css not a string' => [['css' => ['a']]];
     yield 'css is an int' => [['css' => 5]];
+    yield 'unknown color mode' => [['colorMode' => 'sepia']];
+    yield 'empty color mode' => [['colorMode' => '']];
+    yield 'color mode with wrong case' => [['colorMode' => 'Light']];
+    yield 'color mode not a string' => [['colorMode' => ['dark']]];
     yield 'stock colors for custom theme' => [['light' => null, 'dark' => null]];
     yield 'only light null for built-in theme' => [['id' => 'nord', 'light' => null]];
     yield 'only dark null for built-in theme' => [['id' => 'nord', 'dark' => null]];

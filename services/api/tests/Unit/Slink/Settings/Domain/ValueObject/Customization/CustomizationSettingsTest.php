@@ -7,8 +7,10 @@ namespace Unit\Slink\Settings\Domain\ValueObject\Customization;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use Slink\Settings\Domain\Enum\ColorMode;
 use Slink\Settings\Domain\Enum\SettingCategory;
 use Slink\Settings\Domain\Event\SettingsChanged;
+use Slink\Settings\Domain\Exception\InvalidColorModeException;
 use Slink\Settings\Domain\Exception\InvalidDefaultThemeException;
 use Slink\Settings\Domain\Exception\InvalidHiddenThemesException;
 use Slink\Settings\Domain\Exception\InvalidLogoUrlException;
@@ -27,6 +29,7 @@ final class CustomizationSettingsTest extends TestCase {
       'siteDescription' => 'My description',
       'logoUrl' => 'https://example.com/logo.png',
       'themeSelectorEnabled' => false,
+      'colorMode' => 'light',
       'defaultTheme' => 'ocean',
       'hiddenThemes' => ['nord'],
       'themes' => [self::theme('ocean', ['css' => 'body { color: red; }'])],
@@ -38,8 +41,62 @@ final class CustomizationSettingsTest extends TestCase {
     $this->assertSame('My description', $settings->getSiteDescription());
     $this->assertSame('https://example.com/logo.png', $settings->getLogoUrl());
     $this->assertFalse($settings->isThemeSelectorEnabled());
+    $this->assertSame(ColorMode::Light, $settings->getColorMode());
     $this->assertSame('ocean', $settings->getDefaultTheme());
     $this->assertSame($payload, $settings->toPayload());
+  }
+
+  /**
+   * @return iterable<string, array{ColorMode}>
+   */
+  public static function colorModeProvider(): iterable {
+    foreach (ColorMode::cases() as $mode) {
+      yield $mode->value => [$mode];
+    }
+  }
+
+  #[Test]
+  #[DataProvider('colorModeProvider')]
+  public function itAcceptsEveryColorMode(ColorMode $mode): void {
+    $settings = CustomizationSettings::fromPayload(['colorMode' => $mode->value]);
+
+    $this->assertSame($mode, $settings->getColorMode());
+    $this->assertSame($mode->value, $settings->toPayload()['colorMode']);
+  }
+
+  #[Test]
+  public function itPutsColorModeBetweenThemeSelectorAndDefaultTheme(): void {
+    $keys = array_keys(CustomizationSettings::fromPayload([])->toPayload());
+
+    $this->assertSame(['themeSelectorEnabled', 'colorMode', 'defaultTheme'], array_slice($keys, 3, 3));
+  }
+
+  #[Test]
+  #[DataProvider('emptyColorModeProvider')]
+  public function itTreatsMissingNullAndEmptyColorModeAsBoth(mixed $colorMode): void {
+    $payload = $colorMode === 'missing' ? [] : ['colorMode' => $colorMode];
+
+    $settings = CustomizationSettings::fromPayload($payload);
+
+    $this->assertSame(ColorMode::Both, $settings->getColorMode());
+    $this->assertSame('both', $settings->toPayload()['colorMode']);
+  }
+
+  /**
+   * @return iterable<string, array{mixed}>
+   */
+  public static function emptyColorModeProvider(): iterable {
+    yield 'missing' => ['missing'];
+    yield 'null' => [null];
+    yield 'empty string' => [''];
+  }
+
+  #[Test]
+  public function itIgnoresColorModeWhenListingAvailableThemes(): void {
+    $available = CustomizationSettings::availableThemesFrom(['colorMode' => 'sepia', 'hiddenThemes' => ['nord']]);
+
+    $this->assertContains('default', $available);
+    $this->assertNotContains('nord', $available);
   }
 
   #[Test]
@@ -75,6 +132,7 @@ final class CustomizationSettingsTest extends TestCase {
     $this->assertSame('Acme', $payload['siteName']);
     $this->assertTrue($payload['themeSelectorEnabled']);
     $this->assertSame('default', $payload['defaultTheme']);
+    $this->assertSame('both', $payload['colorMode']);
     $this->assertSame([], $payload['themes']);
     $this->assertArrayNotHasKey('customCss', $payload);
   }
@@ -105,6 +163,11 @@ final class CustomizationSettingsTest extends TestCase {
   public static function invalidThemingProvider(): iterable {
     yield 'theme css too long' => [['themes' => [self::theme('ocean', ['css' => str_repeat('a', 65537)])]], InvalidThemeException::class, 'customization.themes'];
     yield 'theme css not a string' => [['themes' => [self::theme('ocean', ['css' => ['a']])]], InvalidThemeException::class, 'customization.themes'];
+    yield 'unknown color mode' => [['colorMode' => 'sepia'], InvalidColorModeException::class, 'customization.colorMode'];
+    yield 'color mode with wrong case' => [['colorMode' => 'Dark'], InvalidColorModeException::class, 'customization.colorMode'];
+    yield 'color mode with whitespace' => [['colorMode' => ' dark'], InvalidColorModeException::class, 'customization.colorMode'];
+    yield 'color mode not a string' => [['colorMode' => ['dark']], InvalidColorModeException::class, 'customization.colorMode'];
+    yield 'color mode is a bool' => [['colorMode' => true], InvalidColorModeException::class, 'customization.colorMode'];
     yield 'unknown default theme' => [['defaultTheme' => 'solarized'], InvalidDefaultThemeException::class, 'customization.defaultTheme'];
     yield 'hidden default theme' => [['hiddenThemes' => ['default']], InvalidDefaultThemeException::class, 'customization.defaultTheme'];
     yield 'default theme not a string' => [['defaultTheme' => []], InvalidDefaultThemeException::class, 'customization.defaultTheme'];
@@ -147,6 +210,7 @@ final class CustomizationSettingsTest extends TestCase {
       'light' => array_fill_keys(Theme::COLORS, '#ffffff'),
       'dark' => array_fill_keys(Theme::COLORS, '#000000'),
       'radius' => null,
+      'colorMode' => 'both',
       'css' => '',
       ...$overrides,
     ];
@@ -160,6 +224,7 @@ final class CustomizationSettingsTest extends TestCase {
     $this->assertSame(CustomizationSettings::DEFAULT_SITE_DESCRIPTION, $settings->getSiteDescription());
     $this->assertSame('', $settings->getLogoUrl());
     $this->assertTrue($settings->isThemeSelectorEnabled());
+    $this->assertSame(ColorMode::Both, $settings->getColorMode());
     $this->assertSame(CustomizationSettings::DEFAULT_THEME, $settings->getDefaultTheme());
   }
 

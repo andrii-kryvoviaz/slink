@@ -59,6 +59,7 @@ parameters:
     siteDescription: '%env(string:default::CUSTOMIZATION_SITE_DESCRIPTION)%'
     logoUrl: '%env(string:default::CUSTOMIZATION_LOGO_URL)%'
     themeSelectorEnabled: '%env(bool:CUSTOMIZATION_THEME_SELECTOR_ENABLED)%'
+    colorMode: '%env(string:default::CUSTOMIZATION_COLOR_MODE)%'
     defaultTheme: '%env(string:default::CUSTOMIZATION_DEFAULT_THEME)%'
     hiddenThemes: []
     themes: []

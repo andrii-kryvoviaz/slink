@@ -6,6 +6,7 @@ namespace Tests\Integration\Http\Settings;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
+use Slink\Settings\Domain\Enum\ColorMode;
 use Slink\Settings\Domain\ValueObject\Customization\Theme;
 use Tests\Integration\Http\HttpTestCase;
 
@@ -33,6 +34,7 @@ final class ThemeSettingsTest extends HttpTestCase {
       'light' => array_fill_keys(Theme::COLORS, '#ffffff'),
       'dark' => array_fill_keys(Theme::COLORS, '#000000'),
       'radius' => 0.5,
+      'colorMode' => 'both',
       'css' => '',
       ...$overrides,
     ];
@@ -83,6 +85,30 @@ final class ThemeSettingsTest extends HttpTestCase {
     self::assertSame('default', $customization['defaultTheme']);
     self::assertSame([], $customization['hiddenThemes']);
     self::assertSame([], $customization['themes']);
+    self::assertSame('both', $customization['colorMode']);
+  }
+
+  #[Test]
+  public function itExposesBothColorModesBeforeAnythingIsSaved(): void {
+    self::assertSame('both', $this->customization('/api/settings/global')['colorMode']);
+  }
+
+  /**
+   * @return iterable<string, array{ColorMode}>
+   */
+  public static function colorModeProvider(): iterable {
+    foreach (ColorMode::cases() as $mode) {
+      yield $mode->value => [$mode];
+    }
+  }
+
+  #[Test]
+  #[DataProvider('colorModeProvider')]
+  public function itPersistsEveryColorModeAndExposesItToAdminsAndPublic(ColorMode $mode): void {
+    self::assertSame(204, $this->save(['colorMode' => $mode->value]));
+
+    self::assertSame($mode->value, $this->customization('/api/settings/global')['colorMode']);
+    self::assertSame($mode->value, $this->customization('/api/settings/public')['colorMode']);
   }
 
   #[Test]
@@ -92,6 +118,7 @@ final class ThemeSettingsTest extends HttpTestCase {
       'siteDescription' => 'Screens',
       'logoUrl' => '',
       'themeSelectorEnabled' => false,
+      'colorMode' => 'dark',
       'defaultTheme' => 'ocean',
       'hiddenThemes' => ['nord'],
       'themes' => [self::theme('ocean', ['css' => self::THEME_CSS]), self::theme('gruvbox')],
@@ -124,6 +151,7 @@ final class ThemeSettingsTest extends HttpTestCase {
       'siteDescription' => 'Screens',
       'logoUrl' => '',
       'themeSelectorEnabled' => false,
+      'colorMode' => 'light',
       'defaultTheme' => 'ocean',
       'hiddenThemes' => ['nord'],
       'themes' => [self::theme('ocean', ['css' => self::THEME_CSS]), self::theme('gruvbox')],
@@ -135,6 +163,7 @@ final class ThemeSettingsTest extends HttpTestCase {
     $customization = $this->customization('/api/settings/global');
     self::assertSame('Renamed', $customization['siteName']);
     self::assertFalse($customization['themeSelectorEnabled']);
+    self::assertSame('light', $customization['colorMode']);
     self::assertSame('ocean', $customization['defaultTheme']);
     self::assertSame(['nord'], $customization['hiddenThemes']);
     self::assertEquals($settings['themes'], $customization['themes']);
@@ -181,6 +210,9 @@ final class ThemeSettingsTest extends HttpTestCase {
    */
   public static function invalidSettingsProvider(): iterable {
     yield 'oversized css' => [['themes' => [self::theme('ocean', ['css' => str_repeat('a', 65537)])]], 'customization.themes'];
+    yield 'unknown color mode' => [['colorMode' => 'sepia'], 'customization.colorMode'];
+    yield 'color mode not a string' => [['colorMode' => ['dark']], 'customization.colorMode'];
+    yield 'theme with unknown color mode' => [['themes' => [self::theme('ocean', ['colorMode' => 'sepia'])]], 'customization.themes'];
     yield 'unknown default theme' => [['defaultTheme' => 'solarized'], 'customization.defaultTheme'];
     yield 'hidden default theme' => [['defaultTheme' => 'nord', 'hiddenThemes' => ['nord']], 'customization.defaultTheme'];
     yield 'hiding a custom theme' => [['themes' => [self::theme('ocean')], 'hiddenThemes' => ['ocean']], 'customization.hiddenThemes'];

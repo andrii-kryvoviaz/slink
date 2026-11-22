@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Slink\Settings\Domain\ValueObject\Customization;
 
+use Slink\Settings\Domain\Enum\ColorMode;
 use Slink\Settings\Domain\Enum\SettingCategory;
+use Slink\Settings\Domain\Exception\InvalidColorModeException;
 use Slink\Settings\Domain\Exception\InvalidDefaultThemeException;
 use Slink\Settings\Domain\Exception\InvalidHiddenThemesException;
 use Slink\Settings\Domain\Exception\InvalidLogoUrlException;
@@ -32,6 +34,7 @@ final readonly class CustomizationSettings extends AbstractSettingsValueObject {
     private string $siteDescription,
     private string $logoUrl,
     private bool $themeSelectorEnabled,
+    private ColorMode $colorMode,
     private string $defaultTheme,
     private array $hiddenThemes,
     private array $themes,
@@ -72,6 +75,7 @@ final readonly class CustomizationSettings extends AbstractSettingsValueObject {
       'siteDescription' => $this->siteDescription,
       'logoUrl' => $this->logoUrl,
       'themeSelectorEnabled' => $this->themeSelectorEnabled,
+      'colorMode' => $this->colorMode->value,
       'defaultTheme' => $this->defaultTheme,
       'hiddenThemes' => $this->hiddenThemes,
       'themes' => array_map(static fn (Theme $theme): array => $theme->toPayload(), $this->themes),
@@ -99,6 +103,7 @@ final readonly class CustomizationSettings extends AbstractSettingsValueObject {
       $payload['siteDescription'] ?? self::DEFAULT_SITE_DESCRIPTION,
       $payload['logoUrl'] ?? '',
       filter_var($payload['themeSelectorEnabled'] ?? true, FILTER_VALIDATE_BOOLEAN),
+      self::parseColorMode($payload['colorMode'] ?? null),
       self::parseDefaultTheme($payload['defaultTheme'] ?? ''),
       self::parseHiddenThemes($payload['hiddenThemes'] ?? []),
       self::parseThemes($payload['themes'] ?? []),
@@ -124,6 +129,10 @@ final readonly class CustomizationSettings extends AbstractSettingsValueObject {
 
   public function isThemeSelectorEnabled(): bool {
     return $this->themeSelectorEnabled;
+  }
+
+  public function getColorMode(): ColorMode {
+    return $this->colorMode;
   }
 
   public function getDefaultTheme(): string {
@@ -166,6 +175,20 @@ final readonly class CustomizationSettings extends AbstractSettingsValueObject {
     $themes = array_unique([...DisplayTheme::values(), ...$themeIds]);
 
     return array_values(array_diff($themes, $hiddenThemes));
+  }
+
+  private static function parseColorMode(mixed $colorMode): ColorMode {
+    if ($colorMode === null || $colorMode === '') {
+      return ColorMode::Both;
+    }
+
+    $mode = is_string($colorMode) ? ColorMode::tryFrom($colorMode) : null;
+
+    if ($mode === null) {
+      throw new InvalidColorModeException('Color mode must be one of both, light or dark');
+    }
+
+    return $mode;
   }
 
   private static function parseDefaultTheme(mixed $defaultTheme): string {

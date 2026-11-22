@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Slink\Settings\Domain\ValueObject\Public;
 
+use Slink\Settings\Domain\Enum\ColorMode;
 use Slink\Settings\Domain\ValueObject\Customization\CustomizationSettings;
 use Slink\Shared\Infrastructure\Attribute\Groups;
 
@@ -27,6 +28,9 @@ final readonly class PublicCustomizationSettings {
     public bool $themeSelectorEnabled = true,
 
     #[Groups(['public'])]
+    public string $colorMode = ColorMode::Both->value,
+
+    #[Groups(['public'])]
     public string $defaultTheme = CustomizationSettings::DEFAULT_THEME,
 
     #[Groups(['public'])]
@@ -45,6 +49,9 @@ final readonly class PublicCustomizationSettings {
       siteDescription: $settings['siteDescription'] ?? CustomizationSettings::DEFAULT_SITE_DESCRIPTION,
       logoUrl: $settings['logoUrl'] ?? '',
       themeSelectorEnabled: $settings['themeSelectorEnabled'] ?? true,
+      colorMode: is_string($settings['colorMode'] ?? null) && $settings['colorMode'] !== ''
+        ? $settings['colorMode']
+        : ColorMode::Both->value,
       defaultTheme: $settings['defaultTheme'] ?? CustomizationSettings::DEFAULT_THEME,
       hiddenThemes: $settings['hiddenThemes'] ?? [],
       themes: $settings['themes'] ?? [],
