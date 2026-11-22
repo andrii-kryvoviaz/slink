@@ -10,5 +10,6 @@ enum SettingType: string {
   case Float = 'float';
   case Boolean = 'boolean';
   case Serialized = 'serialized';
+  case Json = 'json';
   case Null = 'null';
 }

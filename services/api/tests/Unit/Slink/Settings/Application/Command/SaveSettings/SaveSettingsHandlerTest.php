@@ -15,6 +15,8 @@ use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Settings\Domain\Repository\SettingStoreRepositoryInterface;
 use Slink\Settings\Domain\Settings;
 use Slink\Settings\Domain\Specification\SignInMethodSpecificationInterface;
+use Slink\Settings\Domain\ValueObject\Customization\CustomizationSettings;
+use Slink\Settings\Domain\ValueObject\Customization\Theme;
 use Slink\Settings\Domain\ValueObject\Image\ImageSettings;
 use Slink\Settings\Domain\ValueObject\Storage\StorageSettings;
 use Slink\Settings\Domain\ValueObject\User\UserSettings;
@@ -399,6 +401,104 @@ final class SaveSettingsHandlerTest extends TestCase {
         $handler->__invoke($command);
 
         $this->assertSame(['get', 'setSettings', 'store'], $callOrder);
+    }
+
+    /**
+     * @return list<array{string, mixed}>
+     */
+    private static function effectiveCustomizationMap(): array {
+        return [
+            ['customization.customCss', ':root { --radius: 0; }'],
+            ['customization.themeSelectorEnabled', false],
+            ['customization.defaultTheme', 'ocean'],
+            ['customization.hiddenThemes', ['nord']],
+            ['customization.themes', [[
+                'id' => 'ocean',
+                'name' => 'Ocean',
+                'light' => array_fill_keys(Theme::COLORS, '#ffffff'),
+                'dark' => array_fill_keys(Theme::COLORS, '#000000'),
+            ]]],
+        ];
+    }
+
+    #[Test]
+    public function itKeepsOmittedCustomizationKeysFromTheEffectiveValue(): void {
+        $command = new SaveSettingsCommand('customization', ['siteName' => 'Acme']);
+
+        $captured = null;
+        $settings = $this->createStub(Settings::class);
+        $settings->method('setSettings')->willReturnCallback(function ($value) use (&$captured) {
+            $captured = $value;
+        });
+
+        $store = $this->createStub(SettingStoreRepositoryInterface::class);
+        $store->method('get')->willReturn($settings);
+
+        $provider = $this->createStub(ConfigurationProviderInterface::class);
+        $provider->method('get')->willReturnMap(self::effectiveCustomizationMap());
+
+        (new SaveSettingsHandler($store, $provider, $this->signInMethodSpecification(true)))->__invoke($command);
+
+        $this->assertInstanceOf(CustomizationSettings::class, $captured);
+        $payload = $captured->toPayload();
+        $this->assertSame('Acme', $payload['siteName']);
+        $this->assertSame(':root { --radius: 0; }', $payload['customCss']);
+        $this->assertFalse($payload['themeSelectorEnabled']);
+        $this->assertSame('ocean', $payload['defaultTheme']);
+        $this->assertSame(['nord'], $payload['hiddenThemes']);
+        $this->assertSame(['ocean'], array_column($payload['themes'], 'id'));
+    }
+
+    #[Test]
+    public function itLetsExplicitEmptyCustomizationValuesWin(): void {
+        $command = new SaveSettingsCommand('customization', [
+            'customCss' => '',
+            'themeSelectorEnabled' => false,
+            'defaultTheme' => 'default',
+            'hiddenThemes' => [],
+            'themes' => [],
+        ]);
+
+        $captured = null;
+        $settings = $this->createStub(Settings::class);
+        $settings->method('setSettings')->willReturnCallback(function ($value) use (&$captured) {
+            $captured = $value;
+        });
+
+        $store = $this->createStub(SettingStoreRepositoryInterface::class);
+        $store->method('get')->willReturn($settings);
+
+        $provider = $this->createStub(ConfigurationProviderInterface::class);
+        $provider->method('get')->willReturnMap(self::effectiveCustomizationMap());
+
+        (new SaveSettingsHandler($store, $provider, $this->signInMethodSpecification(true)))->__invoke($command);
+
+        $this->assertInstanceOf(CustomizationSettings::class, $captured);
+        $payload = $captured->toPayload();
+        $this->assertSame('', $payload['customCss']);
+        $this->assertFalse($payload['themeSelectorEnabled']);
+        $this->assertSame('default', $payload['defaultTheme']);
+        $this->assertSame([], $payload['hiddenThemes']);
+        $this->assertSame([], $payload['themes']);
+    }
+
+    #[Test]
+    public function itDoesNotConsultCustomizationKeysForOtherCategories(): void {
+        $command = new SaveSettingsCommand('user', [
+            'approvalRequired' => false,
+            'allowRegistration' => true,
+            'password' => ['minLength' => 8, 'requirements' => 0],
+            'localAuthEnabled' => true,
+        ]);
+
+        $settings = $this->createStub(Settings::class);
+        $store = $this->createStub(SettingStoreRepositoryInterface::class);
+        $store->method('get')->willReturn($settings);
+
+        $provider = $this->createMock(ConfigurationProviderInterface::class);
+        $provider->expects($this->never())->method('get');
+
+        (new SaveSettingsHandler($store, $provider, $this->signInMethodSpecification(true)))->__invoke($command);
     }
 
     private function signInMethodSpecification(bool $satisfied): SignInMethodSpecificationInterface {

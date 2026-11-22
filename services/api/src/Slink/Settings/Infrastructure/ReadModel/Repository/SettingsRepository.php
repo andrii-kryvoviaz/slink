@@ -22,10 +22,11 @@ final class SettingsRepository extends AbstractRepository implements SettingsRep
   public function set(string $key, mixed $value, SettingCategory $category): void {
     $setting = $this->findOneBy(['key' => $key]);
     
-    $valueTypeEnum = SettingType::from(strtolower(gettype($value)));
+    $valueTypeEnum = is_array($value) ? SettingType::Json : SettingType::from(strtolower(gettype($value)));
     $stringValue = match ($valueTypeEnum) {
       SettingType::Boolean => $value ? 'true' : 'false',
       SettingType::Null => '',
+      SettingType::Json => json_encode($value, JSON_THROW_ON_ERROR),
       default => (string) $value,
     };
     
