@@ -10,7 +10,7 @@ Custom CSS should rely only on the following. Tailwind classes and markup may ch
 - **Shape and type**: `--radius`, `--font-sans`, `--font-mono`, `--spacing`, `--text-*`, `--blur-*`.
 - **Brand buttons**: `--color-brand-*`, `--color-on-brand`.
 - **Active theme**: `[data-theme='<id>']` on `<html>`, or `[data-theme='edited:<id>']` for a built-in theme whose colors were changed. Adding only CSS, a radius or a name to a built-in theme keeps its plain id.
-- **Mode**: `.light`, `.dark` or `.system` on `<html>`.
+- **Mode**: `.light`, `.dark` or `.system` on `<html>`. A site or theme can allow only one mode (`colorMode`): its users get that mode, the switch is hidden, and their own choice is kept.
 - **Parts**: `[data-slot='<name>']`, for example `app`, `app-header`, `app-content`, `app-footer`, `navbar`, `brand-logo`, `button`, `notice`, `banner`, `setting-item`, `explore-card`, `collection-card`.
 
 Paste this into the Custom CSS of one theme. It loads only while that theme is active:
