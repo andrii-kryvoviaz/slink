@@ -17,9 +17,9 @@
   import type { User } from '@slink/lib/auth/Type/User';
   import { LandingPage } from '@slink/lib/enum/LandingPage';
   import type { License } from '@slink/lib/enum/License';
-  import { Locale, resolveTheme } from '@slink/lib/settings/Settings.enums';
+  import { customization, describeThemes } from '@slink/lib/settings';
+  import { Locale } from '@slink/lib/settings/Settings.enums';
   import type { UploadPolicy } from '@slink/lib/settings/UploadPolicy';
-  import { themes } from '@slink/lib/settings/themes.svelte';
   import { applyLocale } from '@slink/lib/utils/i18n';
   import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
 
@@ -44,7 +44,11 @@
   let { data }: Props = $props();
 
   const { settings } = page.data;
-  const formState = new PreferencesPageState(data.preferences);
+  const themes = $derived(customization.themes);
+  const formState = new PreferencesPageState(
+    data.preferences,
+    customization.themes,
+  );
 
   formState.onChanged('locale', (locale) =>
     applyLocale(locale as Locale, settings),
@@ -125,8 +129,11 @@
         formError = null;
       },
       onSuccess: async () => {
+        const themeChanged = formState.themeChanged;
         await formState.commit();
-        settings.theme.current = resolveTheme(formState.theme);
+        if (themes.selectorEnabled && themeChanged) {
+          settings.theme.current = formState.theme;
+        }
         toast.success(messages.preferences.updated);
       },
       onError: (data) => {
@@ -160,29 +167,37 @@
         </SettingItem>
       </SettingsSection>
 
-      <SettingsSection id="appearance" class="scroll-mt-20">
-        {#snippet title()}
-          Appearance
-        {/snippet}
-        <SettingItem>
-          {#snippet label()}
-            Theme
+      {#if themes.selectorEnabled}
+        <SettingsSection id="appearance" class="scroll-mt-20">
+          {#snippet title()}
+            Appearance
           {/snippet}
-          {#snippet hint()}
-            Choose your preferred color theme for the interface
-          {/snippet}
-          {#snippet footer()}
-            <div class="px-4 pb-4">
-              <ThemePreview theme={formState.theme} />
-            </div>
-          {/snippet}
-          <ThemePicker
-            {themes}
-            bind:value={formState.theme}
-            name="display.theme"
-          />
-        </SettingItem>
-      </SettingsSection>
+          <SettingItem>
+            {#snippet label()}
+              Theme
+            {/snippet}
+            {#snippet hint()}
+              Choose your preferred color theme for the interface
+            {/snippet}
+            {#snippet footer()}
+              <div class="px-4 pb-4">
+                <ThemePreview theme={themes.selector(formState.theme)} />
+              </div>
+            {/snippet}
+            <ThemePicker
+              themes={describeThemes(themes)}
+              bind:value={formState.theme}
+            />
+            {#if formState.themeChanged}
+              <input
+                type="hidden"
+                name="display.theme"
+                value={formState.theme}
+              />
+            {/if}
+          </SettingItem>
+        </SettingsSection>
+      {/if}
 
       <SettingsSection>
         {#snippet title()}

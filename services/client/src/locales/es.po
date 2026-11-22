@@ -103,6 +103,7 @@ msgstr "Sin datos"
 msgid "Users"
 msgstr "Usuarios"
 
+#: src/feature/Notification/NotificationThread/NotificationThread.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
 #: src/ui/components/picker/picker-create-row.svelte
 msgid "Enter"
@@ -246,7 +247,7 @@ msgstr "Guardar cambios"
 msgid "Create Collection"
 msgstr "Crear colección"
 
-#: src/feature/Notification/NotificationListItem.svelte
+#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
 msgid "Mark as read"
 msgstr "Marcar como leído"
 
@@ -291,6 +292,7 @@ msgstr "Opciones de búsqueda"
 
 #: src/feature/Comment/CommentList.svelte
 #: src/feature/Image/PostViewer/CommentsSkeleton.svelte
+#: src/lib/utils/notification/NotificationFilters.language.ts
 msgid "Comments"
 msgstr "Comentarios"
 
@@ -398,6 +400,7 @@ msgid "Bookmarks | Slink"
 msgstr "Marcadores | Slink"
 
 #: src/feature/Navigation/Sidebar/config.ts
+#: src/lib/utils/notification/NotificationFilters.language.ts
 #: src/routes/bookmarks/+page.svelte
 msgid "Bookmarks"
 msgstr "Marcadores"
@@ -846,15 +849,12 @@ msgstr "Inicia sesión para agregar imágenes a colecciones"
 msgid "You can only add your own images to collections"
 msgstr "Solo puedes agregar tus propias imágenes a las colecciones"
 
-#: src/feature/Collection/AddToCollectionButton/AddToCollectionButton.svelte
-msgid "Sign in to add to collection"
-msgstr "Inicia sesión para agregar a la colección"
+#~ msgid "Sign in to add to collection"
+#~ msgstr "Inicia sesión para agregar a la colección"
 
-#: src/feature/Collection/AddToCollectionButton/AddToCollectionButton.svelte
-msgid "Only own images can be added"
-msgstr "Solo se pueden agregar imágenes propias"
+#~ msgid "Only own images can be added"
+#~ msgstr "Solo se pueden agregar imágenes propias"
 
-#: src/feature/Collection/AddToCollectionButton/AddToCollectionButton.svelte
 #: src/feature/Image/Actions/ImageCollectionAction/ImageCollectionAction.svelte
 #: src/feature/Image/Actions/ImageCollectionAction/ImageCollectionAction.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
@@ -1000,6 +1000,7 @@ msgid "Save"
 msgstr "Guardar"
 
 #: src/feature/Image/BookmarkersPanel/BookmarkersPanel.svelte
+#: src/feature/Notification/NotificationActorCard/NotificationActorCard.svelte
 msgid "Bookmarked"
 msgstr "En favoritos"
 
@@ -2014,7 +2015,9 @@ msgid "Move"
 msgstr "Mover"
 
 #. 0: selectedCount === 1 ? 'Image' \\: 'Images'
+#. 0: row.name
 #: src/feature/Image/History/Actions/DeleteAction.svelte
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
 msgid "Delete {0}"
 msgstr "Eliminar {0}"
 
@@ -3769,6 +3772,7 @@ msgstr "Volver a las opciones"
 msgid "Manage share link"
 msgstr "Gestionar enlace compartido"
 
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
 #: src/feature/Share/Controls/ExpirationPicker/ExpirationPicker.svelte
 msgid "Custom"
 msgstr "Personalizado"
@@ -4086,6 +4090,7 @@ msgstr "Un enlace independiente y controlado creado sobre cualquier imagen, púb
 
 #: src/feature/Analytics/analytics.language.ts
 #: src/feature/Share/Chips/ShareAttributeChips.svelte
+#: src/routes/notifications/+page.svelte
 msgid "Today"
 msgstr "Hoy"
 
@@ -4982,9 +4987,8 @@ msgstr "URL del logotipo"
 msgid "Customize the site name, description, logo, and branding"
 msgstr "Personaliza el nombre del sitio, la descripción, el logotipo y la marca"
 
-#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
-msgid "Name and brand your Slink instance."
-msgstr "Nombra y personaliza la marca de tu instancia de Slink."
+#~ msgid "Name and brand your Slink instance."
+#~ msgstr "Nombra y personaliza la marca de tu instancia de Slink."
 
 #: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
 msgid "The public name of your instance."
@@ -5087,7 +5091,7 @@ msgstr "Monocromo"
 msgid "Toggle light and dark mode."
 msgstr "Alternar entre modo claro y oscuro."
 
-#. 0: themeLabel
+#. 0: label
 #: src/feature/Layout/ModeSwitch/ModeSwitchHoverCard.svelte
 msgid "Theme: {0}"
 msgstr "Tema: {0}"
@@ -5181,7 +5185,7 @@ msgid "Open post"
 msgstr "Abrir publicación"
 
 #. 0: group.actorTotal
-#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
+#: src/feature/Notification/NotificationActorCard/NotificationActorCard.svelte
 msgid "See all {0}"
 msgstr "Mostrar los {0}"
 
@@ -5220,6 +5224,7 @@ msgstr "tu comentario:"
 msgid "No notifications match this filter."
 msgstr "Ninguna notificación coincide con este filtro."
 
+#: src/feature/Notification/NotificationActorCard/NotificationActorCard.svelte
 #: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
 msgid "and a visitor"
 msgid_plural "and # visitors"
@@ -5275,3 +5280,174 @@ msgstr "Permitir el inicio de sesión con correo electrónico y contraseña. Si 
 #: src/routes/profile/(auth)/login/+page.svelte
 msgid "No sign-in method is configured."
 msgstr "No hay ningún método de inicio de sesión configurado."
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Name, brand and theme your Slink instance."
+msgstr "Defina el nombre, la marca y el tema de su instancia de Slink."
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Custom CSS"
+msgstr "CSS personalizado"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Background"
+msgstr "Fondo"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Text"
+msgstr "Texto"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Primary"
+msgstr "Primario"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Accent"
+msgstr "Acento"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Success"
+msgstr "Éxito"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Warning"
+msgstr "Advertencia"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Danger"
+msgstr "Peligro"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Info"
+msgstr "Información"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Light"
+msgstr "Claro"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Dark"
+msgstr "Oscuro"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Add Theme"
+msgstr "Añadir tema"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Edit Theme"
+msgstr "Editar tema"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Every other shade is derived from these colors"
+msgstr "Todos los demás tonos se derivan de estos colores"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Theme Name"
+msgstr "Nombre del tema"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Corner Radius (rem)"
+msgstr "Radio de las esquinas (rem)"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Enter a number from 0 to 2"
+msgstr "Introduzca un número del 0 al 2"
+
+#. 0: label
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Pick {0}"
+msgstr "Elegir {0}"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Apply Changes"
+msgstr "Aplicar cambios"
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Theme Selector"
+msgstr "Selector de tema"
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Let users pick their own theme. When off, everyone gets the default theme."
+msgstr "Permite a los usuarios elegir su propio tema. Si está desactivado, todos usan el tema predeterminado."
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Default Theme"
+msgstr "Tema predeterminado"
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Used for guests and for users who have not picked a theme."
+msgstr "Se usa para los invitados y para los usuarios que no han elegido un tema."
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Themes"
+msgstr "Temas"
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Add your own themes, or edit and hide the built-in ones."
+msgstr "Añada sus propios temas, o edite y oculte los integrados."
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Hidden"
+msgstr "Oculto"
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Edited"
+msgstr "Editado"
+
+#. 0: row.name
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Restore {0}"
+msgstr "Restaurar {0}"
+
+#. 0: row.name
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Revert {0}"
+msgstr "Revertir cambios de {0}"
+
+#. 0: row.name
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Edit {0}"
+msgstr "Editar {0}"
+
+#. 0: row.name
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Duplicate {0}"
+msgstr "Duplicar {0}"
+
+#. 0: row.name
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Hide {0}"
+msgstr "Ocultar {0}"
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Save to apply your theme changes."
+msgstr "Guarde para aplicar los cambios de tema."
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Applied only while this theme is active. If it breaks a page, add <0/> to the address to load it without custom CSS."
+msgstr "Se aplica solo mientras este tema está activo. Si rompe una página, añada <0/> a la dirección para cargarla sin CSS personalizado."
+
+#: src/feature/Settings/ThemeSettings/colorMode.svelte.ts
+msgid "Light and dark"
+msgstr "Claro y oscuro"
+
+#: src/feature/Settings/ThemeSettings/colorMode.svelte.ts
+msgid "Light only"
+msgstr "Solo claro"
+
+#: src/feature/Settings/ThemeSettings/colorMode.svelte.ts
+msgid "Dark only"
+msgstr "Solo oscuro"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Color Mode"
+msgstr "Modo de color"
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Choose which modes are available. With only one, the light and dark switch disappears."
+msgstr "Elija qué modos están disponibles. Con solo uno, desaparece el interruptor de claro y oscuro."

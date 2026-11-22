@@ -82,7 +82,7 @@
   const buttonClasses = $derived(CopyContainerButtonTheme({ size }));
 </script>
 
-<div class="flex w-full items-center">
+<div data-slot="copy-container" class="flex w-full items-center">
   <Copyable text={resolveValue} {delay}>
     {#snippet children({ copied, copy })}
       <InputGroup {variant} {size} {fluid}>

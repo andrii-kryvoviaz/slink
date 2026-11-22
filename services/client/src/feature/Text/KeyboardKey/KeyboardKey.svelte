@@ -55,6 +55,6 @@
   );
 </script>
 
-<kbd class={classes}>
+<kbd data-slot="keyboard-key" class={classes}>
   {@render children?.()}
 </kbd>

@@ -23,6 +23,6 @@
   );
 </script>
 
-<div class={classes}>
+<div data-slot="notice" class={classes}>
   {@render children?.()}
 </div>

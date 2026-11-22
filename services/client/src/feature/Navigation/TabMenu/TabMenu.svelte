@@ -160,7 +160,13 @@
   });
 </script>
 
-<div bind:this={menuRef} class={classes} role="tablist" tabindex="0">
+<div
+  bind:this={menuRef}
+  data-slot="tab-menu"
+  class={classes}
+  role="tablist"
+  tabindex="0"
+>
   <div class="absolute inset-1 pointer-events-none overflow-hidden">
     <div
       bind:this={marker}

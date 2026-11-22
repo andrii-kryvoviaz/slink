@@ -81,7 +81,7 @@ export const modalContentVariants = cva(
 );
 
 export const modalAccentVariants = cva(
-  'shadow-[0_0_0_1px_rgb(100_116_139/0.06)]',
+  'shadow-[0_0_0_1px_var(--color-modal-hairline)]',
   {
     variants: {
       variant: {

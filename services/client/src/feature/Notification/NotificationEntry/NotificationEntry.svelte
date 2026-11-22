@@ -36,7 +36,7 @@
   }
 </script>
 
-<div class={theme.row()}>
+<div data-slot="notification" class={theme.row()}>
   <button
     type="button"
     aria-label="Open post"

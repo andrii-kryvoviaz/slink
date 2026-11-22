@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Slink\Settings\Application\Command\SaveSettings;
 
 use Slink\Settings\Application\Service\SettingsService;
+use Slink\Settings\Domain\Enum\ColorMode;
 use Slink\Settings\Domain\Enum\SettingCategory;
 use Slink\Settings\Domain\Exception\SsoProviderRequiredException;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
@@ -14,7 +15,8 @@ use Slink\Shared\Application\Command\CommandHandlerInterface;
 
 final readonly class SaveSettingsHandler implements CommandHandlerInterface {
   private const string LOCAL_AUTH_ENABLED_KEY = 'localAuthEnabled';
-  
+  private const array CUSTOMIZATION_THEMING_KEYS = ['themeSelectorEnabled', 'colorMode', 'defaultTheme', 'hiddenThemes', 'themes'];
+
   /**
    * @param SettingStoreRepositoryInterface $store
    * @param ConfigurationProviderInterface<SettingsService> $configurationProvider
@@ -31,7 +33,9 @@ final readonly class SaveSettingsHandler implements CommandHandlerInterface {
     
     $category = SettingCategory::from($command->getCategory());
     
-    $data = $category->createSettingsCategoryRoot($this->withEffectiveLocalAuth($category, $command->getSettings()));
+    $data = $category->createSettingsCategoryRoot(
+      $this->withEffectiveCustomization($category, $this->withEffectiveLocalAuth($category, $command->getSettings()))
+    );
     
     if (!$this->signInMethodSpecification->isSatisfiedBy($data)) {
       throw new SsoProviderRequiredException();
@@ -54,7 +58,46 @@ final readonly class SaveSettingsHandler implements CommandHandlerInterface {
     $settings[self::LOCAL_AUTH_ENABLED_KEY] ??= $this->configurationProvider->get(
       $category->getCategoryKey() . '.' . self::LOCAL_AUTH_ENABLED_KEY
     );
-    
+
     return $settings;
+  }
+
+  /**
+   * @param array<string, mixed> $settings
+   * @return array<string, mixed>
+   */
+  private function withEffectiveCustomization(SettingCategory $category, array $settings): array {
+    if ($category !== SettingCategory::Customization) {
+      return $settings;
+    }
+
+    foreach (self::CUSTOMIZATION_THEMING_KEYS as $key) {
+      if (($settings[$key] ?? null) !== null) {
+        continue;
+      }
+
+      $effective = $this->configurationProvider->get($category->getCategoryKey() . '.' . $key);
+
+      if ($key === 'colorMode') {
+        $effective = self::effectiveColorMode($effective);
+      }
+
+      if ($effective !== null) {
+        $settings[$key] = $effective;
+      }
+    }
+
+    return $settings;
+  }
+
+  /**
+   * A bad env value must not block saves, so it falls back to the default mode.
+   */
+  private static function effectiveColorMode(mixed $configured): string {
+    if (!is_string($configured) || ColorMode::tryFrom($configured) === null) {
+      return ColorMode::Both->value;
+    }
+
+    return $configured;
   }
 }

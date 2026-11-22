@@ -6,6 +6,8 @@
 @import './core/primary.css' layer(core);
 @import './core/decor.css' layer(core);
 @import './core/series.css' layer(core);
+@import './core/brand.css' layer(core);
+@import './core/font.css' layer(core);
 @import './core/status.css' layer(core);
 
 @import './presets/default.css';

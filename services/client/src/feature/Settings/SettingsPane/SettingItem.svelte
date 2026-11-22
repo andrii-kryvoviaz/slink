@@ -102,6 +102,7 @@
 ></button>
 
 <div
+  data-slot="setting-item"
   class="relative flex flex-col hover:bg-muted/50 dark:hover:bg-muted/30 transition-colors duration-150 overflow-hidden"
 >
   {#if header}

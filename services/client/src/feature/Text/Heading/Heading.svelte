@@ -41,7 +41,7 @@
   );
 </script>
 
-<div class={className(containerClasses)}>
+<div data-slot="heading" class={className(containerClasses)}>
   <h1 class={className(textClasses)}>
     {#if children}{@render children()}{:else}Heading{/if}
   </h1>

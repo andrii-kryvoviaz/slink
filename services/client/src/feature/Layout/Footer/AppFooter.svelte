@@ -9,6 +9,7 @@
 </script>
 
 <footer
+  data-slot="app-footer"
   class={`flex items-center justify-end px-4 py-3 bg-transparent flex-shrink-0 ${className}`}
 >
   <Version

@@ -10,11 +10,14 @@ use PHPUnit\Framework\TestCase;
 use Slink\Settings\Application\Command\SaveSettings\SaveSettingsCommand;
 use Slink\Settings\Application\Command\SaveSettings\SaveSettingsHandler;
 use Slink\Settings\Domain\Enum\SettingCategory;
+use Slink\Settings\Domain\Exception\InvalidColorModeException;
 use Slink\Settings\Domain\Exception\SsoProviderRequiredException;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Settings\Domain\Repository\SettingStoreRepositoryInterface;
 use Slink\Settings\Domain\Settings;
 use Slink\Settings\Domain\Specification\SignInMethodSpecificationInterface;
+use Slink\Settings\Domain\ValueObject\Customization\CustomizationSettings;
+use Slink\Settings\Domain\ValueObject\Customization\Theme;
 use Slink\Settings\Domain\ValueObject\Image\ImageSettings;
 use Slink\Settings\Domain\ValueObject\Storage\StorageSettings;
 use Slink\Settings\Domain\ValueObject\User\UserSettings;
@@ -399,6 +402,161 @@ final class SaveSettingsHandlerTest extends TestCase {
         $handler->__invoke($command);
 
         $this->assertSame(['get', 'setSettings', 'store'], $callOrder);
+    }
+
+    /**
+     * @return list<array{string, mixed}>
+     */
+    private static function effectiveCustomizationMap(): array {
+        return [
+            ['customization.themeSelectorEnabled', false],
+            ['customization.colorMode', 'dark'],
+            ['customization.defaultTheme', 'ocean'],
+            ['customization.hiddenThemes', ['nord']],
+            ['customization.themes', [[
+                'id' => 'ocean',
+                'name' => 'Ocean',
+                'light' => array_fill_keys(Theme::COLORS, '#ffffff'),
+                'dark' => array_fill_keys(Theme::COLORS, '#000000'),
+                'css' => ':root { --radius: 0; }',
+            ]]],
+        ];
+    }
+
+    #[Test]
+    public function itKeepsOmittedCustomizationKeysFromTheEffectiveValue(): void {
+        $command = new SaveSettingsCommand('customization', ['siteName' => 'Acme']);
+
+        $captured = null;
+        $settings = $this->createStub(Settings::class);
+        $settings->method('setSettings')->willReturnCallback(function ($value) use (&$captured) {
+            $captured = $value;
+        });
+
+        $store = $this->createStub(SettingStoreRepositoryInterface::class);
+        $store->method('get')->willReturn($settings);
+
+        $provider = $this->createStub(ConfigurationProviderInterface::class);
+        $provider->method('get')->willReturnMap(self::effectiveCustomizationMap());
+
+        (new SaveSettingsHandler($store, $provider, $this->signInMethodSpecification(true)))->__invoke($command);
+
+        $this->assertInstanceOf(CustomizationSettings::class, $captured);
+        $payload = $captured->toPayload();
+        $this->assertSame('Acme', $payload['siteName']);
+        $this->assertArrayNotHasKey('customCss', $payload);
+        $this->assertFalse($payload['themeSelectorEnabled']);
+        $this->assertSame('dark', $payload['colorMode']);
+        $this->assertSame('ocean', $payload['defaultTheme']);
+        $this->assertSame(['nord'], $payload['hiddenThemes']);
+        $this->assertSame(['ocean'], array_column($payload['themes'], 'id'));
+        $this->assertSame(':root { --radius: 0; }', $payload['themes'][0]['css']);
+    }
+
+    /**
+     * @return iterable<string, array{mixed}>
+     */
+    public static function unusableEnvColorModeProvider(): iterable {
+        yield 'unknown value' => ['sepia'];
+        yield 'empty' => [''];
+        yield 'null' => [null];
+        yield 'not a string' => [['dark']];
+    }
+
+    #[Test]
+    #[DataProvider('unusableEnvColorModeProvider')]
+    public function itFallsBackToBothWhenEnvColorModeIsUnusable(mixed $envValue): void {
+        $command = new SaveSettingsCommand('customization', ['siteName' => 'Acme']);
+
+        $captured = null;
+        $settings = $this->createStub(Settings::class);
+        $settings->method('setSettings')->willReturnCallback(function ($value) use (&$captured) {
+            $captured = $value;
+        });
+
+        $store = $this->createStub(SettingStoreRepositoryInterface::class);
+        $store->method('get')->willReturn($settings);
+
+        $map = array_values(array_filter(
+            self::effectiveCustomizationMap(),
+            static fn (array $entry): bool => $entry[0] !== 'customization.colorMode',
+        ));
+        $map[] = ['customization.colorMode', $envValue];
+
+        $provider = $this->createStub(ConfigurationProviderInterface::class);
+        $provider->method('get')->willReturnMap($map);
+
+        (new SaveSettingsHandler($store, $provider, $this->signInMethodSpecification(true)))->__invoke($command);
+
+        $this->assertInstanceOf(CustomizationSettings::class, $captured);
+        $this->assertSame('both', $captured->toPayload()['colorMode']);
+    }
+
+    #[Test]
+    public function itRejectsAnInvalidExplicitColorMode(): void {
+        $this->expectException(InvalidColorModeException::class);
+
+        $settings = $this->createStub(Settings::class);
+        $store = $this->createStub(SettingStoreRepositoryInterface::class);
+        $store->method('get')->willReturn($settings);
+
+        (new SaveSettingsHandler(
+            $store,
+            $this->createStub(ConfigurationProviderInterface::class),
+            $this->signInMethodSpecification(true),
+        ))->__invoke(new SaveSettingsCommand('customization', ['colorMode' => 'sepia']));
+    }
+
+    #[Test]
+    public function itLetsExplicitEmptyCustomizationValuesWin(): void {
+        $command = new SaveSettingsCommand('customization', [
+            'themeSelectorEnabled' => false,
+            'colorMode' => 'light',
+            'defaultTheme' => 'default',
+            'hiddenThemes' => [],
+            'themes' => [],
+        ]);
+
+        $captured = null;
+        $settings = $this->createStub(Settings::class);
+        $settings->method('setSettings')->willReturnCallback(function ($value) use (&$captured) {
+            $captured = $value;
+        });
+
+        $store = $this->createStub(SettingStoreRepositoryInterface::class);
+        $store->method('get')->willReturn($settings);
+
+        $provider = $this->createStub(ConfigurationProviderInterface::class);
+        $provider->method('get')->willReturnMap(self::effectiveCustomizationMap());
+
+        (new SaveSettingsHandler($store, $provider, $this->signInMethodSpecification(true)))->__invoke($command);
+
+        $this->assertInstanceOf(CustomizationSettings::class, $captured);
+        $payload = $captured->toPayload();
+        $this->assertFalse($payload['themeSelectorEnabled']);
+        $this->assertSame('light', $payload['colorMode']);
+        $this->assertSame('default', $payload['defaultTheme']);
+        $this->assertSame([], $payload['hiddenThemes']);
+        $this->assertSame([], $payload['themes']);
+    }
+
+    #[Test]
+    public function itDoesNotConsultCustomizationKeysForOtherCategories(): void {
+        $command = new SaveSettingsCommand('user', [
+            'approvalRequired' => false,
+            'allowRegistration' => true,
+            'password' => ['minLength' => 8, 'requirements' => 0],
+            'localAuthEnabled' => true,
+        ]);
+
+        $settings = $this->createStub(Settings::class);
+        $store = $this->createStub(SettingStoreRepositoryInterface::class);
+        $store->method('get')->willReturn($settings);
+
+        $provider = $this->createMock(ConfigurationProviderInterface::class);
+        $provider->expects($this->never())->method('get');
+
+        (new SaveSettingsHandler($store, $provider, $this->signInMethodSpecification(true)))->__invoke($command);
     }
 
     private function signInMethodSpecification(bool $satisfied): SignInMethodSpecificationInterface {

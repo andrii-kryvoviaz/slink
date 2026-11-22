@@ -23,7 +23,7 @@
   let outerClasses = $derived(className(defaultOuterClasses, props.class));
 </script>
 
-<div class={outerClasses}>
+<div data-slot="loader" class={outerClasses}>
   <div {...props} class={innerClasses}></div>
   {@render children?.()}
 </div>

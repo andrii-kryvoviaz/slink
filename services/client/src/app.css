@@ -53,7 +53,7 @@
     --sab: env(safe-area-inset-bottom);
     --sal: env(safe-area-inset-left);
 
-    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    font-family: var(--font-sans);
     line-height: 1.5;
     font-weight: 400;
 

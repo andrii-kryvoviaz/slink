@@ -1,7 +1,12 @@
 export { customization } from './Customization.svelte';
 export * from './Settings.enums';
 export * from './SettingsPolicy';
-export { themes, type ThemeDescriptor } from './themes.svelte';
+export { ThemeCatalog } from './ThemeCatalog';
+export {
+  describeThemes,
+  themeLabel,
+  type ThemeDescriptor,
+} from './themes.svelte';
 export * from './UploadPolicy';
 export {
   UserSettings,

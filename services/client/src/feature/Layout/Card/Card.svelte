@@ -25,6 +25,6 @@
   );
 </script>
 
-<div class={classes}>
+<div data-slot="panel-card" class={classes}>
   {@render children?.()}
 </div>

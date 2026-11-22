@@ -5,7 +5,7 @@
   import { page } from '$app/state';
   import Icon from '@iconify/svelte';
 
-  import { themes } from '@slink/lib/settings';
+  import { customization, themeLabel } from '@slink/lib/settings';
 
   interface Props {
     showPreferencesLink?: boolean;
@@ -15,8 +15,9 @@
   let { showPreferencesLink = false, children }: Props = $props();
 
   const { settings } = page.data;
-  const themeLabel = $derived(
-    themes.find((t) => t.name === settings.theme.current)?.label ?? '',
+  const themes = $derived(customization.themes);
+  const label = $derived(
+    themeLabel(themes, themes.resolve(settings.theme.current)),
   );
 </script>
 
@@ -44,12 +45,12 @@
       <p class="text-xs text-foreground-muted leading-relaxed">
         Toggle light and dark mode.
       </p>
-      {#if showPreferencesLink}
+      {#if showPreferencesLink && themes.selectorEnabled}
         <div
           class="flex items-center justify-between gap-4 border-t border-muted pt-2 mt-0.5"
         >
           <span class="text-xs text-foreground-muted">
-            Theme: {themeLabel}
+            Theme: {label}
           </span>
           <a
             href="/preferences#appearance"

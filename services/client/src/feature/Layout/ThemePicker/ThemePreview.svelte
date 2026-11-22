@@ -1,9 +1,11 @@
 <script lang="ts">
   interface Props {
-    theme: string;
+    theme?: string;
+    /** Inline variables, for a theme that is not saved yet. */
+    variables?: string;
   }
 
-  let { theme }: Props = $props();
+  let { theme, variables }: Props = $props();
 
   const colors = [
     '--color-background',
@@ -14,7 +16,12 @@
   ];
 </script>
 
-<span class="flex w-full items-center gap-1" data-theme={theme}>
+<span
+  data-slot="theme-preview"
+  class="flex w-full items-center gap-1"
+  data-theme={theme}
+  style={variables}
+>
   {#each colors as color (color)}
     <span
       class="h-5 flex-1 rounded-md"

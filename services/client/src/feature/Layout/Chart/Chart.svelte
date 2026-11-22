@@ -6,7 +6,8 @@
   import { twMerge } from 'tailwind-merge';
 
   import { deepMerge } from '#lib/utils/object/deepMerge.js';
-  import { page } from '$app/state';
+
+  import { customization } from '@slink/lib/settings';
 
   interface Props {
     class?: string;
@@ -14,8 +15,6 @@
   }
 
   let { options, ...props }: Props = $props();
-
-  const { settings } = page.data;
 
   let defaultOptions: ChartOptions = {
     chart: {
@@ -186,7 +185,7 @@
   };
 
   let chartOptions = $derived(
-    handleOptionsChange(options, settings.mode.isDark ? 'dark' : 'light'),
+    handleOptionsChange(options, customization.isDark ? 'dark' : 'light'),
   );
 </script>
 

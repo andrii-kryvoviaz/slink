@@ -1,11 +1,12 @@
 import { Theme } from '@slink/lib/settings/Settings.enums';
+import type { ThemeCatalog } from '@slink/lib/settings/ThemeCatalog';
 
 export interface ThemeDescriptor {
-  name: Theme;
+  name: string;
   label: string;
 }
 
-const themeLabels: Record<Theme, () => string> = {
+const builtInLabels: Record<string, () => string> = {
   [Theme.DEFAULT]: () => 'Default',
   [Theme.NORD]: () => 'Nord',
   [Theme.CATPPUCCIN]: () => 'Catppuccin',
@@ -16,9 +17,12 @@ const themeLabels: Record<Theme, () => string> = {
   [Theme.MONOCHROME]: () => 'Monochrome',
 };
 
-export const themes: ThemeDescriptor[] = Object.values(Theme).map((name) => ({
-  name,
-  get label() {
-    return themeLabels[name]();
-  },
-}));
+export const builtInThemeLabel = (id: string): string =>
+  builtInLabels[id]?.() ?? id;
+
+export const themeLabel = (catalog: ThemeCatalog, id: string): string =>
+  catalog.custom.find((theme) => theme.id === id)?.name ??
+  builtInThemeLabel(id);
+
+export const describeThemes = (catalog: ThemeCatalog): ThemeDescriptor[] =>
+  catalog.ids.map((id) => ({ name: id, label: themeLabel(catalog, id) }));

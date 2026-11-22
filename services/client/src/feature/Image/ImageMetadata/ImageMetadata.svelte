@@ -20,7 +20,7 @@
   let { item, gap = 'sm', showBookmarkCount = true }: Props = $props();
 </script>
 
-<div class={metadataContainerTheme({ gap })}>
+<div data-slot="image-metadata" class={metadataContainerTheme({ gap })}>
   <span class="font-semibold text-foreground-muted">
     {formatMimeType(item.metadata.mimeType)}
   </span>

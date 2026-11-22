@@ -91,6 +91,7 @@
 <svelte:document onpaste={fileDrop.handlePaste} />
 
 <div
+  data-slot="uploader"
   class={UploaderContainerTheme({ state: containerState })}
   {...fileDrop.dragHandlers}
 >

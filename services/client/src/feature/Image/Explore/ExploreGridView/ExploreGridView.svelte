@@ -39,6 +39,7 @@
     {#if hasMedia(image)}
       <div
         in:fly={{ y: 20, duration: 300, delay: Math.random() * 100 }}
+        data-slot="explore-card"
         class={theme.root()}
         onclick={() => on.open(image)}
         onkeydown={(e) => e.key === Key.Enter && on.open(image)}

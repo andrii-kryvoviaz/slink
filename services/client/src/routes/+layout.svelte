@@ -22,6 +22,7 @@
   import { isAdmin } from '@slink/lib/auth/utils';
   import { customization } from '@slink/lib/settings';
   import { initResponsiveStore } from '@slink/lib/stores/responsive.svelte';
+  import { styleTag } from '@slink/lib/utils/ui/styleTag';
 
   const { settings } = page.data;
 
@@ -44,6 +45,16 @@
 
   let showSidebar = $derived(!!user);
 
+  let activeTheme = $derived(
+    customization.themes.selector(customization.activeThemeId),
+  );
+
+  let activeThemeCss = $derived(
+    customization.customCssEnabled
+      ? customization.themes.customCssFor(customization.activeThemeId)
+      : '',
+  );
+
   let sidebarOpen = $state(settings.sidebar.expanded);
 
   $effect(() => {
@@ -64,12 +75,15 @@
     <link rel="icon" href={customization.logoUrl} />
   {/if}
   <link rel="apple-touch-icon" href={customization.appleTouchIconUrl} />
+  {@html styleTag('slink-themes', customization.themes.css)}
+  {@html styleTag('slink-theme-css', activeThemeCss)}
 </svelte:head>
 
 <div
   class="relative flex h-screen"
-  use:mode={settings.mode.current}
-  use:theme={settings.theme.current}
+  data-slot="app"
+  use:mode={customization.mode}
+  use:theme={activeTheme}
 >
   <Sidebar.Provider bind:open={sidebarOpen}>
     {#if showSidebar}
@@ -86,6 +100,7 @@
     {/if}
     <Sidebar.Inset class="bg-transparent">
       <header
+        data-slot="app-header"
         class="group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 flex h-16 shrink-0 items-center justify-between gap-2 transition-[width,height] ease-linear border-b border-muted relative"
       >
         {#if showSidebar}
@@ -97,29 +112,34 @@
             />
           </div>
         {/if}
+        {#snippet modeSwitch()}
+          <ModeSwitchHoverCard showPreferencesLink={!!user}>
+            <ModeSwitch
+              checked={customization.isDark}
+              variant="default"
+              animation="none"
+              on={{ change: (mode) => (settings.mode.current = mode) }}
+            />
+          </ModeSwitchHoverCard>
+        {/snippet}
         <Navbar
           user={user || undefined}
           showLogo={!showSidebar}
           showLoginButton={!user}
           showUploadButton={!!user ||
             !!data.globalSettings?.access?.allowGuestUploads}
-        >
-          {#snippet modeSwitch()}
-            <ModeSwitchHoverCard showPreferencesLink={!!user}>
-              <ModeSwitch
-                checked={settings.mode.isDark}
-                variant="default"
-                animation="none"
-                on={{ change: (mode) => (settings.mode.current = mode) }}
-              />
-            </ModeSwitchHoverCard>
-          {/snippet}
-        </Navbar>
+          modeSwitch={customization.forcedMode === null
+            ? modeSwitch
+            : undefined}
+        />
       </header>
       {#if isDemoMode}
         <DemoNotice visible={true} />
       {/if}
-      <div class="flex flex-1 flex-col min-h-0 relative">
+      <div
+        data-slot="app-content"
+        class="flex flex-1 flex-col min-h-0 relative"
+      >
         <ScrollArea
           bind:ref={scrollAreaRef}
           class="flex-1 min-h-0"

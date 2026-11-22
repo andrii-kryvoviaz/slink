@@ -37,7 +37,10 @@
   };
 </script>
 
-<div class="flex items-center justify-center min-h-[60vh] px-4">
+<div
+  data-slot="share-locked"
+  class="flex items-center justify-center min-h-[60vh] px-4"
+>
   <div
     class="flex flex-col items-center text-center w-full max-w-sm"
     in:fade={{ duration: 600, delay: 100 }}
@@ -47,7 +50,7 @@
       in:fly={{ y: -20, duration: 500, delay: 200 }}
     >
       <div
-        class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[length:12px_12px] rounded-3xl"
+        class="absolute inset-0 bg-[radial-gradient(circle_at_center,color-mix(in_oklab,var(--color-sheen)_10%,transparent)_1px,transparent_1px)] bg-[length:12px_12px] rounded-3xl"
       ></div>
 
       <Icon
@@ -56,7 +59,7 @@
       />
 
       <div
-        class="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/5 to-transparent dark:from-white/10"
+        class="absolute inset-0 rounded-3xl bg-gradient-to-br from-sheen/5 to-transparent dark:from-sheen/10"
       ></div>
     </div>
 

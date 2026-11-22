@@ -1,5 +1,9 @@
 <script lang="ts">
-  import { SettingItem, SettingsPane } from '@slink/feature/Settings';
+  import {
+    SettingItem,
+    SettingsPane,
+    ThemeSettings,
+  } from '@slink/feature/Settings';
   import { FilePickerButton } from '@slink/ui/components/file-picker-button';
   import { Input } from '@slink/ui/components/input';
 
@@ -49,7 +53,7 @@
     Customization
   {/snippet}
   {#snippet description()}
-    Name and brand your Slink instance.
+    Name, brand and theme your Slink instance.
   {/snippet}
 
   {#snippet children(errors)}
@@ -177,5 +181,7 @@
         {/if}
       </div>
     </SettingItem>
+
+    <ThemeSettings bind:settings {defaultSettings} {errors} />
   {/snippet}
 </SettingsPane>

@@ -35,6 +35,7 @@ final readonly class DatabaseProvider implements ConfigurationProviderInterface,
       SettingType::Float => (float) $value,
       SettingType::Boolean => filter_var($value, FILTER_VALIDATE_BOOLEAN),
       SettingType::Serialized => unserialize($value),
+      SettingType::Json => json_decode((string) $value, true, 512, JSON_THROW_ON_ERROR),
       SettingType::Null => null,
       default => $value,
     };

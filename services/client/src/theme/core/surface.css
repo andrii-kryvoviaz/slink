@@ -158,6 +158,12 @@
   );
 }
 
+@theme static {
+  --color-sheen: var(--color-white);
+  --color-on-banner: var(--color-white);
+  --color-modal-hairline: rgb(100 116 139 / 0.06);
+}
+
 :root {
   --modal-overlay-tint: light-dark(
     oklch(0.3 0.01 270 / 0.35),

@@ -40,6 +40,7 @@
 <svelte:window bind:innerWidth />
 
 <nav
+  data-slot="navbar"
   class="flex flex-grow h-14 items-center justify-between px-4 sm:px-6 lg:px-8"
 >
   <div class="flex items-center">

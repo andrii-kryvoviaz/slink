@@ -6,7 +6,10 @@ namespace Tests\Unit\Slink\User\Application\Command\UpdateUserPreferences;
 
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\User\Application\Command\UpdateUserPreferences\UpdateUserPreferencesCommand;
+use Slink\User\Infrastructure\Validator\AvailableThemeValidator;
+use Symfony\Component\Validator\ConstraintValidatorFactory;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -62,9 +65,30 @@ final class UpdateUserPreferencesCommandTest extends TestCase {
         $this->assertSame('defaultLicense', $violation->getPropertyPath());
     }
 
+    #[Test]
+    public function itAcceptsABuiltInTheme(): void {
+        $violations = $this->validator()->validate(new UpdateUserPreferencesCommand(displayTheme: 'nord'));
+
+        $this->assertCount(0, $violations);
+    }
+
+    #[Test]
+    public function itRejectsAnUnknownTheme(): void {
+        $violations = $this->validator()->validate(new UpdateUserPreferencesCommand(displayTheme: 'solarized'));
+
+        $this->assertCount(1, $violations);
+        $this->assertSame('displayTheme', $violations->get(0)->getPropertyPath());
+    }
+
     private function validator(): ValidatorInterface {
+        $provider = $this->createStub(ConfigurationProviderInterface::class);
+        $provider->method('all')->willReturn([]);
+
         return Validation::createValidatorBuilder()
             ->enableAttributeMapping()
+            ->setConstraintValidatorFactory(new ConstraintValidatorFactory([
+                AvailableThemeValidator::class => new AvailableThemeValidator($provider),
+            ]))
             ->getValidator();
     }
 }

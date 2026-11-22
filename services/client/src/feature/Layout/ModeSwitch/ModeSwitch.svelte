@@ -73,7 +73,7 @@
   };
 </script>
 
-<div class={containerClasses}>
+<div data-slot="mode-switch" class={containerClasses}>
   <button
     type="button"
     class={buttonClasses}

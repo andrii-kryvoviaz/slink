@@ -3,11 +3,9 @@
 
   import type { ThemeDescriptor } from '@slink/lib/settings/themes.svelte';
 
-  type ThemeName = ThemeDescriptor['name'];
-
   interface Props {
     themes: ThemeDescriptor[];
-    value: ThemeName;
+    value: string;
     disabled?: boolean;
     class?: string;
     name?: string;
@@ -26,7 +24,7 @@
   );
 
   const handleChange = (name: string) => {
-    value = name as ThemeName;
+    value = name;
   };
 </script>
 

@@ -108,6 +108,7 @@
 
 {#if viewerState.isOpen}
   <div
+    data-slot="post-viewer"
     class="fixed inset-0 z-50 bg-scrim overflow-hidden"
     transition:fade={{ duration: 200 }}
     role="dialog"

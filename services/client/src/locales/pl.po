@@ -103,6 +103,7 @@ msgstr "Brak danych"
 msgid "Users"
 msgstr "Użytkownicy"
 
+#: src/feature/Notification/NotificationThread/NotificationThread.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
 #: src/ui/components/picker/picker-create-row.svelte
 msgid "Enter"
@@ -246,7 +247,7 @@ msgstr "Zapisz zmiany"
 msgid "Create Collection"
 msgstr "Utwórz kolekcję"
 
-#: src/feature/Notification/NotificationListItem.svelte
+#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
 msgid "Mark as read"
 msgstr "Oznacz jako przeczytane"
 
@@ -291,6 +292,7 @@ msgstr "Opcje wyszukiwania"
 
 #: src/feature/Comment/CommentList.svelte
 #: src/feature/Image/PostViewer/CommentsSkeleton.svelte
+#: src/lib/utils/notification/NotificationFilters.language.ts
 msgid "Comments"
 msgstr "Komentarze"
 
@@ -398,6 +400,7 @@ msgid "Bookmarks | Slink"
 msgstr "Zakładki | Slink"
 
 #: src/feature/Navigation/Sidebar/config.ts
+#: src/lib/utils/notification/NotificationFilters.language.ts
 #: src/routes/bookmarks/+page.svelte
 msgid "Bookmarks"
 msgstr "Zakładki"
@@ -846,15 +849,12 @@ msgstr "Zaloguj się, aby dodawać obrazy do kolekcji"
 msgid "You can only add your own images to collections"
 msgstr "Do kolekcji możesz dodawać tylko własne obrazy"
 
-#: src/feature/Collection/AddToCollectionButton/AddToCollectionButton.svelte
-msgid "Sign in to add to collection"
-msgstr "Zaloguj się, aby dodać do kolekcji"
+#~ msgid "Sign in to add to collection"
+#~ msgstr "Zaloguj się, aby dodać do kolekcji"
 
-#: src/feature/Collection/AddToCollectionButton/AddToCollectionButton.svelte
-msgid "Only own images can be added"
-msgstr "Można dodawać tylko własne obrazy"
+#~ msgid "Only own images can be added"
+#~ msgstr "Można dodawać tylko własne obrazy"
 
-#: src/feature/Collection/AddToCollectionButton/AddToCollectionButton.svelte
 #: src/feature/Image/Actions/ImageCollectionAction/ImageCollectionAction.svelte
 #: src/feature/Image/Actions/ImageCollectionAction/ImageCollectionAction.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
@@ -1000,6 +1000,7 @@ msgid "Save"
 msgstr "Zapisz"
 
 #: src/feature/Image/BookmarkersPanel/BookmarkersPanel.svelte
+#: src/feature/Notification/NotificationActorCard/NotificationActorCard.svelte
 msgid "Bookmarked"
 msgstr "W zakładkach"
 
@@ -2014,7 +2015,9 @@ msgid "Move"
 msgstr "Przenieś"
 
 #. 0: selectedCount === 1 ? 'Image' \\: 'Images'
+#. 0: row.name
 #: src/feature/Image/History/Actions/DeleteAction.svelte
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
 msgid "Delete {0}"
 msgstr "Usuń {0}"
 
@@ -3785,6 +3788,7 @@ msgstr "Wróć do opcji"
 msgid "Manage share link"
 msgstr "Zarządzaj linkiem udostępniania"
 
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
 #: src/feature/Share/Controls/ExpirationPicker/ExpirationPicker.svelte
 msgid "Custom"
 msgstr "Niestandardowo"
@@ -4108,6 +4112,7 @@ msgstr "Osobny, zarządzany link generowany na bazie dowolnego obrazu, publiczne
 
 #: src/feature/Analytics/analytics.language.ts
 #: src/feature/Share/Chips/ShareAttributeChips.svelte
+#: src/routes/notifications/+page.svelte
 msgid "Today"
 msgstr "Dzisiaj"
 
@@ -5018,9 +5023,8 @@ msgstr "URL logo"
 msgid "Customize the site name, description, logo, and branding"
 msgstr "Dostosuj nazwę witryny, opis, logo i branding"
 
-#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
-msgid "Name and brand your Slink instance."
-msgstr "Nazwij swoją instancję Slink i nadaj jej markę."
+#~ msgid "Name and brand your Slink instance."
+#~ msgstr "Nazwij swoją instancję Slink i nadaj jej markę."
 
 #: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
 msgid "The public name of your instance."
@@ -5123,7 +5127,7 @@ msgstr "Monochromatyczny"
 msgid "Toggle light and dark mode."
 msgstr "Przełącz między jasnym a ciemnym trybem."
 
-#. 0: themeLabel
+#. 0: label
 #: src/feature/Layout/ModeSwitch/ModeSwitchHoverCard.svelte
 msgid "Theme: {0}"
 msgstr "Motyw: {0}"
@@ -5230,7 +5234,7 @@ msgid "Open post"
 msgstr "Otwórz post"
 
 #. 0: group.actorTotal
-#: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
+#: src/feature/Notification/NotificationActorCard/NotificationActorCard.svelte
 msgid "See all {0}"
 msgstr "Pokaż wszystkie {0}"
 
@@ -5270,6 +5274,7 @@ msgstr "Twój komentarz:"
 msgid "No notifications match this filter."
 msgstr "Żadne powiadomienie nie pasuje do tego filtra."
 
+#: src/feature/Notification/NotificationActorCard/NotificationActorCard.svelte
 #: src/feature/Notification/NotificationEntry/NotificationEntry.svelte
 msgid "and a visitor"
 msgid_plural "and # visitors"
@@ -5326,3 +5331,174 @@ msgstr "Zezwalaj na logowanie za pomocą adresu e-mail i hasła. Po wyłączeniu
 #: src/routes/profile/(auth)/login/+page.svelte
 msgid "No sign-in method is configured."
 msgstr "Nie skonfigurowano żadnej metody logowania."
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Name, brand and theme your Slink instance."
+msgstr "Nazwa, marka i motyw Twojej instancji Slink."
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Custom CSS"
+msgstr "Własny CSS"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Background"
+msgstr "Tło"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Text"
+msgstr "Tekst"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Primary"
+msgstr "Główny"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Accent"
+msgstr "Akcent"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Success"
+msgstr "Sukces"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Warning"
+msgstr "Ostrzeżenie"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Danger"
+msgstr "Niebezpieczeństwo"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Info"
+msgstr "Informacja"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Light"
+msgstr "Jasny"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Dark"
+msgstr "Ciemny"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Add Theme"
+msgstr "Dodaj motyw"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Edit Theme"
+msgstr "Edytuj motyw"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Every other shade is derived from these colors"
+msgstr "Wszystkie pozostałe odcienie są wyliczane z tych kolorów"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Theme Name"
+msgstr "Nazwa motywu"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Corner Radius (rem)"
+msgstr "Promień zaokrąglenia (rem)"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Enter a number from 0 to 2"
+msgstr "Wpisz liczbę od 0 do 2"
+
+#. 0: label
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Pick {0}"
+msgstr "Wybierz {0}"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Apply Changes"
+msgstr "Zastosuj zmiany"
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Theme Selector"
+msgstr "Wybór motywu"
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Let users pick their own theme. When off, everyone gets the default theme."
+msgstr "Pozwól użytkownikom wybrać własny motyw. Po wyłączeniu wszyscy otrzymują motyw domyślny."
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Default Theme"
+msgstr "Motyw domyślny"
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Used for guests and for users who have not picked a theme."
+msgstr "Używany przez gości i użytkowników, którzy nie wybrali motywu."
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Themes"
+msgstr "Motywy"
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Add your own themes, or edit and hide the built-in ones."
+msgstr "Dodawaj własne motywy lub edytuj i ukrywaj wbudowane."
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Hidden"
+msgstr "Ukryty"
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Edited"
+msgstr "Edytowany"
+
+#. 0: row.name
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Restore {0}"
+msgstr "Przywróć {0}"
+
+#. 0: row.name
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Revert {0}"
+msgstr "Cofnij zmiany {0}"
+
+#. 0: row.name
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Edit {0}"
+msgstr "Edytuj {0}"
+
+#. 0: row.name
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Duplicate {0}"
+msgstr "Duplikuj {0}"
+
+#. 0: row.name
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Hide {0}"
+msgstr "Ukryj {0}"
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Save to apply your theme changes."
+msgstr "Zapisz, aby zastosować zmiany motywu."
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Applied only while this theme is active. If it breaks a page, add <0/> to the address to load it without custom CSS."
+msgstr "Stosowany tylko wtedy, gdy ten motyw jest aktywny. Jeśli zepsuje stronę, dodaj <0/> do adresu, aby załadować ją bez własnego CSS."
+
+#: src/feature/Settings/ThemeSettings/colorMode.svelte.ts
+msgid "Light and dark"
+msgstr "Jasny i ciemny"
+
+#: src/feature/Settings/ThemeSettings/colorMode.svelte.ts
+msgid "Light only"
+msgstr "Tylko jasny"
+
+#: src/feature/Settings/ThemeSettings/colorMode.svelte.ts
+msgid "Dark only"
+msgstr "Tylko ciemny"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Color Mode"
+msgstr "Tryb kolorów"
+
+#: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
+msgid "Choose which modes are available. With only one, the light and dark switch disappears."
+msgstr "Wybierz dostępne tryby. Gdy dostępny jest tylko jeden, przełącznik jasny/ciemny znika."

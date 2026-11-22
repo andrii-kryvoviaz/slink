@@ -2,17 +2,16 @@ import type { UserPreferencesResponse } from '@slink/api/Response';
 
 import { LandingPage } from '@slink/lib/enum/LandingPage';
 import type { LicenseId } from '@slink/lib/enum/License';
-import {
-  Locale,
-  Theme,
-  resolveTheme,
-} from '@slink/lib/settings/Settings.enums';
+import { Locale } from '@slink/lib/settings/Settings.enums';
+import type { ThemeCatalog } from '@slink/lib/settings/ThemeCatalog';
 
 type ChangeHandler = (value: unknown) => void | Promise<void>;
 
 export class PreferencesPageState {
   locale = $state(Locale.EN);
-  theme = $state(Theme.DEFAULT);
+  theme = $state('');
+  private _savedTheme = $state('');
+  themeChanged = $derived(this.theme !== this._savedTheme);
   landingPage = $state(LandingPage.Explore);
   visibility = $state('private');
   exifPreference = $state('default');
@@ -24,9 +23,12 @@ export class PreferencesPageState {
   private _changeHandlers: Array<{ field: string; handler: ChangeHandler }> =
     [];
 
-  constructor(preferences: UserPreferencesResponse | null) {
+  constructor(
+    preferences: UserPreferencesResponse | null,
+    themes: ThemeCatalog,
+  ) {
     this.locale = (preferences?.['display.language'] as Locale) ?? Locale.EN;
-    this.theme = resolveTheme(preferences?.['display.theme']);
+    this.theme = themes.resolve(preferences?.['display.theme']);
     this.landingPage =
       preferences?.['navigation.landingPage'] ?? LandingPage.Explore;
     this.visibility = preferences?.['image.defaultVisibility'] ?? 'private';
@@ -57,9 +59,9 @@ export class PreferencesPageState {
   }
 
   private _takeSnapshot() {
+    this._savedTheme = this.theme;
     this._snapshot = {
       locale: this.locale,
-      theme: this.theme,
       landingPage: this.landingPage,
       visibility: this.visibility,
       exifPreference: this.exifPreference,
