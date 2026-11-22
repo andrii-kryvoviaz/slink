@@ -9,9 +9,9 @@ use Slink\Shared\Application\Command\CommandInterface;
 use Slink\Shared\Infrastructure\MessageBus\EnvelopedMessage;
 use Slink\User\Domain\Enum\DefaultVisibility;
 use Slink\User\Domain\Enum\DisplayLanguage;
-use Slink\User\Domain\Enum\DisplayTheme;
 use Slink\User\Domain\Enum\ExifMetadataPreference;
 use Slink\User\Domain\Enum\LandingPage;
+use Slink\User\Infrastructure\Validator\AvailableTheme;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -34,7 +34,7 @@ final readonly class UpdateUserPreferencesCommand implements CommandInterface {
     #[Assert\Choice(callback: [DisplayLanguage::class, 'values'], message: 'Invalid display language.')]
     private ?string $displayLanguage = null,
     #[SerializedName('display.theme')]
-    #[Assert\Choice(callback: [DisplayTheme::class, 'values'], message: 'Invalid display theme.')]
+    #[AvailableTheme]
     private ?string $displayTheme = null,
     #[SerializedName('image.externalUploadAutoPublish')]
     private ?bool $externalUploadAutoPublish = null,
