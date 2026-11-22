@@ -1,5 +1,9 @@
 <script lang="ts">
-  import { SettingItem, SettingsPane } from '@slink/feature/Settings';
+  import {
+    SettingItem,
+    SettingsPane,
+    ThemeSettings,
+  } from '@slink/feature/Settings';
   import { FilePickerButton } from '@slink/ui/components/file-picker-button';
   import { Input } from '@slink/ui/components/input';
 
@@ -49,7 +53,7 @@
     Customization
   {/snippet}
   {#snippet description()}
-    Name and brand your Slink instance.
+    Name, brand and theme your Slink instance.
   {/snippet}
 
   {#snippet children(errors)}
@@ -176,6 +180,35 @@
           </div>
         {/if}
       </div>
+    </SettingItem>
+
+    <ThemeSettings bind:settings {defaultSettings} {errors} />
+
+    <SettingItem layout="stacked">
+      {#snippet label()}
+        Custom CSS
+      {/snippet}
+      {#snippet hint()}
+        Applied on top of the theme for every visitor. If it breaks a page, add
+        <code class="font-mono">?custom-css=off</code> to the address to load it without
+        custom CSS.
+      {/snippet}
+      <textarea
+        name="customizationCustomCss"
+        aria-label="Custom CSS"
+        bind:value={settings.customCss}
+        placeholder=":root &#123; --radius: 0; &#125;"
+        maxlength={65536}
+        rows={8}
+        spellcheck="false"
+        class="border-border bg-background dark:bg-input/30 placeholder:text-foreground-muted shadow-xs flex w-full min-w-0 resize-y rounded-lg border px-4 py-2.5 font-mono text-sm outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:border-danger"
+        aria-invalid={errors['customization.customCss'] ? true : undefined}
+      ></textarea>
+      {#if errors['customization.customCss']}
+        <p class="mt-1.5 text-xs text-accent-strong">
+          {errors['customization.customCss']}
+        </p>
+      {/if}
     </SettingItem>
   {/snippet}
 </SettingsPane>

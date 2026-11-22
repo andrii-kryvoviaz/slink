@@ -24,6 +24,7 @@ export { default as SettingsSection } from './SettingsSection/SettingsSection.sv
 export { default as SettingsSkeleton } from './SettingsSkeleton.svelte';
 export { default as ShareSettings } from './ShareSettings/ShareSettings.svelte';
 export { default as StorageSettings } from './StorageSettings/StorageSettings.svelte';
+export { default as ThemeSettings } from './ThemeSettings/ThemeSettings.svelte';
 export { default as UserSettings } from './UserSettings/UserSettings.svelte';
 export { default as ReleaseModal } from './Version/ReleaseModal.svelte';
 export { default as Version } from './Version/Version.svelte';
