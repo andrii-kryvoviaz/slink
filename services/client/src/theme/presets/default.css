@@ -100,6 +100,9 @@
       var(--color-indigo-500),
       var(--color-indigo-400)
     );
+    --color-success: light-dark(var(--color-green-500), var(--color-green-400));
+    --color-warning: light-dark(var(--color-amber-500), var(--color-amber-400));
+    --color-danger: light-dark(var(--color-red-600), var(--color-red-400));
     --color-info: light-dark(var(--color-blue-500), var(--color-blue-400));
     --color-primary: light-dark(var(--color-blue-500), var(--color-blue-400));
 

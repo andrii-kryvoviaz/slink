@@ -1,0 +1,15 @@
+@theme static {
+  --color-on-brand: var(--color-white);
+  --color-brand-google: #fff;
+  --color-brand-google-hover: #f8f9fa;
+  --color-brand-google-border: #dadce0;
+  --color-on-brand-google: #1f1f1f;
+  --color-brand-authentik: #fd4b2d;
+  --color-brand-authentik-hover: #e4432a;
+  --color-brand-keycloak: #4d4d4d;
+  --color-brand-keycloak-hover: #5c5c5c;
+  --color-brand-authelia: #0065bf;
+  --color-brand-authelia-hover: #00559f;
+  --color-brand-pocketid: #e11d48;
+  --color-brand-pocketid-hover: #be123c;
+}

@@ -6,28 +6,24 @@
     variants: {
       provider: {
         google:
-          'bg-[#fff] border border-[#dadce0] hover:bg-[#f8f9fa] dark:bg-[#fff] dark:hover:bg-[#f8f9fa]',
-        authentik:
-          'bg-[#fd4b2d] hover:bg-[#e4432a] dark:bg-[#fd4b2d] dark:hover:bg-[#e4432a]',
-        keycloak:
-          'bg-[#4d4d4d] hover:bg-[#5c5c5c] dark:bg-[#4d4d4d] dark:hover:bg-[#5c5c5c]',
-        authelia:
-          'bg-[#0065BF] hover:bg-[#00559F] dark:bg-[#0065BF] dark:hover:bg-[#00559F]',
-        pocketid:
-          'bg-[#e11d48] hover:bg-[#be123c] dark:bg-[#e11d48] dark:hover:bg-[#be123c]',
+          'bg-brand-google border border-brand-google-border hover:bg-brand-google-hover',
+        authentik: 'bg-brand-authentik hover:bg-brand-authentik-hover',
+        keycloak: 'bg-brand-keycloak hover:bg-brand-keycloak-hover',
+        authelia: 'bg-brand-authelia hover:bg-brand-authelia-hover',
+        pocketid: 'bg-brand-pocketid hover:bg-brand-pocketid-hover',
       },
     },
   });
 
   export const ssoButtonInnerVariants = tv({
-    base: 'w-full relative flex items-center justify-center whitespace-nowrap text-sm font-medium px-5.5 py-2.5 rounded-xl bg-transparent text-white',
+    base: 'w-full relative flex items-center justify-center whitespace-nowrap text-sm font-medium px-5.5 py-2.5 rounded-xl bg-transparent text-on-brand',
     variants: {
       provider: {
-        google: 'text-[#1f1f1f]',
-        authentik: 'text-white',
-        keycloak: 'text-white',
-        authelia: 'text-white',
-        pocketid: 'text-white',
+        google: 'text-on-brand-google',
+        authentik: 'text-on-brand',
+        keycloak: 'text-on-brand',
+        authelia: 'text-on-brand',
+        pocketid: 'text-on-brand',
       },
     },
   });
