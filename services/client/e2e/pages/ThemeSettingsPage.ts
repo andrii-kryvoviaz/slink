@@ -6,6 +6,7 @@ export const DEFAULT_CUSTOMIZATION = {
   siteName: 'Slink',
   siteDescription: 'Fast and secure image sharing service',
   logoUrl: '',
+  colorMode: 'both',
   themeSelectorEnabled: true,
   defaultTheme: 'default',
   hiddenThemes: [] as string[],
@@ -33,6 +34,7 @@ export const buildTheme = (
   light: palette(light),
   dark: palette(dark),
   radius: null as number | null,
+  colorMode: 'both',
   css: '',
 });
 
@@ -52,6 +54,12 @@ export class ThemeSettingsPage extends BasePage {
     name: 'Theme Selector',
   });
   readonly themeCss = this.editor.locator('textarea[name="themeCss"]');
+  readonly colorModeTrigger = this.page.locator(
+    'xpath=//h3[normalize-space()="Color Mode"]/ancestor::div[.//*[@data-slot="select-trigger"]][1]//*[@data-slot="select-trigger"]',
+  );
+  readonly editorColorModeTrigger = this.editor.locator(
+    'xpath=.//label[normalize-space()="Color Mode"]/..//*[@data-slot="select-trigger"]',
+  );
   readonly dirtyHint = this.page.getByText('Save to apply your theme changes.');
 
   constructor(page: Page) {

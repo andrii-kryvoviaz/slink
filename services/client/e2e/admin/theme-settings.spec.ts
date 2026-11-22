@@ -532,6 +532,7 @@ test.describe('Theme custom CSS', { tag: '@serial' }, () => {
         light: null,
         dark: null,
         radius: null,
+        colorMode: 'both',
         css,
       },
     ]);
