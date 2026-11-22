@@ -10,8 +10,8 @@
 
   import { themeVariables } from '@slink/lib/settings/ThemeCatalog';
   import type {
-    CustomTheme,
     CustomizationSettings,
+    ThemeDraft,
   } from '@slink/lib/settings/Type/CustomizationSettings';
   import {
     describeThemes,
@@ -31,7 +31,7 @@
 
   const manager = new ThemeManager(() => settings);
 
-  let editing = $state<CustomTheme | null>(null);
+  let editing = $state<ThemeDraft | null>(null);
   let addButton: HTMLElement | null = $state(null);
 
   /** Focus moves to the row's first button, or to "Add Theme" if the row is gone. */
@@ -134,7 +134,7 @@
         </div>
 
         <div class="w-32 shrink-0" class:opacity-50={row.hidden}>
-          {#if row.custom}
+          {#if row.custom?.light && row.custom?.dark}
             <ThemePreview variables={themeVariables(row.custom)} />
           {:else}
             <ThemePreview theme={row.id} />

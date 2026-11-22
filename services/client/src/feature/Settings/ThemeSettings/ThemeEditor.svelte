@@ -6,16 +6,16 @@
   import Icon from '@iconify/svelte';
 
   import {
-    type CustomTheme,
     type ThemeColor,
+    type ThemeDraft,
     themeColors,
   } from '@slink/lib/settings/Type/CustomizationSettings';
 
   import { isHexColor } from './theme.utils';
 
   interface Props {
-    theme: CustomTheme;
-    onSave: (theme: CustomTheme) => void;
+    theme: ThemeDraft;
+    onSave: (theme: ThemeDraft) => void;
     onClose: () => void;
   }
 
@@ -124,9 +124,9 @@
       </div>
 
       <div
-        class="grid grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)_minmax(0,1.5fr)] items-center gap-x-3 gap-y-2"
+        class="grid grid-cols-2 items-center sm:grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)_minmax(0,1.5fr)] gap-x-3 gap-y-2"
       >
-        <span></span>
+        <span class="hidden sm:block"></span>
         {#each schemes as scheme (scheme)}
           <span class="text-xs font-medium text-foreground-muted">
             {schemeLabels[scheme]()}
@@ -134,7 +134,7 @@
         {/each}
 
         {#each themeColors as color (color)}
-          <Label>{colorLabels[color]()}</Label>
+          <Label class="col-span-2 sm:col-span-1">{colorLabels[color]()}</Label>
           {#each schemes as scheme (scheme)}
             {@const label = `${colorLabels[color]()} (${schemeLabels[scheme]()})`}
             <div class="flex items-center gap-2">
@@ -164,6 +164,25 @@
             </div>
           {/each}
         {/each}
+      </div>
+
+      <div class="space-y-2">
+        <Label>Custom CSS</Label>
+        <textarea
+          name="themeCss"
+          aria-label="Custom CSS"
+          bind:value={draft.css}
+          placeholder=":root &#123; --radius: 0; &#125;"
+          maxlength={65536}
+          rows={8}
+          spellcheck="false"
+          class="border-border bg-background dark:bg-input/30 placeholder:text-foreground-muted shadow-xs flex w-full min-w-0 resize-y rounded-lg border px-4 py-2.5 font-mono text-sm outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
+        ></textarea>
+        <p class="text-xs text-foreground-muted">
+          Applied only while this theme is active. If it breaks a page, add
+          <code class="font-mono">?custom-css=off</code> to the address to load it
+          without custom CSS.
+        </p>
       </div>
 
       <div class="grid gap-3 sm:grid-cols-2" aria-hidden="true">

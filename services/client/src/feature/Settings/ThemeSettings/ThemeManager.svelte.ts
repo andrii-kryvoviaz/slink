@@ -2,10 +2,11 @@ import { ThemeCatalog, builtInThemes } from '@slink/lib/settings/ThemeCatalog';
 import type {
   CustomTheme,
   CustomizationSettings,
+  ThemeDraft,
 } from '@slink/lib/settings/Type/CustomizationSettings';
 import { builtInThemeLabel } from '@slink/lib/settings/themes.svelte';
 
-import { readTheme, uniqueThemeId } from './theme.utils';
+import { readTheme, samePalette, uniqueThemeId } from './theme.utils';
 
 interface ThemeRow {
   id: string;
@@ -51,15 +52,20 @@ export class ThemeManager {
   }
 
   /** A new theme starts from the colors of the current default theme. */
-  draft(): CustomTheme {
-    return { ...this._source(this.catalog.defaultTheme), id: '', name: '' };
+  draft(): ThemeDraft {
+    return {
+      ...this._source(this.catalog.defaultTheme),
+      id: '',
+      name: '',
+      css: '',
+    };
   }
 
-  edit(row: ThemeRow): CustomTheme {
+  edit(row: ThemeRow): ThemeDraft {
     return { ...this._source(row.id), id: row.id, name: row.name };
   }
 
-  duplicate(row: ThemeRow): CustomTheme {
+  duplicate(row: ThemeRow): ThemeDraft {
     return {
       ...this._source(row.id),
       id: '',
@@ -67,18 +73,23 @@ export class ThemeManager {
     };
   }
 
-  save(theme: CustomTheme): void {
+  save(draft: ThemeDraft): void {
     const settings = this._settings();
     const taken = this.rows.map(({ id }) => id);
-    const saved = {
-      ...theme,
-      id: theme.id || uniqueThemeId(theme.name, taken),
-    };
-    const exists = settings.themes.some(({ id }) => id === saved.id);
+    const id = draft.id || uniqueThemeId(draft.name, taken);
+    const saved = this._normalize({ ...draft, id });
+    const others = settings.themes.filter((item) => item.id !== id);
+
+    if (!saved) {
+      settings.themes = others;
+      return;
+    }
+
+    const exists = settings.themes.some((item) => item.id === id);
 
     settings.themes = exists
-      ? settings.themes.map((item) => (item.id === saved.id ? saved : item))
-      : [...settings.themes, saved];
+      ? settings.themes.map((item) => (item.id === id ? saved : item))
+      : [...others, saved];
   }
 
   remove(row: ThemeRow): void {
@@ -111,14 +122,56 @@ export class ThemeManager {
     settings.themes = settings.themes.filter((theme) => theme.id !== id);
   }
 
-  private _source(id: string): CustomTheme {
+  /** The editor always gets real colors, read from the stock theme if needed. */
+  private _source(id: string): ThemeDraft {
     const custom = this._settings().themes.find((theme) => theme.id === id);
 
-    if (custom) {
-      return $state.snapshot(custom);
+    if (!custom) {
+      return readTheme(id);
     }
 
-    return readTheme(id);
+    const snapshot = $state.snapshot(custom);
+    const stock = snapshot.light && snapshot.dark ? null : readTheme(id);
+
+    return {
+      ...snapshot,
+      light: snapshot.light ?? stock!.light,
+      dark: snapshot.dark ?? stock!.dark,
+      css: snapshot.css ?? '',
+    };
+  }
+
+  /**
+   * A built-in theme keeps stock colors as null, so that adding CSS, a radius
+   * or a name to it leaves its colors alone. Returns null when nothing differs
+   * from the stock theme, which drops the override.
+   */
+  private _normalize(draft: ThemeDraft): CustomTheme | null {
+    const theme = { ...draft, name: draft.name.trim() };
+
+    if (!builtInThemes.includes(theme.id)) {
+      return theme;
+    }
+
+    const stock = readTheme(theme.id);
+    const sameColors =
+      samePalette(theme.light, stock.light) &&
+      samePalette(theme.dark, stock.dark);
+    const untouched =
+      sameColors &&
+      theme.name === builtInThemeLabel(theme.id) &&
+      theme.radius === null &&
+      theme.css.trim() === '';
+
+    if (untouched) {
+      return null;
+    }
+
+    return {
+      ...theme,
+      light: sameColors ? null : theme.light,
+      dark: sameColors ? null : theme.dark,
+    };
   }
 
   private _serialize(): string {

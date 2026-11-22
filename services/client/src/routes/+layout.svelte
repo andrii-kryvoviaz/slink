@@ -45,10 +45,16 @@
 
   let showSidebar = $derived(!!user);
 
-  let activeTheme = $derived(
-    customization.themes.selector(
-      customization.themes.resolve(settings.theme.current),
-    ),
+  let activeThemeId = $derived(
+    customization.themes.resolve(settings.theme.current),
+  );
+
+  let activeTheme = $derived(customization.themes.selector(activeThemeId));
+
+  let activeThemeCss = $derived(
+    customization.customCssEnabled
+      ? customization.themes.customCssFor(activeThemeId)
+      : '',
   );
 
   let sidebarOpen = $state(settings.sidebar.expanded);
@@ -72,7 +78,7 @@
   {/if}
   <link rel="apple-touch-icon" href={customization.appleTouchIconUrl} />
   {@html styleTag('slink-themes', customization.themes.css)}
-  {@html styleTag('slink-custom-css', customization.customCss)}
+  {@html styleTag('slink-theme-css', activeThemeCss)}
 </svelte:head>
 
 <div

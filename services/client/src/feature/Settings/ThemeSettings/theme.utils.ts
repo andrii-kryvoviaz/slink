@@ -1,5 +1,5 @@
 import {
-  type CustomTheme,
+  type ThemeDraft,
   type ThemePalette,
   themeColors,
 } from '@slink/lib/settings/Type/CustomizationSettings';
@@ -71,10 +71,16 @@ const readPalette = (id: string, scheme: 'light' | 'dark'): ThemePalette => {
 };
 
 /** Reads a built-in theme back from its stylesheet. */
-export const readTheme = (id: string): CustomTheme => ({
+export const readTheme = (id: string): ThemeDraft => ({
   id,
   name: '',
   light: readPalette(id, 'light'),
   dark: readPalette(id, 'dark'),
   radius: null,
+  css: '',
 });
+
+export const samePalette = (a: ThemePalette, b: ThemePalette): boolean =>
+  themeColors.every(
+    (color) => a[color].toLowerCase() === b[color].toLowerCase(),
+  );

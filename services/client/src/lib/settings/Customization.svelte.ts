@@ -18,10 +18,8 @@ class Customization {
   /**
    * `?custom-css=off` keeps the instance reachable when custom CSS breaks it.
    */
-  customCss = $derived(
-    page.url.searchParams.get('custom-css') === 'off'
-      ? ''
-      : (this._settings?.customCss ?? ''),
+  customCssEnabled = $derived(
+    page.url.searchParams.get('custom-css') !== 'off',
   );
 }
 

@@ -15,10 +15,14 @@ export const builtInThemes: readonly string[] = Object.values(Theme);
 export const themeVariables = (
   theme: Pick<CustomTheme, 'light' | 'dark' | 'radius'>,
 ): string => {
-  const colors = themeColors.map(
-    (color) =>
-      `--color-${color}:light-dark(${theme.light[color]},${theme.dark[color]})`,
-  );
+  const { light, dark } = theme;
+  const colors =
+    light && dark
+      ? themeColors.map(
+          (color) =>
+            `--color-${color}:light-dark(${light[color]},${dark[color]})`,
+        )
+      : [];
   const radius = theme.radius === null ? [] : [`--radius:${theme.radius}rem`];
 
   return [...colors, ...radius].join(';');
@@ -57,22 +61,35 @@ export class ThemeCatalog {
   }
 
   /**
-   * An edited built-in theme gets its own selector, so that nothing from the
-   * stock preset leaks into it.
+   * A built-in theme with changed colors gets its own selector, so that nothing
+   * from the stock preset leaks into it.
    */
   selector(id: string): string {
     const edited =
-      builtInThemes.includes(id) && this.custom.some((t) => t.id === id);
+      builtInThemes.includes(id) &&
+      this.custom.some(
+        (theme) =>
+          theme.id === id && theme.light !== null && theme.dark !== null,
+      );
 
     return edited ? `edited:${id}` : id;
   }
 
+  /** The custom CSS of a theme, applied only while that theme is active. */
+  customCssFor(id: string): string {
+    return this.custom.find((theme) => theme.id === id)?.css ?? '';
+  }
+
   get css(): string {
     return this.custom
-      .map(
-        (theme) =>
-          `[data-theme='${this.selector(theme.id)}']{${themeVariables(theme)}}`,
-      )
+      .map((theme) => {
+        const variables = themeVariables(theme);
+
+        return variables
+          ? `[data-theme='${this.selector(theme.id)}']{${variables}}`
+          : '';
+      })
+      .filter(Boolean)
       .join('\n');
   }
 }
