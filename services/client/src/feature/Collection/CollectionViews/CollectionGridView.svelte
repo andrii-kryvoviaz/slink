@@ -31,6 +31,7 @@
   {#snippet itemTemplate(collection)}
     <div
       in:fly={{ y: 20, duration: 300, delay: Math.random() * 100 }}
+      data-slot="collection-card"
       class="group relative overflow-hidden rounded-lg border border-border bg-card transition-all duration-200 hover:border-border-strong hover:shadow-md dark:hover:shadow-surface-inverse/50"
     >
       <a href="/collection/{collection.id}" class="block">

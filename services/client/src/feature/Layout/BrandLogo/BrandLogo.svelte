@@ -13,6 +13,7 @@
 </script>
 
 <img
+  data-slot="brand-logo"
   class={className}
   src={customization.logoUrl}
   alt={customization.siteName}

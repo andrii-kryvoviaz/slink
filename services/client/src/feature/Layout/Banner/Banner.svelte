@@ -42,7 +42,7 @@
   );
 </script>
 
-<div class={bannerClasses}>
+<div data-slot="banner" class={bannerClasses}>
   {#if onDismiss}
     <Button
       variant="ghost"

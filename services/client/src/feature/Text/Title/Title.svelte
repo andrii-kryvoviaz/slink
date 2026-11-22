@@ -17,6 +17,7 @@
 
 <svelte:element
   this={as}
+  data-slot="title"
   class="{TitleTheme({ size, weight })} {customClass ?? ''}"
 >
   {@render children()}

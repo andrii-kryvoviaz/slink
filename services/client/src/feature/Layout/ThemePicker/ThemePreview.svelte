@@ -17,6 +17,7 @@
 </script>
 
 <span
+  data-slot="theme-preview"
   class="flex w-full items-center gap-1"
   data-theme={theme}
   style={variables}

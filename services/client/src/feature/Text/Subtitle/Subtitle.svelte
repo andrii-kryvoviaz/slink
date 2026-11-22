@@ -12,6 +12,6 @@
   } = $props();
 </script>
 
-<p class="{SubtitleTheme({ size })} {customClass ?? ''}">
+<p data-slot="subtitle" class="{SubtitleTheme({ size })} {customClass ?? ''}">
   {@render children()}
 </p>

@@ -62,6 +62,7 @@
 </script>
 
 <a
+  data-slot="sso-button"
   href={routes.sso.login(provider.slug)}
   class={outerClasses}
   data-sveltekit-reload

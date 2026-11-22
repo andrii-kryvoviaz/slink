@@ -61,7 +61,7 @@
   const filterUrl = $derived(`/history?tagIds=${encodeURIComponent(tag.id)}`);
 </script>
 
-<Link href={filterUrl} class="shrink-0">
+<Link href={filterUrl} data-slot="tag-badge" class="shrink-0">
   <Badge {variant} {size} {outline} class={className}>
     <div class="group flex items-center gap-1.5" title={fullPathLabel}>
       <Icon icon="ph:tag" class="h-3 w-3" />

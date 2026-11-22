@@ -31,6 +31,7 @@
 </script>
 
 <div
+  data-slot="api-key-card"
   class="relative rounded-lg border border-border p-4 bg-card transition-all duration-200 hover:border-border-strong group"
   transition:fade={{ duration: 200 }}
 >

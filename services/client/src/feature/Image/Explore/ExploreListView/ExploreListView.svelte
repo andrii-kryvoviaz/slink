@@ -40,6 +40,7 @@
     >
       {#if hasMedia(image)}
         <div
+          data-slot="explore-row"
           class={theme.root()}
           onclick={() => on.open(image)}
           onkeydown={(e) => e.key === Key.Enter && on.open(image)}

@@ -25,6 +25,6 @@
   );
 </script>
 
-<span class={className(classes)} {...rest}>
+<span data-slot="badge" class={className(classes)} {...rest}>
   {@render children?.()}
 </span>

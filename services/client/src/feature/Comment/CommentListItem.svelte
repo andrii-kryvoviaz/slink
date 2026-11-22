@@ -82,6 +82,7 @@
 {/snippet}
 
 <div
+  data-slot="comment"
   class={commentListItemTheme({
     deleted: comment.isDeleted,
     editing: isEditing,

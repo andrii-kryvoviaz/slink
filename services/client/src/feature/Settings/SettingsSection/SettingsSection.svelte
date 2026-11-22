@@ -30,7 +30,7 @@
   </div>
 {/snippet}
 
-<section {id} class={cn('space-y-1', className)}>
+<section {id} data-slot="settings-section" class={cn('space-y-1', className)}>
   <div class="flex items-center justify-between gap-4 pb-3">
     <div>
       {#if title}

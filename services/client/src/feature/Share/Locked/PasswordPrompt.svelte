@@ -37,7 +37,10 @@
   };
 </script>
 
-<div class="flex items-center justify-center min-h-[60vh] px-4">
+<div
+  data-slot="share-locked"
+  class="flex items-center justify-center min-h-[60vh] px-4"
+>
   <div
     class="flex flex-col items-center text-center w-full max-w-sm"
     in:fade={{ duration: 600, delay: 100 }}

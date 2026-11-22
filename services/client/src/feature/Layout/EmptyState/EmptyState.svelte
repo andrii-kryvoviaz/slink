@@ -46,6 +46,7 @@
 
 {#if kind === 'first-use'}
   <div
+    data-slot="empty-state"
     class={cn(containerVariants({ kind }), className)}
     role="status"
     in:fade={{ duration: reducedMotion.current ? 0 : 200 }}
@@ -73,7 +74,11 @@
     </div>
   </div>
 {:else}
-  <div class={cn(containerVariants({ kind }), className)} role="status">
+  <div
+    data-slot="empty-state"
+    class={cn(containerVariants({ kind }), className)}
+    role="status"
+  >
     <span class={iconVariants({ tone })} aria-hidden="true">
       <Icon {icon} class="h-4 w-4" />
     </span>

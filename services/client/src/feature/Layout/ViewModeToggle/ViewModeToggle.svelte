@@ -57,6 +57,7 @@
 
 <TooltipProvider delayDuration={250} disableHoverableContent>
   <div
+    data-slot="view-mode-toggle"
     class={className(
       styles.root(),
       disabled && styles.disabled(),

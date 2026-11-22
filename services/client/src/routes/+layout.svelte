@@ -77,6 +77,7 @@
 
 <div
   class="relative flex h-screen"
+  data-slot="app"
   use:mode={settings.mode.current}
   use:theme={activeTheme}
 >
@@ -95,6 +96,7 @@
     {/if}
     <Sidebar.Inset class="bg-transparent">
       <header
+        data-slot="app-header"
         class="group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 flex h-16 shrink-0 items-center justify-between gap-2 transition-[width,height] ease-linear border-b border-muted relative"
       >
         {#if showSidebar}
@@ -128,7 +130,10 @@
       {#if isDemoMode}
         <DemoNotice visible={true} />
       {/if}
-      <div class="flex flex-1 flex-col min-h-0 relative">
+      <div
+        data-slot="app-content"
+        class="flex flex-1 flex-col min-h-0 relative"
+      >
         <ScrollArea
           bind:ref={scrollAreaRef}
           class="flex-1 min-h-0"
