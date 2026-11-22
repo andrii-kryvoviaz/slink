@@ -5249,14 +5249,10 @@ msgstr "サインイン方法が設定されていません。"
 msgid "Name, brand and theme your Slink instance."
 msgstr "Slinkインスタンスの名前、ブランド、テーマを設定します。"
 
-#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
-#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
 msgid "Custom CSS"
 msgstr "カスタムCSS"
-
-#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
-msgid "Applied on top of the theme for every visitor. If it breaks a page, add <0/> to the address to load it without custom CSS."
-msgstr "すべての訪問者に対し、テーマの上から適用されます。ページが崩れた場合は、アドレスに<0/>を追加するとカスタムCSSなしで読み込めます。"
 
 #: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
 msgid "Background"
@@ -5394,3 +5390,7 @@ msgstr "{0}を非表示"
 #: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
 msgid "Save to apply your theme changes."
 msgstr "テーマの変更を適用するには保存してください。"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Applied only while this theme is active. If it breaks a page, add <0/> to the address to load it without custom CSS."
+msgstr "このテーマが有効な間のみ適用されます。ページが崩れた場合は、アドレスに<0/>を追加するとカスタムCSSなしで読み込めます。"

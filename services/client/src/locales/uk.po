@@ -5314,14 +5314,10 @@ msgstr "Жоден спосіб входу не налаштований."
 msgid "Name, brand and theme your Slink instance."
 msgstr "Назва, бренд і тема вашого екземпляра Slink."
 
-#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
-#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
 msgid "Custom CSS"
 msgstr "Власний CSS"
-
-#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
-msgid "Applied on top of the theme for every visitor. If it breaks a page, add <0/> to the address to load it without custom CSS."
-msgstr "Застосовується поверх теми для кожного відвідувача. Якщо це зламає сторінку, додайте <0/> до адреси, щоб завантажити її без власного CSS."
 
 #: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
 msgid "Background"
@@ -5459,3 +5455,7 @@ msgstr "Приховати {0}"
 #: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
 msgid "Save to apply your theme changes."
 msgstr "Збережіть, щоб застосувати зміни теми."
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Applied only while this theme is active. If it breaks a page, add <0/> to the address to load it without custom CSS."
+msgstr "Застосовується лише тоді, коли ця тема активна. Якщо це зламає сторінку, додайте <0/> до адреси, щоб завантажити її без власного CSS."

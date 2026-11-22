@@ -5285,14 +5285,10 @@ msgstr "Nessun metodo di accesso è configurato."
 msgid "Name, brand and theme your Slink instance."
 msgstr "Imposta nome, marchio e tema della tua istanza di Slink."
 
-#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
-#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
 msgid "Custom CSS"
 msgstr "CSS personalizzato"
-
-#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
-msgid "Applied on top of the theme for every visitor. If it breaks a page, add <0/> to the address to load it without custom CSS."
-msgstr "Applicato sopra il tema per ogni visitatore. Se una pagina non funziona, aggiungi <0/> all'indirizzo per caricarla senza CSS personalizzato."
 
 #: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
 msgid "Background"
@@ -5430,3 +5426,7 @@ msgstr "Nascondi {0}"
 #: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
 msgid "Save to apply your theme changes."
 msgstr "Salva per applicare le modifiche al tema."
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Applied only while this theme is active. If it breaks a page, add <0/> to the address to load it without custom CSS."
+msgstr "Applicato solo mentre questo tema è attivo. Se una pagina non funziona, aggiungi <0/> all'indirizzo per caricarla senza CSS personalizzato."

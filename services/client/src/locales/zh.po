@@ -5249,14 +5249,10 @@ msgstr "尚未配置任何登录方式。"
 msgid "Name, brand and theme your Slink instance."
 msgstr "设置 Slink 实例的名称、品牌和主题。"
 
-#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
-#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
 msgid "Custom CSS"
 msgstr "自定义 CSS"
-
-#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
-msgid "Applied on top of the theme for every visitor. If it breaks a page, add <0/> to the address to load it without custom CSS."
-msgstr "应用于所有访客的主题之上。如果导致页面异常，请在地址后添加 <0/>，以不加载自定义 CSS 的方式打开页面。"
 
 #: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
 msgid "Background"
@@ -5394,3 +5390,7 @@ msgstr "隐藏 {0}"
 #: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
 msgid "Save to apply your theme changes."
 msgstr "保存以应用您的主题更改。"
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Applied only while this theme is active. If it breaks a page, add <0/> to the address to load it without custom CSS."
+msgstr "仅在此主题启用时应用。如果导致页面异常，请在地址后添加 <0/>，以不加载自定义 CSS 的方式打开页面。"

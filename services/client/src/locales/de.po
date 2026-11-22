@@ -5278,14 +5278,10 @@ msgstr "Es ist keine Anmeldemethode konfiguriert."
 msgid "Name, brand and theme your Slink instance."
 msgstr "Name, Marke und Design Ihrer Slink-Instanz festlegen."
 
-#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
-#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
 msgid "Custom CSS"
 msgstr "Benutzerdefiniertes CSS"
-
-#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
-msgid "Applied on top of the theme for every visitor. If it breaks a page, add <0/> to the address to load it without custom CSS."
-msgstr "Wird für jeden Besucher über das Design gelegt. Wenn dadurch eine Seite fehlerhaft dargestellt wird, fügen Sie <0/> zur Adresse hinzu, um die Seite ohne benutzerdefiniertes CSS zu laden."
 
 #: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
 msgid "Background"
@@ -5423,3 +5419,7 @@ msgstr "{0} ausblenden"
 #: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
 msgid "Save to apply your theme changes."
 msgstr "Speichern Sie, um Ihre Designänderungen zu übernehmen."
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Applied only while this theme is active. If it breaks a page, add <0/> to the address to load it without custom CSS."
+msgstr "Wird nur angewendet, während dieses Design aktiv ist. Wenn dadurch eine Seite fehlerhaft dargestellt wird, fügen Sie <0/> zur Adresse hinzu, um die Seite ohne benutzerdefiniertes CSS zu laden."

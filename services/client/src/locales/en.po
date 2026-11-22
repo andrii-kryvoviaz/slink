@@ -5278,14 +5278,10 @@ msgstr "No sign-in method is configured."
 msgid "Name, brand and theme your Slink instance."
 msgstr "Name, brand and theme your Slink instance."
 
-#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
-#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
 msgid "Custom CSS"
 msgstr "Custom CSS"
-
-#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
-msgid "Applied on top of the theme for every visitor. If it breaks a page, add <0/> to the address to load it without custom CSS."
-msgstr "Applied on top of the theme for every visitor. If it breaks a page, add <0/> to the address to load it without custom CSS."
 
 #: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
 msgid "Background"
@@ -5423,3 +5419,7 @@ msgstr "Hide {0}"
 #: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
 msgid "Save to apply your theme changes."
 msgstr "Save to apply your theme changes."
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Applied only while this theme is active. If it breaks a page, add <0/> to the address to load it without custom CSS."
+msgstr "Applied only while this theme is active. If it breaks a page, add <0/> to the address to load it without custom CSS."

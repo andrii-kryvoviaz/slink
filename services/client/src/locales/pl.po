@@ -5336,14 +5336,10 @@ msgstr "Nie skonfigurowano żadnej metody logowania."
 msgid "Name, brand and theme your Slink instance."
 msgstr "Nazwa, marka i motyw Twojej instancji Slink."
 
-#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
-#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
 msgid "Custom CSS"
 msgstr "Własny CSS"
-
-#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
-msgid "Applied on top of the theme for every visitor. If it breaks a page, add <0/> to the address to load it without custom CSS."
-msgstr "Stosowany na motywie dla każdego odwiedzającego. Jeśli zepsuje stronę, dodaj <0/> do adresu, aby załadować ją bez własnego CSS."
 
 #: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
 msgid "Background"
@@ -5481,3 +5477,7 @@ msgstr "Ukryj {0}"
 #: src/feature/Settings/ThemeSettings/ThemeSettings.svelte
 msgid "Save to apply your theme changes."
 msgstr "Zapisz, aby zastosować zmiany motywu."
+
+#: src/feature/Settings/ThemeSettings/ThemeEditor.svelte
+msgid "Applied only while this theme is active. If it breaks a page, add <0/> to the address to load it without custom CSS."
+msgstr "Stosowany tylko wtedy, gdy ten motyw jest aktywny. Jeśli zepsuje stronę, dodaj <0/> do adresu, aby załadować ją bez własnego CSS."
