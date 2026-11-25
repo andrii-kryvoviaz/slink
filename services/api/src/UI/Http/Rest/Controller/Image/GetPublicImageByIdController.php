@@ -35,7 +35,10 @@ final class GetPublicImageByIdController {
   public function __invoke(string $id, #[CurrentUser] ?JwtUser $user = null): ApiResponse {
     $imageView = $this->imageRepository->oneById($id);
 
-    if (!$this->access->isGranted(ImageAccess::View, new ImageAccessContext(image: $imageView))) {
+    $isPublic = $imageView->getAttributes()->isPublic();
+    $canView = $this->access->isGranted(ImageAccess::View, new ImageAccessContext(image: $imageView));
+
+    if (!$isPublic && !$canView) {
       throw new NotFoundException();
     }
 

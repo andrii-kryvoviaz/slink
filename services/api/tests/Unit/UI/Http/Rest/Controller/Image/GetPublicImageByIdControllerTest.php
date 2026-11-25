@@ -56,6 +56,25 @@ final class GetPublicImageByIdControllerTest extends TestCase {
   }
 
   #[Test]
+  public function itReturnsPublicImageWhenShareBasedAccessIsDenied(): void {
+    $imageRepository = $this->createStub(ImageRepositoryInterface::class);
+    $imageRepository->method('oneById')->willReturn($this->imageView(isPublic: true));
+
+    $queryBus = $this->createStub(QueryBusInterface::class);
+    $queryBus->method('ask')->willReturn(Item::fromPayload('image', ['id' => 'image-id']));
+
+    $access = $this->createStub(AuthorizationCheckerInterface::class);
+    $access->method('isGranted')->willReturn(false);
+
+    $controller = new GetPublicImageByIdController($imageRepository, $access);
+    $controller->setQueryBus($queryBus);
+
+    $response = $controller('image-id');
+
+    $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+  }
+
+  #[Test]
   public function itThrowsNotFoundWhenAccessIsDenied(): void {
     $imageRepository = $this->createStub(ImageRepositoryInterface::class);
     $imageRepository->method('oneById')->willReturn($this->imageView(isPublic: false, ownerId: 'owner-id'));

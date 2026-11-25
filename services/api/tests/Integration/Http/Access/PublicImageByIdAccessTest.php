@@ -29,6 +29,18 @@ final class PublicImageByIdAccessTest extends HttpTestCase {
   }
 
   #[Test]
+  public function anonymousCanReadPublicImageMetadataWithoutShare(): void {
+    $this->setAccessSettings([
+      'allowUnauthenticatedAccess' => true,
+      'requireAuthForMediaShares' => false,
+    ]);
+    $this->bootActors();
+    $image = $this->uploadImage($this->ownerToken, true);
+
+    self::assertSame(200, $this->apiRequest('GET', $this->url($image)));
+  }
+
+  #[Test]
   public function anonymousCannotReadPublishedShareMetadataWhenGuestViewEnabled(): void {
     $this->setAccessSettings([
       'allowUnauthenticatedAccess' => true,
