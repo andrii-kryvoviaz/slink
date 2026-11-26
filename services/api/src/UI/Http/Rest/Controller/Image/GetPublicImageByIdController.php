@@ -46,7 +46,7 @@ final class GetPublicImageByIdController {
 
     $resourceContext = new ImageResourceContext(
       viewerUserId: $user?->getIdentifier(),
-      groups: ['public', 'bookmark', 'tag'],
+      groups: ['public', 'bookmark'],
     );
 
     $image = $this->ask($query->withContext([
