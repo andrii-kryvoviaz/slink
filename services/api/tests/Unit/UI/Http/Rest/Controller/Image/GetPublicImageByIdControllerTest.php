@@ -6,49 +6,30 @@ namespace Tests\Unit\UI\Http\Rest\Controller\Image;
 
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use Slink\Image\Domain\Repository\ImageRepositoryInterface;
-use Slink\Image\Domain\ValueObject\ImageAttributes;
-use Slink\Image\Infrastructure\ReadModel\View\ImageView;
+use Slink\Image\Application\Query\GetPublicImageById\GetPublicImageByIdQuery;
+use Slink\Image\Infrastructure\Resource\ImageResourceContext;
 use Slink\Shared\Application\Http\Item;
 use Slink\Shared\Application\Query\QueryBusInterface;
-use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\User\Infrastructure\Auth\JwtUser;
-use Slink\User\Infrastructure\ReadModel\View\UserView;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Messenger\Envelope;
+use Symfony\Component\Messenger\Stamp\HandlerArgumentsStamp;
 use UI\Http\Rest\Controller\Image\GetPublicImageByIdController;
 
 final class GetPublicImageByIdControllerTest extends TestCase {
-  private function imageView(bool $isPublic, ?string $ownerId = null): ImageView {
-    $attributes = $this->createStub(ImageAttributes::class);
-    $attributes->method('isPublic')->willReturn($isPublic);
+  private function controller(QueryBusInterface $queryBus): GetPublicImageByIdController {
+    $controller = new GetPublicImageByIdController();
+    $controller->setQueryBus($queryBus);
 
-    $owner = null;
-    if ($ownerId !== null) {
-      $owner = $this->createStub(UserView::class);
-      $owner->method('getUuid')->willReturn($ownerId);
-    }
-
-    $image = $this->createStub(ImageView::class);
-    $image->method('getAttributes')->willReturn($attributes);
-    $image->method('getUser')->willReturn($owner);
-
-    return $image;
+    return $controller;
   }
 
   #[Test]
-  public function itReturnsImageWhenAccessIsGranted(): void {
-    $imageRepository = $this->createStub(ImageRepositoryInterface::class);
-    $imageRepository->method('oneById')->willReturn($this->imageView(isPublic: true));
-
+  public function itReturnsImageFromQueryBus(): void {
     $queryBus = $this->createStub(QueryBusInterface::class);
     $queryBus->method('ask')->willReturn(Item::fromPayload('image', ['id' => 'image-id']));
 
-    $access = $this->createStub(AuthorizationCheckerInterface::class);
-    $access->method('isGranted')->willReturn(true);
-
-    $controller = new GetPublicImageByIdController($imageRepository, $access);
-    $controller->setQueryBus($queryBus);
+    $controller = $this->controller($queryBus);
 
     $response = $controller('image-id');
 
@@ -56,18 +37,26 @@ final class GetPublicImageByIdControllerTest extends TestCase {
   }
 
   #[Test]
-  public function itReturnsPublicImageWhenShareBasedAccessIsDenied(): void {
-    $imageRepository = $this->createStub(ImageRepositoryInterface::class);
-    $imageRepository->method('oneById')->willReturn($this->imageView(isPublic: true));
+  public function itDispatchesPublicQueryWithImageId(): void {
+    $queryBus = $this->createMock(QueryBusInterface::class);
+    $queryBus
+      ->expects($this->once())
+      ->method('ask')
+      ->with($this->callback(static function (mixed $envelope): bool {
+        if (!$envelope instanceof Envelope) {
+          return false;
+        }
 
-    $queryBus = $this->createStub(QueryBusInterface::class);
-    $queryBus->method('ask')->willReturn(Item::fromPayload('image', ['id' => 'image-id']));
+        $query = $envelope->getMessage();
+        if (!$query instanceof GetPublicImageByIdQuery) {
+          return false;
+        }
 
-    $access = $this->createStub(AuthorizationCheckerInterface::class);
-    $access->method('isGranted')->willReturn(false);
+        return $query->getId() === 'image-id';
+      }))
+      ->willReturn(Item::fromPayload('image', ['id' => 'image-id']));
 
-    $controller = new GetPublicImageByIdController($imageRepository, $access);
-    $controller->setQueryBus($queryBus);
+    $controller = $this->controller($queryBus);
 
     $response = $controller('image-id');
 
@@ -75,38 +64,36 @@ final class GetPublicImageByIdControllerTest extends TestCase {
   }
 
   #[Test]
-  public function itThrowsNotFoundWhenAccessIsDenied(): void {
-    $imageRepository = $this->createStub(ImageRepositoryInterface::class);
-    $imageRepository->method('oneById')->willReturn($this->imageView(isPublic: false, ownerId: 'owner-id'));
-
-    $access = $this->createStub(AuthorizationCheckerInterface::class);
-    $access->method('isGranted')->willReturn(false);
-
-    $controller = new GetPublicImageByIdController($imageRepository, $access);
-    $controller->setQueryBus($this->createStub(QueryBusInterface::class));
-
-    $this->expectException(NotFoundException::class);
-
-    $controller('image-id');
-  }
-
-  #[Test]
-  public function itReturnsImageForOwner(): void {
+  public function itPassesViewerUserIdToResourceContext(): void {
     $ownerId = '550e8400-e29b-41d4-a716-446655440000';
-    $imageRepository = $this->createStub(ImageRepositoryInterface::class);
-    $imageRepository->method('oneById')->willReturn($this->imageView(isPublic: false, ownerId: $ownerId));
 
-    $queryBus = $this->createStub(QueryBusInterface::class);
-    $queryBus->method('ask')->willReturn(Item::fromPayload('image', ['id' => 'image-id']));
+    $queryBus = $this->createMock(QueryBusInterface::class);
+    $queryBus
+      ->expects($this->once())
+      ->method('ask')
+      ->with($this->callback(static function (mixed $envelope) use ($ownerId): bool {
+        if (!$envelope instanceof Envelope) {
+          return false;
+        }
 
-    $access = $this->createStub(AuthorizationCheckerInterface::class);
-    $access->method('isGranted')->willReturn(true);
+        $stamp = $envelope->last(HandlerArgumentsStamp::class);
+        if (!$stamp instanceof HandlerArgumentsStamp) {
+          return false;
+        }
+
+        $context = $stamp->getAdditionalArguments();
+        $resourceContext = $context['resourceContext'] ?? null;
+
+        return $resourceContext instanceof ImageResourceContext
+          && $resourceContext->viewerUserId === $ownerId
+          && $resourceContext->getGroups() === ['public', 'bookmark'];
+      }))
+      ->willReturn(Item::fromPayload('image', ['id' => 'image-id']));
 
     $owner = $this->createStub(JwtUser::class);
     $owner->method('getIdentifier')->willReturn($ownerId);
 
-    $controller = new GetPublicImageByIdController($imageRepository, $access);
-    $controller->setQueryBus($queryBus);
+    $controller = $this->controller($queryBus);
 
     $response = $controller('image-id', $owner);
 
