@@ -11,7 +11,6 @@ use Slink\Image\Infrastructure\Resource\ImageResourceContext;
 use Slink\Shared\Application\Http\Item;
 use Slink\Shared\Application\Query\QueryBusInterface;
 use Slink\User\Infrastructure\Auth\JwtUser;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Stamp\HandlerArgumentsStamp;
 use UI\Http\Rest\Controller\Image\GetPublicImageByIdController;
@@ -22,18 +21,6 @@ final class GetPublicImageByIdControllerTest extends TestCase {
     $controller->setQueryBus($queryBus);
 
     return $controller;
-  }
-
-  #[Test]
-  public function itReturnsImageFromQueryBus(): void {
-    $queryBus = $this->createStub(QueryBusInterface::class);
-    $queryBus->method('ask')->willReturn(Item::fromPayload('image', ['id' => 'image-id']));
-
-    $controller = $this->controller($queryBus);
-
-    $response = $controller('image-id');
-
-    $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
   }
 
   #[Test]
@@ -58,9 +45,7 @@ final class GetPublicImageByIdControllerTest extends TestCase {
 
     $controller = $this->controller($queryBus);
 
-    $response = $controller('image-id');
-
-    $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+    $controller('image-id');
   }
 
   #[Test]
@@ -85,8 +70,7 @@ final class GetPublicImageByIdControllerTest extends TestCase {
         $resourceContext = $context['resourceContext'] ?? null;
 
         return $resourceContext instanceof ImageResourceContext
-          && $resourceContext->viewerUserId === $ownerId
-          && $resourceContext->getGroups() === ['public', 'bookmark'];
+          && $resourceContext->viewerUserId === $ownerId;
       }))
       ->willReturn(Item::fromPayload('image', ['id' => 'image-id']));
 
@@ -95,8 +79,6 @@ final class GetPublicImageByIdControllerTest extends TestCase {
 
     $controller = $this->controller($queryBus);
 
-    $response = $controller('image-id', $owner);
-
-    $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+    $controller('image-id', $owner);
   }
 }

@@ -38,6 +38,12 @@ final class PublicImageByIdAccessTest extends HttpTestCase {
     $image = $this->uploadImage($this->ownerToken, true);
 
     self::assertSame(200, $this->apiRequest('GET', $this->url($image)));
+
+    $data = $this->responsePayload()['data'];
+
+    self::assertIsArray($data);
+    self::assertArrayNotHasKey('tags', $data);
+    self::assertFalse($data['isBookmarked']);
   }
 
   #[Test]
